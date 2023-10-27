@@ -6,15 +6,11 @@ import pc from 'picocolors'
 import { createWorkerFork, cwd, getProjectPackageJson, meteorPackagePath } from './workers';
 import os from 'node:os';
 
-if (process.env.NODE_ENV !== 'production') return
-
-// Not in a project (publishing the package)
-if (process.env.VITE_METEOR_DISABLED) return
-
 const pkg = getProjectPackageJson();
-const meteorMainModule = pkg.meteor?.mainModule?.client
 
+const meteorMainModule = pkg.meteor?.mainModule?.client
 // Meteor packages to omit or replace the temporary build.
+
 // Useful for other build-time packages that may conflict with Meteor-Vite's temporary build.
 const replaceMeteorPackages = [
   { startsWith: 'standard-minifier', replaceWith: '' },
@@ -24,11 +20,23 @@ const replaceMeteorPackages = [
 if (!meteorMainModule) {
   throw new Error('No meteor main module found, please add meteor.mainModule.client to your package.json')
 }
-
 const tempDir = getTempDir();
+
+const viteStubFile = path.join(cwd, 'node_modules', 'meteor-vite', 'temp', 'stubs.js')
 const tempMeteorProject = path.resolve(tempDir, 'meteor')
 const tempMeteorOutDir = path.join(tempDir, 'bundle', 'meteor')
 const viteOutDir = path.join(tempDir, 'bundle', 'vite');
+
+// Empty stubs from any previous builds
+{
+  fs.writeFileSync(viteStubFile, `// Stub file for Meteor-Vite\n`, 'utf8');
+}
+
+
+if (process.env.NODE_ENV !== 'production') return
+
+// Not in a project (publishing the package)
+if (process.env.VITE_METEOR_DISABLED) return
 
 // Temporary Meteor build
 
