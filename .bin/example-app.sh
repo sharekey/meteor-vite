@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# shellcheck disable=SC2120
 
 this="$0"
 action="$1" # e.g. link, build, start
@@ -15,7 +16,7 @@ export METEOR_VITE_TSUP_BUILD_WATCHER="true"
 # Start a development server
 start() {
   cd "$APP_DIR" || exit 1
-  meteor npm start
+  meteor npm start -- "$@"
 }
 
 # Install dependencies for dev app
@@ -83,4 +84,4 @@ production:app() {
 }
 
 set -x
-"$action" || exit 1;
+"$action" "${@:3}" || exit 1;
