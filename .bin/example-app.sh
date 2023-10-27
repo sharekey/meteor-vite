@@ -5,13 +5,11 @@ this="$0"
 action="$1" # e.g. link, build, start
 app="$2" # e.g. vue, svelte
 
-
 APP_DIR="$PWD/examples/$app"
 BUILD_TARGET="$PWD/examples/output/$app"
 NPM_LINK_TARGET="$PWD/npm-packages/meteor-vite"
 export METEOR_PACKAGE_DIRS="$PWD/packages"
 export METEOR_VITE_TSUP_BUILD_WATCHER="true"
-
 
 # Start a development server
 start() {
@@ -23,6 +21,15 @@ start() {
 install() {
   cd "$APP_DIR" || exit 1
   meteor npm i
+}
+
+# Initial setup for example apps - installs and links our local packages.
+prepare() {
+  npm run install:package
+  npm run build:package
+
+  (install) || exit 1
+  (link) || exit 1
 }
 
 # Build an example app for production
@@ -74,7 +81,7 @@ production:mongo() {
 }
 
 production:app() {
-  cd "$BUILD_TARGET/bundle" || exit 1;
+  cd "$BUILD_TARGET/bundle" || exit 1
 
   export PORT=4040
   export ROOT_URL=http://localhost:4040
@@ -84,4 +91,4 @@ production:app() {
 }
 
 set -x
-"$action" "${@:3}" || exit 1;
+"$action" "${@:3}" || exit 1
