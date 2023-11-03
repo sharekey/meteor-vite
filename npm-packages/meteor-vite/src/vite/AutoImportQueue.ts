@@ -59,7 +59,7 @@ export default new class AutoImportQueue {
         if (this.addedPackages.length > lastPackageCount && !skipRestart) {
             await MeteorEvents.waitForMessage({
                 topic: ['webapp-reload-client', 'client-refresh'],
-                timeoutMs: process.env.NODE_ENV === 'test' ? 50 : 5000, // todo: implement tests for this
+                timeoutMs: process.env.NODE_ENV === 'test' ? 50 : 15_000, // todo: implement tests for this
             }).catch((error: Error) => {
                 if (error instanceof EventTimeout) {
                     Logger.warn(`Timed out waiting for Meteor to refresh the client for ${pc.yellow(importString)}!`)
