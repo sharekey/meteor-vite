@@ -13,16 +13,17 @@ let viteConfig: MeteorViteConfig;
 
 type Replies = IPCReply<{
     kind: 'viteConfig',
-    data: {
-        host?: string | boolean;
-        port?: number;
-        entryFile?: string
-    }
+    data: ViteRuntimeConfig;
 } | {
     kind: 'refreshNeeded',
     data: {},
 }>
 
+type ViteRuntimeConfig = {
+    host?: string | boolean;
+    port?: number;
+    entryFile?: string
+}
 interface DevServerOptions {
     packageJson: ProjectJson,
     globalMeteorPackagesDir: string;
