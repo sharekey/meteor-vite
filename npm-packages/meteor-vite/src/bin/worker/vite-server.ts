@@ -188,7 +188,14 @@ class BackgroundWorker {
                 return;
             }
             console.warn('Meteor parent process is no longer running. Shutting down...');
-            process.exit(1);
+            this.update({
+                pid: 0,
+                meteorPid: 0,
+                meteorParentPid: 0,
+                viteConfig: {},
+            }).then(() => {
+                process.exit(1);
+            })
         }, 30_000)
     }
     
