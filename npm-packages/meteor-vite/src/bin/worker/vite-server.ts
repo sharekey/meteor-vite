@@ -25,6 +25,7 @@ type ViteRuntimeConfig = {
     host?: string | boolean;
     port?: number;
     entryFile?: string
+    backgroundWorker?: WorkerRuntimeConfig;
 }
 interface DevServerOptions {
     packageJson: ProjectJson,
@@ -73,6 +74,7 @@ export default CreateIPCInterface({
         
         await server.listen()
         await sendViteConfig(replyInterface);
+        server.printUrls();
         listening = true
         return;
     },
@@ -225,7 +227,10 @@ async function sendViteConfig(reply: Replies) {
     
     reply({
         kind: 'viteConfig',
-        data,
+        data: {
+            ...data,
+            backgroundWorker: BackgroundWorker.instance.config,
+        },
     });
     await BackgroundWorker.instance.setViteConfig(data);
 }
