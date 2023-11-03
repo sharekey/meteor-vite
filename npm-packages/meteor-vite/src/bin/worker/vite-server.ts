@@ -54,7 +54,6 @@ export default CreateIPCInterface({
                 kind: 'viteConfig',
                 data: backgroundWorker.config.viteConfig,
             })
-            console.log('Testing testing!');
             console.log(`Vite server running as background process. (pid ${backgroundWorker.config.pid})`);
             return process.exit(0);
         }
