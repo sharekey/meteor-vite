@@ -41,45 +41,25 @@ export default CreateIPCInterface({
     // todo: Add reply for triggering a server restart
     async 'vite.startDevServer'(replyInterface: Replies, { packageJson, globalMeteorPackagesDir }: DevServerOptions) {
         
-        viteConfig = await resolveConfig({
-            configFile: packageJson?.meteor?.viteConfig,
-        }, 'serve');
-        
-        if (!server) {
-            server = await createServer({
-                configFile: viteConfig.configFile,
-                plugins: [
-                    MeteorStubs({
-                        meteor: {
-                            packagePath: Path.join('.meteor', 'local', 'build', 'programs', 'web.browser', 'packages'),
-                            isopackPath: Path.join('.meteor', 'local', 'isopacks'),
-                            globalMeteorPackagesDir,
-                        },
-                        packageJson,
-                        stubValidation: viteConfig.meteor?.stubValidation,
-                    }),
-                    {
-                        name: 'meteor-handle-restart',
-                        buildStart () {
-                            if (!listening) {
-                                sendViteConfig(replyInterface);
-                            }
-                        },
-                    },
-                ],
-            });
-            
-            process.on('warning', (warning) => {
-                if (warning.name !== RefreshNeeded.name) {
-                    return;
+        const server = await createViteServer({
+            packageJson,
+            globalMeteorPackagesDir,
+            buildStart: () => {
+                if (listening) {
+                    sendViteConfig(replyInterface);
                 }
-                replyInterface({
-                    kind: 'refreshNeeded',
-                    data: {},
-                })
-            })
-        }
+            },
+        });
         
+        process.on('warning', (warning) => {
+            if (warning.name !== RefreshNeeded.name) {
+                return;
+            }
+            replyInterface({
+                kind: 'refreshNeeded',
+                data: {},
+            })
+        })
         
         let listening = false
         await server.listen()
@@ -98,6 +78,41 @@ export default CreateIPCInterface({
         }
     }
 })
+
+async function createViteServer({
+    globalMeteorPackagesDir,
+    packageJson,
+    buildStart,
+}: DevServerOptions & {
+    buildStart: () => void;
+}) {
+    if (server) {
+        return server;
+    }
+    
+    viteConfig = await resolveConfig({
+        configFile: packageJson?.meteor?.viteConfig,
+    }, 'serve');
+    
+    return server = await createServer({
+        configFile: viteConfig.configFile,
+        plugins: [
+            MeteorStubs({
+                meteor: {
+                    packagePath: Path.join('.meteor', 'local', 'build', 'programs', 'web.browser', 'packages'),
+                    isopackPath: Path.join('.meteor', 'local', 'isopacks'),
+                    globalMeteorPackagesDir,
+                },
+                packageJson,
+                stubValidation: viteConfig.meteor?.stubValidation,
+            }),
+            {
+                name: 'meteor-handle-restart',
+                buildStart,
+            },
+        ],
+    });
+}
 
 function sendViteConfig(reply: Replies) {
     if (!server) {
