@@ -183,7 +183,7 @@ class BackgroundWorker {
         }
         // Keep track of Meteor's parent process to exit if it has ended abruptly.
         setInterval(() => {
-            if (this._isRunning(config.meteorParentPid)) {
+            if (this._isRunning(config.meteorPid)) {
                 return;
             }
             console.warn('Meteor parent process is no longer running. Shutting down...');
@@ -195,7 +195,7 @@ class BackgroundWorker {
             }).then(() => {
                 process.exit(1);
             })
-        }, 30_000)
+        }, 5_000)
     }
     
     protected _isRunning(pid: number) {
