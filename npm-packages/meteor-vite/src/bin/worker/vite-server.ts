@@ -150,7 +150,9 @@ class BackgroundWorker {
         }
         try {
             const content = await FS.readFile(this.configPath, 'utf-8');
-            return BackgroundWorker.instance = new BackgroundWorker(JSON.parse(content));
+            const config = JSON.parse(content);
+            console.log('Retrieved runtime config from file: ', config)
+            return BackgroundWorker.instance = new BackgroundWorker(config);
         } catch (error) {
             return BackgroundWorker.instance = new BackgroundWorker({
                 pid: process.pid,
@@ -160,19 +162,25 @@ class BackgroundWorker {
             })
         }
     }
-    constructor(public config: WorkerRuntimeConfig) {}
+    constructor(public config: WorkerRuntimeConfig) {
+        console.log('Retrieved background process config', config);
+    }
     
     public get isRunning() {
         if (!this.config.pid) {
+            console.log('No background worker process ID')
             return false;
         }
         if (this.config.pid === process.pid) {
+            console.log(`Background worker's process ID is identical to ours`)
             return false;
         }
         try {
             process.kill(this.config.pid, 0);
+            console.log('Background worker should be running!');
             return true;
         } catch (error) {
+            console.warn(`Background worker not running: ${this.config.pid} (current PID ${process.pid}) `, error);
             return false;
         }
     }
@@ -183,7 +191,8 @@ class BackgroundWorker {
     }
     
     public async setViteConfig(viteConfig: WorkerRuntimeConfig['viteConfig']) {
-        if (this.config.pid !== process.pid) {
+        if (this.config.pid !== process.pid && this.isRunning) {
+            console.log(`Skipping Vite config write - config is controlled by different background process: ${this.config.pid}`);
             return;
         }
         await this.update({
