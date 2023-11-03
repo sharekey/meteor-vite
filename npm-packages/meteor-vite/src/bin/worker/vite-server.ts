@@ -44,6 +44,16 @@ export default CreateIPCInterface({
     // todo: Add reply for triggering a server restart
     async 'vite.startDevServer'(replyInterface: Replies, { packageJson, globalMeteorPackagesDir, meteorParentPid }: DevServerOptions) {
         const worker = await BackgroundWorker.init(meteorParentPid);
+        
+        if (worker.isRunning) {
+            replyInterface({
+                kind: 'viteConfig',
+                data: worker.config.viteConfig,
+            })
+            console.log(`Vite server running as background process. (pid ${worker.config.pid})`);
+            return;
+        }
+        
         const server = await createViteServer({
             packageJson,
             globalMeteorPackagesDir,
@@ -60,15 +70,6 @@ export default CreateIPCInterface({
                 });
             },
         });
-        
-        if (worker.isRunning) {
-            replyInterface({
-                kind: 'viteConfig',
-                data: worker.config.viteConfig,
-            })
-            console.log(`Vite server running as background process. (pid ${worker.config.pid})`);
-            return;
-        }
         
         await server.listen()
         await sendViteConfig(replyInterface);
