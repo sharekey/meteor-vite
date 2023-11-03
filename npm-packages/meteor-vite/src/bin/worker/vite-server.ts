@@ -152,15 +152,21 @@ class BackgroundWorker {
             const content = await FS.readFile(this.configPath, 'utf-8');
             const config = JSON.parse(content);
             console.log('Retrieved runtime config from file: ', config)
-            return BackgroundWorker.instance = new BackgroundWorker(config);
+            BackgroundWorker.instance = new BackgroundWorker(config);
         } catch (error) {
-            return BackgroundWorker.instance = new BackgroundWorker({
+            BackgroundWorker.instance = new BackgroundWorker({
                 pid: process.pid,
                 meteorPid: process.ppid,
                 meteorParentPid,
                 viteConfig: {}
             })
         }
+        
+        const worker = BackgroundWorker.instance;
+        if (!worker.isRunning) {
+            await worker.update(worker.config);
+        }
+        return worker;
     }
     constructor(public config: WorkerRuntimeConfig) {
         console.log('Retrieved background process config', config);
