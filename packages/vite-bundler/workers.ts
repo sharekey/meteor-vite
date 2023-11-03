@@ -50,6 +50,7 @@ export function createWorkerFork(hooks: Partial<WorkerResponseHooks>, options?: 
             console.log('Running Vite worker as a background process..\n  ', [
                 `Background PID: ${pid}`,
                 `Child process PID: ${child.pid}`,
+                `Meteor PID: ${process.pid}`,
                 `Is vite server: ${listening}`,
             ].join('\n   '));
         }
