@@ -1,6 +1,8 @@
 import { Meteor } from 'meteor/meteor'
 import { WebAppInternals } from 'meteor/webapp'
 import type HTTP from 'http'
+import { fetch } from 'meteor/fetch';
+import { MeteorIPCMessage } from '../../npm-packages/meteor-vite/src/meteor/MeteorEvents';
 import {
     getConfig, DevConnectionLog,
     MeteorViteConfig,
@@ -46,6 +48,19 @@ if (Meteor.isDevelopment) {
         }
     }, { detached: true });
     
+    const sendIpcMessage = Meteor.bindEnvironment(async (message: MeteorIPCMessage) => {
+        const { host, port, ready } = getConfig();
+        if (!ready) return;
+        
+        await fetch(`http://${host}:${port}/__meteor__/ipc-message`, {
+            method: 'POST',
+            body: JSON.stringify(message),
+        }).catch((error) => {
+            console.error(error);
+        })
+    })
+    
+    
     viteServer.call({
         method: 'vite.startDevServer',
         params: [{
@@ -57,10 +72,7 @@ if (Meteor.isDevelopment) {
     
     process.on('message', (message) => {
         if (!isMeteorIPCMessage(message)) return;
-        viteServer.call({
-            method: 'meteor.ipcMessage',
-            params: [message],
-        })
+        sendIpcMessage(message);
     })
     
     Meteor.publish(ViteConnection.publication, () => {

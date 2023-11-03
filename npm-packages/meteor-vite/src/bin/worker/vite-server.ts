@@ -128,6 +128,24 @@ async function createViteServer({
                 name: 'meteor-handle-restart',
                 buildStart,
             },
+            {
+                name: 'meteor-ipc-middleware',
+                configureServer: (server) => {
+                    server.middlewares.use('/__meteor__/ipc-message', (req, res, next) => {
+                        let body = '';
+                        req.on('data', (chunk) => {
+                            body += chunk.toString();
+                        });
+                        req.on('end', () => {
+                          const message = JSON.parse(body);
+                          console.log(message);
+                          MeteorEvents.ingest(message);
+                          res.statusCode = 204;
+                          next();
+                        })
+                    })
+                }
+            }
         ],
     });
     
@@ -139,6 +157,33 @@ async function createViteServer({
     })
     
     return server;
+}
+
+async function sendViteConfig(reply: Replies) {
+    if (!server) {
+        Logger.debug('Tried to get config from Vite server before it has been created!');
+        return;
+    }
+    
+    const { config } = server;
+    const worker = BackgroundWorker.instance;
+    
+    await worker.setViteConfig({
+        host: config.server?.host,
+        port: config.server?.port,
+        entryFile: config.meteor?.clientEntry,
+    });
+    reply({
+        kind: 'viteConfig',
+        data: worker.config.viteConfig,
+    });
+    reply({
+        kind: 'workerConfig',
+        data: {
+            ...worker.config,
+            listening,
+        },
+    })
 }
 
 type WorkerRuntimeConfig = {
@@ -238,31 +283,4 @@ class BackgroundWorker {
             viteConfig,
         })
     }
-}
-
-async function sendViteConfig(reply: Replies) {
-    if (!server) {
-        Logger.debug('Tried to get config from Vite server before it has been created!');
-        return;
-    }
-    
-    const { config } = server;
-    const worker = BackgroundWorker.instance;
-    
-    await worker.setViteConfig({
-        host: config.server?.host,
-        port: config.server?.port,
-        entryFile: config.meteor?.clientEntry,
-    });
-    reply({
-        kind: 'viteConfig',
-        data: worker.config.viteConfig,
-    });
-    reply({
-        kind: 'workerConfig',
-        data: {
-            ...worker.config,
-            listening,
-        },
-    })
 }
