@@ -222,18 +222,19 @@ async function sendViteConfig(reply: Replies) {
     }
     
     const { config } = server;
-    const data = {
+    const worker = BackgroundWorker.instance;
+    
+    await worker.setViteConfig({
         host: config.server?.host,
         port: config.server?.port,
         entryFile: config.meteor?.clientEntry,
-    };
-    
+    });
     reply({
         kind: 'viteConfig',
-        data: {
-            ...data,
-            backgroundWorker: BackgroundWorker.instance.config,
-        },
+        data: worker.config.viteConfig,
     });
-    await BackgroundWorker.instance.setViteConfig(data);
+    reply({
+        kind: 'workerConfig',
+        data: worker.config,
+    })
 }
