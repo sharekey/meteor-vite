@@ -19,6 +19,9 @@ type Replies = IPCReply<{
 } | {
     kind: 'refreshNeeded',
     data: {},
+} | {
+    kind: 'workerConfig';
+    data: WorkerRuntimeConfig;
 }>
 
 type ViteRuntimeConfig = {
@@ -146,7 +149,7 @@ type WorkerRuntimeConfig = {
 
 class BackgroundWorker {
     public static instance: BackgroundWorker;
-    protected static readonly configPath = './.meteor-vite-server.pid'
+    protected static readonly configPath = '.meteor-vite/vite-server.pid'
     public static async init(meteorParentPid: number) {
         if (BackgroundWorker.instance) {
             return BackgroundWorker.instance;
