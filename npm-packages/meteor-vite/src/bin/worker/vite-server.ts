@@ -44,22 +44,18 @@ export default CreateIPCInterface({
         const server = await createViteServer({
             packageJson,
             globalMeteorPackagesDir,
+            refreshNeeded: () => {
+                replyInterface({
+                    kind: 'refreshNeeded',
+                    data: {},
+                })
+            },
             buildStart: () => {
                 if (listening) {
                     sendViteConfig(replyInterface);
                 }
             },
         });
-        
-        process.on('warning', (warning) => {
-            if (warning.name !== RefreshNeeded.name) {
-                return;
-            }
-            replyInterface({
-                kind: 'refreshNeeded',
-                data: {},
-            })
-        })
         
         let listening = false
         await server.listen()
@@ -83,8 +79,10 @@ async function createViteServer({
     globalMeteorPackagesDir,
     packageJson,
     buildStart,
+    refreshNeeded,
 }: DevServerOptions & {
     buildStart: () => void;
+    refreshNeeded: () => void;
 }) {
     if (server) {
         return server;
@@ -94,7 +92,7 @@ async function createViteServer({
         configFile: packageJson?.meteor?.viteConfig,
     }, 'serve');
     
-    return server = await createServer({
+    server = await createServer({
         configFile: viteConfig.configFile,
         plugins: [
             MeteorStubs({
@@ -112,6 +110,15 @@ async function createViteServer({
             },
         ],
     });
+    
+    process.on('warning', (warning) => {
+        if (warning.name !== RefreshNeeded.name) {
+            return;
+        }
+        refreshNeeded();
+    })
+    
+    return server;
 }
 
 function sendViteConfig(reply: Replies) {
