@@ -30,6 +30,7 @@ export function createWorkerFork(hooks: Partial<WorkerResponseHooks>, options?: 
         detached: options?.detached ?? false,
         env: {
             FORCE_COLOR: '3',
+            ENABLE_DEBUG_LOGS: process.env.ENABLE_DEBUG_LOGS,
         },
     });
     
