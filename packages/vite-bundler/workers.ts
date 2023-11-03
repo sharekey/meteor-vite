@@ -46,7 +46,7 @@ export function createWorkerFork(hooks: Partial<WorkerResponseHooks>, options?: 
             workerConfigHook(data);
         }
         const { pid, listening } = data;
-        if (listening) {
+        if (listening && process.env.ENABLE_DEBUG_LOGS) {
             console.log('Running Vite worker as a background process..\n  ', [
                 `Background PID: ${pid}`,
                 `Child process PID: ${child.pid}`,
