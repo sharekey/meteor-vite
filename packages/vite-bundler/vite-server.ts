@@ -10,6 +10,7 @@ import {
 import { createWorkerFork, getProjectPackageJson, isMeteorIPCMessage, meteorPackagePath } from './workers';
 
 if (Meteor.isDevelopment) {
+    let tsupWatcherRunning = false;
     DevConnectionLog.info('Starting Vite server...');
     
     WebAppInternals.registerBoilerplateDataCallback('meteor-vite', (request: HTTP.IncomingMessage, data: BoilerplateData) => {
@@ -26,8 +27,24 @@ if (Meteor.isDevelopment) {
         },
         refreshNeeded() {
             DevConnectionLog.info('Some lazy-loaded packages were imported, please refresh')
+        },
+        
+        /**
+         * Builds the 'meteor-vite' npm package where the worker and Vite server is kept.
+         * Primarily to ease the testing process for the Vite plugin.
+         */
+        workerConfig({ listening }) {
+            if (!listening) return;
+            if (process.env.METEOR_VITE_TSUP_BUILD_WATCHER !== 'true') return;
+            if (tsupWatcherRunning) return;
+            
+            tsupWatcherRunning = true;
+            viteServer.call({
+                method: 'tsup.watchMeteorVite',
+                params: [],
+            })
         }
-    });
+    }, { detached: true });
     
     viteServer.call({
         method: 'vite.startDevServer',
@@ -60,18 +77,6 @@ if (Meteor.isDevelopment) {
             return getConfig();
         }
     })
-    
-    /**
-     * Builds the 'meteor-vite' npm package where the worker and Vite server is kept.
-     * Primarily to ease the testing process for the Vite plugin.
-     */
-    if (process.env.METEOR_VITE_TSUP_BUILD_WATCHER === 'true') {
-        const packageBuilder = createWorkerFork({});
-        packageBuilder.call({
-            method: 'tsup.watchMeteorVite',
-            params: [],
-        });
-    }
 }
 
 interface BoilerplateData {
