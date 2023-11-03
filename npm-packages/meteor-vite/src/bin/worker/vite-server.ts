@@ -148,23 +148,24 @@ class BackgroundWorker {
         if (BackgroundWorker.instance) {
             return BackgroundWorker.instance;
         }
+        const myConfig = {
+            pid: process.pid,
+            meteorPid: process.ppid,
+            meteorParentPid,
+            viteConfig: {}
+        };
         try {
             const content = await FS.readFile(this.configPath, 'utf-8');
             const config = JSON.parse(content);
             console.log('Retrieved runtime config from file: ', config)
             BackgroundWorker.instance = new BackgroundWorker(config);
         } catch (error) {
-            BackgroundWorker.instance = new BackgroundWorker({
-                pid: process.pid,
-                meteorPid: process.ppid,
-                meteorParentPid,
-                viteConfig: {}
-            })
+            BackgroundWorker.instance = new BackgroundWorker(myConfig)
         }
         
         const worker = BackgroundWorker.instance;
         if (!worker.isRunning) {
-            await worker.update(worker.config);
+            await worker.update(myConfig);
         }
         return worker;
     }
