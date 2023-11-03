@@ -34,6 +34,7 @@ if (Meteor.isDevelopment) {
         params: [{
             packageJson: getProjectPackageJson(),
             globalMeteorPackagesDir: meteorPackagePath,
+            meteorParentPid: process.ppid,
         }]
     });
     
