@@ -54,7 +54,7 @@ export default CreateIPCInterface({
                 kind: 'viteConfig',
                 data: backgroundWorker.config.viteConfig,
             })
-            console.log(`Vite server running as background process. (pid ${backgroundWorker.config.pid})`);
+            Logger.info(`Vite server running as background process. (pid ${backgroundWorker.config.pid})`);
             return process.exit(0);
         }
         
@@ -69,7 +69,7 @@ export default CreateIPCInterface({
             },
             buildStart: () => {
                 sendViteConfig(replyInterface).catch((error) => {
-                    console.error(error);
+                    Logger.error(error);
                     process.exit(1);
                 });
             },
@@ -85,11 +85,11 @@ export default CreateIPCInterface({
     async 'vite.stopDevServer'() {
         if (!server) return;
         try {
-            console.log('Shutting down vite server...');
+            Logger.info('Shutting down vite server...');
             await server.close()
-            console.log('Vite server shut down successfully!');
+            Logger.info('Vite server shut down successfully!');
         } catch (error) {
-            console.error('Failed to shut down Vite server:', error);
+            Logger.error('Failed to shut down Vite server:', error);
         }
     }
 })
@@ -217,7 +217,7 @@ class BackgroundWorker {
             await worker.update(myConfig);
             worker._watchForParentExit();
         } else {
-            console.log(`Background worker should be running with PID: ${worker.config.pid}`, worker.config);
+            Logger.debug(`Background worker should be running with PID: ${worker.config.pid}`, worker.config);
         }
         return worker;
     }
@@ -229,7 +229,7 @@ class BackgroundWorker {
             if (this._isRunning(this.config.meteorPid)) {
                 return;
             }
-            console.warn('Meteor parent process is no longer running. Shutting down...');
+            Logger.warn('Meteor parent process is no longer running. Shutting down...');
             this.update({
                 pid: 0,
                 meteorPid: 0,
@@ -252,15 +252,15 @@ class BackgroundWorker {
     
     public get isRunning() {
         if (!this.config.pid) {
-            console.log('No background worker process ID')
+            Logger.debug('No background worker process ID')
             return false;
         }
         if (this.config.pid === process.pid) {
-            console.log(`Background worker's process ID is identical to ours`)
+            Logger.debug(`Background worker's process ID is identical to ours`)
             return false;
         }
         if (!this._isRunning(this.config.pid)) {
-            console.warn(`Background worker not running: ${this.config.pid} (current PID ${process.pid}) `);
+            Logger.debug(`Background worker not running: ${this.config.pid} (current PID ${process.pid}) `);
             return false;
         }
         return true;
@@ -273,7 +273,7 @@ class BackgroundWorker {
     
     public async setViteConfig(viteConfig: WorkerRuntimeConfig['viteConfig']) {
         if (this.config.pid !== process.pid && this.isRunning) {
-            console.log(`Skipping Vite config write - config is controlled by different background process: ${this.config.pid}`);
+            Logger.debug(`Skipping Vite config write - config is controlled by different background process: ${this.config.pid}`);
             return;
         }
         await this.update({
