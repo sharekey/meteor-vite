@@ -138,7 +138,6 @@ async function createViteServer({
                         });
                         req.on('end', () => {
                           const message = JSON.parse(body);
-                          console.log(message);
                           MeteorEvents.ingest(message);
                           res.statusCode = 204;
                           next();
