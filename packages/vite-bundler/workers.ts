@@ -87,6 +87,7 @@ export function createWorkerFork(hooks: Partial<WorkerResponseHooks>, options?: 
         call(method: Omit<WorkerMethod, 'replies'>) {
             if (!child.connected) {
                 console.warn('Oops worker process is not connected! Tried to send message to worker:', method);
+                console.log('The Vite server is likely running in the background. Try restarting Meteor. 👍');
                 return;
             }
             child.send(method);
