@@ -43,7 +43,7 @@ export default CreateIPCInterface({
     
     // todo: Add reply for triggering a server restart
     async 'vite.startDevServer'(replyInterface: Replies, { packageJson, globalMeteorPackagesDir, meteorParentPid }: DevServerOptions) {
-        const worker = await BackgroundWorker.init();
+        const worker = await BackgroundWorker.init(meteorParentPid);
         const server = await createViteServer({
             packageJson,
             globalMeteorPackagesDir,
@@ -70,12 +70,6 @@ export default CreateIPCInterface({
             return;
         }
         
-        await worker.update({
-            pid: process.pid,
-            meteorPid: process.ppid,
-            meteorParentPid,
-            viteConfig: {},
-        })
         await server.listen()
         await sendViteConfig(replyInterface);
         listening = true
@@ -150,7 +144,7 @@ type WorkerRuntimeConfig = {
 class BackgroundWorker {
     public static instance: BackgroundWorker;
     protected static readonly configPath = './.meteor-vite-server.pid'
-    public static async init() {
+    public static async init(meteorParentPid: number) {
         if (BackgroundWorker.instance) {
             return BackgroundWorker.instance;
         }
@@ -159,9 +153,9 @@ class BackgroundWorker {
             return BackgroundWorker.instance = new BackgroundWorker(JSON.parse(content));
         } catch (error) {
             return BackgroundWorker.instance = new BackgroundWorker({
-                pid: 0,
-                meteorPid: 0,
-                meteorParentPid: 0,
+                pid: process.pid,
+                meteorPid: process.ppid,
+                meteorParentPid,
                 viteConfig: {}
             })
         }
@@ -170,6 +164,9 @@ class BackgroundWorker {
     
     public get isRunning() {
         if (!this.config.pid) {
+            return false;
+        }
+        if (this.config.pid === process.pid) {
             return false;
         }
         try {
