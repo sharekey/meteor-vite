@@ -11,7 +11,6 @@ import CreateIPCInterface, { IPCReply } from './IPC/interface';
 
 let server: ViteDevServer & { config: MeteorViteConfig };
 let viteConfig: MeteorViteConfig;
-let workerConfig: WorkerRuntimeConfig;
 let listening = false;
 
 type Replies = IPCReply<{
@@ -44,8 +43,7 @@ export default CreateIPCInterface({
     
     // todo: Add reply for triggering a server restart
     async 'vite.startDevServer'(replyInterface: Replies, { packageJson, globalMeteorPackagesDir, meteorParentPid }: DevServerOptions) {
-        let hasBackgroundWorker = false;
-        workerConfig = await getWorkerRuntimeConfig();
+        const worker = await BackgroundWorker.init();
         const server = await createViteServer({
             packageJson,
             globalMeteorPackagesDir,
@@ -63,26 +61,21 @@ export default CreateIPCInterface({
             },
         });
         
-        try {
-            process.kill(workerConfig.pid, 0);
-            hasBackgroundWorker = true;
-        } catch (error) {}
-        
-        if (hasBackgroundWorker) {
-            console.log(`Vite server running as background process. (pid ${workerConfig.pid})`);
+        if (worker.isRunning) {
             replyInterface({
                 kind: 'viteConfig',
-                data: workerConfig.viteConfig,
+                data: worker.config.viteConfig,
             })
+            console.log(`Vite server running as background process. (pid ${worker.config.pid})`);
             return;
         }
         
-        await setWorkerRuntimeConfig({
+        await worker.update({
             pid: process.pid,
             meteorPid: process.ppid,
             meteorParentPid,
             viteConfig: {},
-        });
+        })
         await server.listen()
         await sendViteConfig(replyInterface);
         listening = true
@@ -153,25 +146,54 @@ type WorkerRuntimeConfig = {
     meteorParentPid: number;
     viteConfig: ViteRuntimeConfig;
 }
-const workerRuntimeConfigFilePath = './.meteor-vite-server.pid';
 
-async function getWorkerRuntimeConfig(): Promise<WorkerRuntimeConfig> {
-    try {
-        const content = await FS.readFile(workerRuntimeConfigFilePath, 'utf-8');
-        return JSON.parse(content);
-    } catch (error) {
-        return {
-            pid: 0,
-            meteorPid: 0,
-            meteorParentPid: 0,
-            viteConfig: {}
+class BackgroundWorker {
+    public static instance: BackgroundWorker;
+    protected static readonly configPath = './.meteor-vite-server.pid'
+    public static async init() {
+        if (BackgroundWorker.instance) {
+            return BackgroundWorker.instance;
+        }
+        try {
+            const content = await FS.readFile(this.configPath, 'utf-8');
+            return BackgroundWorker.instance = new BackgroundWorker(JSON.parse(content));
+        } catch (error) {
+            return BackgroundWorker.instance = new BackgroundWorker({
+                pid: 0,
+                meteorPid: 0,
+                meteorParentPid: 0,
+                viteConfig: {}
+            })
         }
     }
-}
-
-async function setWorkerRuntimeConfig(config: WorkerRuntimeConfig) {
-    workerConfig = config;
-    await FS.writeFile(workerRuntimeConfigFilePath, JSON.stringify(workerConfig));
+    constructor(public config: WorkerRuntimeConfig) {}
+    
+    public get isRunning() {
+        if (!this.config.pid) {
+            return false;
+        }
+        try {
+            process.kill(this.config.pid, 0);
+            return true;
+        } catch (error) {
+            return false;
+        }
+    }
+    
+    public async update(config: WorkerRuntimeConfig) {
+        this.config = config;
+        await FS.writeFile(BackgroundWorker.configPath, JSON.stringify(this.config));
+    }
+    
+    public async setViteConfig(viteConfig: WorkerRuntimeConfig['viteConfig']) {
+        if (this.config.pid !== process.pid) {
+            return;
+        }
+        await this.update({
+            ...this.config,
+            viteConfig,
+        })
+    }
 }
 
 async function sendViteConfig(reply: Replies) {
@@ -181,18 +203,15 @@ async function sendViteConfig(reply: Replies) {
     }
     
     const { config } = server;
-    
-    if (listening) {
-        workerConfig.viteConfig = {
-            host: config.server?.host,
-            port: config.server?.port,
-            entryFile: config.meteor?.clientEntry,
-        }
-    }
+    const data = {
+        host: config.server?.host,
+        port: config.server?.port,
+        entryFile: config.meteor?.clientEntry,
+    };
     
     reply({
         kind: 'viteConfig',
-        data: workerConfig.viteConfig,
+        data,
     });
-    await setWorkerRuntimeConfig(workerConfig);
+    await BackgroundWorker.instance.setViteConfig(data);
 }
