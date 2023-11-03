@@ -3,6 +3,7 @@ import FS from 'fs/promises';
 import NodeFS from 'fs';
 import Path from 'path';
 import pc from 'picocolors';
+import { ViteDevServer } from 'vite';
 import { createLabelledLogger, LabelLogger } from '../Logger';
 import { isSameModulePath } from '../meteor/package/components/MeteorPackage';
 import AutoImportQueue from './AutoImportQueue';
@@ -165,6 +166,15 @@ export default class ViteLoadRequest {
         await AutoImportQueue.write({
             meteorEntrypoint: meteorClientEntryFile,
             importString: this.context.id,
+        }).catch((error) => {
+            if (!(error instanceof RefreshNeeded)) {
+                throw error;
+            }
+            if (!this.context.server) {
+                throw error;
+            }
+            
+            this.context.server.restart(true);
         });
     }
     
@@ -197,6 +207,7 @@ export type FileRequestData = ReturnType<typeof ViteLoadRequest['loadFileData']>
 interface PreContextRequest {
     id: string;
     pluginSettings: PluginSettings;
+    server: ViteDevServer;
 }
 
 export interface RequestContext extends PreContextRequest {

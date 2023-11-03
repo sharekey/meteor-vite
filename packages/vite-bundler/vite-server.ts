@@ -1,6 +1,8 @@
 import { Meteor } from 'meteor/meteor'
 import { WebAppInternals } from 'meteor/webapp'
 import type HTTP from 'http'
+import { fetch } from 'meteor/fetch';
+import { MeteorIPCMessage } from '../../npm-packages/meteor-vite/src/meteor/MeteorEvents';
 import {
     getConfig, DevConnectionLog,
     MeteorViteConfig,
@@ -10,6 +12,7 @@ import {
 import { createWorkerFork, getProjectPackageJson, isMeteorIPCMessage, meteorPackagePath } from './workers';
 
 if (Meteor.isDevelopment) {
+    let tsupWatcherRunning = false;
     DevConnectionLog.info('Starting Vite server...');
     
     WebAppInternals.registerBoilerplateDataCallback('meteor-vite', (request: HTTP.IncomingMessage, data: BoilerplateData) => {
@@ -26,23 +29,50 @@ if (Meteor.isDevelopment) {
         },
         refreshNeeded() {
             DevConnectionLog.info('Some lazy-loaded packages were imported, please refresh')
+        },
+        
+        /**
+         * Builds the 'meteor-vite' npm package where the worker and Vite server is kept.
+         * Primarily to ease the testing process for the Vite plugin.
+         */
+        workerConfig({ listening }) {
+            if (!listening) return;
+            if (process.env.METEOR_VITE_TSUP_BUILD_WATCHER !== 'true') return;
+            if (tsupWatcherRunning) return;
+            
+            tsupWatcherRunning = true;
+            viteServer.call({
+                method: 'tsup.watchMeteorVite',
+                params: [],
+            })
         }
-    });
+    }, { detached: true });
+    
+    const sendIpcMessage = Meteor.bindEnvironment(async (message: MeteorIPCMessage) => {
+        const { host, port, ready } = getConfig();
+        if (!ready) return;
+        
+        await fetch(`http://${host}:${port}/__meteor__/ipc-message`, {
+            method: 'POST',
+            body: JSON.stringify(message),
+        }).catch((error) => {
+            console.error(error);
+        })
+    })
+    
     
     viteServer.call({
         method: 'vite.startDevServer',
         params: [{
             packageJson: getProjectPackageJson(),
             globalMeteorPackagesDir: meteorPackagePath,
+            meteorParentPid: process.ppid,
         }]
     });
     
     process.on('message', (message) => {
         if (!isMeteorIPCMessage(message)) return;
-        viteServer.call({
-            method: 'meteor.ipcMessage',
-            params: [message],
-        })
+        sendIpcMessage(message);
     })
     
     Meteor.publish(ViteConnection.publication, () => {
@@ -59,18 +89,6 @@ if (Meteor.isDevelopment) {
             return getConfig();
         }
     })
-    
-    /**
-     * Builds the 'meteor-vite' npm package where the worker and Vite server is kept.
-     * Primarily to ease the testing process for the Vite plugin.
-     */
-    if (process.env.METEOR_VITE_TSUP_BUILD_WATCHER === 'true') {
-        const packageBuilder = createWorkerFork({});
-        packageBuilder.call({
-            method: 'tsup.watchMeteorVite',
-            params: [],
-        });
-    }
 }
 
 interface BoilerplateData {

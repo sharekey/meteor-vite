@@ -14,6 +14,7 @@ export default CreateIPCInterface({
         const child = spawn(tsupPath, ['--watch'], {
             stdio: 'inherit',
             cwd: npmPackagePath,
+            detached: false,
             env: {
                 FORCE_COLOR: '3',
             },

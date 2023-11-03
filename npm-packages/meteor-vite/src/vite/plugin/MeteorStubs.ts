@@ -1,7 +1,7 @@
 import FS from 'fs/promises';
 import Path from 'path';
 import pc from 'picocolors';
-import { Plugin } from 'vite';
+import { Plugin, ViteDevServer } from 'vite';
 import PackageJSON from '../../../package.json';
 import MeteorPackage from '../../meteor/package/components/MeteorPackage';
 import { stubTemplate } from '../../meteor/package/StubTemplate';
@@ -21,8 +21,8 @@ export const MeteorStubs = setupPlugin(async (pluginSettings: PluginSettings) =>
         name: 'meteor-vite: stubs',
         resolveId: (id) => ViteLoadRequest.resolveId(id),
         shouldProcess: (viteId) => ViteLoadRequest.isStubRequest(viteId),
-        async setupContext(viteId) {
-            return ViteLoadRequest.prepareContext({ id: viteId, pluginSettings });
+        async setupContext(viteId, server) {
+            return ViteLoadRequest.prepareContext({ id: viteId, pluginSettings, server });
         },
         
         async load(request) {
@@ -89,16 +89,19 @@ async function storeDebugSnippet({ request, stubTemplate, meteorPackage }: {
 function setupPlugin<Context extends ViteLoadRequest, Settings>(setup: (settings: Settings) => Promise<{
     name: string;
     load(request: Context): Promise<string>;
-    setupContext(viteId: string): Promise<Context>;
+    setupContext(viteId: string, server: ViteDevServer): Promise<Context>;
     shouldProcess(viteId: string): boolean;
     resolveId(viteId: string): string | undefined;
 }>): (settings: Settings) => Promise<Plugin> {
     const createPlugin = async (settings: Settings): Promise<Plugin> => {
         const plugin = await setup(settings);
+        let server: ViteDevServer;
         return {
             name: plugin.name,
             resolveId: plugin.resolveId,
-            
+            configureServer(viteDevServer) {
+                server = viteDevServer;
+            },
             async load(viteId: string) {
                 const shouldProcess = plugin.shouldProcess(viteId);
                 
@@ -106,7 +109,7 @@ function setupPlugin<Context extends ViteLoadRequest, Settings>(setup: (settings
                     return;
                 }
                 
-                const request = await plugin.setupContext(viteId);
+                const request = await plugin.setupContext(viteId, server);
                 
                 return plugin.load(request).catch(
                     createErrorHandler('Could not parse Meteor package', request)

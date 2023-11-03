@@ -1,4 +1,4 @@
-import { fork } from 'node:child_process'
+import { fork } from 'node:child_process';
 import { Meteor } from 'meteor/meteor';
 import Path from 'path';
 import FS from 'fs';
@@ -10,21 +10,27 @@ import type { ProjectJson } from '../../npm-packages/meteor-vite/src/vite/plugin
 
 // Use a worker to skip reify and Fibers
 // Use a child process instead of worker to avoid WASM/archived threads error
-export function createWorkerFork(hooks: Partial<WorkerResponseHooks>) {
+export function createWorkerFork(hooks: Partial<WorkerResponseHooks>, options?: { detached: boolean }) {
     if (!FS.existsSync(workerPath)) {
         throw new MeteorViteError([
-                `Unable to locate Meteor-Vite workers! Make sure you've installed the 'meteor-vite' npm package.`,
-                `Install it by running the following command:`,
-                `$  ${pc.yellow('npm i -D meteor-vite')}`
-            ])
+            `Unable to locate Meteor-Vite workers! Make sure you've installed the 'meteor-vite' npm package.`,
+            `Install it by running the following command:`,
+            `$  ${pc.yellow('npm i -D meteor-vite')}`
+        ])
+    }
+    let shouldKill = true;
+    
+    if (options?.detached) {
+        shouldKill = false;
     }
     
     const child = fork(workerPath, ['--enable-source-maps'], {
         stdio: ['inherit', 'inherit', 'inherit', 'ipc'],
         cwd,
-        detached: false,
+        detached: options?.detached ?? false,
         env: {
             FORCE_COLOR: '3',
+            ENABLE_DEBUG_LOGS: process.env.ENABLE_DEBUG_LOGS,
         },
     });
     
@@ -34,6 +40,28 @@ export function createWorkerFork(hooks: Partial<WorkerResponseHooks>) {
         if (typeof hook !== 'function') return;
         (hooks[method] as typeof hook) = Meteor.bindEnvironment(hook);
     })
+    
+    const workerConfigHook = hooks.workerConfig;
+    hooks.workerConfig = (data) => {
+        if (typeof workerConfigHook === 'function') {
+            workerConfigHook(data);
+        }
+        const { pid, listening } = data;
+        if (listening && process.env.ENABLE_DEBUG_LOGS) {
+            console.log('Running Vite worker as a background process..\n  ', [
+                `Background PID: ${pid}`,
+                `Child process PID: ${child.pid}`,
+                `Meteor PID: ${process.pid}`,
+                `Is vite server: ${listening}`,
+            ].join('\n   '));
+        }
+        
+        if (listening) {
+            shouldKill = false;
+        } else {
+            shouldKill = true;
+        }
+    }
     
     child.on('message', (message: WorkerResponse & { data: any }) => {
         const hook = hooks[message.kind];
@@ -47,17 +75,21 @@ export function createWorkerFork(hooks: Partial<WorkerResponseHooks>) {
     
     ['exit', 'SIGINT', 'SIGHUP', 'SIGTERM'].forEach(event => {
         process.once(event, () => {
-            child.send({
-                method: 'vite.stopDevServer',
-                params: [],
-            } satisfies Omit<WorkerMethod, 'replies'>);
-
-            child.kill()
+            if (!shouldKill) {
+                return;
+            }
+            
+            child.kill();
         })
     });
     
     return {
         call(method: Omit<WorkerMethod, 'replies'>) {
+            if (!child.connected) {
+                console.warn('Oops worker process is not connected! Tried to send message to worker:', method);
+                console.log('The Vite server is likely running in the background. Try restarting Meteor. 👍');
+                return;
+            }
             child.send(method);
         },
         child,
