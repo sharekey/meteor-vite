@@ -1,4 +1,4 @@
-import { fork, StdioOptions } from 'node:child_process';
+import { fork } from 'node:child_process';
 import { Meteor } from 'meteor/meteor';
 import Path from 'path';
 import FS from 'fs';
@@ -71,29 +71,23 @@ export function createWorkerFork(hooks: Partial<WorkerResponseHooks>, options?: 
         
         return hook(message.data);
     });
-    const disconnect = () => {
-        if (!child.connected) {
-            return;
-        }
-        try {
-            child.unref();
-        } catch (error) {
-            console.error('Failure to disconnect', error);
-        }
-    }
     
     ['exit', 'SIGINT', 'SIGHUP', 'SIGTERM'].forEach(event => {
         process.once(event, () => {
-            if (shouldKill) {
-                return child.kill();
+            if (!shouldKill) {
+                return;
             }
             
-            disconnect();
+            child.kill();
         })
     });
     
     return {
         call(method: Omit<WorkerMethod, 'replies'>) {
+            if (!child.connected) {
+                console.warn('Oops worker process is not connected! Tried to send message to worker:', method);
+                return;
+            }
             child.send(method);
         },
         child,
