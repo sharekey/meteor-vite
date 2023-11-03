@@ -172,18 +172,18 @@ class BackgroundWorker {
         const worker = BackgroundWorker.instance;
         if (!worker.isRunning) {
             await worker.update(myConfig);
+            worker._watchForParentExit();
         } else {
             console.log(`Background worker should be running with PID: ${worker.config.pid}`, worker.config);
         }
         return worker;
     }
-    constructor(public config: WorkerRuntimeConfig) {
-        if (config.pid !== process.pid) {
-            return;
-        }
+    constructor(public config: WorkerRuntimeConfig) {}
+    
+    protected _watchForParentExit() {
         // Keep track of Meteor's parent process to exit if it has ended abruptly.
         setInterval(() => {
-            if (this._isRunning(config.meteorPid)) {
+            if (this._isRunning(this.config.meteorPid)) {
                 return;
             }
             console.warn('Meteor parent process is no longer running. Shutting down...');
@@ -195,7 +195,7 @@ class BackgroundWorker {
             }).then(() => {
                 process.exit(1);
             })
-        }, 5_000)
+        }, 1_000)
     }
     
     protected _isRunning(pid: number) {
