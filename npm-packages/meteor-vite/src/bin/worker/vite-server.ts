@@ -158,7 +158,6 @@ class BackgroundWorker {
         try {
             const content = await FS.readFile(this.configPath, 'utf-8');
             const config = JSON.parse(content);
-            console.log('Retrieved runtime config from file: ', config)
             BackgroundWorker.instance = new BackgroundWorker(config);
         } catch (error) {
             BackgroundWorker.instance = new BackgroundWorker(myConfig)
@@ -167,11 +166,13 @@ class BackgroundWorker {
         const worker = BackgroundWorker.instance;
         if (!worker.isRunning) {
             await worker.update(myConfig);
+        } else {
+            console.log(`Background worker should be running with PID: ${worker.config.pid}`, worker.config);
         }
         return worker;
     }
     constructor(public config: WorkerRuntimeConfig) {
-        console.log('Retrieved background process config', config);
+    
     }
     
     public get isRunning() {
@@ -185,7 +186,6 @@ class BackgroundWorker {
         }
         try {
             process.kill(this.config.pid, 0);
-            console.log('Background worker should be running!');
             return true;
         } catch (error) {
             console.warn(`Background worker not running: ${this.config.pid} (current PID ${process.pid}) `, error);
