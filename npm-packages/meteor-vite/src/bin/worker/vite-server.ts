@@ -21,7 +21,7 @@ type Replies = IPCReply<{
     data: {},
 } | {
     kind: 'workerConfig';
-    data: WorkerRuntimeConfig;
+    data: WorkerRuntimeConfig & { listening: boolean };
 }>
 
 type ViteRuntimeConfig = {
@@ -235,6 +235,9 @@ async function sendViteConfig(reply: Replies) {
     });
     reply({
         kind: 'workerConfig',
-        data: worker.config,
+        data: {
+            ...worker.config,
+            listening,
+        },
     })
 }
