@@ -54,7 +54,9 @@ export default CreateIPCInterface({
                 kind: 'viteConfig',
                 data: worker.config.viteConfig,
             })
+            console.log('Testing testing!');
             console.log(`Vite server running as background process. (pid ${worker.config.pid})`);
+            process.exit(0);
             return;
         }
         
@@ -209,7 +211,7 @@ class BackgroundWorker {
             return false;
         }
         if (!this._isRunning(this.config.pid)) {
-            console.warn(`Background worker not running: ${this.config.pid} (current PID ${process.pid}) `, error);
+            console.warn(`Background worker not running: ${this.config.pid} (current PID ${process.pid}) `);
             return false;
         }
         return true;
