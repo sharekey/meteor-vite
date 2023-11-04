@@ -1,5 +1,11 @@
 # meteor-vite
 
+## 1.4.0
+
+### Minor Changes
+
+- 1ce04c9: Keep Vite dev server running between Meteor restarts (Fixes #35)
+
 ## 1.3.2
 
 ### Patch Changes

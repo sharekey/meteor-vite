@@ -1,5 +1,11 @@
 # vite-bundler
 
+## 1.5.0
+
+### Minor Changes
+
+- 1ce04c9: Keep Vite dev server running between Meteor restarts (Fixes #35)
+
 ## 1.4.1
 
 ### Patch Changes
