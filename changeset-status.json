@@ -3,23 +3,36 @@
     {
       "releases": [
         {
+          "name": "meteor-vite",
+          "type": "minor"
+        },
+        {
           "name": "vite-bundler",
-          "type": "patch"
+          "type": "minor"
         }
       ],
-      "summary": "Fix documentation reference in package.js",
-      "id": "witty-garlics-change"
+      "summary": "Keep Vite dev server running between Meteor restarts (Fixes #35)",
+      "id": "funny-eels-dress"
     }
   ],
   "releases": [
     {
-      "name": "vite-bundler",
-      "type": "patch",
-      "oldVersion": "1.4.0",
+      "name": "meteor-vite",
+      "type": "minor",
+      "oldVersion": "1.3.2",
       "changesets": [
-        "witty-garlics-change"
+        "funny-eels-dress"
       ],
-      "newVersion": "1.4.1"
+      "newVersion": "1.4.0"
+    },
+    {
+      "name": "vite-bundler",
+      "type": "minor",
+      "oldVersion": "1.4.1",
+      "changesets": [
+        "funny-eels-dress"
+      ],
+      "newVersion": "1.5.0"
     }
   ]
 }
