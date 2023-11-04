@@ -1,5 +1,11 @@
 # vite-bundler
 
+## 1.5.1
+
+### Patch Changes
+
+- ece1579: Emit warning message if an outdated version of the meteor-vite npm package is in use.
+
 ## 1.5.0
 
 ### Minor Changes
