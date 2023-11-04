@@ -82,7 +82,7 @@ const logger = {
             return;
         }
 
-        let summary = `\n### New Version\n\n`;
+        let summary = `\n### Release Meteor Package\n\n`;
         summary += '```\n';
         summary += this._history.join('\n');
         summary += '```\n';
