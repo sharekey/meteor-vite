@@ -5,18 +5,19 @@ import FS from 'fs/promises';
 // Assuming this is launched from the repository root for now.
 const repoPath = process.cwd();
 const PACKAGE_VERSION_REGEX = /version:\s*'(?<version>[\d.]+)'\s*,/;
+const CHANGESET_STATUS_FILE = 'changeset-status.json';
 const meteorPackage = {
     releaseName: 'vite-bundler',
     packageJsPath: Path.join(repoPath, './packages/vite-bundler/package.js'),
 }
 
 async function applyVersion() {
-    shell('changeset status --output changeset-status.json');
+    shell(`changeset status --output ${CHANGESET_STATUS_FILE}`);
 
-    const { releases } = await FS.readFile('changeset-status.json', 'utf-8')
+    const { releases } = await FS.readFile(`${CHANGESET_STATUS_FILE}`, 'utf-8')
                                  .then((content) => JSON.parse(content));
 
-    const release = releases.find(({ name }) => meteorPackage.releaseName);
+    const release = releases.find(({ name }) => name === meteorPackage.releaseName);
 
     if (!release) {
         console.log('⚠️  No pending releases found for %s', meteorPackage.releaseName);
