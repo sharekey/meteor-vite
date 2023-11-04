@@ -182,6 +182,12 @@ export interface PluginSettings {
  * todo: expand types
  */
 export type ProjectJson = {
+    dependencies: {
+        'meteor-vite'?: string;
+    }
+    devDependencies: {
+        'meteor-vite'?: string;
+    }
     meteor: {
         mainModule: {
             client: string;
