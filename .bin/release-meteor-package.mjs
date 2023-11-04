@@ -11,32 +11,7 @@ const CHANGESET_STATUS_FILE = 'changeset-status.json';
 const meteorPackage = {
     releaseName: 'vite-bundler',
     packageJsPath: Path.join(repoPath, './packages/vite-bundler/package.js'),
-}
-
-const logger = {
-    _history: [],
-    _log(level, params) {
-        console[level].apply(this, params);
-        this._history.push(params.join(' '));
-    },
-    info: (...params) => logger._log('info', params),
-    error: (...params) => logger._log('error', params),
-    emitSummary() {
-        if (!process.env.GITHUB_STEP_SUMMARY) {
-            return;
-        }
-
-        let summary = `\n### New Version\n\n`
-        summary += '```\n';
-        summary += this._history.join('\n');
-        summary += '```\n';
-
-        FS.appendFile(process.env.GITHUB_STEP_SUMMARY, summary, (error) => {
-            if (!error) return;
-            console.error(error);
-        });
-    }
-}
+};
 
 async function applyVersion() {
     shell(`changeset status --output ${CHANGESET_STATUS_FILE}`);
@@ -55,9 +30,9 @@ async function applyVersion() {
 
     let packageJsContent = await FS.readFile(meteorPackage.packageJsPath, 'utf-8');
     const packageName = packageJsContent.match(PACKAGE_NAME_REGEX)?.groups.packageName;
-    const currentVersion = packageJsContent.match(PACKAGE_VERSION_REGEX)?.groups?.version
+    const currentVersion = packageJsContent.match(PACKAGE_VERSION_REGEX)?.groups?.version;
     if (!currentVersion) {
-        throw new Error(`Unable to read version from ${meteorPackage.releaseName} package.js`)
+        throw new Error(`Unable to read version from ${meteorPackage.releaseName} package.js`);
     }
     packageJsContent = packageJsContent.replace(PACKAGE_VERSION_REGEX, `version: '${release.newVersion}',`);
     await FS.writeFile(meteorPackage.packageJsPath, packageJsContent);
@@ -78,8 +53,8 @@ async function publish() {
             METEOR_SESSION_FILE: process.env.METEOR_SESSION_FILE, // Authenticate using auth token stored as file.
             VITE_METEOR_DISABLED: 'true', // Prevents vite:bundler from trying to compile itself on publish
             ...process.env,
-        }
-    })
+        },
+    });
 }
 
 function shell(command, options) {
@@ -95,6 +70,31 @@ function shell(command, options) {
     });
 }
 
+const logger = {
+    _history: [],
+    _log(level, params) {
+        console[level].apply(this, params);
+        this._history.push(params.join(' '));
+    },
+    info: (...params) => logger._log('info', params),
+    error: (...params) => logger._log('error', params),
+    emitSummary() {
+        if (!process.env.GITHUB_STEP_SUMMARY) {
+            return;
+        }
+
+        let summary = `\n### New Version\n\n`;
+        summary += '```\n';
+        summary += this._history.join('\n');
+        summary += '```\n';
+
+        FS.appendFile(process.env.GITHUB_STEP_SUMMARY, summary, (error) => {
+            if (!error) return;
+            console.error(error);
+        });
+    },
+}
+
 (async () => {
     const [binPath, modulePath, action] = process.argv;
 
@@ -108,13 +108,13 @@ function shell(command, options) {
         return;
     }
 
-    throw new Error(`The provided argument is not recognized: "${action}"`)
+    throw new Error(`The provided argument is not recognized: "${action}"`);
 
 })().catch((error) => {
     const { stdout, stderr } = error;
 
     if (stdout) {
-        logger.info(stdout.toString())
+        logger.info(stdout.toString());
     }
     if (stderr) {
         logger.error(stderr.toString());
