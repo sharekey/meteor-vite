@@ -18,6 +18,7 @@ export function createWorkerFork(hooks: Partial<WorkerResponseHooks>, options?: 
             `$  ${pc.yellow('npm i -D meteor-vite')}`
         ])
     }
+    validateNpmVersion();
     let shouldKill = true;
     
     if (options?.detached) {
@@ -124,6 +125,7 @@ class MeteorViteError extends Error {
     }
 }
 
+export const MIN_METEOR_VITE_NPM_VERSION = { major: 1, minor: 4, patch: 1 };
 export const cwd = process.env.METEOR_VITE_CWD ?? guessCwd();
 export const meteorPackagePath = guessMeteorPackagePath();
 export const workerPath = Path.join(cwd, 'node_modules/meteor-vite/dist/bin/worker/index.mjs');
@@ -161,4 +163,60 @@ function guessMeteorPackagePath() {
     });
     
     return Path.join(packagePath, '../');
+}
+
+function validateNpmVersion() {
+    const packageJson = getProjectPackageJson();
+    const version = packageJson.dependencies['meteor-vite'] || packageJson.devDependencies['meteor-vite'];
+    const SEMVER_PARSE_REGEX = /(?<major>\d)+\.(?<minor>\d)+\.(?<patch>\d)+/;
+    
+    if (!version) {
+        console.error([
+            '⚡  Missing `meteor-vite` in your dependencies! You can install it with the following command:',
+            pc.dim(' $ meteor npm i meteor-vite '),
+        ].join('\n'))
+        return;
+    }
+    
+    let { minor, patch, major } = version.match(SEMVER_PARSE_REGEX)?.groups || {} as Record<'major' | 'minor' | 'patch', number | string | undefined>;
+    function logVersionRequirement() {
+        const { major, minor, patch } = MIN_METEOR_VITE_NPM_VERSION;
+        console.error([
+            '⚡  You are using an out of date version of `meteor-vite`.',
+            `   Please update it: ${pc.dim(`$ meteor npm i meteor-vite@${major}.${minor}.${patch}`)}`
+        ].join('\n'))
+    }
+    
+    if (!major || !minor || !patch) {
+        console.warn('⚡  Unrecognized version of the `meteor-vite` npm package.');
+        return;
+    }
+    major = parseInt(major.toString());
+    minor = parseInt(minor.toString());
+    patch = parseInt(patch.toString());
+    
+    if (major > MIN_METEOR_VITE_NPM_VERSION.major) {
+        return;
+    }
+    
+    if (major < MIN_METEOR_VITE_NPM_VERSION.major) {
+        logVersionRequirement();
+        return;
+    }
+    
+    if (minor > MIN_METEOR_VITE_NPM_VERSION.minor) {
+        return;
+    }
+    
+    if (minor < MIN_METEOR_VITE_NPM_VERSION.minor) {
+        logVersionRequirement();
+    }
+    
+    if (patch > MIN_METEOR_VITE_NPM_VERSION.patch) {
+        return;
+    }
+    
+    if (patch < MIN_METEOR_VITE_NPM_VERSION.patch) {
+        logVersionRequirement();
+    }
 }
