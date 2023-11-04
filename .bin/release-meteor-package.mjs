@@ -15,11 +15,11 @@ const meteorPackage = {
 const logger = {
     _history: [],
     _log(level, params) {
-        console[level].apply(this, ...params);
+        console[level].apply(this, params);
         this._history.push(params.join(' '));
     },
-    info: (...params) => this._log('info', params),
-    error: (...params) => this._log('error', params),
+    info: (...params) => logger._log('info', params),
+    error: (...params) => logger._log('error', params),
     emitSummary() {
         if (!process.env.GITHUB_STEP_SUMMARY) {
             return;
