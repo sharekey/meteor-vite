@@ -205,6 +205,7 @@ class BackgroundWorker {
             viteConfig: {}
         };
         try {
+            await FS.mkdir(Path.dirname(this.configPath), { recursive: true });
             const content = await FS.readFile(this.configPath, 'utf-8');
             const config = JSON.parse(content);
             BackgroundWorker.instance = new BackgroundWorker(config);
