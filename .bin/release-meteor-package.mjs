@@ -11,6 +11,30 @@ const meteorPackage = {
     releaseName: 'vite-bundler',
     packageJsPath: Path.join(repoPath, './packages/vite-bundler/package.js'),
 };
+const logger = {
+    _history: [],
+    _log(level, params) {
+        console[level].apply(this, params);
+        this._history.push(params.join(' '));
+    },
+    info: (...params) => logger._log('info', params),
+    error: (...params) => logger._log('error', params),
+    emitSummary() {
+        if (!process.env.GITHUB_STEP_SUMMARY) {
+            return;
+        }
+
+        let summary = `\n### Release Meteor Package\n\n`;
+        summary += '```\n';
+        summary += this._history.join('\n');
+        summary += '```\n';
+
+        FS.appendFile(process.env.GITHUB_STEP_SUMMARY, summary, (error) => {
+            if (!error) return;
+            console.error(error);
+        });
+    },
+}
 
 async function applyVersion() {
     shell(`changeset status --output ${CHANGESET_STATUS_FILE}`);
@@ -67,31 +91,6 @@ function shell(command, options) {
         ...options,
         stdio: 'inherit',
     });
-}
-
-const logger = {
-    _history: [],
-    _log(level, params) {
-        console[level].apply(this, params);
-        this._history.push(params.join(' '));
-    },
-    info: (...params) => logger._log('info', params),
-    error: (...params) => logger._log('error', params),
-    emitSummary() {
-        if (!process.env.GITHUB_STEP_SUMMARY) {
-            return;
-        }
-
-        let summary = `\n### Release Meteor Package\n\n`;
-        summary += '```\n';
-        summary += this._history.join('\n');
-        summary += '```\n';
-
-        FS.appendFile(process.env.GITHUB_STEP_SUMMARY, summary, (error) => {
-            if (!error) return;
-            console.error(error);
-        });
-    },
 }
 
 (async () => {
