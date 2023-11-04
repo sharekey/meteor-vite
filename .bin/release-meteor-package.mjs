@@ -1,7 +1,6 @@
 import { execSync, spawn } from 'child_process';
 import Path from 'path';
 import FS from 'fs/promises';
-import { version } from '../npm-packages/meteor-vite/test/__mocks/meteor-bundle/svelte_example-modules.js';
 
 // Assuming this is launched from the repository root for now.
 const repoPath = process.cwd();
