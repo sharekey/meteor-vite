@@ -27,7 +27,7 @@ const logger = {
         let summary = `\n### Release Meteor Package\n\n`;
         summary += '```\n';
         summary += this._history.join('\n');
-        summary += '```\n';
+        summary += '\n```\n';
 
         FS.appendFile(process.env.GITHUB_STEP_SUMMARY, summary, (error) => {
             if (!error) return;
