@@ -1,6 +1,7 @@
 import { execSync, spawn } from 'child_process';
 import Path from 'path';
 import FS from 'fs/promises';
+import { version } from '../npm-packages/meteor-vite/test/__mocks/meteor-bundle/svelte_example-modules.js';
 
 // Assuming this is launched from the repository root for now.
 const repoPath = process.cwd();
@@ -99,13 +100,11 @@ function shell(command, options) {
 
     if (action === 'publish') {
         await publish();
-        logger.emitSummary();
         return;
     }
 
     if (action === 'version') {
         await applyVersion();
-        logger.emitSummary();
         return;
     }
 
@@ -123,4 +122,6 @@ function shell(command, options) {
 
     logger.emitSummary();
     process.exit(1);
+}).finally(() => {
+    logger.emitSummary();
 });
