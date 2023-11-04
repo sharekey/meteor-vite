@@ -193,7 +193,7 @@ type WorkerRuntimeConfig = {
 
 class BackgroundWorker {
     public static instance: BackgroundWorker;
-    protected static readonly configPath = Path.join('.meteor-vite', 'vite-server.pid')
+    protected static readonly configPath = Path.join('.meteor/local/vite', 'vite-dev-server.pid')
     public static async init(meteorParentPid: number) {
         if (BackgroundWorker.instance) {
             return BackgroundWorker.instance;
