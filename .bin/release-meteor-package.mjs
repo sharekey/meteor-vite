@@ -12,6 +12,31 @@ const meteorPackage = {
     packageJsPath: Path.join(repoPath, './packages/vite-bundler/package.js'),
 }
 
+const logger = {
+    _history: [],
+    _log(level, params) {
+        console[level].apply(this, ...params);
+        this._history.push(params.join(' '));
+    },
+    info: (...params) => this._log('info', params),
+    error: (...params) => this._log('error', params),
+    emitSummary() {
+        if (!process.env.GITHUB_STEP_SUMMARY) {
+            return;
+        }
+
+        let summary = `\n### New Version\n\n`
+        summary += '```\n';
+        summary += this._history.join('\n');
+        summary += '```\n';
+
+        FS.appendFile(process.env.GITHUB_STEP_SUMMARY, summary, (error) => {
+            if (!error) return;
+            console.error(error);
+        });
+    }
+}
+
 async function applyVersion() {
     shell(`changeset status --output ${CHANGESET_STATUS_FILE}`);
 
@@ -21,11 +46,11 @@ async function applyVersion() {
     const release = releases.find(({ name }) => name === meteorPackage.releaseName);
 
     if (!release) {
-        console.log('⚠️  No pending releases found for %s', meteorPackage.releaseName);
+        logger.info('⚠️  No pending releases found for %s', meteorPackage.releaseName);
         return;
     }
 
-    console.log(`ℹ️  New version ${release.newVersion} for ${meteorPackage.releaseName} detected`);
+    logger.info(`ℹ️  New version ${release.newVersion} for ${meteorPackage.releaseName} detected`);
 
     let packageJsContent = await FS.readFile(meteorPackage.packageJsPath, 'utf-8');
     const packageName = packageJsContent.match(PACKAGE_NAME_REGEX)?.groups.packageName;
@@ -36,14 +61,14 @@ async function applyVersion() {
     packageJsContent = packageJsContent.replace(PACKAGE_VERSION_REGEX, `version: '${release.newVersion}',`);
     await FS.writeFile(meteorPackage.packageJsPath, packageJsContent);
 
-    console.log(`✅  Changed ${meteorPackage.releaseName} (${packageName}) version from v${currentVersion} to v${release.newVersion}\n`);
+    logger.info(`✅  Changed ${meteorPackage.releaseName} (${packageName}) version from v${currentVersion} to v${release.newVersion}\n`);
 
     shell(`git add ${meteorPackage.packageJsPath}`);
     shell(`git commit -m 'Bump ${meteorPackage.releaseName} version to ${release.newVersion}'`);
 }
 
 async function publish() {
-    console.log(`⚡  Publishing ${meteorPackage.releaseName}...`);
+    logger.info(`⚡  Publishing ${meteorPackage.releaseName}...`);
 
     shell('meteor publish', {
         async: true,
@@ -57,9 +82,9 @@ async function publish() {
 }
 
 function shell(command, options) {
-    console.log(`$ ${command}`);
+    logger.info(`$ ${command}`);
     if (!options?.async) {
-        console.log(execSync(command, { ...options, encoding: 'utf-8' }));
+        logger.info(execSync(command, { ...options, encoding: 'utf-8' }));
         return;
     }
     const [bin, ...args] = command.split(' ');
@@ -74,11 +99,13 @@ function shell(command, options) {
 
     if (action === 'publish') {
         await publish();
+        logger.emitSummary();
         return;
     }
 
     if (action === 'version') {
         await applyVersion();
+        logger.emitSummary();
         return;
     }
 
@@ -88,11 +115,12 @@ function shell(command, options) {
     const { stdout, stderr } = error;
 
     if (stdout) {
-        console.log(stdout.toString())
+        logger.info(stdout.toString())
     }
     if (stderr) {
-        console.error(stderr.toString());
+        logger.error(stderr.toString());
     }
 
+    logger.emitSummary();
     process.exit(1);
 });
