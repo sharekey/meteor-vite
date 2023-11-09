@@ -4,41 +4,22 @@
       "releases": [
         {
           "name": "vite-bundler",
-          "type": "patch"
+          "type": "minor"
         }
       ],
-      "summary": "Emit warning message if an outdated version of the meteor-vite npm package is in use.",
-      "id": "nasty-sheep-run"
-    },
-    {
-      "releases": [
-        {
-          "name": "meteor-vite",
-          "type": "patch"
-        }
-      ],
-      "summary": "Store info file for Vite dev server background worker in .meteor/local to prevent the file from being accidentally committed into version control by package users.",
-      "id": "tasty-pugs-confess"
+      "summary": "Add option for users to pass through environment variables to the Vite dev server worker. Useful if for enabling the Vite debug logs or changing the Node environment.\n\nVariable prefix `METEOR_VITE_WORKER_`.\n`METEOR_VITE_WORKER_DEBUG=\"vite:_\"` gets translated into `DEBUG=\"vite:_\"`",
+      "id": "weak-shrimps-admire"
     }
   ],
   "releases": [
     {
       "name": "vite-bundler",
-      "type": "patch",
-      "oldVersion": "1.5.0",
+      "type": "minor",
+      "oldVersion": "1.5.1",
       "changesets": [
-        "nasty-sheep-run"
+        "weak-shrimps-admire"
       ],
-      "newVersion": "1.5.1"
-    },
-    {
-      "name": "meteor-vite",
-      "type": "patch",
-      "oldVersion": "1.4.0",
-      "changesets": [
-        "tasty-pugs-confess"
-      ],
-      "newVersion": "1.4.1"
+      "newVersion": "1.6.0"
     }
   ]
 }
