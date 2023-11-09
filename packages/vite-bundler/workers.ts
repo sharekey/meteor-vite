@@ -29,10 +29,7 @@ export function createWorkerFork(hooks: Partial<WorkerResponseHooks>, options?: 
         stdio: ['inherit', 'inherit', 'inherit', 'ipc'],
         cwd,
         detached: options?.detached ?? false,
-        env: {
-            FORCE_COLOR: '3',
-            ENABLE_DEBUG_LOGS: process.env.ENABLE_DEBUG_LOGS,
-        },
+        env: prepareWorkerEnv(),
     });
     
     const hookMethods = Object.keys(hooks) as (keyof typeof hooks)[];
@@ -163,6 +160,23 @@ function guessMeteorPackagePath() {
     });
     
     return Path.join(packagePath, '../');
+}
+
+function prepareWorkerEnv() {
+    const workerEnvPrefix = 'METEOR_VITE_WORKER_';
+    const env: Record<string, unknown> = {
+        FORCE_COLOR: '3',
+        ENABLE_DEBUG_LOGS: process.env.ENABLE_DEBUG_LOGS,
+    }
+    Object.entries(process.env).forEach(([key, value]) => {
+        if (!key.startsWith(workerEnvPrefix)) {
+            return;
+        }
+        const unPrefixedKey = key.replace(new RegExp(`^${workerEnvPrefix}`), '');
+        env[key] = value;
+        env[unPrefixedKey] = value;
+    })
+    return env;
 }
 
 function validateNpmVersion() {
