@@ -164,7 +164,7 @@ function guessMeteorPackagePath() {
 
 function prepareWorkerEnv() {
     const workerEnvPrefix = 'METEOR_VITE_WORKER_';
-    const env: Record<string, unknown> = {
+    const env: Record<string, string | undefined> = {
         FORCE_COLOR: '3',
         ENABLE_DEBUG_LOGS: process.env.ENABLE_DEBUG_LOGS,
     }
