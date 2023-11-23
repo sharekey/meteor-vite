@@ -22,6 +22,8 @@ if (!meteorMainModule) {
 }
 const tempDir = getTempDir();
 
+const isSimulatedProduction = process.argv.includes('--production');
+
 const viteStubTempDir = path.join(cwd, 'node_modules', 'meteor-vite', 'temp')
 const viteStubFile = path.join(viteStubTempDir, 'stubs.js')
 const tempMeteorProject = path.resolve(tempDir, 'meteor')
@@ -238,6 +240,7 @@ try {
       }
 
       afterLink () {
+        if (isSimulatedProduction) return;
         fs.removeSync(viteOutSrcDir)
       }
     }
