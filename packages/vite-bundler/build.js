@@ -173,7 +173,7 @@ try {
     // Add assets to Meteor
 
     // Copy the assets to the Meteor auto-imported sources
-    const viteOutSrcDir = path.join(viteStubTempDir, 'build')
+    const viteOutSrcDir = path.join(cwd, 'client', 'vite')
     fs.ensureDirSync(viteOutSrcDir)
     fs.emptyDirSync(viteOutSrcDir)
     const files = payload.output.map(o => o.fileName)
