@@ -41,7 +41,7 @@ build() {
     METEOR_VITE_TSUP_BUILD_WATCHER="false"
 
     cd "$APP_DIR" || exit 1
-    meteor build "$BUILD_TARGET" --directory
+    meteor build "$BUILD_TARGET" --directory "$@"
 }
 
 # Build then start a production app
