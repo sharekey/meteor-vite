@@ -14,7 +14,7 @@
   },
   "meteor": {
     "mainModule": {
-      "client": "client/main.jsx",
+      "client": "imports/entrypoint/meteor-client.js",
       "server": "server/main.js"
     },
     "testModule": "tests/main.js"
