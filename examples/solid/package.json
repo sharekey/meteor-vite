@@ -21,9 +21,9 @@
   },
   "devDependencies": {
     "babel-preset-solid": "^1.5.4",
-    "vite": "^3.0.9",
+    "meteor-vite": "~1.4.1",
+    "vite": "^4.5.0",
     "vite-plugin-solid": "^2.3.0",
-    "vite-plugin-solid-svg": "^0.4.1",
-    "meteor-vite": "~1.4.1"
+    "vite-plugin-solid-svg": "^0.4.1"
   }
 }
