@@ -1,5 +1,11 @@
 # vite-bundler
 
+## 1.6.1
+
+### Patch Changes
+
+- 56394e8: Add default server flag to temporary Meteor build
+
 ## 1.6.0
 
 ### Minor Changes
