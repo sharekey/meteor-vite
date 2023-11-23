@@ -22,7 +22,8 @@ if (!meteorMainModule) {
 }
 const tempDir = getTempDir();
 
-const viteStubFile = path.join(cwd, 'node_modules', 'meteor-vite', 'temp', 'stubs.js')
+const viteStubTempDir = path.join(cwd, 'node_modules', 'meteor-vite', 'temp')
+const viteStubFile = path.join(viteStubTempDir, 'stubs.js')
 const tempMeteorProject = path.resolve(tempDir, 'meteor')
 const tempMeteorOutDir = path.join(tempDir, 'bundle', 'meteor')
 const viteOutDir = path.join(tempDir, 'bundle', 'vite');
@@ -172,7 +173,7 @@ try {
     // Add assets to Meteor
 
     // Copy the assets to the Meteor auto-imported sources
-    const viteOutSrcDir = path.join(cwd, 'client', 'vite')
+    const viteOutSrcDir = path.join(viteStubTempDir, 'build')
     fs.ensureDirSync(viteOutSrcDir)
     fs.emptyDirSync(viteOutSrcDir)
     const files = payload.output.map(o => o.fileName)
@@ -199,10 +200,8 @@ try {
     }
 
     // Patch meteor entry
-    const meteorEntry = path.join(cwd, meteorMainModule)
-    const originalEntryContent = fs.readFileSync(meteorEntry, 'utf8')
-    const patchedEntryContent = `import ${JSON.stringify(`./${path.relative(path.dirname(meteorEntry), path.join(viteOutSrcDir, entryAsset.fileName))}`)}\n${originalEntryContent}`
-    fs.writeFileSync(meteorEntry, patchedEntryContent, 'utf8')
+    const patchedEntryContent = `import ${JSON.stringify(`./${path.relative(path.dirname(viteStubFile), path.join(viteOutSrcDir, entryAsset.fileName))}`)}`
+    fs.writeFileSync(viteStubFile, patchedEntryContent, 'utf8')
 
     class Compiler {
       processFilesForTarget (files) {
@@ -231,7 +230,6 @@ try {
 
       afterLink () {
         fs.removeSync(viteOutSrcDir)
-        fs.writeFileSync(meteorEntry, originalEntryContent, 'utf8')
       }
     }
 
