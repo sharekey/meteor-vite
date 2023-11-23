@@ -20,10 +20,10 @@ jobs:
           meteor-release: '2.12'
 
       - name: 'Install dependencies'
-        run: meteor npm run install:${{ inputs.name }}
+        run: meteor npm run example install ${{ inputs.name }}
 
       - name: 'Link meteor-vite package'
-        run: meteor npm run link:${{ inputs.name }}
+        run: meteor npm run example link ${{ inputs.name }}
 
       - name: 'Build for production'
-        run: meteor npm run build:${{ inputs.name }}
+        run: meteor npm run example build ${{ inputs.name }}
