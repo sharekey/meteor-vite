@@ -1,7 +1,8 @@
 import FS from 'fs/promises';
 import Path from 'path';
 import pc from 'picocolors';
-import { Plugin, ViteDevServer } from 'vite';
+import type { PluginContext } from 'rollup';
+import type { Plugin, ViteDevServer } from 'vite';
 import PackageJSON from '../../../package.json';
 import MeteorPackage from '../../meteor/package/components/MeteorPackage';
 import { stubTemplate } from '../../meteor/package/StubTemplate';
@@ -16,6 +17,11 @@ export const MeteorStubs = setupPlugin(async (pluginSettings: PluginSettings) =>
             subtitle: `See the following link for more info: ${PackageJSON.homepage}`
         })
     }
+    
+    pluginSettings.stubValidation = Object.assign({
+        warnOnly: process.env.NODE_ENV === 'production',
+        disabled: false,
+    }, pluginSettings.stubValidation);
     
     return {
         name: 'meteor-vite: stubs',
@@ -88,7 +94,7 @@ async function storeDebugSnippet({ request, stubTemplate, meteorPackage }: {
  */
 function setupPlugin<Context extends ViteLoadRequest, Settings>(setup: (settings: Settings) => Promise<{
     name: string;
-    load(request: Context): Promise<string>;
+    load(this: PluginContext, request: Context): Promise<string>;
     setupContext(viteId: string, server: ViteDevServer): Promise<Context>;
     shouldProcess(viteId: string): boolean;
     resolveId(viteId: string): string | undefined;
@@ -102,7 +108,7 @@ function setupPlugin<Context extends ViteLoadRequest, Settings>(setup: (settings
             configureServer(viteDevServer) {
                 server = viteDevServer;
             },
-            async load(viteId: string) {
+            async load(this: PluginContext, viteId: string) {
                 const shouldProcess = plugin.shouldProcess(viteId);
                 
                 if (!shouldProcess) {
@@ -111,7 +117,7 @@ function setupPlugin<Context extends ViteLoadRequest, Settings>(setup: (settings
                 
                 const request = await plugin.setupContext(viteId, server);
                 
-                return plugin.load(request).catch(
+                return plugin.load.apply(this, [request]).catch(
                     createErrorHandler('Could not parse Meteor package', request)
                 )
             },
