@@ -109,6 +109,9 @@ try {
     'build',
     tempMeteorOutDir,
     '--directory',
+    // Ensure the temporary build doesn't abort for projects with mobile builds
+    // Since this is only a temporary build, it shouldn't impact the final production build for the developer.
+    '--server=http://localhost:3000',
   ], {
     cwd: tempMeteorProject,
     // stdio: ['inherit', 'inherit', 'inherit'],
