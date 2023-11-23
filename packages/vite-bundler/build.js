@@ -27,6 +27,9 @@ const tempMeteorProject = path.resolve(tempDir, 'meteor')
 const tempMeteorOutDir = path.join(tempDir, 'bundle', 'meteor')
 const viteOutDir = path.join(tempDir, 'bundle', 'vite');
 
+// Not in a project (publishing the package)
+if (process.env.VITE_METEOR_DISABLED) return
+
 // Empty stubs from any previous builds
 {
   fs.writeFileSync(viteStubFile, `// Stub file for Meteor-Vite\n`, 'utf8');
@@ -35,8 +38,6 @@ const viteOutDir = path.join(tempDir, 'bundle', 'vite');
 
 if (process.env.NODE_ENV !== 'production') return
 
-// Not in a project (publishing the package)
-if (process.env.VITE_METEOR_DISABLED) return
 
 // Temporary Meteor build
 
