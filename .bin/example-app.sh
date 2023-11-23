@@ -103,7 +103,7 @@ production:app() {
 
   export PORT=4040
   export ROOT_URL=http://localhost:4040
-  export MONGO_URL=mongodb://127.0.0.1:3001/meteor
+  export MONGO_URL=mongodb://127.0.0.1:3001/$app
 
   meteor node main.js
 }
