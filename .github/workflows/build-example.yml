@@ -28,3 +28,9 @@ jobs:
     uses: ./.github/workflows/_reuse_.build.yml
     with:
       name: 'react'
+
+  solid:
+    name: 'Solid'
+    uses: ./.github/workflows/_reuse_.build.yml
+    with:
+      name: 'solid'
