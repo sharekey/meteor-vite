@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module type="WEB_MODULE" version="4">
+  <component name="NewModuleRootManager">
+    <content url="file://$MODULE_DIR$">
+      <excludeFolder url="file://$MODULE_DIR$/examples/output" />
+      <excludeFolder url="file://$MODULE_DIR$/examples/vue-ssr" />
+      <excludeFolder url="file://$MODULE_DIR$/examples/vue/.meteor-vite" />
+      <excludeFolder url="file://$MODULE_DIR$/examples/vue/vite" />
+      <excludeFolder url="file://$MODULE_DIR$/examples/react/.meteor/local" />
+      <excludeFolder url="file://$MODULE_DIR$/examples/svelte/.meteor-vite" />
+      <excludeFolder url="file://$MODULE_DIR$/examples/svelte/.meteor/local" />
+      <excludeFolder url="file://$MODULE_DIR$/examples/vue/.meteor/local" />
+      <excludeFolder url="file://$MODULE_DIR$/examples/vue/client/.vite" />
+      <excludeFolder url="file://$MODULE_DIR$/examples/vue/client/vite" />
+      <excludeFolder url="file://$MODULE_DIR$/npm-packages/meteor-vite/dist" />
+      <excludeFolder url="file://$MODULE_DIR$/examples/solid/.meteor/local" />
+      <excludeFolder url="file://$MODULE_DIR$/packages/vite-bundler/.npm" />
+    </content>
+    <orderEntry type="inheritedJdk" />
+    <orderEntry type="sourceFolder" forTests="false" />
+  </component>
+</module>
