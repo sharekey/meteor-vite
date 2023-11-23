@@ -2,14 +2,14 @@
 # shellcheck disable=SC2120
 
 # Simple utility script for managing the example apps.
-# Usage: ./examples.sh <action> <app>
-# e.g. ./examples.sh start vue      # (Start the Meteor dev server for the vue app)
-# e.g. ./examples.sh launch svelte  # (Build for production, then start the production Svelte app)
+# Usage: ./examples.sh <app> <action>
+# e.g. ./examples.sh vue start      # (Start the Vue example in development mode)
+# e.g. ./examples.sh svelte launch  # (Build for production, then start the production Svelte app)
 
 # Alternatively, you can access the script though npm at the root of the repo:
-# Usage: npm run example <action> <app> -- <args>
-# e.g. npm run example build vue
-# e.g. npm run example start vue -- --port 3030
+# Usage: npm run example <app> <action> -- <args>
+# e.g. npm run example vue build
+# e.g. npm run example vue start -- --port 3030
 
 this="$0"
 action="$1" # e.g. link, build, start
