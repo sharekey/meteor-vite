@@ -4,22 +4,22 @@
       "releases": [
         {
           "name": "vite-bundler",
-          "type": "minor"
+          "type": "patch"
         }
       ],
-      "summary": "Add option for users to pass through environment variables to the Vite dev server worker. Useful if for enabling the Vite debug logs or changing the Node environment.\n\nVariable prefix `METEOR_VITE_WORKER_`.\n`METEOR_VITE_WORKER_DEBUG=\"vite:_\"` gets translated into `DEBUG=\"vite:_\"`",
-      "id": "weak-shrimps-admire"
+      "summary": "Add default server flag to temporary Meteor build",
+      "id": "clever-readers-guess"
     }
   ],
   "releases": [
     {
       "name": "vite-bundler",
-      "type": "minor",
-      "oldVersion": "1.5.1",
+      "type": "patch",
+      "oldVersion": "1.6.0",
       "changesets": [
-        "weak-shrimps-admire"
+        "clever-readers-guess"
       ],
-      "newVersion": "1.6.0"
+      "newVersion": "1.6.1"
     }
   ]
 }
