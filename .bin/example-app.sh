@@ -15,8 +15,7 @@ this="$0"
 action="$1" # e.g. link, build, start
 app="$2" # e.g. vue, svelte
 
-EXAMPLES_DIR="$PWD/examples"
-APP_DIR="$EXAMPLES_DIR/$app"
+APP_DIR="$PWD/examples/$app"
 BUILD_TARGET="$PWD/examples/output/$app"
 NPM_LINK_TARGET="$PWD/npm-packages/meteor-vite"
 export METEOR_PACKAGE_DIRS="$PWD/packages"
@@ -68,7 +67,7 @@ start:production() {
   (production:install) || exit 1
 
   local PRODUCTION_SERVER="$this production:app $app"
-  local MONGO_SERVER="$this production:mongo $app"
+  local MONGO_SERVER="$this start .mongo" # Use the Meteor dev server to run a local MongoDB instance
 
   concurrently --names "PROD,MongoDB" --prefixColors "cyan,dim" "$PRODUCTION_SERVER" "$MONGO_SERVER"
 }
@@ -85,11 +84,6 @@ link() {
 production:install() {
    cd "$BUILD_TARGET/bundle/programs/server" || exit 1
    meteor npm install
-}
-
-production:mongo() {
-  cd "$EXAMPLES_DIR/.mongo" || exit 1
-  start # Start Meteor dev server to leech of its MongoDB server.
 }
 
 production:app() {
