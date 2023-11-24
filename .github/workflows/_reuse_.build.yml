@@ -41,10 +41,13 @@ jobs:
           meteor-release: '2.12'
 
       - name: 'Install dependencies'
-        run: gitbash .bin/example-app.sh install ${{ inputs.name }}
+        run: meteor npm run example install ${{ inputs.name }}
+        shell: bash
 
       - name: 'Link meteor-vite package'
-        run: gitbash .bin/example-app.sh link ${{ inputs.name }}
+        run: meteor npm run example link ${{ inputs.name }}
+        shell: bash
 
       - name: 'Build for production'
-        run: gitbash .bin/example-app.sh build ${{ inputs.name }}
+        run: meteor npm run example build ${{ inputs.name }}
+        shell: bash
