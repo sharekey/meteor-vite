@@ -28,26 +28,3 @@ jobs:
       - name: 'Build for production'
         run: meteor npm run example build ${{ inputs.name }}
 
-  build-on-windows:
-    name: 'Build on Windows'
-    runs-on: windows-latest
-    timeout-minutes: 10
-    steps:
-      - name: 'Checkout'
-        uses: actions/checkout@v3
-      - name: 'Setup Meteor'
-        uses: meteorengineer/setup-meteor@v1
-        with:
-          meteor-release: '2.12'
-
-      - name: 'Install dependencies'
-        run: meteor npm run example install ${{ inputs.name }}
-        shell: bash
-
-      - name: 'Link meteor-vite package'
-        run: meteor npm run example link ${{ inputs.name }}
-        shell: bash
-
-      - name: 'Build for production'
-        run: meteor npm run example build ${{ inputs.name }}
-        shell: bash
