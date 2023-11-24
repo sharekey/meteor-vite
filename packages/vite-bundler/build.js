@@ -35,6 +35,7 @@ if (!meteorMainModule) {
 
 // Empty stubs from any previous builds
 {
+  fs.ensureDirSync(path.dirname(meteorViteProductionEntry));
   fs.writeFileSync(meteorViteProductionEntry, `// Stub file for Meteor-Vite\n`, 'utf8');
 }
 
