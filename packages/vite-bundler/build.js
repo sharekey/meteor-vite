@@ -228,8 +228,8 @@ ${meteorViteImport}
 
     // Patch the meteor-vite entry module with an import for the project's Vite production bundle
     // in <project root>/client/vite
-    const viteBundleImport = `import ${JSON.stringify(`./${path.relative(path.dirname(meteorViteProductionEntry), path.join(viteOutSrcDir, entryAsset.fileName))}`)}`
-    fs.writeFileSync(meteorViteProductionEntry, viteBundleImport, 'utf8')
+    const entryModuleContent = `import ${JSON.stringify(`./${path.relative(path.dirname(meteorViteProductionEntry), path.join(viteOutSrcDir, entryAsset.fileName))}`)}`
+    fs.writeFileSync(meteorViteProductionEntry, entryModuleContent, 'utf8')
 
     class Compiler {
       processFilesForTarget (files) {
