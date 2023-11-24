@@ -1,5 +1,21 @@
 # vite-bundler
 
+## 1.7.0
+
+### Minor Changes
+
+- dbc9be4: Use temporary file in `meteor-vite` npm package to feed Vite bundle into Meteor for production.
+
+  - Run build cleanup before creating a new Vite bundle.
+  - Default Meteor stub validator to warnOnly when running in production mode.
+  - Add SolidJS example app
+
+  Fixes #34
+  Fixes Akryum/meteor-vite#33
+  Fixes meteor/meteor#12594
+
+  ***
+
 ## 1.6.1
 
 ### Patch Changes
