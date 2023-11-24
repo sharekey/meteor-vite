@@ -21,7 +21,8 @@ const tempDir = getTempDir();
 
 const isSimulatedProduction = process.argv.includes('--production');
 
-const meteorViteProductionEntry = path.join(cwd, 'node_modules', 'meteor-vite', 'temp', 'stubs.js')
+const meteorViteEntryModule = path.join('meteor-vite', 'temp', 'stubs.js')
+const meteorViteProductionEntry = path.join(cwd, 'node_modules', meteorViteEntryModule)
 const tempMeteorProject = path.resolve(tempDir, 'meteor')
 const tempMeteorOutDir = path.join(tempDir, 'bundle', 'meteor')
 const viteOutDir = path.join(tempDir, 'bundle', 'vite');
@@ -211,7 +212,7 @@ try {
  * Meteor might be trying to import ESM over CommonJS. Please open an issue if this happens.
  * Shouldn't be dangerous, but it might bloat your client bundle.
 **/
-import 'meteor-vite/temp/stubs.js';
+import '${meteorViteEntryModule}';
 
 
 `.trimLeft();
@@ -219,7 +220,7 @@ import 'meteor-vite/temp/stubs.js';
     // Patch meteor entry if needed
     const meteorEntry = path.join(cwd, meteorMainModule)
     const originalEntryContent = fs.readFileSync(meteorEntry, 'utf8');
-    if (!originalEntryContent.includes(`import 'meteor-vite'`)) {
+    if (!originalEntryContent.includes(`import '${meteorViteEntryModule}'`)) {
         fs.writeFileSync(meteorEntry, `${meteorViteImport}\n${originalEntryContent}`, 'utf8')
     }
 
