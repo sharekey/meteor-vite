@@ -218,14 +218,16 @@ ${meteorViteImport}
 
 `.trimLeft();
 
-    // Patch meteor entry if needed
+    // Patch project's meteor entry with import for meteor-vite's entry module.
+    // in node_modules/meteor-vite/temp
     const meteorEntry = path.join(cwd, meteorMainModule)
     const originalEntryContent = fs.readFileSync(meteorEntry, 'utf8');
     if (!originalEntryContent.includes(meteorViteImport)) {
         fs.writeFileSync(meteorEntry, `${meteorViteImportTemplate}\n${originalEntryContent}`, 'utf8')
     }
 
-    // Patch meteor-vite's temporary stub file with imports for the new production bundle.
+    // Patch the meteor-vite entry module with an import for the project's Vite production bundle
+    // in <project root>/client/vite
     const viteBundleImport = `import ${JSON.stringify(`./${path.relative(path.dirname(meteorViteProductionEntry), path.join(viteOutSrcDir, entryAsset.fileName))}`)}`
     fs.writeFileSync(meteorViteProductionEntry, viteBundleImport, 'utf8')
 
