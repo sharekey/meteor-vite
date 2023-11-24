@@ -21,8 +21,7 @@ const tempDir = getTempDir();
 
 const isSimulatedProduction = process.argv.includes('--production');
 
-const viteStubTempDir = path.join(cwd, 'node_modules', 'meteor-vite', 'temp')
-const viteStubFile = path.join(viteStubTempDir, 'stubs.js')
+const meteorViteProductionEntry = path.join(cwd, 'node_modules', 'meteor-vite', 'temp', 'stubs.js')
 const tempMeteorProject = path.resolve(tempDir, 'meteor')
 const tempMeteorOutDir = path.join(tempDir, 'bundle', 'meteor')
 const viteOutDir = path.join(tempDir, 'bundle', 'vite');
@@ -36,7 +35,7 @@ if (!meteorMainModule) {
 
 // Empty stubs from any previous builds
 {
-  fs.writeFileSync(viteStubFile, `// Stub file for Meteor-Vite\n`, 'utf8');
+  fs.writeFileSync(meteorViteProductionEntry, `// Stub file for Meteor-Vite\n`, 'utf8');
 }
 
 
@@ -224,8 +223,8 @@ import 'meteor-vite/temp/stubs.js';
     }
 
     // Patch meteor-vite's temporary stub file with imports for the new production bundle.
-    const viteBundleImport = `import ${JSON.stringify(`./${path.relative(path.dirname(viteStubFile), path.join(viteOutSrcDir, entryAsset.fileName))}`)}`
-    fs.writeFileSync(viteStubFile, viteBundleImport, 'utf8')
+    const viteBundleImport = `import ${JSON.stringify(`./${path.relative(path.dirname(meteorViteProductionEntry), path.join(viteOutSrcDir, entryAsset.fileName))}`)}`
+    fs.writeFileSync(meteorViteProductionEntry, viteBundleImport, 'utf8')
 
     class Compiler {
       processFilesForTarget (files) {
