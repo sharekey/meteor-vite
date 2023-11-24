@@ -21,7 +21,7 @@ const tempDir = getTempDir();
 
 const isSimulatedProduction = process.argv.includes('--production');
 
-const meteorViteEntryModule = path.join('meteor-vite', 'temp', 'stubs.js')
+const meteorViteEntryModule = path.join('meteor-vite', '.build', 'import-vite-bundle.js');
 const meteorViteProductionEntry = path.join(cwd, 'node_modules', meteorViteEntryModule)
 const tempMeteorProject = path.resolve(tempDir, 'meteor')
 const tempMeteorOutDir = path.join(tempDir, 'bundle', 'meteor')

@@ -6,7 +6,7 @@
  * Meteor might be trying to import ESM over CommonJS. Please open an issue if this happens.
  * Shouldn't be dangerous, but it might bloat your client bundle.
 **/
-import 'meteor-vite/temp/stubs.js';
+import 'meteor-vite/.build/import-vite-bundle.js';
 
 
 
