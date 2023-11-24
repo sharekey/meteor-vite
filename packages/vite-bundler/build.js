@@ -17,9 +17,6 @@ const replaceMeteorPackages = [
   { startsWith: 'refapp:meteor-typescript', replaceWith: 'typescript' },
   ...pkg?.meteorVite?.replacePackages || []
 ]
-if (!meteorMainModule) {
-  throw new Error('No meteor main module found, please add meteor.mainModule.client to your package.json')
-}
 const tempDir = getTempDir();
 
 const isSimulatedProduction = process.argv.includes('--production');
@@ -30,8 +27,12 @@ const tempMeteorProject = path.resolve(tempDir, 'meteor')
 const tempMeteorOutDir = path.join(tempDir, 'bundle', 'meteor')
 const viteOutDir = path.join(tempDir, 'bundle', 'vite');
 
-// Not in a project (publishing the package)
+// Not in a project (publishing the package or in temporary Meteor build)
 if (process.env.VITE_METEOR_DISABLED) return
+
+if (!meteorMainModule) {
+  throw new Error('No meteor main module found, please add meteor.mainModule.client to your package.json')
+}
 
 // Empty stubs from any previous builds
 {
