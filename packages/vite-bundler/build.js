@@ -203,7 +203,7 @@ try {
       }
     }
 
-    const moduleImportPath = JSON.stringify(entryModule.split(path.sep).join('/'));
+    const moduleImportPath = JSON.stringify(posixPath(entryModule));
     const meteorViteImport = `import ${moduleImportPath};`
     const meteorViteImportTemplate = `
 /**
@@ -229,7 +229,8 @@ ${meteorViteImport}
 
     // Patch the meteor-vite entry module with an import for the project's Vite production bundle
     // in <project root>/client/vite
-    const entryModuleContent = `import ${JSON.stringify(`./${path.relative(path.dirname(entryModuleFilepath), path.join(viteOutSrcDir, entryAsset.fileName))}`)}`
+    const bundleEntryPath = path.relative(path.dirname(entryModuleFilepath), path.join(viteOutSrcDir, entryAsset.fileName));
+    const entryModuleContent = `import ${JSON.stringify(`${posixPath(bundleEntryPath)}`)}`
     fs.writeFileSync(entryModuleFilepath, entryModuleContent, 'utf8')
 
     class Compiler {
@@ -274,6 +275,10 @@ ${meteorViteImport}
 
 } catch (e) {
   throw e
+}
+
+function posixPath(filePath) {
+  return filePath.split(path.sep).join('/')
 }
 
 function getTempDir() {
