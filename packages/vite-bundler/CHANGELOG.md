@@ -1,5 +1,14 @@
 # vite-bundler
 
+## 1.7.1
+
+### Patch Changes
+
+- 7c56b11: Fix mainModule validation running before `VITE_METEOR_DISABLED` environment checks
+
+  - Refactor file paths and internal notes for Vite bundle entry module.
+  - Handle empty parent directory for final Vite bundle's entry module.
+
 ## 1.7.0
 
 ### Minor Changes
