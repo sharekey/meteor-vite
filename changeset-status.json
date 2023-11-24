@@ -3,36 +3,23 @@
     {
       "releases": [
         {
-          "name": "meteor-vite",
-          "type": "minor"
-        },
-        {
           "name": "vite-bundler",
-          "type": "minor"
+          "type": "patch"
         }
       ],
-      "summary": "Use temporary file in `meteor-vite` npm package to feed Vite bundle into Meteor for production.\n  - Run build cleanup before creating a new Vite bundle.\n  - Default Meteor stub validator to warnOnly when running in production mode.\n  - Add SolidJS example app\n\nFixes #34\nFixes Akryum/meteor-vite#33\nFixes meteor/meteor#12594\n---",
-      "id": "tall-avocados-talk"
+      "summary": "Fix mainModule validation running before `VITE_METEOR_DISABLED` environment checks\n\n- Refactor file paths and internal notes for Vite bundle entry module.\n- Handle empty parent directory for final Vite bundle's entry module.",
+      "id": "neat-wolves-draw"
     }
   ],
   "releases": [
     {
-      "name": "meteor-vite",
-      "type": "minor",
-      "oldVersion": "1.4.1",
-      "changesets": [
-        "tall-avocados-talk"
-      ],
-      "newVersion": "1.5.0"
-    },
-    {
       "name": "vite-bundler",
-      "type": "minor",
-      "oldVersion": "1.6.1",
+      "type": "patch",
+      "oldVersion": "1.7.0",
       "changesets": [
-        "tall-avocados-talk"
+        "neat-wolves-draw"
       ],
-      "newVersion": "1.7.0"
+      "newVersion": "1.7.1"
     }
   ]
 }
