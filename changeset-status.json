@@ -7,19 +7,19 @@
           "type": "patch"
         }
       ],
-      "summary": "Fix mainModule validation running before `VITE_METEOR_DISABLED` environment checks\n\n- Refactor file paths and internal notes for Vite bundle entry module.\n- Handle empty parent directory for final Vite bundle's entry module.",
-      "id": "neat-wolves-draw"
+      "summary": "Correct import path serialization for meteor-vite entryfile on Windows",
+      "id": "great-maps-turn"
     }
   ],
   "releases": [
     {
       "name": "vite-bundler",
       "type": "patch",
-      "oldVersion": "1.7.0",
+      "oldVersion": "1.7.1",
       "changesets": [
-        "neat-wolves-draw"
+        "great-maps-turn"
       ],
-      "newVersion": "1.7.1"
+      "newVersion": "1.7.2"
     }
   ]
 }
