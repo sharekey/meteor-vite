@@ -1,5 +1,11 @@
 # vite-bundler
 
+## 1.7.2
+
+### Patch Changes
+
+- 917a547: Correct import path serialization for meteor-vite entryfile on Windows
+
 ## 1.7.1
 
 ### Patch Changes
