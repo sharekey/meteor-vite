@@ -7,19 +7,19 @@
           "type": "patch"
         }
       ],
-      "summary": "Correct import path serialization for meteor-vite entryfile on Windows",
-      "id": "great-maps-turn"
+      "summary": "Use shared import path formatter for meteor-vite bundle importer and project reference import.",
+      "id": "violet-dragons-run"
     }
   ],
   "releases": [
     {
       "name": "vite-bundler",
       "type": "patch",
-      "oldVersion": "1.7.1",
+      "oldVersion": "1.7.2",
       "changesets": [
-        "great-maps-turn"
+        "violet-dragons-run"
       ],
-      "newVersion": "1.7.2"
+      "newVersion": "1.7.3"
     }
   ]
 }

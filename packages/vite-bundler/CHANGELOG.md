@@ -1,5 +1,11 @@
 # vite-bundler
 
+## 1.7.3
+
+### Patch Changes
+
+- 2921838: Use shared import path formatter for meteor-vite bundle importer and project reference import.
+
 ## 1.7.2
 
 ### Patch Changes
