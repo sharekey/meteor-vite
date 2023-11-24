@@ -7,8 +7,8 @@ on:
         type: string
 
 jobs:
-  build:
-    name: 'Build'
+  build-on-ubuntu:
+    name: 'Build on Ubuntu'
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
@@ -27,3 +27,4 @@ jobs:
 
       - name: 'Build for production'
         run: meteor npm run example build ${{ inputs.name }}
+
