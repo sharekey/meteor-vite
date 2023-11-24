@@ -258,7 +258,8 @@ ${meteorViteImport}
 
       afterLink () {
         if (isSimulatedProduction) return;
-        fs.removeSync(viteOutSrcDir)
+        fs.removeSync(viteOutSrcDir);
+        fs.writeFileSync(meteorEntry, originalEntryContent, 'utf8');
       }
     }
 
