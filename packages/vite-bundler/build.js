@@ -203,7 +203,7 @@ try {
       }
     }
 
-    const moduleImportPath = JSON.stringify(path.split(path.sep).join('/'));
+    const moduleImportPath = JSON.stringify(entryModule.split(path.sep).join('/'));
     const meteorViteImport = `import ${moduleImportPath};`
     const meteorViteImportTemplate = `
 /**
