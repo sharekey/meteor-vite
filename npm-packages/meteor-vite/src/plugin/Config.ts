@@ -1,11 +1,11 @@
 import Path from 'path';
-import { mergeConfig, Plugin, UserConfig } from 'vite';
+import { mergeConfig, Plugin, PluginOption, UserConfig } from 'vite';
 import { MeteorViteError } from '../error/MeteorViteError';
 import { DeepPartial, MakeOptional } from '../utilities/GenericTypes';
-import { MeteorStubsSettings } from './internal/MeteorStubs';
+import { MeteorStubs, MeteorStubsSettings } from './internal/MeteorStubs';
 import PackageJSON from '../../package.json';
 
-export default async function configure(config: PluginOptions): Promise<Plugin> {
+export default async function meteor(config: PluginOptions): Promise<PluginOption> {
     const clientEntry = config.clientEntry;
     
     if (!clientEntry) {
@@ -14,30 +14,33 @@ export default async function configure(config: PluginOptions): Promise<Plugin> 
         })
     }
     
-    return {
-        name: 'meteor-vite:config',
-        config: () =>  ({
-            meteor: config,
-            build: meteorBuildConfig({ clientEntry })
-        } as UserConfig),
-        configResolved(resolvedConfig) {
-            mergeConfig({
-                meteor: {
-                    meteorStubs: {
-                        packageJsonPath: 'package.json',
-                        meteor: {
-                            packagePath: Path.join('.meteor', 'local', 'build', 'programs', 'web.browser', 'packages'),
-                            isopackPath: Path.join('.meteor', 'local', 'isopacks'),
+    return [
+        {
+            name: 'meteor-vite:config',
+            config: () =>  ({
+                meteor: config,
+                build: meteorBuildConfig({ clientEntry })
+            } as UserConfig),
+            configResolved(resolvedConfig) {
+                mergeConfig({
+                    meteor: {
+                        meteorStubs: {
+                            packageJsonPath: 'package.json',
+                            meteor: {
+                                packagePath: Path.join('.meteor', 'local', 'build', 'programs', 'web.browser', 'packages'),
+                                isopackPath: Path.join('.meteor', 'local', 'isopacks'),
+                            }
+                        },
+                        stubValidation: {
+                            warnOnly: process.env.NODE_ENV === 'production',
+                            disabled: false,
                         }
-                    },
-                    stubValidation: {
-                        warnOnly: process.env.NODE_ENV === 'production',
-                        disabled: false,
-                    }
-                } satisfies PartialPluginOptions,
-            }, resolvedConfig)
-        }
-    }
+                    } satisfies PartialPluginOptions,
+                }, resolvedConfig)
+            }
+        },
+        MeteorStubs(),
+    ]
 }
 
 export function patchConfig(patch: PartialPluginOptions): Plugin {
