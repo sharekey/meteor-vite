@@ -1,12 +1,12 @@
-import { mergeConfig, Plugin } from 'vite';
+import { Plugin, UserConfig } from 'vite';
 import { MeteorStubsSettings } from './internal/MeteorStubs';
 
 export default function configure(config: PluginSettings): Plugin {
     return {
         name: 'meteor-vite:config',
-        configResolved(resolvedConfig) {
-            mergeConfig(resolvedConfig, { meteor: config });
-        }
+        config: () =>  ({
+            meteor: config,
+        } as UserConfig),
     }
 }
 
