@@ -40,6 +40,15 @@ export default async function configure(config: PluginOptions): Promise<Plugin> 
     }
 }
 
+export function patchConfig(patch: PartialPluginOptions): Plugin {
+    return {
+        name: 'meteor-vite:config-patch',
+        configResolved(resolvedConfig) {
+            mergeConfig(resolvedConfig, patch);
+        }
+    }
+}
+
 type PluginOptions = MakeOptional<PluginSettings, 'stubValidation' | 'meteorStubs'>;
 export type PartialPluginOptions = DeepPartial<PluginSettings>;
 
