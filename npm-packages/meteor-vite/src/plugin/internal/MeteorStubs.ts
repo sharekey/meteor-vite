@@ -2,6 +2,7 @@ import FS from 'fs/promises';
 import Path from 'path';
 import pc from 'picocolors';
 import type { PluginContext } from 'rollup';
+import { mergeConfig } from 'vite';
 import type { Plugin, ViteDevServer } from 'vite';
 import PackageJSON from '../../../package.json';
 import MeteorPackage from '../../meteor/package/components/MeteorPackage';
@@ -105,6 +106,9 @@ function setupPlugin<Context extends ViteLoadRequest, Settings>(setup: (settings
         return {
             name: plugin.name,
             resolveId: plugin.resolveId,
+            configResolved(resolvedConfig) {
+                mergeConfig(resolvedConfig, { meteor: { meteorStubs: settings } });
+            },
             configureServer(viteDevServer) {
                 server = viteDevServer;
             },
