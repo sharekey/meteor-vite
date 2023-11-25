@@ -181,7 +181,7 @@ export interface MeteorStubsSettings {
      * Full content of the user's Meteor project package.json.
      * Like the one found in {@link /examples/vue/package.json}
      */
-    packageJson: ProjectJson;
+    packageJson?: ProjectJson;
     
     /**
      * Alternatively, a path to a package.json file can be supplied.
