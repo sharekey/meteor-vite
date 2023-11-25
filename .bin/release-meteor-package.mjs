@@ -81,7 +81,7 @@ async function applyVersion() {
 async function publish() {
     const { version, name } = await parsePackageJs(meteorPackage.packageJsPath);
     logger.info(`⚡  Publishing ${name}...`);
-    const tag = `${name}@v${version}`
+    const tag = `${meteorPackage.releaseName}@v${version}`
 
     shell('meteor publish', {
         async: true,
