@@ -1,7 +1,7 @@
 import { RollupOutput, RollupWatcher } from 'rollup';
 import { build, InlineConfig, resolveConfig } from 'vite';
 import { MeteorViteConfig } from '../../../MeteorViteConfig';
-import { MeteorStubs } from '../../../plugin';
+import { MeteorStubs } from '../../../plugin/internal';
 import MeteorVitePackage from '../../../../package.json';
 import { PluginSettings, ProjectJson } from '../../../plugin/internal/MeteorStubs';
 import CreateIPCInterface, { IPCReply } from '../interface';
