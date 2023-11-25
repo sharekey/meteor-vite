@@ -3,7 +3,7 @@ import { build, InlineConfig, resolveConfig } from 'vite';
 import { MeteorViteConfig } from '../../../MeteorViteConfig';
 import { MeteorStubs } from '../../../plugin';
 import MeteorVitePackage from '../../../../package.json';
-import { PluginSettings, ProjectJson } from '../../../plugin/stubs/MeteorStubs';
+import { PluginSettings, ProjectJson } from '../../../plugin/internal/MeteorStubs';
 import CreateIPCInterface, { IPCReply } from '../interface';
 
 export default CreateIPCInterface({
