@@ -101,6 +101,8 @@ function setupPlugin<Context extends ViteLoadRequest>(setup: () => Promise<{
     shouldProcess(viteId: string): boolean;
     resolveId(viteId: string): string | undefined;
 }>): () => Promise<Plugin> {
+    const handleError = createErrorHandler('Could not set up Vite plugin!');
+    
     const createPlugin = async (): Promise<Plugin> => {
         const plugin = await setup();
         let settings: PluginSettings;
@@ -108,13 +110,17 @@ function setupPlugin<Context extends ViteLoadRequest>(setup: () => Promise<{
         return {
             name: plugin.name,
             resolveId: plugin.resolveId,
-            configResolved(resolvedConfig) {
+            async configResolved(resolvedConfig) {
                 const pluginSettings = (resolvedConfig as MeteorViteConfig).meteor;
                 if (!pluginSettings) {
                     throw new MeteorViteError('Unable to get configuration for Meteor-Vite!');
                 }
-                settings = pluginSettings;
-                plugin.validateConfig(pluginSettings);
+                try {
+                    settings = pluginSettings;
+                    await plugin.validateConfig(pluginSettings);
+                } catch (error) {
+                    await handleError(error);
+                }
             },
             configureServer(viteDevServer) {
                 server = viteDevServer;
@@ -135,7 +141,7 @@ function setupPlugin<Context extends ViteLoadRequest>(setup: () => Promise<{
         }
     }
     
-    return () => createPlugin().catch(createErrorHandler('Could not set up Vite plugin!'))
+    return () => createPlugin().catch(handleError)
 }
 
 
