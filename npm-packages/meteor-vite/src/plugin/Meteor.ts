@@ -137,7 +137,11 @@ export interface StubValidationSettings {
     disabled?: boolean;
 }
 
-function mergeMeteorSettings(userConfig: ResolvedConfig | UserConfig, defaults: PartialPluginOptions, overrides: PartialPluginOptions) {
+function mergeMeteorSettings(
+    userConfig: ResolvedConfig | UserConfig,
+    defaults: PartialPluginOptions,
+    overrides: PartialPluginOptions
+) {
     const viteConfig = parseConfig(userConfig);
     const existingSettings = viteConfig.meteor || {};
     const withDefaults = mergeWithTypes(defaults, existingSettings);
