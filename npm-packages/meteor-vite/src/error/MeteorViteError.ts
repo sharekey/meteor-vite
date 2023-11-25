@@ -124,6 +124,8 @@ export class MeteorViteError extends Error implements ErrorMetadata {
     }
 }
 
+export class FatalMeteorViteError extends MeteorViteError {}
+
 export interface ErrorMetadata {
     subtitle?: string;
     package?: Pick<MeteorPackage, 'packageId'>;
