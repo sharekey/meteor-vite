@@ -28,6 +28,10 @@ export default async function configure(config: PluginSettings): Promise<Plugin>
                             packagePath: Path.join('.meteor', 'local', 'build', 'programs', 'web.browser', 'packages'),
                             isopackPath: Path.join('.meteor', 'local', 'isopacks'),
                         }
+                    },
+                    stubValidation: {
+                        warnOnly: process.env.NODE_ENV === 'production',
+                        disabled: false,
                     }
                 } satisfies PluginSettings,
             }, resolvedConfig)
