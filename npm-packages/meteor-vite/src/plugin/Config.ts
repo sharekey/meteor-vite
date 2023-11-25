@@ -1,10 +1,13 @@
+import Path from 'path';
 import { Plugin, UserConfig } from 'vite';
 import { MeteorViteError } from '../error/MeteorViteError';
 import { MeteorStubsSettings } from './internal/MeteorStubs';
 import PackageJSON from '../../package.json';
 
 export default function configure(config: PluginSettings): Plugin {
-    if (!config.clientEntry) {
+    const clientEntry = config.clientEntry;
+    
+    if (!clientEntry) {
         throw new MeteorViteError(`You need to specify an entrypoint for Vite!`, {
             subtitle: `More info available here ${PackageJSON.homepage}`
         })
@@ -14,6 +17,7 @@ export default function configure(config: PluginSettings): Plugin {
         name: 'meteor-vite:config',
         config: () =>  ({
             meteor: config,
+            build: meteorBuildConfig({ clientEntry })
         } as UserConfig),
     }
 }
@@ -70,4 +74,27 @@ export interface StubValidationSettings {
      * @default false
      */
     disabled?: boolean;
+}
+
+export function meteorBuildConfig({
+    clientEntry,
+    outDir = Path.join('client', 'vite')
+}: {
+    clientEntry: string,
+    outDir?: string,
+}): UserConfig['build'] {
+    return {
+        lib: {
+            entry: clientEntry,
+            formats: ['es'],
+        },
+        rollupOptions: {
+            output: {
+                entryFileNames: 'meteor-entry.js',
+                chunkFileNames: '[name].js',
+            },
+        },
+        outDir,
+        minify: false,
+    }
 }
