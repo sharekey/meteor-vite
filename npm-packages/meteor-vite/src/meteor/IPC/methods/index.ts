@@ -1,12 +1,10 @@
 import { IPCReply } from '../interface';
-import PackageBuild from './watch-npm-package';
-import ProductionBuilder from './build';
+import BuildWorker from './build';
 import ViteServerWorker from './vite-server';
 
 const IpcMethods = {
     ...ViteServerWorker,
-    ...ProductionBuilder,
-    ...PackageBuild,
+    ...BuildWorker,
 } as const;
 
 export default IpcMethods;

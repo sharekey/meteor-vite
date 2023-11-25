@@ -1,3 +1,5 @@
+import { spawn } from 'child_process';
+import Path from 'path';
 import { RollupOutput, RollupWatcher } from 'rollup';
 import { build, InlineConfig, resolveConfig } from 'vite';
 import { MeteorViteConfig } from '../../../MeteorViteConfig';
@@ -43,6 +45,32 @@ export default CreateIPCInterface({
             })
             throw error;
         }
+    },
+    
+    async 'npm.meteor-vite.build'(reply) {
+        const npmPackagePath = Path.join(process.cwd(), '/node_modules/meteor-vite/') // to the meteor-vite npm package
+        const tsupPath = Path.join(npmPackagePath, '/node_modules/.bin/tsup-node'); // tsup to 2 node_modules dirs down.
+        
+        const child = spawn(tsupPath, ['--watch'], {
+            stdio: 'inherit',
+            cwd: npmPackagePath,
+            detached: false,
+            env: {
+                FORCE_COLOR: '3',
+            },
+        });
+        
+        child.on('error', (error) => {
+            throw new Error(`meteor-vite package build worker error: ${error.message}`, { cause: error })
+        });
+        
+        child.on('exit', (code) => {
+            if (!code) {
+                return;
+            }
+            process.exit(1);
+            throw new Error('TSUp watcher exited unexpectedly!');
+        });
     }
 })
 
