@@ -3,7 +3,7 @@ import Path from 'path';
 import { RollupOutput, RollupWatcher } from 'rollup';
 import { build, InlineConfig, resolveConfig } from 'vite';
 import { MeteorViteConfig } from '../../../MeteorViteConfig';
-import { meteorBuildConfig } from '../../../plugin/Config';
+import configure, { meteorBuildConfig, patchConfig } from '../../../plugin/Config';
 import { MeteorStubs } from '../../../plugin/internal';
 import MeteorVitePackage from '../../../../package.json';
 import { MeteorStubsSettings, ProjectJson } from '../../../plugin/internal/MeteorStubs';
@@ -102,10 +102,11 @@ async function prepareConfig(buildConfig: BuildOptions): Promise<ParsedConfig> {
             configFile,
             build: meteorBuildConfig({ clientEntry: viteConfig.meteor?.clientEntry, outDir }),
             plugins: [
-                MeteorStubs({
-                    meteor,
-                    stubValidation: viteConfig.meteor.stubValidation,
-                    packageJson,
+                patchConfig({
+                    meteorStubs: {
+                        meteor,
+                        packageJson,
+                    },
                 }),
             ],
         }

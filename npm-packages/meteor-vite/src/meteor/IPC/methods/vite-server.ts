@@ -1,6 +1,7 @@
 import FS from 'fs/promises';
 import Path from 'path';
 import { createServer, resolveConfig, ViteDevServer } from 'vite';
+import { patchConfig } from '../../../plugin/Config';
 import Logger from '../../../utilities/Logger';
 import MeteorEvents, { MeteorIPCMessage } from '../MeteorEvents';
 import { MeteorViteConfig } from '../../../MeteorViteConfig';
@@ -32,7 +33,6 @@ export type ViteRuntimeConfig = {
 }
 export interface DevServerOptions {
     packageJson: ProjectJson,
-    globalMeteorPackagesDir?: string;
     meteorParentPid: number;
 }
 
@@ -46,7 +46,7 @@ export default CreateIPCInterface({
     },
     
     // todo: Add reply for triggering a server restart
-    async 'vite.server.start'(replyInterface: Replies, { packageJson, globalMeteorPackagesDir, meteorParentPid }: DevServerOptions) {
+    async 'vite.server.start'(replyInterface: Replies, { packageJson, meteorParentPid }: DevServerOptions) {
         const backgroundWorker = await BackgroundWorker.init(meteorParentPid);
         
         if (backgroundWorker.isRunning) {
@@ -60,7 +60,6 @@ export default CreateIPCInterface({
         
         const server = await createViteServer({
             packageJson,
-            globalMeteorPackagesDir,
             refreshNeeded: () => {
                 replyInterface({
                     kind: 'refreshNeeded',
@@ -95,7 +94,6 @@ export default CreateIPCInterface({
 })
 
 async function createViteServer({
-    globalMeteorPackagesDir,
     packageJson,
     buildStart,
     refreshNeeded,
@@ -114,14 +112,10 @@ async function createViteServer({
     server = await createServer({
         configFile: viteConfig.configFile,
         plugins: [
-            MeteorStubs({
-                meteor: {
-                    packagePath: Path.join('.meteor', 'local', 'build', 'programs', 'web.browser', 'packages'),
-                    isopackPath: Path.join('.meteor', 'local', 'isopacks'),
-                    globalMeteorPackagesDir,
-                },
-                packageJson,
-                stubValidation: viteConfig.meteor?.stubValidation,
+            patchConfig({
+               meteorStubs: {
+                   packageJson,
+               }
             }),
             {
                 name: 'meteor-handle-restart',
