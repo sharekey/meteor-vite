@@ -10,7 +10,7 @@ export type MeteorIPCMessage = {
     encodedPayload: string
 }
 
-export default new class MeteorEvents {
+class MeteorEventBus {
     protected readonly events = new EventEmitter();
     
     /**
@@ -85,4 +85,7 @@ function awaitEvent<
     })
 }
 
+const MeteorEvents = new MeteorEventBus();
+
 export class EventTimeout extends Error {}
+export default MeteorEvents;
