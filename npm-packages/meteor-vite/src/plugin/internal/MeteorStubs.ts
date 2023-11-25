@@ -100,7 +100,7 @@ function setupPlugin<Context extends ViteLoadRequest>(setup: () => Promise<{
     setupContext(viteId: string, server: ViteDevServer, settings: PluginSettings): Promise<Context>;
     shouldProcess(viteId: string): boolean;
     resolveId(viteId: string): string | undefined;
-}>): (settings: PluginSettings) => Promise<Plugin> {
+}>): () => Promise<Plugin> {
     const createPlugin = async (): Promise<Plugin> => {
         const plugin = await setup();
         let settings: PluginSettings;
