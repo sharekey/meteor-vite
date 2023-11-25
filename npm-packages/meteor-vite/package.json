@@ -32,8 +32,8 @@
   ],
   "typesVersions": {
     "*": {
-      "plugin": ["./src/plugin/index.d.ts"],
-      "client": ["./src/client/index.d.ts"]
+      "plugin": ["./dist/plugin/index.d.ts"],
+      "client": ["./dist/client/index.d.ts"]
     }
   },
   "keywords": [],
