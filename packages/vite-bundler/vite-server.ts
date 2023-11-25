@@ -42,7 +42,7 @@ if (Meteor.isDevelopment) {
             
             tsupWatcherRunning = true;
             viteServer.call({
-                method: 'tsup.watchMeteorVite',
+                method: 'npm.meteor-vite.build',
                 params: [],
             })
         }
