@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { parseMeteorPackage } from '../../src/meteor/package/parser/Parser';
+import { parseMeteorPackage } from '../../src/meteor/parser/Parser';
 import { LazyLoadedPackage } from '../__mocks';
 
 describe('Lazy-loaded packages', () => {
