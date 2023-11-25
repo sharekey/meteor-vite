@@ -1,5 +1,5 @@
 name: 'Test'
-run-name: 'Test: meteor-vite'
+run-name: 'Test: ${{ github.event.head_commit.message }}'
 on:
   push:
 
