@@ -16,10 +16,10 @@ export default function meteor(config: PluginOptions) {
         })
     }
    
-    return configure(config);
+    return meteorWorker(config);
 }
 
-function configure(config: PartialPluginOptions): (Plugin | Promise<Plugin>)[] {
+export function meteorWorker(config: PartialPluginOptions): (Plugin | Promise<Plugin>)[] {
     return [
         {
             name: 'meteor-vite:config',
@@ -45,18 +45,6 @@ function configure(config: PartialPluginOptions): (Plugin | Promise<Plugin>)[] {
                     meteor,
                 }
             },
-        },
-        MeteorStubs(),
-    ]
-}
-
-export function meteorWorker(patch: PartialPluginOptions): PluginOption {
-    return [
-        {
-            name: 'meteor-vite:config-patch',
-            configResolved(resolvedConfig) {
-                mergeConfig(resolvedConfig, patch);
-            }
         },
         MeteorStubs(),
     ]
