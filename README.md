@@ -181,12 +181,10 @@ and your Meteor `mainModule.client` may lead to the code being included twice in
 ## Package Details
 The Vite integration comes with two dependencies that work together to enable compatibility between Meteor and Vite.
 
-- [`meteor-vite`](/npm-packages/meteor-vite/) - Internal Vite plugin and server worker parsing and formatting Meteor
-  packages for Vite.
+- [`meteor-vite`](/npm-packages/meteor-vite/) - Internal Vite plugin and server worker parsing and formatting Meteor packages for Vite.
     - [View changelog](/npm-packages/meteor-vite/CHANGELOG.md)
     - [View on npm](https://www.npmjs.com/package/meteor-vite)
 
-- [`jorgenvatle:vite-bundler`](/packages/vite-bundler/) - Meteor build plugin for launching Vite workers and compiling
-  production bundles from Vite and Meteor.
+- [`jorgenvatle:vite-bundler`](/packages/vite-bundler/) - Meteor build plugin for launching Vite workers and compiling production bundles from Vite and Meteor.
     - [View changelog](/packages/vite-bundler/CHANGELOG.md)
     - [View on Atmosphere](https://atmospherejs.com/jorgenvatle/vite-bundler)
