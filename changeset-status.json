@@ -3,23 +3,36 @@
     {
       "releases": [
         {
+          "name": "meteor-vite",
+          "type": "minor"
+        },
+        {
           "name": "vite-bundler",
-          "type": "patch"
+          "type": "minor"
         }
       ],
-      "summary": "Use shared import path formatter for meteor-vite bundle importer and project reference import.",
-      "id": "violet-dragons-run"
+      "summary": "Add option to configure Meteor-Vite though a Vite plugin rather than as a top-level property in the Vite user config.",
+      "id": "chatty-eyes-explode"
     }
   ],
   "releases": [
     {
-      "name": "vite-bundler",
-      "type": "patch",
-      "oldVersion": "1.7.2",
+      "name": "meteor-vite",
+      "type": "minor",
+      "oldVersion": "1.5.0",
       "changesets": [
-        "violet-dragons-run"
+        "chatty-eyes-explode"
       ],
-      "newVersion": "1.7.3"
+      "newVersion": "1.6.0"
+    },
+    {
+      "name": "vite-bundler",
+      "type": "minor",
+      "oldVersion": "1.7.3",
+      "changesets": [
+        "chatty-eyes-explode"
+      ],
+      "newVersion": "1.8.0"
     }
   ]
 }

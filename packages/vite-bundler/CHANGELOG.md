@@ -1,5 +1,11 @@
 # vite-bundler
 
+## 1.8.0
+
+### Minor Changes
+
+- 9bd104d: Add option to configure Meteor-Vite though a Vite plugin rather than as a top-level property in the Vite user config.
+
 ## 1.7.3
 
 ### Patch Changes
