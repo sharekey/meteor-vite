@@ -10,6 +10,23 @@ export default function configure(config: MeteorViteConfig): Plugin {
     }
 }
 
+export interface PluginSettings {
+    /**
+     * Vite client entry into Meteor.
+     * Not to be confused with your Meteor mainModule.
+     *
+     * {@link https://github.com/JorgenVatle/meteor-vite#readme}
+     */
+    clientEntry?: string;
+    
+    /**
+     * Settings for controlling how stubs created by Meteor-Vite are validated.
+     * These settings only apply in a development environment. Once the app is bundled for production, runtime
+     * stub validation is disabled.
+     */
+    stubValidation?: StubValidationSettings;
+}
+
 export interface StubValidationSettings {
     /**
      * list of packages to ignore export validation for.
