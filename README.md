@@ -126,13 +126,6 @@ export default defineConfig({
 })
 ```
 
-> #### Side-note:
-> Code written to or imported by the `meteor.ts` entrypoint will not be processed by Vite, however, it will still by
-> loaded by the Meteor client. So it could be a good place to put code that you don't want Vite to process.
->
-> But do be careful with this - any code that's imported by both entrypoints may lead to the code being included twice
-> in your final production bundle.
-
 ## Features
 
 ### Lazy Loaded Meteor Packages
@@ -175,6 +168,15 @@ export default defineConfig({
   ]
 })
 ```
+
+## A note about the Meteor mainModule
+Code written to or imported by your Meteor client's [`mainModule.client`](https://docs.meteor.com/packages/modules.html#Modular-application-structure) 
+will not be processed by Vite, however, it will still by loaded by the Meteor client. So if you have a use case where 
+you have some code that you don't want Vite to process, but still want in your client bundle, this would be the place 
+to put that.
+
+But do be careful with this - any code that's imported by both your Vite config's [`clientEntry`](#example-with-vue)
+and your Meteor `mainModule.client` may lead to the code being included twice in your final production bundle.
 
 ## Package Details
 The Vite integration comes with two dependencies that work together to enable compatibility between Meteor and Vite.
