@@ -37,7 +37,8 @@ const logger = {
 }
 
 async function parsePackageJs(packageJsPath) {
-    logger.info(`⚡  Parsing ${Path.dirname(packageJsPath)} package.js...`);
+    logger.info(`⚡  Parsing ${Path.basename(Path.dirname(packageJsPath))} package.js file...`);
+    logger.info(`  L ${packageJsPath}`);
     const rawContent = await FS.readFile(packageJsPath, 'utf-8');
     const name = rawContent.match(PACKAGE_NAME_REGEX)?.groups.packageName;
     const version = rawContent.match(PACKAGE_VERSION_REGEX)?.groups?.version;
