@@ -45,15 +45,7 @@ Make sure to have an import client entry (`meteor.mainModule.client`) in your `p
     "build": "meteor build ../output/vue --directory"
   },
   "dependencies": {
-    "@babel/runtime": "^7.17.9",
-    "meteor-node-stubs": "^1.2.1",
-    "vue": "^3.2.37"
-  },
-  "devDependencies": {
-    "@types/meteor": "^1.4.87",
-    "@vitejs/plugin-vue": "^3.0.3",
-    "typescript": "^4.6.3",
-    "vite": "^3.0.9"
+    // ...
   },
   "meteor": {
     "mainModule": {
