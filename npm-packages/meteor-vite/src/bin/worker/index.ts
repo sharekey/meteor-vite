@@ -1,4 +1,4 @@
-import { IPCReply } from './IPC/interface';
+import { IPCReply } from '../../meteor/IPC/interface';
 import { MeteorViteConfig } from '../../vite/MeteorViteConfig';
 import PackageBuild from './package-build';
 import ProductionBuilder from './production-build';

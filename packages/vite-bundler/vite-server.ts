@@ -2,7 +2,7 @@ import { Meteor } from 'meteor/meteor'
 import { WebAppInternals } from 'meteor/webapp'
 import type HTTP from 'http'
 import { fetch } from 'meteor/fetch';
-import { MeteorIPCMessage } from '../../npm-packages/meteor-vite/src/bin/worker/IPC/MeteorEvents';
+import { MeteorIPCMessage } from '../../npm-packages/meteor-vite/src/meteor/IPC/MeteorEvents';
 import {
     getConfig, DevConnectionLog,
     MeteorViteConfig,

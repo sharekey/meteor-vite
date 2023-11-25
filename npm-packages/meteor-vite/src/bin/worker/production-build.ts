@@ -4,7 +4,7 @@ import { MeteorViteConfig } from '../../vite/MeteorViteConfig';
 import { MeteorStubs } from '../../vite';
 import MeteorVitePackage from '../../../package.json';
 import { PluginSettings, ProjectJson } from '../../vite/plugin/MeteorStubs';
-import CreateIPCInterface, { IPCReply } from './IPC/interface';
+import CreateIPCInterface, { IPCReply } from '../../meteor/IPC/interface';
 
 export default CreateIPCInterface({
     async buildForProduction(
