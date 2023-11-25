@@ -99,7 +99,20 @@ async function prepareConfig(buildConfig: BuildOptions): Promise<ParsedConfig> {
         viteConfig,
         inlineBuildConfig: {
             configFile,
-            build: meteorBuildConfig({ clientEntry: viteConfig.meteor?.clientEntry, outDir }),
+            build: {
+                lib: {
+                    entry: viteConfig.meteor.clientEntry,
+                    formats: ['es'],
+                },
+                rollupOptions: {
+                    output: {
+                        entryFileNames: 'meteor-entry.js',
+                        chunkFileNames: '[name].js',
+                    },
+                },
+                outDir: buildConfig.viteOutDir,
+                minify: false,
+            },
             plugins: [
                 meteorWorker({
                     meteorStubs: {

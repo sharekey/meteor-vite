@@ -41,7 +41,7 @@ export function meteorWorker(config: PartialPluginOptions): PluginOption {
         {
             name: 'meteor-vite:config',
             config: (userConfig) =>  {
-                const meteor = mergeMeteorSettings(userConfig, {
+                mergeMeteorSettings(userConfig, {
                     meteorStubs: {
                         packageJsonPath: 'package.json',
                         meteor: {
@@ -54,13 +54,6 @@ export function meteorWorker(config: PartialPluginOptions): PluginOption {
                         disabled: false,
                     }
                 }, config);
-                
-                return {
-                    build: meteorBuildConfig({
-                        clientEntry: meteor.clientEntry,
-                    }),
-                    meteor,
-                }
             },
             configResolved(resolvedConfig) {
                 const config = parseConfig(resolvedConfig);
@@ -150,27 +143,4 @@ function mergeMeteorSettings(
     const existingSettings = viteConfig.meteor || {};
     const withDefaults = mergeWithTypes(defaults, existingSettings);
     return viteConfig.meteor = mergeWithTypes(withDefaults, overrides) as PluginSettings;
-}
-
-export function meteorBuildConfig({
-    clientEntry,
-    outDir = Path.join('client', 'vite')
-}: {
-    clientEntry: string,
-    outDir?: string,
-}): UserConfig['build'] {
-    return {
-        lib: {
-            entry: clientEntry,
-            formats: ['es'],
-        },
-        rollupOptions: {
-            output: {
-                entryFileNames: 'meteor-entry.js',
-                chunkFileNames: '[name].js',
-            },
-        },
-        outDir,
-        minify: false,
-    }
 }
