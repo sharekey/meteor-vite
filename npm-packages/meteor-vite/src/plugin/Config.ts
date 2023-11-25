@@ -1,10 +1,11 @@
 import Path from 'path';
 import { mergeConfig, Plugin, UserConfig } from 'vite';
 import { MeteorViteError } from '../error/MeteorViteError';
+import { DeepPartial, MakeOptional } from '../utilities/GenericTypes';
 import { MeteorStubsSettings } from './internal/MeteorStubs';
 import PackageJSON from '../../package.json';
 
-export default async function configure(config: PluginSettings): Promise<Plugin> {
+export default async function configure(config: PluginOptions): Promise<Plugin> {
     const clientEntry = config.clientEntry;
     
     if (!clientEntry) {
@@ -33,11 +34,14 @@ export default async function configure(config: PluginSettings): Promise<Plugin>
                         warnOnly: process.env.NODE_ENV === 'production',
                         disabled: false,
                     }
-                } satisfies PluginSettings,
+                } satisfies PartialPluginOptions,
             }, resolvedConfig)
         }
     }
 }
+
+type PluginOptions = MakeOptional<PluginSettings, 'stubValidation' | 'meteorStubs'>;
+export type PartialPluginOptions = DeepPartial<PluginSettings>;
 
 export interface PluginSettings {
     /**
@@ -46,14 +50,14 @@ export interface PluginSettings {
      *
      * {@link https://github.com/JorgenVatle/meteor-vite#readme}
      */
-    clientEntry?: string;
+    clientEntry: string;
     
     /**
      * Settings for controlling how stubs created by Meteor-Vite are validated.
      * These settings only apply in a development environment. Once the app is bundled for production, runtime
      * stub validation is disabled.
      */
-    stubValidation?: StubValidationSettings;
+    stubValidation: StubValidationSettings;
     
     /**
      * Internal configuration injected by the vite:bundler Meteor package. Specifies some important source paths
@@ -63,7 +67,7 @@ export interface PluginSettings {
      * using Vite independently of Meteor. Or to host the Vite dev server yourself instead of letting the vite:bundler
      * plugin do the work for you.
      */
-    meteorStubs?: MeteorStubsSettings;
+    meteorStubs: MeteorStubsSettings;
 }
 
 export interface StubValidationSettings {
