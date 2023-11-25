@@ -62,7 +62,7 @@ if (Meteor.isDevelopment) {
     
     
     viteServer.call({
-        method: 'vite.startDevServer',
+        method: 'vite.server.start',
         params: [{
             packageJson: getProjectPackageJson(),
             globalMeteorPackagesDir: meteorPackagePath,
@@ -83,7 +83,7 @@ if (Meteor.isDevelopment) {
         [ViteConnection.methods.refreshConfig]() {
             DevConnectionLog.info('Refreshing configuration from Vite dev server...')
             viteServer.call({
-                method: 'vite.getDevServerConfig',
+                method: 'vite.server.getConfig',
                 params: [],
             });
             return getConfig();

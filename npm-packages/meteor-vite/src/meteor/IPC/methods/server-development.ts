@@ -37,16 +37,16 @@ interface DevServerOptions {
 }
 
 export default CreateIPCInterface({
-    async 'vite.getDevServerConfig'(replyInterface: Replies) {
+    async 'vite.server.getConfig'(replyInterface: Replies) {
         await sendViteConfig(replyInterface);
     },
     
-    async 'meteor.ipcMessage'(reply, data: MeteorIPCMessage) {
+    async 'meteor.events.emit'(reply, data: MeteorIPCMessage) {
         MeteorEvents.ingest(data);
     },
     
     // todo: Add reply for triggering a server restart
-    async 'vite.startDevServer'(replyInterface: Replies, { packageJson, globalMeteorPackagesDir, meteorParentPid }: DevServerOptions) {
+    async 'vite.server.start'(replyInterface: Replies, { packageJson, globalMeteorPackagesDir, meteorParentPid }: DevServerOptions) {
         const backgroundWorker = await BackgroundWorker.init(meteorParentPid);
         
         if (backgroundWorker.isRunning) {
@@ -82,7 +82,7 @@ export default CreateIPCInterface({
         return;
     },
 
-    async 'vite.stopDevServer'() {
+    async 'vite.server.stop'() {
         if (!server) return;
         try {
             Logger.info('Shutting down vite server...');

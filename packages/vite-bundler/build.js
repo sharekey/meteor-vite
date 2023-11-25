@@ -152,7 +152,7 @@ try {
     });
 
     worker.call({
-      method: 'buildForProduction',
+      method: 'vite.build',
       params: [{
         viteOutDir,
         packageJson: pkg,

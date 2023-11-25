@@ -7,7 +7,7 @@ import { PluginSettings, ProjectJson } from '../../../vite/plugin/MeteorStubs';
 import CreateIPCInterface, { IPCReply } from '../interface';
 
 export default CreateIPCInterface({
-    async buildForProduction(
+    async 'vite.build'(
         reply: Replies,
         buildConfig: BuildOptions
     ) {
