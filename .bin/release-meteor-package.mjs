@@ -37,6 +37,7 @@ const logger = {
 }
 
 async function parsePackageJs(packageJsPath) {
+    logger.info(`⚡  Parsing ${Path.dirname(packageJsPath)} package.js...`);
     const rawContent = await FS.readFile(packageJsPath, 'utf-8');
     const name = rawContent.match(PACKAGE_NAME_REGEX)?.groups.packageName;
     const version = rawContent.match(PACKAGE_VERSION_REGEX)?.groups?.version;
@@ -77,7 +78,9 @@ async function applyVersion() {
 }
 
 async function publish() {
-    logger.info(`⚡  Publishing ${meteorPackage.releaseName}...`);
+    const { version, name } = await parsePackageJs(meteorPackage.packageJsPath);
+    logger.info(`⚡  Publishing ${name}...`);
+    const tag = `${name}@v${version}`
 
     shell('meteor publish', {
         async: true,
@@ -88,6 +91,7 @@ async function publish() {
             ...process.env,
         },
     });
+    shell(`git tag -a "${tag}" -m 'Release ${tag}'`)
 }
 
 function shell(command, options) {
