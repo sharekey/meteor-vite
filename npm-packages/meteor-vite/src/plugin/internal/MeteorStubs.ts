@@ -176,8 +176,9 @@ export interface MeteorStubsSettings {
     packageJson: ProjectJson;
     
     /**
-     * Enabling debug mode will write all input and output files to a `.meteor-vite` directory.
-     * Handy for quickly assessing how things are being formatted, or for writing up new test sources.
+     * Enabling debug mode will write all input and output files to a `.meteor-vite` directory in the Meteor project's
+     * root. Handy for quickly assessing how things are being formatted, or for use in writing up new test cases for
+     * meteor-vite.
      */
     debug?: boolean;
     
