@@ -6,7 +6,7 @@ import { DeepPartial, MakeOptional } from '../utilities/GenericTypes';
 import { MeteorStubs, MeteorStubsSettings } from './internal/MeteorStubs';
 import PackageJSON from '../../package.json';
 
-export default async function meteor(config: PluginOptions): Promise<PluginOption> {
+export default function meteor(config: PluginOptions): (Plugin | Promise<Plugin>)[] {
     const clientEntry = config.clientEntry;
     
     if (!clientEntry) {
