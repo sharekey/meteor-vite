@@ -1,9 +1,10 @@
 import Path from 'path';
-import { mergeConfig, Plugin, ResolvedConfig, UserConfig } from 'vite';
+import { Plugin, ResolvedConfig, UserConfig } from 'vite';
 import PackageJSON from '../../package.json';
 import { MeteorViteError } from '../error/MeteorViteError';
 import { DeepPartial, MakeOptional } from '../utilities/GenericTypes';
 import { MeteorStubs, MeteorStubsSettings } from './MeteorStubs';
+import { mergeWithTypes, parseConfig } from './ParseConfig';
 
 /**
  * Configure the Meteor-Vite compiler.
@@ -136,22 +137,11 @@ export interface StubValidationSettings {
     disabled?: boolean;
 }
 
-function mergeWithTypes<
-    TDefaults extends Record<string, any>,
-    TOverrides extends Record<string, any>,
->(defaults: TDefaults, overrides: TOverrides) {
-    return mergeConfig(defaults as any, overrides as any) as TDefaults & TOverrides;
-}
-
 function mergeMeteorSettings(userConfig: ResolvedConfig | UserConfig, defaults: PartialPluginOptions, overrides: PartialPluginOptions) {
     const viteConfig = parseConfig(userConfig);
     const existingSettings = viteConfig.meteor || {};
     const withDefaults = mergeWithTypes(defaults, existingSettings);
     return viteConfig.meteor = mergeWithTypes(withDefaults, overrides) as PluginSettings;
-}
-
-function parseConfig<TConfig extends ResolvedConfig | UserConfig>(config: TConfig): TConfig & { meteor?: PluginSettings } {
-    return config;
 }
 
 export function meteorBuildConfig({
