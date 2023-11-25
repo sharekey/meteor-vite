@@ -6,8 +6,8 @@ import type { Plugin, ViteDevServer } from 'vite';
 import PackageJSON from '../../../package.json';
 import MeteorPackage from '../../meteor/package/components/MeteorPackage';
 import { stubTemplate } from '../../meteor/package/StubTemplate';
-import { createErrorHandler } from '../error/ErrorHandler';
-import { MeteorViteError } from '../error/MeteorViteError';
+import { createErrorHandler } from '../../error/ErrorHandler';
+import { MeteorViteError } from '../../error/MeteorViteError';
 import { StubValidationSettings } from '../MeteorViteConfig';
 import ViteLoadRequest from '../ViteLoadRequest';
 

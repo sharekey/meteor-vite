@@ -1,5 +1,5 @@
 import Path from 'path';
-import { MeteorViteError } from '../../../vite/error/MeteorViteError';
+import { MeteorViteError } from '../../../error/MeteorViteError';
 import type { ModuleList, ParsedPackage } from '../../parser/Parser';
 import { parseMeteorPackage } from '../../parser/Parser';
 import { SerializationStore } from '../SerializationStore';

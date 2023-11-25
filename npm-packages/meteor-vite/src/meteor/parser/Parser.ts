@@ -10,7 +10,7 @@ import {
 import FS from 'fs/promises';
 import { inspect } from 'util';
 import Logger from '../../utilities/Logger';
-import { MeteorViteError } from '../../vite/error/MeteorViteError';
+import { MeteorViteError } from '../../error/MeteorViteError';
 import {
     KnownModuleMethodNames,
     MeteorPackageProperty,

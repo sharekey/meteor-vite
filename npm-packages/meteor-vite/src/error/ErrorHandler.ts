@@ -1,5 +1,5 @@
-import Logger from '../../utilities/Logger';
-import ViteLoadRequest, { RefreshNeeded } from '../ViteLoadRequest';
+import Logger from '../utilities/Logger';
+import ViteLoadRequest, { RefreshNeeded } from '../vite/ViteLoadRequest';
 import { MeteorViteError } from './MeteorViteError';
 
 export function createErrorHandler(fallbackDescription: string, request?: ViteLoadRequest) {
