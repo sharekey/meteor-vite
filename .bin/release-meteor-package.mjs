@@ -79,9 +79,7 @@ async function applyVersion() {
 }
 
 async function publish() {
-    const { version, name } = await parsePackageJs(meteorPackage.packageJsPath);
-    logger.info(`⚡  Publishing ${name}...`);
-    const tag = `${meteorPackage.releaseName}@v${version}`
+    logger.info(`⚡  Publishing ${meteorPackage.releaseName}...`);
 
     shell('meteor publish', {
         async: true,
@@ -92,7 +90,6 @@ async function publish() {
             ...process.env,
         },
     });
-    shell(`git tag -a "${tag}" -m 'Release ${tag}'`)
 }
 
 function shell(command, options) {
