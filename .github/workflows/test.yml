@@ -1,4 +1,5 @@
 name: 'Test'
+run-name: 'Test: meteor-vite'
 on:
   push:
   pull_request:
