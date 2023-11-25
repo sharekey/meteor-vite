@@ -125,7 +125,7 @@ class MeteorViteError extends Error {
 export const MIN_METEOR_VITE_NPM_VERSION = { major: 1, minor: 5, patch: 0 };
 export const cwd = process.env.METEOR_VITE_CWD ?? guessCwd();
 export const meteorPackagePath = guessMeteorPackagePath();
-export const workerPath = Path.join(cwd, 'node_modules/meteor-vite/dist/bin/worker/index.mjs');
+export const workerPath = Path.join(cwd, 'node_modules/meteor-vite/dist/bin/worker.mjs');
 export function getProjectPackageJson(): ProjectJson {
     const path = Path.join(cwd, 'package.json');
     
