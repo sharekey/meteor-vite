@@ -1,5 +1,4 @@
-import { IPCReply } from '../interface';
-import { MeteorViteConfig } from '../../../vite/MeteorViteConfig';
+import { IPCReply, validateIpcChannel } from '../interface';
 import PackageBuild from './package-build';
 import ProductionBuilder from './production-build';
 import ViteServerWorker from './vite-server';
@@ -33,11 +32,6 @@ process.on('message', async (message: WorkerMethod) => {
 
 validateIpcChannel(process.send);
 
-function validateIpcChannel(send: NodeJS.Process['send']): asserts send is Required<Pick<NodeJS.Process, 'send'>>['send'] {
-    if (typeof process.send !== 'function') {
-        throw new Error('Worker was not launched with an IPC channel!');
-    }
-}
 export type WorkerMethod = { [key in keyof IPCMethods]: [name: key, method: IPCMethods[key]]
                            } extends {
                                [key: string]: [infer Name, infer Method]
