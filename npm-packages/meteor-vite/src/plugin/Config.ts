@@ -6,7 +6,8 @@ import { DeepPartial, MakeOptional } from '../utilities/GenericTypes';
 import { MeteorStubs, MeteorStubsSettings } from './internal/MeteorStubs';
 import PackageJSON from '../../package.json';
 
-export default function meteor(config: PluginOptions): (Plugin | Promise<Plugin>)[] {
+
+export default function meteor(config: PluginOptions) {
     const clientEntry = config.clientEntry;
     
     if (!clientEntry) {
@@ -14,7 +15,11 @@ export default function meteor(config: PluginOptions): (Plugin | Promise<Plugin>
             subtitle: `More info available here ${PackageJSON.homepage}`
         })
     }
-    
+   
+    return configure(config);
+}
+
+function configure(config: PartialPluginOptions): (Plugin | Promise<Plugin>)[] {
     return [
         {
             name: 'meteor-vite:config',
