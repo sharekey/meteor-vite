@@ -1,4 +1,4 @@
-import { StubValidationSettings } from '../../vite/MeteorViteConfig';
+import { StubValidationSettings } from '../../MeteorViteConfig';
 import { StubValidatorOptions } from '../../client/ValidateStub';
 import MeteorPackage from './components/MeteorPackage';
 

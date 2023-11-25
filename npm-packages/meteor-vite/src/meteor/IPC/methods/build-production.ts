@@ -1,6 +1,6 @@
 import { RollupOutput, RollupWatcher } from 'rollup';
 import { build, InlineConfig, resolveConfig } from 'vite';
-import { MeteorViteConfig } from '../../../vite/MeteorViteConfig';
+import { MeteorViteConfig } from '../../../MeteorViteConfig';
 import { MeteorStubs } from '../../../vite';
 import MeteorVitePackage from '../../../../package.json';
 import { PluginSettings, ProjectJson } from '../../../vite/plugin/MeteorStubs';

@@ -4,11 +4,11 @@ import NodeFS from 'fs';
 import Path from 'path';
 import pc from 'picocolors';
 import { ViteDevServer } from 'vite';
-import { createLabelledLogger, LabelLogger } from '../utilities/Logger';
-import { isSameModulePath } from '../meteor/package/components/MeteorPackage';
-import AutoImportQueue from '../meteor/package/AutoImportQueue';
-import { MeteorViteError } from '../error/MeteorViteError';
-import type { PluginSettings } from './plugin/MeteorStubs';
+import { createLabelledLogger, LabelLogger } from './utilities/Logger';
+import { isSameModulePath } from './meteor/package/components/MeteorPackage';
+import AutoImportQueue from './meteor/package/AutoImportQueue';
+import { MeteorViteError } from './error/MeteorViteError';
+import type { PluginSettings } from './vite/plugin/MeteorStubs';
 
 export default class ViteLoadRequest {
     

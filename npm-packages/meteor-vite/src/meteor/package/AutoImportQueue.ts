@@ -1,7 +1,7 @@
 import FS from 'fs/promises';
 import pc from 'picocolors';
 import Logger from '../../utilities/Logger';
-import { RefreshNeeded } from '../../vite/ViteLoadRequest';
+import { RefreshNeeded } from '../../ViteLoadRequest';
 import MeteorEvents, { EventTimeout } from '../IPC/MeteorEvents';
 import { viteAutoImportBlock } from './StubTemplate';
 import PLimit from 'p-limit';
