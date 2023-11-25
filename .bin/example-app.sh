@@ -19,8 +19,15 @@ EXAMPLE_DIR="$PWD/examples"
 APP_DIR="$EXAMPLE_DIR/$app"
 BUILD_TARGET="$PWD/examples/output/$app"
 NPM_LINK_TARGET="$PWD/npm-packages/meteor-vite"
+
 export METEOR_PACKAGE_DIRS="$PWD/packages"
 export METEOR_VITE_TSUP_BUILD_WATCHER="true"
+
+# Port for the Meteor app in examples/.mongo
+# Used just for the MongoDB server that comes out of the box with Meteor.
+# Which comes in handy when testing production bundles that depend on a Mongo connection to launch.
+PROD_MONGO_METEOR_PORT=4040
+PROD_MONGO_CONNECTION_URI="mongodb://127.0.0.1:$(($PROD_MONGO_METEOR_PORT + 1))/$app"
 
 # Start a development server
 start() {
@@ -81,7 +88,7 @@ install:mongo() {
 
 start:mongo() {
   cd "$EXAMPLE_DIR/.mongo" || exit 1
-  meteor npm start
+  meteor npm start -- --port $PROD_MONGO_METEOR_PORT
 }
 
 cleanOutput() {
@@ -101,9 +108,9 @@ production:install() {
 production:app() {
   cd "$BUILD_TARGET/bundle" || exit 1
 
-  export PORT=4040
-  export ROOT_URL=http://localhost:4040
-  export MONGO_URL=mongodb://127.0.0.1:3001/$app
+  export PORT=3000
+  export ROOT_URL=http://localhost:3000
+  export MONGO_URL="$PROD_MONGO_CONNECTION_URI"
 
   meteor node main.js
 }
