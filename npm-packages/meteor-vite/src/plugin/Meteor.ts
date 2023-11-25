@@ -1,4 +1,5 @@
 import Path from 'path';
+import pc from 'picocolors';
 import { Plugin, ResolvedConfig, UserConfig } from 'vite';
 import PackageJSON from '../../package.json';
 import { FatalMeteorViteError, MeteorViteError } from '../error/MeteorViteError';
@@ -64,9 +65,12 @@ export function meteorWorker(config: PartialPluginOptions): (Plugin | Promise<Pl
             configResolved(resolvedConfig) {
                 const config = parseConfig(resolvedConfig);
                 if (!config.meteor) {
-                    throw new FatalMeteorViteError('Could not retrieve Meteor-Vite settings!', {
-                        subtitle: `See the following link for a setup guide ${PackageJSON.homepage}`
-                    })
+                    throw new FatalMeteorViteError(
+                        `Could not retrieve Meteor-Vite settings! Did you forget to add ${pc.yellow('meteor-vite')} to your Vite config?`,
+                        {
+                            subtitle: `See the following link for a setup guide ${PackageJSON.homepage}`
+                        }
+                    )
                 }
                 
                 if (!config.meteor.clientEntry) {
