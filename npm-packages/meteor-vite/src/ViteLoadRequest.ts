@@ -4,11 +4,12 @@ import NodeFS from 'fs';
 import Path from 'path';
 import pc from 'picocolors';
 import { ViteDevServer } from 'vite';
-import { createLabelledLogger, LabelLogger } from '../Logger';
-import { isSameModulePath } from '../meteor/package/components/MeteorPackage';
-import AutoImportQueue from './AutoImportQueue';
+import { PluginSettings } from './plugin/Meteor';
+import { createLabelledLogger, LabelLogger } from './utilities/Logger';
+import { isSameModulePath } from './meteor/package/components/MeteorPackage';
+import AutoImportQueue from './meteor/package/AutoImportQueue';
 import { MeteorViteError } from './error/MeteorViteError';
-import type { PluginSettings } from './plugin/MeteorStubs';
+import type { MeteorStubsSettings } from './plugin/MeteorStubs';
 
 export default class ViteLoadRequest {
     
@@ -52,7 +53,7 @@ export default class ViteLoadRequest {
             ...request,
         })
     }
-    protected static loadFileData({ id, pluginSettings }: PreContextRequest) {
+    protected static loadFileData({ id, pluginSettings: { meteorStubs } }: PreContextRequest) {
         let {
             /**
              * Base Atmosphere package import This is usually where we find the full package content, even for packages
@@ -75,13 +76,14 @@ export default class ViteLoadRequest {
         const packageName = packageId.replace(/^meteor\//, '');
         const sourceName = packageName.replace(':', '_');
         const sourceFile = `${sourceName}.js`;
-        const sourcePath = Path.join(pluginSettings.meteor.packagePath, sourceFile);
-        const resolverResultCache: ResolverResultCache = JSON.parse(NodeFS.readFileSync(Path.join(pluginSettings.meteor.isopackPath, '../resolver-result-cache.json'), 'utf-8'));
+        const sourcePath = Path.join(meteorStubs.meteor.packagePath, sourceFile);
+        const resolverResultCache: ResolverResultCache = JSON.parse(NodeFS.readFileSync(Path.join(meteorStubs.meteor.isopackPath, '../resolver-result-cache.json'), 'utf-8'));
         const packageVersion = resolverResultCache.lastOutput.answer[packageName];
+        const globalMeteorPackagesDir = meteorStubs.meteor.globalMeteorPackagesDir || this.guessMeteorPackagePath();
         
         const manifestPath = {
-            local: Path.join(pluginSettings.meteor.isopackPath, sourceName, 'web.browser.json'),
-            globalCache: Path.join(pluginSettings.meteor.globalMeteorPackagesDir, sourceName, packageVersion, 'web.browser.json'),
+            local: Path.join(meteorStubs.meteor.isopackPath, sourceName, 'web.browser.json'),
+            globalCache: Path.join(globalMeteorPackagesDir, sourceName, packageVersion, 'web.browser.json'),
         }
         
         /**
@@ -122,6 +124,26 @@ export default class ViteLoadRequest {
         return JSON.parse(await FS.readFile(file.manifestPath, 'utf8')) as ManifestContent;
     }
     
+    /**
+     * Try to determine the path to Meteor's shared package cache.
+     * This is used to retrieve isopack metadata for lazy-loaded packages.
+     * @return {string}
+     * @protected
+     */
+    protected static guessMeteorPackagePath() {
+        const [root, ...parts] = process.argv0.split(/[\/\\]/);
+        let packagePath = root || '/';
+        
+        parts.forEach((part) => {
+            if (packagePath.includes('/.meteor/packages/meteor-tool')) {
+                return;
+            }
+            packagePath = Path.posix.join(packagePath, part);
+        });
+        
+        return Path.join(packagePath, '../');
+    }
+    
     public mainModulePath?: string;
     public isLazyLoaded: boolean;
     public log: LabelLogger;
@@ -156,7 +178,7 @@ export default class ViteLoadRequest {
      * @return {Promise<void>}
      */
     public async forceImport() {
-        const mainModule = this.context.pluginSettings.packageJson.meteor.mainModule;
+        const mainModule = this.context.pluginSettings.meteorStubs.packageJson!.meteor.mainModule;
         const meteorClientEntryFile = Path.resolve(process.cwd(), mainModule.client);
         
         if (!existsSync(meteorClientEntryFile)) {

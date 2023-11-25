@@ -4,9 +4,9 @@ import Path from 'path';
 import FS from 'fs';
 import pc from 'picocolors';
 import type { WorkerMethod, WorkerResponse } from '../../npm-packages/meteor-vite';
-import type { WorkerResponseHooks } from '../../npm-packages/meteor-vite/src/bin/worker';
-import type { MeteorIPCMessage } from '../../npm-packages/meteor-vite/src/meteor/MeteorEvents';
-import type { ProjectJson } from '../../npm-packages/meteor-vite/src/vite/plugin/MeteorStubs';
+import type { WorkerResponseHooks } from '../../npm-packages/meteor-vite/src/meteor/IPC/methods';
+import type { MeteorIPCMessage } from '../../npm-packages/meteor-vite/src/meteor/IPC/MeteorEvents';
+import type { ProjectJson } from '../../npm-packages/meteor-vite/src/plugin/MeteorStubs';
 
 // Use a worker to skip reify and Fibers
 // Use a child process instead of worker to avoid WASM/archived threads error
@@ -124,8 +124,7 @@ class MeteorViteError extends Error {
 
 export const MIN_METEOR_VITE_NPM_VERSION = { major: 1, minor: 5, patch: 0 };
 export const cwd = process.env.METEOR_VITE_CWD ?? guessCwd();
-export const meteorPackagePath = guessMeteorPackagePath();
-export const workerPath = Path.join(cwd, 'node_modules/meteor-vite/dist/bin/worker/index.mjs');
+export const workerPath = Path.join(cwd, 'node_modules/meteor-vite/dist/bin/worker.mjs');
 export function getProjectPackageJson(): ProjectJson {
     const path = Path.join(cwd, 'package.json');
     
@@ -147,19 +146,6 @@ function guessCwd () {
         cwd = cwd.substring(0, index)
     }
     return cwd
-}
-function guessMeteorPackagePath() {
-    const [root, ...parts] = process.argv0.split(/[\/\\]/);
-    let packagePath = root || '/';
-    
-    parts.forEach((part) => {
-        if (packagePath.includes('/.meteor/packages/meteor-tool')) {
-            return;
-        }
-        packagePath = Path.posix.join(packagePath, part);
-    });
-    
-    return Path.join(packagePath, '../');
 }
 
 function prepareWorkerEnv() {

@@ -2,14 +2,14 @@ import { Meteor } from 'meteor/meteor'
 import { WebAppInternals } from 'meteor/webapp'
 import type HTTP from 'http'
 import { fetch } from 'meteor/fetch';
-import { MeteorIPCMessage } from '../../npm-packages/meteor-vite/src/meteor/MeteorEvents';
+import { MeteorIPCMessage } from '../../npm-packages/meteor-vite/src/meteor/IPC/MeteorEvents';
 import {
     getConfig, DevConnectionLog,
     MeteorViteConfig,
     setConfig,
     ViteConnection, ViteDevScripts,
 } from './loading/vite-connection-handler';
-import { createWorkerFork, getProjectPackageJson, isMeteorIPCMessage, meteorPackagePath } from './workers';
+import { createWorkerFork, getProjectPackageJson, isMeteorIPCMessage } from './workers';
 
 if (Meteor.isDevelopment) {
     let tsupWatcherRunning = false;
@@ -42,7 +42,7 @@ if (Meteor.isDevelopment) {
             
             tsupWatcherRunning = true;
             viteServer.call({
-                method: 'tsup.watchMeteorVite',
+                method: 'tsup.watch.meteor-vite',
                 params: [],
             })
         }
@@ -62,10 +62,9 @@ if (Meteor.isDevelopment) {
     
     
     viteServer.call({
-        method: 'vite.startDevServer',
+        method: 'vite.server.start',
         params: [{
             packageJson: getProjectPackageJson(),
-            globalMeteorPackagesDir: meteorPackagePath,
             meteorParentPid: process.ppid,
         }]
     });
@@ -83,7 +82,7 @@ if (Meteor.isDevelopment) {
         [ViteConnection.methods.refreshConfig]() {
             DevConnectionLog.info('Refreshing configuration from Vite dev server...')
             viteServer.call({
-                method: 'vite.getDevServerConfig',
+                method: 'vite.server.getConfig',
                 params: [],
             });
             return getConfig();

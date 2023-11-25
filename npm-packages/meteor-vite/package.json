@@ -5,14 +5,21 @@
   "files": [
     "dist"
   ],
-  "main": "temp/stubs.js",
+  "main": "",
   "exports": {
-    "./plugin": "./dist/vite/index.mjs",
-    "./client": "./dist/meteor/client/index.mjs"
+    "./plugin": {
+      "import": [
+        "./dist/plugin/index.mjs"
+      ],
+      "require": [
+        "./dist/plugin/index.js"
+      ]
+    },
+    "./client": "./dist/client/index.mjs"
   },
   "scripts": {
     "start": "ts-node-dev src/bin/debug/watch-mocks.ts",
-    "watch": "tsup --watch",
+    "watch": "tsup --watch --dts --sourcemap",
     "build": "rm -rf ./dist && tsup-node",
     "prepare": "npm run build",
     "test": "vitest"
@@ -20,14 +27,38 @@
   "tsup": [
     {
       "entry": [
-        "./src/bin/worker/index.ts",
-        "./src/meteor/client/index.ts"
+        "./src/bin/worker.ts",
+        "./src/client/index.ts"
       ],
       "outDir": "dist",
       "format": "esm",
-      "sourcemap": true
+      "sourcemap": true,
+      "dts": false
+    },
+    {
+      "entry": [
+        "./src/plugin/index.ts"
+      ],
+      "outDir": "dist/plugin",
+      "format": [
+        "cjs",
+        "esm"
+      ],
+      "sourcemap": true,
+      "dts": true
     }
   ],
+  "typesVersions": {
+    "*": {
+      "plugin": [
+        "./dist/plugin/index.d.mts",
+        "./dist/plugin/index.d.ts"
+      ],
+      "client": [
+        "./dist/client/index.d.mts"
+      ]
+    }
+  },
   "keywords": [],
   "author": "",
   "bugs": {

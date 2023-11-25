@@ -1,7 +1,7 @@
 import Path from 'path';
 import { describe, expect, it, test } from 'vitest';
 import MeteorPackage from '../../src/meteor/package/components/MeteorPackage';
-import { parseMeteorPackage } from '../../src/meteor/package/parser/Parser';
+import { parseMeteorPackage } from '../../src/meteor/parser/Parser';
 import { AllMockPackages } from '../__mocks';
 
 describe('Validate known exports for mock packages', () => {

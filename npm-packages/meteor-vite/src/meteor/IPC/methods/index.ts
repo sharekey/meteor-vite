@@ -1,43 +1,14 @@
-import { IPCReply } from './IPC/interface';
-import { MeteorViteConfig } from '../../vite/MeteorViteConfig';
-import PackageBuild from './package-build';
-import ProductionBuilder from './production-build';
+import { IPCReply } from '../interface';
+import BuildWorker from './build';
 import ViteServerWorker from './vite-server';
 
 const IpcMethods = {
     ...ViteServerWorker,
-    ...ProductionBuilder,
-    ...PackageBuild,
+    ...BuildWorker,
 } as const;
 
-process.on('message', async (message: WorkerMethod) => {
-    if (!message || !message.method) {
-        console.error('Vite: Unrecognized worker IPC message', { message });
-        return;
-    }
-    
-    const callWorkerMethod = IpcMethods[message.method];
-    
-    if (typeof callWorkerMethod !== 'function') {
-        console.error(`Vite: The provided IPC method hasn't been defined yet!`, { message });
-    }
-    
-    await callWorkerMethod((response) => {
-        validateIpcChannel(process.send);
-        process.send(response);
-    }, ...message.params as [params: any]).catch((error) => {
-        console.error('Vite: worker process encountered an exception!', error);
-    });
-})
+export default IpcMethods;
 
-
-validateIpcChannel(process.send);
-
-function validateIpcChannel(send: NodeJS.Process['send']): asserts send is Required<Pick<NodeJS.Process, 'send'>>['send'] {
-    if (typeof process.send !== 'function') {
-        throw new Error('Worker was not launched with an IPC channel!');
-    }
-}
 export type WorkerMethod = { [key in keyof IPCMethods]: [name: key, method: IPCMethods[key]]
                            } extends {
                                [key: string]: [infer Name, infer Method]

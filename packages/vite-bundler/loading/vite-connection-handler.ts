@@ -1,6 +1,6 @@
 import { Meteor } from 'meteor/meteor';
 import { Mongo } from 'meteor/mongo';
-import { WorkerResponseData } from '../../../npm-packages/meteor-vite/src/bin/worker';
+import { WorkerResponseData } from '../../../npm-packages/meteor-vite/src/meteor/IPC/methods';
 
 export type RuntimeConfig = WorkerResponseData<'viteConfig'> & { ready: boolean, lastUpdate: number };
 export let MeteorViteConfig: Mongo.Collection<RuntimeConfig>;

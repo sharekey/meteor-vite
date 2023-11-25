@@ -1,10 +1,7 @@
 name: 'Test'
+run-name: 'Test: ${{ github.event.head_commit.message }}'
 on:
   push:
-  pull_request:
-    branches:
-      - main
-      - release
 
 env:
   NPM_PACKAGE_PATH: ./npm-packages/meteor-vite

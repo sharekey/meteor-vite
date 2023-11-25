@@ -1,19 +1,20 @@
 import FS from 'fs/promises';
 import Path from 'path';
 import { createServer, resolveConfig, ViteDevServer } from 'vite';
-import Logger from '../../Logger';
-import MeteorEvents, { MeteorIPCMessage } from '../../meteor/MeteorEvents';
-import { MeteorViteConfig } from '../../vite/MeteorViteConfig';
-import { MeteorStubs } from '../../vite';
-import { ProjectJson } from '../../vite/plugin/MeteorStubs';
-import { RefreshNeeded } from '../../vite/ViteLoadRequest';
-import CreateIPCInterface, { IPCReply } from './IPC/interface';
+import { meteorWorker } from '../../../plugin/Meteor';
+import Logger from '../../../utilities/Logger';
+import MeteorEvents, { MeteorIPCMessage } from '../MeteorEvents';
+import { MeteorViteConfig } from '../../../MeteorViteConfig';
+import { MeteorStubs } from '../../../plugin/internal';
+import { ProjectJson } from '../../../plugin/MeteorStubs';
+import { RefreshNeeded } from '../../../ViteLoadRequest';
+import CreateIPCInterface, { IPCReply } from '../interface';
 
 let server: ViteDevServer & { config: MeteorViteConfig };
 let viteConfig: MeteorViteConfig;
 let listening = false;
 
-type Replies = IPCReply<{
+export type Replies = IPCReply<{
     kind: 'viteConfig',
     data: ViteRuntimeConfig;
 } | {
@@ -24,29 +25,28 @@ type Replies = IPCReply<{
     data: WorkerRuntimeConfig & { listening: boolean };
 }>
 
-type ViteRuntimeConfig = {
+export type ViteRuntimeConfig = {
     host?: string | boolean;
     port?: number;
     entryFile?: string
     backgroundWorker?: WorkerRuntimeConfig;
 }
-interface DevServerOptions {
+export interface DevServerOptions {
     packageJson: ProjectJson,
-    globalMeteorPackagesDir: string;
     meteorParentPid: number;
 }
 
 export default CreateIPCInterface({
-    async 'vite.getDevServerConfig'(replyInterface: Replies) {
+    async 'vite.server.getConfig'(replyInterface: Replies) {
         await sendViteConfig(replyInterface);
     },
     
-    async 'meteor.ipcMessage'(reply, data: MeteorIPCMessage) {
+    async 'meteor.events.emit'(reply, data: MeteorIPCMessage) {
         MeteorEvents.ingest(data);
     },
     
     // todo: Add reply for triggering a server restart
-    async 'vite.startDevServer'(replyInterface: Replies, { packageJson, globalMeteorPackagesDir, meteorParentPid }: DevServerOptions) {
+    async 'vite.server.start'(replyInterface: Replies, { packageJson, meteorParentPid }: DevServerOptions) {
         const backgroundWorker = await BackgroundWorker.init(meteorParentPid);
         
         if (backgroundWorker.isRunning) {
@@ -60,7 +60,6 @@ export default CreateIPCInterface({
         
         const server = await createViteServer({
             packageJson,
-            globalMeteorPackagesDir,
             refreshNeeded: () => {
                 replyInterface({
                     kind: 'refreshNeeded',
@@ -82,7 +81,7 @@ export default CreateIPCInterface({
         return;
     },
 
-    async 'vite.stopDevServer'() {
+    async 'vite.server.stop'() {
         if (!server) return;
         try {
             Logger.info('Shutting down vite server...');
@@ -95,7 +94,6 @@ export default CreateIPCInterface({
 })
 
 async function createViteServer({
-    globalMeteorPackagesDir,
     packageJson,
     buildStart,
     refreshNeeded,
@@ -114,14 +112,10 @@ async function createViteServer({
     server = await createServer({
         configFile: viteConfig.configFile,
         plugins: [
-            MeteorStubs({
-                meteor: {
-                    packagePath: Path.join('.meteor', 'local', 'build', 'programs', 'web.browser', 'packages'),
-                    isopackPath: Path.join('.meteor', 'local', 'isopacks'),
-                    globalMeteorPackagesDir,
-                },
-                packageJson,
-                stubValidation: viteConfig.meteor?.stubValidation,
+            meteorWorker({
+               meteorStubs: {
+                   packageJson,
+               }
             }),
             {
                 name: 'meteor-handle-restart',

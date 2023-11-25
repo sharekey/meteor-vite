@@ -3,31 +3,32 @@ import Path from 'path';
 import pc from 'picocolors';
 import type { PluginContext } from 'rollup';
 import type { Plugin, ViteDevServer } from 'vite';
-import PackageJSON from '../../../package.json';
-import MeteorPackage from '../../meteor/package/components/MeteorPackage';
-import { stubTemplate } from '../../meteor/package/StubTemplate';
+import PackageJSON from '../../package.json';
 import { createErrorHandler } from '../error/ErrorHandler';
 import { MeteorViteError } from '../error/MeteorViteError';
-import { StubValidationSettings } from '../MeteorViteConfig';
+import MeteorPackage from '../meteor/package/components/MeteorPackage';
+import { stubTemplate } from '../meteor/package/StubTemplate';
+import { MeteorViteConfig } from '../MeteorViteConfig';
 import ViteLoadRequest from '../ViteLoadRequest';
+import { PluginSettings } from './Meteor';
 
-export const MeteorStubs = setupPlugin(async (pluginSettings: PluginSettings) => {
-    if (!pluginSettings?.packageJson?.meteor?.mainModule?.client) {
-        throw new MeteorViteError(`You need to specify a Meteor entrypoint in your package.json!`, {
-            subtitle: `See the following link for more info: ${PackageJSON.homepage}`
-        })
-    }
-    
-    pluginSettings.stubValidation = Object.assign({
-        warnOnly: process.env.NODE_ENV === 'production',
-        disabled: false,
-    }, pluginSettings.stubValidation);
-    
+export const MeteorStubs = setupPlugin(async () => {
     return {
         name: 'meteor-vite: stubs',
         resolveId: (id) => ViteLoadRequest.resolveId(id),
         shouldProcess: (viteId) => ViteLoadRequest.isStubRequest(viteId),
-        async setupContext(viteId, server) {
+        async validateConfig({ meteorStubs }: ResolvedPluginConfig) {
+            if (!meteorStubs.packageJson) {
+                const jsonPath = meteorStubs.packageJsonPath || 'package.json';
+                meteorStubs.packageJson = JSON.parse(await FS.readFile(jsonPath, 'utf-8'));
+            }
+            if (!meteorStubs?.packageJson?.meteor?.mainModule?.client) {
+                throw new MeteorViteError(`You need to specify a Meteor entrypoint in your package.json!`, {
+                    subtitle: `See the following link for more info: ${PackageJSON.homepage}`
+                })
+            }
+        },
+        async setupContext(viteId, server, pluginSettings: ResolvedPluginConfig) {
             return ViteLoadRequest.prepareContext({ id: viteId, pluginSettings, server });
         },
         
@@ -46,7 +47,7 @@ export const MeteorStubs = setupPlugin(async (pluginSettings: PluginSettings) =>
             const template = stubTemplate({
                 requestId: request.context.id,
                 importPath: request.requestedModulePath,
-                stubValidation: pluginSettings.stubValidation,
+                stubValidation: request.context.pluginSettings.stubValidation,
                 meteorPackage,
             })
             
@@ -55,7 +56,7 @@ export const MeteorStubs = setupPlugin(async (pluginSettings: PluginSettings) =>
                 'Request duration': `${Date.now() - timeStarted}ms`,
             });
             
-            if (pluginSettings.debug) {
+            if (request.context.pluginSettings.meteorStubs.debug) {
                 await storeDebugSnippet({ request, stubTemplate: template, meteorPackage })
             }
             
@@ -92,19 +93,35 @@ async function storeDebugSnippet({ request, stubTemplate, meteorPackage }: {
  * Just a utility to set up catch blocks for nicer error handling as well as pre-populating the load() handler with
  * the request context from {@link ViteLoadRequest}.
  */
-function setupPlugin<Context extends ViteLoadRequest, Settings>(setup: (settings: Settings) => Promise<{
+function setupPlugin<Context extends ViteLoadRequest>(setup: () => Promise<{
     name: string;
     load(this: PluginContext, request: Context): Promise<string>;
-    setupContext(viteId: string, server: ViteDevServer): Promise<Context>;
+    validateConfig(settings: PluginSettings): Promise<void>,
+    setupContext(viteId: string, server: ViteDevServer, settings: PluginSettings): Promise<Context>;
     shouldProcess(viteId: string): boolean;
     resolveId(viteId: string): string | undefined;
-}>): (settings: Settings) => Promise<Plugin> {
-    const createPlugin = async (settings: Settings): Promise<Plugin> => {
-        const plugin = await setup(settings);
+}>): () => Promise<Plugin> {
+    const handleError = createErrorHandler('Could not set up Vite plugin!');
+    
+    const createPlugin = async (): Promise<Plugin> => {
+        const plugin = await setup();
+        let settings: PluginSettings;
         let server: ViteDevServer;
         return {
             name: plugin.name,
             resolveId: plugin.resolveId,
+            async configResolved(resolvedConfig) {
+                const pluginSettings = (resolvedConfig as MeteorViteConfig).meteor;
+                if (!pluginSettings) {
+                    throw new MeteorViteError('Unable to get configuration for Meteor-Vite!');
+                }
+                try {
+                    settings = pluginSettings;
+                    await plugin.validateConfig(pluginSettings);
+                } catch (error) {
+                    await handleError(error);
+                }
+            },
             configureServer(viteDevServer) {
                 server = viteDevServer;
             },
@@ -115,7 +132,7 @@ function setupPlugin<Context extends ViteLoadRequest, Settings>(setup: (settings
                     return;
                 }
                 
-                const request = await plugin.setupContext(viteId, server);
+                const request = await plugin.setupContext(viteId, server, settings);
                 
                 return plugin.load.apply(this, [request]).catch(
                     createErrorHandler('Could not parse Meteor package', request)
@@ -124,11 +141,11 @@ function setupPlugin<Context extends ViteLoadRequest, Settings>(setup: (settings
         }
     }
     
-    return (settings: Settings) => createPlugin(settings).catch(createErrorHandler('Could not set up Vite plugin!'))
+    return () => createPlugin().catch(handleError)
 }
 
 
-export interface PluginSettings {
+export interface MeteorStubsSettings {
     
     meteor: {
         /**
@@ -159,29 +176,30 @@ export interface PluginSettings {
          * @example `react-meteor-data` path
          * /home/john/.meteor/packages/react-meteor-data/2.7.2/web.browser.json
          */
-        globalMeteorPackagesDir: string;
+        globalMeteorPackagesDir?: string;
     }
-    
-    /**
-     * Configuration for how stubs generated by Meteor-Vite should be validated. The intent is to warn users early
-     * in case there is something wrong with the way Meteor-Vite parses Meteor packages.
-     * {@link StubValidationSettings}
-     */
-    stubValidation?: StubValidationSettings;
     
     /**
      * Full content of the user's Meteor project package.json.
      * Like the one found in {@link /examples/vue/package.json}
      */
-    packageJson: ProjectJson;
+    packageJson?: ProjectJson;
     
     /**
-     * Enabling debug mode will write all input and output files to a `.meteor-vite` directory.
-     * Handy for quickly assessing how things are being formatted, or for writing up new test sources.
+     * Alternatively, a path to a package.json file can be supplied.
+     */
+    packageJsonPath?: string;
+    
+    /**
+     * Enabling debug mode will write all input and output files to a `.meteor-vite` directory in the Meteor project's
+     * root. Handy for quickly assessing how things are being formatted, or for use in writing up new test cases for
+     * meteor-vite.
      */
     debug?: boolean;
     
 }
+
+type ResolvedPluginConfig = Required<PluginSettings>;
 
 /**
  * The user's Meteor project package.json content.

@@ -1,6 +1,5 @@
 import { EventEmitter } from 'events';
-import pc from 'picocolors';
-import Logger from '../Logger';
+import Logger from '../../utilities/Logger';
 
 type MeteorIPCTopic = 'webapp-reload-client' | 'webapp-pause-client' | 'client-refresh';
 
@@ -11,7 +10,7 @@ export type MeteorIPCMessage = {
     encodedPayload: string
 }
 
-export default new class MeteorEvents {
+class MeteorEventBus {
     protected readonly events = new EventEmitter();
     
     /**
@@ -86,4 +85,7 @@ function awaitEvent<
     })
 }
 
+const MeteorEvents = new MeteorEventBus();
+
 export class EventTimeout extends Error {}
+export default MeteorEvents;

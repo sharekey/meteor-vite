@@ -1,13 +1,15 @@
+import { spawn } from 'child_process';
+import Path from 'path';
 import { RollupOutput, RollupWatcher } from 'rollup';
 import { build, InlineConfig, resolveConfig } from 'vite';
-import { MeteorViteConfig } from '../../vite/MeteorViteConfig';
-import { MeteorStubs } from '../../vite';
-import MeteorVitePackage from '../../../package.json';
-import { PluginSettings, ProjectJson } from '../../vite/plugin/MeteorStubs';
-import CreateIPCInterface, { IPCReply } from './IPC/interface';
+import MeteorVitePackage from '../../../../package.json';
+import { MeteorViteConfig } from '../../../MeteorViteConfig';
+import { meteorWorker } from '../../../plugin/Meteor';
+import { MeteorStubsSettings, ProjectJson } from '../../../plugin/MeteorStubs';
+import CreateIPCInterface, { IPCReply } from '../interface';
 
 export default CreateIPCInterface({
-    async buildForProduction(
+    async 'vite.build'(
         reply: Replies,
         buildConfig: BuildOptions
     ) {
@@ -43,11 +45,42 @@ export default CreateIPCInterface({
             })
             throw error;
         }
+    },
+    
+    /**
+     * Internal command for spinning up a watcher to rebuild meteor-vite on changes.
+     * Used to ease with the development of this package while running one of the example apps.
+     * Controlled through environment variables applied by the example-app.sh utility script.
+     */
+    async 'tsup.watch.meteor-vite'(reply) {
+        const npmPackagePath = Path.join(process.cwd(), '/node_modules/meteor-vite/') // to the meteor-vite npm package
+        const tsupPath = Path.join(npmPackagePath, '/node_modules/.bin/tsup-node'); // tsup to 2 node_modules dirs down.
+        
+        const child = spawn(tsupPath, ['--watch'], {
+            stdio: 'inherit',
+            cwd: npmPackagePath,
+            detached: false,
+            env: {
+                FORCE_COLOR: '3',
+            },
+        });
+        
+        child.on('error', (error) => {
+            throw new Error(`meteor-vite package build worker error: ${error.message}`, { cause: error })
+        });
+        
+        child.on('exit', (code) => {
+            if (!code) {
+                return;
+            }
+            process.exit(1);
+            throw new Error('TSUp watcher exited unexpectedly!');
+        });
     }
 })
 
 async function prepareConfig(buildConfig: BuildOptions): Promise<ParsedConfig> {
-    const { viteOutDir, meteor, packageJson } = buildConfig;
+    const { viteOutDir: outDir, meteor, packageJson } = buildConfig;
     const configFile = buildConfig.packageJson?.meteor?.viteConfig;
 
     Object.entries(buildConfig).forEach(([key, value]) => {
@@ -68,7 +101,7 @@ async function prepareConfig(buildConfig: BuildOptions): Promise<ParsedConfig> {
             configFile,
             build: {
                 lib: {
-                    entry: viteConfig?.meteor?.clientEntry,
+                    entry: viteConfig.meteor.clientEntry,
                     formats: ['es'],
                 },
                 rollupOptions: {
@@ -77,14 +110,15 @@ async function prepareConfig(buildConfig: BuildOptions): Promise<ParsedConfig> {
                         chunkFileNames: '[name].js',
                     },
                 },
-                outDir: viteOutDir,
+                outDir: buildConfig.viteOutDir,
                 minify: false,
             },
             plugins: [
-                MeteorStubs({
-                    meteor,
-                    stubValidation: viteConfig.meteor.stubValidation,
-                    packageJson,
+                meteorWorker({
+                    meteorStubs: {
+                        meteor,
+                        packageJson,
+                    },
                 }),
             ],
         }
@@ -105,9 +139,9 @@ function validateOutput(rollupResult?: RollupOutput | RollupWatcher): asserts ro
     throw new Error(message);
 }
 
-interface BuildOptions {
+export interface BuildOptions {
     viteOutDir: string;
-    meteor: PluginSettings['meteor'];
+    meteor: MeteorStubsSettings['meteor'];
     packageJson: ProjectJson;
 }
 
