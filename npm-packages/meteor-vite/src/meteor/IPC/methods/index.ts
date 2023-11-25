@@ -1,4 +1,4 @@
-import { IPCReply, validateIpcChannel } from '../interface';
+import { IPCReply } from '../interface';
 import PackageBuild from './package-build';
 import ProductionBuilder from './production-build';
 import ViteServerWorker from './vite-server';
@@ -9,28 +9,7 @@ const IpcMethods = {
     ...PackageBuild,
 } as const;
 
-process.on('message', async (message: WorkerMethod) => {
-    if (!message || !message.method) {
-        console.error('Vite: Unrecognized worker IPC message', { message });
-        return;
-    }
-    
-    const callWorkerMethod = IpcMethods[message.method];
-    
-    if (typeof callWorkerMethod !== 'function') {
-        console.error(`Vite: The provided IPC method hasn't been defined yet!`, { message });
-    }
-    
-    await callWorkerMethod((response) => {
-        validateIpcChannel(process.send);
-        process.send(response);
-    }, ...message.params as [params: any]).catch((error) => {
-        console.error('Vite: worker process encountered an exception!', error);
-    });
-})
-
-
-validateIpcChannel(process.send);
+export default IpcMethods;
 
 export type WorkerMethod = { [key in keyof IPCMethods]: [name: key, method: IPCMethods[key]]
                            } extends {
