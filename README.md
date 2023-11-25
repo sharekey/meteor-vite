@@ -169,7 +169,7 @@ export default defineConfig({
 })
 ```
 
-## A note about the Meteor mainModule
+## A note about the Meteor `mainModule`
 Code written to or imported by your Meteor client's [`mainModule.client`](https://docs.meteor.com/packages/modules.html#Modular-application-structure) 
 will not be processed by Vite, however, it will still by loaded by the Meteor client. So if you have a use case where 
 you have some code that you don't want Vite to process, but still want in your client bundle, this would be the place 
