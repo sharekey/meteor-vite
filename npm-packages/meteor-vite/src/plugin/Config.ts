@@ -1,7 +1,15 @@
 import { Plugin, UserConfig } from 'vite';
+import { MeteorViteError } from '../error/MeteorViteError';
 import { MeteorStubsSettings } from './internal/MeteorStubs';
+import PackageJSON from '../../package.json';
 
 export default function configure(config: PluginSettings): Plugin {
+    if (!config.clientEntry) {
+        throw new MeteorViteError(`You need to specify an entrypoint for Vite!`, {
+            subtitle: `More info available here ${PackageJSON.homepage}`
+        })
+    }
+    
     return {
         name: 'meteor-vite:config',
         config: () =>  ({
