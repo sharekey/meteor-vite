@@ -1,7 +1,7 @@
 import FS from 'fs/promises';
 import Path from 'path';
 import { createServer, resolveConfig, ViteDevServer } from 'vite';
-import { patchConfig } from '../../../plugin/Config';
+import { meteorWorker } from '../../../plugin/Config';
 import Logger from '../../../utilities/Logger';
 import MeteorEvents, { MeteorIPCMessage } from '../MeteorEvents';
 import { MeteorViteConfig } from '../../../MeteorViteConfig';
@@ -112,7 +112,7 @@ async function createViteServer({
     server = await createServer({
         configFile: viteConfig.configFile,
         plugins: [
-            patchConfig({
+            meteorWorker({
                meteorStubs: {
                    packageJson,
                }

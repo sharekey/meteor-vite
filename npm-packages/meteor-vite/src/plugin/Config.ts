@@ -43,13 +43,16 @@ export default async function meteor(config: PluginOptions): Promise<PluginOptio
     ]
 }
 
-export function patchConfig(patch: PartialPluginOptions): Plugin {
-    return {
-        name: 'meteor-vite:config-patch',
-        configResolved(resolvedConfig) {
-            mergeConfig(resolvedConfig, patch);
-        }
-    }
+export function meteorWorker(patch: PartialPluginOptions): PluginOption {
+    return [
+        {
+            name: 'meteor-vite:config-patch',
+            configResolved(resolvedConfig) {
+                mergeConfig(resolvedConfig, patch);
+            }
+        },
+        MeteorStubs(),
+    ]
 }
 
 type PluginOptions = MakeOptional<PluginSettings, 'stubValidation' | 'meteorStubs'>;
