@@ -38,13 +38,13 @@ const logger = {
 
 async function parsePackageJs(packageJsPath) {
     const rawContent = await FS.readFile(packageJsPath, 'utf-8');
-    const packageName = rawContent.match(PACKAGE_NAME_REGEX)?.groups.packageName;
-    const currentVersion = rawContent.match(PACKAGE_VERSION_REGEX)?.groups?.version;
+    const name = rawContent.match(PACKAGE_NAME_REGEX)?.groups.packageName;
+    const version = rawContent.match(PACKAGE_VERSION_REGEX)?.groups?.version;
 
     return {
         rawContent,
-        packageName,
-        currentVersion,
+        name,
+        version,
     }
 }
 
@@ -63,14 +63,14 @@ async function applyVersion() {
 
     logger.info(`ℹ️  New version ${release.newVersion} for ${meteorPackage.releaseName} detected`);
 
-    const { rawContent, currentVersion, packageName } = await parsePackageJs(meteorPackage.packageJsPath);
-    if (!currentVersion) {
+    const { rawContent, version, name } = await parsePackageJs(meteorPackage.packageJsPath);
+    if (!version) {
         throw new Error(`Unable to read version from ${meteorPackage.releaseName} package.js`);
     }
     const patchedPackageJs = rawContent.replace(PACKAGE_VERSION_REGEX, `version: '${release.newVersion}',`);
     await FS.writeFile(meteorPackage.packageJsPath, patchedPackageJs);
 
-    logger.info(`✅  Changed ${meteorPackage.releaseName} (${packageName}) version from v${currentVersion} to v${release.newVersion}\n`);
+    logger.info(`✅  Changed ${meteorPackage.releaseName} (${name}) version from v${version} to v${release.newVersion}\n`);
 
     shell(`git add ${meteorPackage.packageJsPath}`);
     shell(`git commit -m 'Bump ${meteorPackage.releaseName} version to ${release.newVersion}'`);
