@@ -4,7 +4,7 @@
 
 import { spawn } from 'child_process';
 import Path from 'path';
-import CreateIPCInterface from '../../meteor/IPC/interface';
+import CreateIPCInterface from '../interface';
 
 export default CreateIPCInterface({
     async 'tsup.watchMeteorVite'(reply) {

@@ -1,10 +1,10 @@
 import { RollupOutput, RollupWatcher } from 'rollup';
 import { build, InlineConfig, resolveConfig } from 'vite';
-import { MeteorViteConfig } from '../../vite/MeteorViteConfig';
-import { MeteorStubs } from '../../vite';
-import MeteorVitePackage from '../../../package.json';
-import { PluginSettings, ProjectJson } from '../../vite/plugin/MeteorStubs';
-import CreateIPCInterface, { IPCReply } from '../../meteor/IPC/interface';
+import { MeteorViteConfig } from '../../../vite/MeteorViteConfig';
+import { MeteorStubs } from '../../../vite';
+import MeteorVitePackage from '../../../../package.json';
+import { PluginSettings, ProjectJson } from '../../../vite/plugin/MeteorStubs';
+import CreateIPCInterface, { IPCReply } from '../interface';
 
 export default CreateIPCInterface({
     async buildForProduction(
