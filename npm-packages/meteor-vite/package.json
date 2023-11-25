@@ -30,6 +30,12 @@
       "dts": true
     }
   ],
+  "typesVersions": {
+    "*": {
+      "plugin": ["./src/plugin/index.d.ts"],
+      "client": ["./src/client/index.d.ts"]
+    }
+  },
   "keywords": [],
   "author": "",
   "bugs": {
