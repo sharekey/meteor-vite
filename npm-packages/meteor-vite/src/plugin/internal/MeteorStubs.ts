@@ -11,7 +11,7 @@ import { MeteorViteError } from '../../error/MeteorViteError';
 import ViteLoadRequest from '../../ViteLoadRequest';
 import { StubValidationSettings } from '../Config';
 
-export const MeteorStubs = setupPlugin(async (pluginSettings: PluginSettings) => {
+export const MeteorStubs = setupPlugin(async (pluginSettings: MeteorStubsSettings) => {
     if (!pluginSettings?.packageJson?.meteor?.mainModule?.client) {
         throw new MeteorViteError(`You need to specify a Meteor entrypoint in your package.json!`, {
             subtitle: `See the following link for more info: ${PackageJSON.homepage}`
@@ -128,7 +128,7 @@ function setupPlugin<Context extends ViteLoadRequest, Settings>(setup: (settings
 }
 
 
-export interface PluginSettings {
+export interface MeteorStubsSettings {
     
     meteor: {
         /**

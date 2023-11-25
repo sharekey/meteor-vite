@@ -8,7 +8,7 @@ import { createLabelledLogger, LabelLogger } from './utilities/Logger';
 import { isSameModulePath } from './meteor/package/components/MeteorPackage';
 import AutoImportQueue from './meteor/package/AutoImportQueue';
 import { MeteorViteError } from './error/MeteorViteError';
-import type { PluginSettings } from './plugin/internal/MeteorStubs';
+import type { MeteorStubsSettings } from './plugin/internal/MeteorStubs';
 
 export default class ViteLoadRequest {
     
@@ -206,7 +206,7 @@ export type FileRequestData = ReturnType<typeof ViteLoadRequest['loadFileData']>
 
 interface PreContextRequest {
     id: string;
-    pluginSettings: PluginSettings;
+    pluginSettings: MeteorStubsSettings;
     server: ViteDevServer;
 }
 

@@ -5,7 +5,7 @@ import { build, InlineConfig, resolveConfig } from 'vite';
 import { MeteorViteConfig } from '../../../MeteorViteConfig';
 import { MeteorStubs } from '../../../plugin/internal';
 import MeteorVitePackage from '../../../../package.json';
-import { PluginSettings, ProjectJson } from '../../../plugin/internal/MeteorStubs';
+import { MeteorStubsSettings, ProjectJson } from '../../../plugin/internal/MeteorStubs';
 import CreateIPCInterface, { IPCReply } from '../interface';
 
 export default CreateIPCInterface({
@@ -140,7 +140,7 @@ function validateOutput(rollupResult?: RollupOutput | RollupWatcher): asserts ro
 
 export interface BuildOptions {
     viteOutDir: string;
-    meteor: PluginSettings['meteor'];
+    meteor: MeteorStubsSettings['meteor'];
     packageJson: ProjectJson;
 }
 
