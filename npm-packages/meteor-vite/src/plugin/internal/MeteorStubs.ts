@@ -13,6 +13,10 @@ import ViteLoadRequest from '../../ViteLoadRequest';
 import { StubValidationSettings } from '../Config';
 
 export const MeteorStubs = setupPlugin(async (pluginSettings: MeteorStubsSettings) => {
+    if (!pluginSettings.packageJson) {
+        const jsonPath = pluginSettings.packageJsonPath || 'package.json';
+        pluginSettings.packageJson = JSON.parse(await FS.readFile(jsonPath, 'utf-8'));
+    }
     if (!pluginSettings?.packageJson?.meteor?.mainModule?.client) {
         throw new MeteorViteError(`You need to specify a Meteor entrypoint in your package.json!`, {
             subtitle: `See the following link for more info: ${PackageJSON.homepage}`
@@ -178,6 +182,11 @@ export interface MeteorStubsSettings {
      * Like the one found in {@link /examples/vue/package.json}
      */
     packageJson: ProjectJson;
+    
+    /**
+     * Alternatively, a path to a package.json file can be supplied.
+     */
+    packageJsonPath?: string;
     
     /**
      * Enabling debug mode will write all input and output files to a `.meteor-vite` directory in the Meteor project's
