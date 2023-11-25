@@ -1,10 +1,10 @@
 import Path from 'path';
-import { Plugin, UserConfig } from 'vite';
+import { mergeConfig, Plugin, UserConfig } from 'vite';
 import { MeteorViteError } from '../error/MeteorViteError';
 import { MeteorStubsSettings } from './internal/MeteorStubs';
 import PackageJSON from '../../package.json';
 
-export default function configure(config: PluginSettings): Plugin {
+export default async function configure(config: PluginSettings): Promise<Plugin> {
     const clientEntry = config.clientEntry;
     
     if (!clientEntry) {
@@ -19,6 +19,19 @@ export default function configure(config: PluginSettings): Plugin {
             meteor: config,
             build: meteorBuildConfig({ clientEntry })
         } as UserConfig),
+        configResolved(resolvedConfig) {
+            mergeConfig({
+                meteor: {
+                    meteorStubs: {
+                        packageJsonPath: 'package.json',
+                        meteor: {
+                            packagePath: Path.join('.meteor', 'local', 'build', 'programs', 'web.browser', 'packages'),
+                            isopackPath: Path.join('.meteor', 'local', 'isopacks'),
+                        }
+                    }
+                } satisfies PluginSettings,
+            }, resolvedConfig)
+        }
     }
 }
 
