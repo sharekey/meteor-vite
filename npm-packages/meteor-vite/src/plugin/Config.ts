@@ -115,10 +115,14 @@ function mergeWithTypes<
 }
 
 function mergeMeteorSettings(userConfig: ResolvedConfig | UserConfig, defaults: PartialPluginOptions, overrides: PartialPluginOptions) {
-    const viteConfig = (userConfig as Pick<MeteorViteConfig, 'meteor'>);
+    const viteConfig = parseConfig(userConfig);
     const existingSettings = viteConfig.meteor || {};
     const withDefaults = mergeWithTypes(defaults, existingSettings);
     return viteConfig.meteor = mergeWithTypes(withDefaults, overrides) as PluginSettings;
+}
+
+function parseConfig<TConfig extends ResolvedConfig | UserConfig>(config: TConfig): TConfig & { meteor?: PluginSettings } {
+    return config;
 }
 
 export function meteorBuildConfig({
