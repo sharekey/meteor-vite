@@ -7,7 +7,7 @@
   ],
   "main": "",
   "exports": {
-    "./plugin": "./dist/vite/index.mjs",
+    "./plugin": "./dist/plugin/index.mjs",
     "./client": "./dist/client/index.mjs"
   },
   "scripts": {
