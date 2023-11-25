@@ -13,7 +13,7 @@ let server: ViteDevServer & { config: MeteorViteConfig };
 let viteConfig: MeteorViteConfig;
 let listening = false;
 
-type Replies = IPCReply<{
+export type Replies = IPCReply<{
     kind: 'viteConfig',
     data: ViteRuntimeConfig;
 } | {
@@ -24,13 +24,13 @@ type Replies = IPCReply<{
     data: WorkerRuntimeConfig & { listening: boolean };
 }>
 
-type ViteRuntimeConfig = {
+export type ViteRuntimeConfig = {
     host?: string | boolean;
     port?: number;
     entryFile?: string
     backgroundWorker?: WorkerRuntimeConfig;
 }
-interface DevServerOptions {
+export interface DevServerOptions {
     packageJson: ProjectJson,
     globalMeteorPackagesDir: string;
     meteorParentPid: number;
