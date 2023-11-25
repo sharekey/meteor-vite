@@ -5,7 +5,27 @@ import { DeepPartial, MakeOptional } from '../utilities/GenericTypes';
 import { MeteorStubs, MeteorStubsSettings } from './internal/MeteorStubs';
 import PackageJSON from '../../package.json';
 
-
+/**
+ * Configure the Meteor-Vite compiler.
+ * Will be added automatically by Meteor if omitted.
+ *
+ * Just make sure you set your {@link https://github.com/JorgenVatle/meteor-vite#installation clientEntry} either using
+ * this plugin, or in your vite config.
+ *
+ * @example plugin (recommended)
+ * export default defineConfig({
+ *     plugins: [
+ *         meteor({ clientEntry: './imports/entrypoint/vite.js' })
+ *     ]
+ * })
+ *
+ * @example vite config
+ * export default defineConfig({
+ *     meteor: {
+ *         clientEntry: './imports/entrypoint/vite.js',
+ *     }
+ * })
+ */
 export default function meteor(config: PluginOptions) {
     return meteorWorker(config);
 }
