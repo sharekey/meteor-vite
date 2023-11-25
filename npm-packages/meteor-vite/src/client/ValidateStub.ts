@@ -1,5 +1,6 @@
 import PackageJson from '../../package.json';
-import { StubValidationSettings } from '../MeteorViteConfig';
+
+import { StubValidationSettings } from '../plugin/Config';
 
 /**
  * Validate that the provided stub export key maps to a working export.

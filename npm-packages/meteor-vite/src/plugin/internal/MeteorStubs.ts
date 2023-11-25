@@ -8,8 +8,8 @@ import MeteorPackage from '../../meteor/package/components/MeteorPackage';
 import { stubTemplate } from '../../meteor/package/StubTemplate';
 import { createErrorHandler } from '../../error/ErrorHandler';
 import { MeteorViteError } from '../../error/MeteorViteError';
-import { StubValidationSettings } from '../../MeteorViteConfig';
 import ViteLoadRequest from '../../ViteLoadRequest';
+import { StubValidationSettings } from '../Config';
 
 export const MeteorStubs = setupPlugin(async (pluginSettings: PluginSettings) => {
     if (!pluginSettings?.packageJson?.meteor?.mainModule?.client) {
