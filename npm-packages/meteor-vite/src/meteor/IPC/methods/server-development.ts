@@ -4,8 +4,8 @@ import { createServer, resolveConfig, ViteDevServer } from 'vite';
 import Logger from '../../../utilities/Logger';
 import MeteorEvents, { MeteorIPCMessage } from '../MeteorEvents';
 import { MeteorViteConfig } from '../../../MeteorViteConfig';
-import { MeteorStubs } from '../../../vite';
-import { ProjectJson } from '../../../vite/plugin/MeteorStubs';
+import { MeteorStubs } from '../../../plugin';
+import { ProjectJson } from '../../../plugin/stubs/MeteorStubs';
 import { RefreshNeeded } from '../../../ViteLoadRequest';
 import CreateIPCInterface, { IPCReply } from '../interface';
 
