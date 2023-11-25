@@ -4,6 +4,7 @@ import NodeFS from 'fs';
 import Path from 'path';
 import pc from 'picocolors';
 import { ViteDevServer } from 'vite';
+import { PluginSettings } from './plugin/Config';
 import { createLabelledLogger, LabelLogger } from './utilities/Logger';
 import { isSameModulePath } from './meteor/package/components/MeteorPackage';
 import AutoImportQueue from './meteor/package/AutoImportQueue';
@@ -52,7 +53,7 @@ export default class ViteLoadRequest {
             ...request,
         })
     }
-    protected static loadFileData({ id, pluginSettings }: PreContextRequest) {
+    protected static loadFileData({ id, pluginSettings: { meteorStubs } }: PreContextRequest) {
         let {
             /**
              * Base Atmosphere package import This is usually where we find the full package content, even for packages
@@ -75,13 +76,13 @@ export default class ViteLoadRequest {
         const packageName = packageId.replace(/^meteor\//, '');
         const sourceName = packageName.replace(':', '_');
         const sourceFile = `${sourceName}.js`;
-        const sourcePath = Path.join(pluginSettings.meteor.packagePath, sourceFile);
-        const resolverResultCache: ResolverResultCache = JSON.parse(NodeFS.readFileSync(Path.join(pluginSettings.meteor.isopackPath, '../resolver-result-cache.json'), 'utf-8'));
+        const sourcePath = Path.join(meteorStubs.meteor.packagePath, sourceFile);
+        const resolverResultCache: ResolverResultCache = JSON.parse(NodeFS.readFileSync(Path.join(meteorStubs.meteor.isopackPath, '../resolver-result-cache.json'), 'utf-8'));
         const packageVersion = resolverResultCache.lastOutput.answer[packageName];
-        const globalMeteorPackagesDir = pluginSettings.meteor.globalMeteorPackagesDir || this.guessMeteorPackagePath();
+        const globalMeteorPackagesDir = meteorStubs.meteor.globalMeteorPackagesDir || this.guessMeteorPackagePath();
         
         const manifestPath = {
-            local: Path.join(pluginSettings.meteor.isopackPath, sourceName, 'web.browser.json'),
+            local: Path.join(meteorStubs.meteor.isopackPath, sourceName, 'web.browser.json'),
             globalCache: Path.join(globalMeteorPackagesDir, sourceName, packageVersion, 'web.browser.json'),
         }
         
@@ -177,7 +178,7 @@ export default class ViteLoadRequest {
      * @return {Promise<void>}
      */
     public async forceImport() {
-        const mainModule = this.context.pluginSettings.packageJson.meteor.mainModule;
+        const mainModule = this.context.pluginSettings.meteorStubs.packageJson!.meteor.mainModule;
         const meteorClientEntryFile = Path.resolve(process.cwd(), mainModule.client);
         
         if (!existsSync(meteorClientEntryFile)) {
@@ -227,7 +228,7 @@ export type FileRequestData = ReturnType<typeof ViteLoadRequest['loadFileData']>
 
 interface PreContextRequest {
     id: string;
-    pluginSettings: MeteorStubsSettings;
+    pluginSettings: PluginSettings;
     server: ViteDevServer;
 }
 
