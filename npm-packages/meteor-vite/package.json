@@ -32,8 +32,12 @@
   ],
   "typesVersions": {
     "*": {
-      "plugin": ["./dist/plugin/index.d.ts"],
-      "client": ["./dist/client/index.d.ts"]
+      "plugin": [
+        "./dist/plugin/index.d.ts"
+      ],
+      "client": [
+        "./dist/client/index.d.ts"
+      ]
     }
   },
   "keywords": [],
