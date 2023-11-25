@@ -36,6 +36,18 @@ const logger = {
     },
 }
 
+async function parsePackageJs(packageJsPath) {
+    const rawContent = await FS.readFile(packageJsPath, 'utf-8');
+    const packageName = rawContent.match(PACKAGE_NAME_REGEX)?.groups.packageName;
+    const currentVersion = rawContent.match(PACKAGE_VERSION_REGEX)?.groups?.version;
+
+    return {
+        rawContent,
+        packageName,
+        currentVersion,
+    }
+}
+
 async function applyVersion() {
     shell(`changeset status --output ${CHANGESET_STATUS_FILE}`);
 
@@ -51,14 +63,12 @@ async function applyVersion() {
 
     logger.info(`ℹ️  New version ${release.newVersion} for ${meteorPackage.releaseName} detected`);
 
-    let packageJsContent = await FS.readFile(meteorPackage.packageJsPath, 'utf-8');
-    const packageName = packageJsContent.match(PACKAGE_NAME_REGEX)?.groups.packageName;
-    const currentVersion = packageJsContent.match(PACKAGE_VERSION_REGEX)?.groups?.version;
+    const { rawContent, currentVersion, packageName } = await parsePackageJs(meteorPackage.packageJsPath);
     if (!currentVersion) {
         throw new Error(`Unable to read version from ${meteorPackage.releaseName} package.js`);
     }
-    packageJsContent = packageJsContent.replace(PACKAGE_VERSION_REGEX, `version: '${release.newVersion}',`);
-    await FS.writeFile(meteorPackage.packageJsPath, packageJsContent);
+    const patchedPackageJs = rawContent.replace(PACKAGE_VERSION_REGEX, `version: '${release.newVersion}',`);
+    await FS.writeFile(meteorPackage.packageJsPath, patchedPackageJs);
 
     logger.info(`✅  Changed ${meteorPackage.releaseName} (${packageName}) version from v${currentVersion} to v${release.newVersion}\n`);
 
