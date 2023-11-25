@@ -6,7 +6,7 @@ import pc from 'picocolors';
 import type { WorkerMethod, WorkerResponse } from '../../npm-packages/meteor-vite';
 import type { WorkerResponseHooks } from '../../npm-packages/meteor-vite/src/meteor/IPC/methods';
 import type { MeteorIPCMessage } from '../../npm-packages/meteor-vite/src/meteor/IPC/MeteorEvents';
-import type { ProjectJson } from '../../npm-packages/meteor-vite/src/plugin/internal/MeteorStubs';
+import type { ProjectJson } from '../../npm-packages/meteor-vite/src/plugin/MeteorStubs';
 
 // Use a worker to skip reify and Fibers
 // Use a child process instead of worker to avoid WASM/archived threads error

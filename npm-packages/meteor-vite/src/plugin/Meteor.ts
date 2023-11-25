@@ -2,7 +2,7 @@ import Path from 'path';
 import { mergeConfig, Plugin, PluginOption, ResolvedConfig, UserConfig } from 'vite';
 import { MeteorViteError } from '../error/MeteorViteError';
 import { DeepPartial, MakeOptional } from '../utilities/GenericTypes';
-import { MeteorStubs, MeteorStubsSettings } from './internal/MeteorStubs';
+import { MeteorStubs, MeteorStubsSettings } from './MeteorStubs';
 import PackageJSON from '../../package.json';
 
 /**

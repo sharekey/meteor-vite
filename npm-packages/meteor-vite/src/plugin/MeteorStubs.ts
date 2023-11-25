@@ -3,14 +3,14 @@ import Path from 'path';
 import pc from 'picocolors';
 import type { PluginContext } from 'rollup';
 import type { Plugin, ViteDevServer } from 'vite';
-import PackageJSON from '../../../package.json';
-import MeteorPackage from '../../meteor/package/components/MeteorPackage';
-import { stubTemplate } from '../../meteor/package/StubTemplate';
-import { createErrorHandler } from '../../error/ErrorHandler';
-import { MeteorViteError } from '../../error/MeteorViteError';
-import { MeteorViteConfig } from '../../MeteorViteConfig';
-import ViteLoadRequest from '../../ViteLoadRequest';
-import { PluginSettings, StubValidationSettings } from '../Meteor';
+import PackageJSON from '../../package.json';
+import MeteorPackage from '../meteor/package/components/MeteorPackage';
+import { stubTemplate } from '../meteor/package/StubTemplate';
+import { createErrorHandler } from '../error/ErrorHandler';
+import { MeteorViteError } from '../error/MeteorViteError';
+import { MeteorViteConfig } from '../MeteorViteConfig';
+import ViteLoadRequest from '../ViteLoadRequest';
+import { PluginSettings, StubValidationSettings } from './Meteor';
 
 export const MeteorStubs = setupPlugin(async () => {
     return {

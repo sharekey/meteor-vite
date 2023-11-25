@@ -6,7 +6,7 @@ import { MeteorViteConfig } from '../../../MeteorViteConfig';
 import configure, { meteorBuildConfig, meteorWorker } from '../../../plugin/Meteor';
 import { MeteorStubs } from '../../../plugin/internal';
 import MeteorVitePackage from '../../../../package.json';
-import { MeteorStubsSettings, ProjectJson } from '../../../plugin/internal/MeteorStubs';
+import { MeteorStubsSettings, ProjectJson } from '../../../plugin/MeteorStubs';
 import CreateIPCInterface, { IPCReply } from '../interface';
 
 export default CreateIPCInterface({
