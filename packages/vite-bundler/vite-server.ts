@@ -9,7 +9,7 @@ import {
     setConfig,
     ViteConnection, ViteDevScripts,
 } from './loading/vite-connection-handler';
-import { createWorkerFork, getProjectPackageJson, isMeteorIPCMessage, meteorPackagePath } from './workers';
+import { createWorkerFork, getProjectPackageJson, isMeteorIPCMessage } from './workers';
 
 if (Meteor.isDevelopment) {
     let tsupWatcherRunning = false;
@@ -65,7 +65,6 @@ if (Meteor.isDevelopment) {
         method: 'vite.server.start',
         params: [{
             packageJson: getProjectPackageJson(),
-            globalMeteorPackagesDir: meteorPackagePath,
             meteorParentPid: process.ppid,
         }]
     });
