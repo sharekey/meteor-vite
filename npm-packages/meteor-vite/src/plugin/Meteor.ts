@@ -1,8 +1,8 @@
 import Path from 'path';
 import pc from 'picocolors';
-import { Plugin, ResolvedConfig, UserConfig } from 'vite';
+import { PluginOption, ResolvedConfig, UserConfig } from 'vite';
 import PackageJSON from '../../package.json';
-import { FatalMeteorViteError, MeteorViteError } from '../error/MeteorViteError';
+import { FatalMeteorViteError } from '../error/MeteorViteError';
 import { DeepPartial, MakeOptional } from '../utilities/GenericTypes';
 import { MeteorStubs, MeteorStubsSettings } from './MeteorStubs';
 import { mergeWithTypes, parseConfig } from './ParseConfig';
@@ -36,7 +36,7 @@ export default function meteor(config: PluginOptions) {
  * Internal worker plugin. Merges the user's config with necessary overrides for the Meteor compiler and loads the
  * MeteorStubs plugin.
  */
-export function meteorWorker(config: PartialPluginOptions): (Plugin | Promise<Plugin>)[] {
+export function meteorWorker(config: PartialPluginOptions): PluginOption {
     return [
         {
             name: 'meteor-vite:config',
