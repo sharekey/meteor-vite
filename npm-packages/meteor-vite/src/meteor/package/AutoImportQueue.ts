@@ -8,7 +8,7 @@ import PLimit from 'p-limit';
 
 export const wait = (waitMs: number) => new Promise<void>((resolve) => setTimeout(() => resolve(), waitMs));
 
-export default new class AutoImportQueue {
+class AutoImportQueue {
     protected restartTimeout?: ReturnType<typeof setTimeout>;
     protected addedPackages: string[] = [];
     protected queueWrite = PLimit(1);
@@ -88,3 +88,7 @@ export default new class AutoImportQueue {
         })
     }
 }
+
+const AutoImportQueueInstance = new AutoImportQueue();
+
+export default AutoImportQueueInstance;
