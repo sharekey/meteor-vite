@@ -1,5 +1,5 @@
 import pc from 'picocolors';
-import Logger from '../../Logger';
+import Logger from '../../utilities/Logger';
 import { ErrorMetadata, MeteorViteError } from '../../vite/error/MeteorViteError';
 import ModuleExport from './components/ModuleExport';
 import PackageExport from './components/PackageExport';

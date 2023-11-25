@@ -1,6 +1,6 @@
 import FS from 'fs/promises';
 import pc from 'picocolors';
-import Logger from '../Logger';
+import Logger from '../utilities/Logger';
 import { RefreshNeeded } from './ViteLoadRequest';
 import MeteorEvents, { EventTimeout } from '../meteor/IPC/MeteorEvents';
 import { viteAutoImportBlock } from '../meteor/package/StubTemplate';
