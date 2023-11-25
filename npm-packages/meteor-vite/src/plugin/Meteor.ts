@@ -1,7 +1,7 @@
 import Path from 'path';
 import { Plugin, ResolvedConfig, UserConfig } from 'vite';
 import PackageJSON from '../../package.json';
-import { MeteorViteError } from '../error/MeteorViteError';
+import { FatalMeteorViteError, MeteorViteError } from '../error/MeteorViteError';
 import { DeepPartial, MakeOptional } from '../utilities/GenericTypes';
 import { MeteorStubs, MeteorStubsSettings } from './MeteorStubs';
 import { mergeWithTypes, parseConfig } from './ParseConfig';
@@ -64,13 +64,13 @@ export function meteorWorker(config: PartialPluginOptions): (Plugin | Promise<Pl
             configResolved(resolvedConfig) {
                 const config = parseConfig(resolvedConfig);
                 if (!config.meteor) {
-                    throw new MeteorViteError('Could not retrieve Meteor-Vite settings!', {
+                    throw new FatalMeteorViteError('Could not retrieve Meteor-Vite settings!', {
                         subtitle: `See the following link for a setup guide ${PackageJSON.homepage}`
                     })
                 }
                 
                 if (!config.meteor.clientEntry) {
-                    throw new MeteorViteError(`You need to specify an entrypoint for Vite!`, {
+                    throw new FatalMeteorViteError(`You need to specify an entrypoint for Vite!`, {
                         subtitle: `More info available here ${PackageJSON.homepage}`
                     })
                 }
