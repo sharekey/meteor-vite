@@ -1,5 +1,5 @@
 import { StubValidationSettings } from '../../vite/MeteorViteConfig';
-import { StubValidatorOptions } from '../client/ValidateStub';
+import { StubValidatorOptions } from '../../client/ValidateStub';
 import MeteorPackage from './components/MeteorPackage';
 
 export const METEOR_STUB_KEY = `m2`;
