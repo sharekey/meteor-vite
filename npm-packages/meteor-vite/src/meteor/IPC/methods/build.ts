@@ -52,7 +52,7 @@ export default CreateIPCInterface({
      * Used to ease with the development of this package while running one of the example apps.
      * Controlled through environment variables applied by the example-app.sh utility script.
      */
-    async 'npm.meteor-vite.build'(reply) {
+    async 'tsup.watch.meteor-vite'(reply) {
         const npmPackagePath = Path.join(process.cwd(), '/node_modules/meteor-vite/') // to the meteor-vite npm package
         const tsupPath = Path.join(npmPackagePath, '/node_modules/.bin/tsup-node'); // tsup to 2 node_modules dirs down.
         
