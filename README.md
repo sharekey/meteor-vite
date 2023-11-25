@@ -52,8 +52,8 @@ Make sure to have an import client entry (`meteor.mainModule.client`) in your `p
       "client": "imports/entrypoint/meteor.ts",
       "server": "server/main.ts"
     },
-    // "viteConfig": "", // If you want your Vite config to live in another directory (e.g. .tools/vite.config.js), specify that here.
-    "testModule": "tests/main.js"
+    "testModule": "tests/main.js",
+    // "viteConfig": "",       /* If you want your Vite config to live in another directory (e.g. .tools/vite.config.js), specify that here. */
   }
 }
 ```
@@ -64,9 +64,10 @@ above, we can create an empty `imports/entrypoint/meteor.ts` file.
 Create a Vite configuration file (`vite.config.js`) in your project root.
 As we don't use a standard Vite `index.html` file, we need to specify an entry point (different from the Meteor one):
 
+#### Example with Vue
 ```js
+// vite.config.js
 import { defineConfig } from 'vite'
-// Example with Vue
 import vue from '@vitejs/plugin-vue'
 import { meteor } from 'meteor-vite/plugin';
 
