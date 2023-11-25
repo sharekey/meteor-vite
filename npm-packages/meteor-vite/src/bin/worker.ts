@@ -1,3 +1,4 @@
+import { createErrorHandler } from '../error/ErrorHandler';
 import { validateIpcChannel } from '../meteor/IPC/interface';
 import IpcMethods, { WorkerMethod } from '../meteor/IPC/methods';
 
@@ -16,9 +17,9 @@ process.on('message', async (message: WorkerMethod) => {
     await callWorkerMethod((response) => {
         validateIpcChannel(process.send);
         process.send(response);
-    }, ...message.params as [params: any]).catch((error) => {
-        console.error('Vite: worker process encountered an exception!', error);
-    });
+    }, ...message.params as [params: any]).catch(
+        createErrorHandler('Vite: worker process encountered an exception!')
+    );
 })
 
 

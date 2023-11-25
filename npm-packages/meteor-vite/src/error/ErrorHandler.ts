@@ -1,4 +1,3 @@
-import Logger from '../utilities/Logger';
 import ViteLoadRequest, { RefreshNeeded } from '../ViteLoadRequest';
 import { MeteorViteError } from './MeteorViteError';
 
