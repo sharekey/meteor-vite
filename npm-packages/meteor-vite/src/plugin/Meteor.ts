@@ -1,9 +1,9 @@
 import Path from 'path';
-import { mergeConfig, Plugin, PluginOption, ResolvedConfig, UserConfig } from 'vite';
+import { mergeConfig, Plugin, ResolvedConfig, UserConfig } from 'vite';
+import PackageJSON from '../../package.json';
 import { MeteorViteError } from '../error/MeteorViteError';
 import { DeepPartial, MakeOptional } from '../utilities/GenericTypes';
 import { MeteorStubs, MeteorStubsSettings } from './MeteorStubs';
-import PackageJSON from '../../package.json';
 
 /**
  * Configure the Meteor-Vite compiler.
