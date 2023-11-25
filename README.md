@@ -89,7 +89,14 @@ export default defineConfig({
 })
 ```
 
-You can then write your code from this entry point and it will be handled by Vite! ⚡️
+You can then write your code from the `vite.ts` entry point and it will be handled by Vite! ⚡️
+
+> #### Side-note:
+> Code written to or imported by the `meteor.ts` entrypoint will not be processed by Vite, however, it will still by
+> loaded by the Meteor client. So it could be a good place to put code that you don't want Vite to process.
+>
+> But do be careful with this - any code that's imported by both entrypoints may lead to the code being included twice
+> in your final production bundle.
 
 ## Features
 
