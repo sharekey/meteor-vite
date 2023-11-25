@@ -138,7 +138,7 @@ function validateOutput(rollupResult?: RollupOutput | RollupWatcher): asserts ro
     throw new Error(message);
 }
 
-interface BuildOptions {
+export interface BuildOptions {
     viteOutDir: string;
     meteor: PluginSettings['meteor'];
     packageJson: ProjectJson;
