@@ -1,4 +1,5 @@
-name: 'Example build'
+name: 'Build'
+run-name: 'Build example apps'
 
 on:
   push:
