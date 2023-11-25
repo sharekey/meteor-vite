@@ -12,7 +12,7 @@
   },
   "scripts": {
     "start": "ts-node-dev src/bin/debug/watch-mocks.ts",
-    "watch": "tsup --watch",
+    "watch": "tsup --watch --dts --sourcemap",
     "build": "rm -rf ./dist && tsup-node",
     "prepare": "npm run build",
     "test": "vitest"
@@ -33,9 +33,11 @@
   "typesVersions": {
     "*": {
       "plugin": [
+        "./dist/plugin/index.d.mts",
         "./dist/plugin/index.d.ts"
       ],
       "client": [
+        "./dist/client/index.d.mts",
         "./dist/client/index.d.ts"
       ]
     }
