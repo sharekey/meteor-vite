@@ -3,36 +3,23 @@
     {
       "releases": [
         {
-          "name": "meteor-vite",
-          "type": "minor"
-        },
-        {
           "name": "vite-bundler",
-          "type": "minor"
+          "type": "patch"
         }
       ],
-      "summary": "Add option to configure Meteor-Vite though a Vite plugin rather than as a top-level property in the Vite user config.",
-      "id": "chatty-eyes-explode"
+      "summary": "Create release on GitHub",
+      "id": "fluffy-zebras-obey"
     }
   ],
   "releases": [
     {
-      "name": "meteor-vite",
-      "type": "minor",
-      "oldVersion": "1.5.0",
-      "changesets": [
-        "chatty-eyes-explode"
-      ],
-      "newVersion": "1.6.0"
-    },
-    {
       "name": "vite-bundler",
-      "type": "minor",
-      "oldVersion": "1.7.3",
+      "type": "patch",
+      "oldVersion": "1.8.0",
       "changesets": [
-        "chatty-eyes-explode"
+        "fluffy-zebras-obey"
       ],
-      "newVersion": "1.8.0"
+      "newVersion": "1.8.1"
     }
   ]
 }
