@@ -74,7 +74,6 @@ import { meteor } from 'meteor-vite/plugin';
 export default defineConfig({
     plugins: [
         meteor({
-          // This becomes the main entrypoint for both Vite and the Meteor client.
           clientEntry: 'imports/entrypoint/vite.ts',
         }),
         vue(),
