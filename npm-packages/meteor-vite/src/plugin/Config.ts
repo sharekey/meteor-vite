@@ -1,6 +1,7 @@
 import Path from 'path';
-import { mergeConfig, Plugin, PluginOption, UserConfig } from 'vite';
+import { mergeConfig, Plugin, PluginOption, ResolvedConfig, UserConfig } from 'vite';
 import { MeteorViteError } from '../error/MeteorViteError';
+import { MeteorViteConfig } from '../MeteorViteConfig';
 import { DeepPartial, MakeOptional } from '../utilities/GenericTypes';
 import { MeteorStubs, MeteorStubsSettings } from './internal/MeteorStubs';
 import PackageJSON from '../../package.json';
@@ -17,27 +18,28 @@ export default async function meteor(config: PluginOptions): Promise<PluginOptio
     return [
         {
             name: 'meteor-vite:config',
-            config: () =>  ({
-                meteor: config,
-                build: meteorBuildConfig({ clientEntry })
-            } as UserConfig),
-            configResolved(resolvedConfig) {
-                mergeConfig({
-                    meteor: {
-                        meteorStubs: {
-                            packageJsonPath: 'package.json',
-                            meteor: {
-                                packagePath: Path.join('.meteor', 'local', 'build', 'programs', 'web.browser', 'packages'),
-                                isopackPath: Path.join('.meteor', 'local', 'isopacks'),
-                            }
-                        },
-                        stubValidation: {
-                            warnOnly: process.env.NODE_ENV === 'production',
-                            disabled: false,
+            config: (userConfig) =>  {
+                const meteor = mergeMeteorSettings(userConfig, {
+                    meteorStubs: {
+                        packageJsonPath: 'package.json',
+                        meteor: {
+                            packagePath: Path.join('.meteor', 'local', 'build', 'programs', 'web.browser', 'packages'),
+                            isopackPath: Path.join('.meteor', 'local', 'isopacks'),
                         }
-                    } satisfies PartialPluginOptions,
-                }, resolvedConfig)
-            }
+                    },
+                    stubValidation: {
+                        warnOnly: process.env.NODE_ENV === 'production',
+                        disabled: false,
+                    }
+                }, config);
+                
+                return {
+                    build: meteorBuildConfig({
+                        clientEntry: meteor.clientEntry,
+                    }),
+                    meteor,
+                }
+            },
         },
         MeteorStubs(),
     ]
@@ -110,6 +112,20 @@ export interface StubValidationSettings {
      * @default false
      */
     disabled?: boolean;
+}
+
+function mergeWithTypes<
+    TDefaults extends Record<string, any>,
+    TOverrides extends Record<string, any>,
+>(defaults: TDefaults, overrides: TOverrides) {
+    return mergeConfig(defaults as any, overrides as any) as TDefaults & TOverrides;
+}
+
+function mergeMeteorSettings(userConfig: ResolvedConfig | UserConfig, defaults: PartialPluginOptions, overrides: PartialPluginOptions) {
+    const viteConfig = (userConfig as Pick<MeteorViteConfig, 'meteor'>);
+    const existingSettings = viteConfig.meteor || {};
+    const withDefaults = mergeWithTypes(defaults, existingSettings);
+    return viteConfig.meteor = mergeWithTypes(withDefaults, overrides) as PluginSettings;
 }
 
 export function meteorBuildConfig({
