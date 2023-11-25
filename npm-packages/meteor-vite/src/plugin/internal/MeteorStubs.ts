@@ -10,7 +10,7 @@ import { createErrorHandler } from '../../error/ErrorHandler';
 import { MeteorViteError } from '../../error/MeteorViteError';
 import { MeteorViteConfig } from '../../MeteorViteConfig';
 import ViteLoadRequest from '../../ViteLoadRequest';
-import { PluginSettings, StubValidationSettings } from '../Config';
+import { PluginSettings, StubValidationSettings } from '../Meteor';
 
 export const MeteorStubs = setupPlugin(async () => {
     return {

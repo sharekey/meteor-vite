@@ -3,7 +3,7 @@ import Path from 'path';
 import { RollupOutput, RollupWatcher } from 'rollup';
 import { build, InlineConfig, resolveConfig } from 'vite';
 import { MeteorViteConfig } from '../../../MeteorViteConfig';
-import configure, { meteorBuildConfig, meteorWorker } from '../../../plugin/Config';
+import configure, { meteorBuildConfig, meteorWorker } from '../../../plugin/Meteor';
 import { MeteorStubs } from '../../../plugin/internal';
 import MeteorVitePackage from '../../../../package.json';
 import { MeteorStubsSettings, ProjectJson } from '../../../plugin/internal/MeteorStubs';

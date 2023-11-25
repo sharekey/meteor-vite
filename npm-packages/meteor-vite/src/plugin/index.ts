@@ -1,2 +1,2 @@
-export { default as meteor } from './Config';
+export { default as meteor } from './Meteor';
 export * as Internal from './internal/index';

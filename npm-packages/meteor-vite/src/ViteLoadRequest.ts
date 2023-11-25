@@ -4,7 +4,7 @@ import NodeFS from 'fs';
 import Path from 'path';
 import pc from 'picocolors';
 import { ViteDevServer } from 'vite';
-import { PluginSettings } from './plugin/Config';
+import { PluginSettings } from './plugin/Meteor';
 import { createLabelledLogger, LabelLogger } from './utilities/Logger';
 import { isSameModulePath } from './meteor/package/components/MeteorPackage';
 import AutoImportQueue from './meteor/package/AutoImportQueue';
