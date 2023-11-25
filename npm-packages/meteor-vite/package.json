@@ -40,7 +40,10 @@
         "./src/plugin/index.ts"
       ],
       "outDir": "dist/plugin",
-      "format": ["cjs", "esm"],
+      "format": [
+        "cjs",
+        "esm"
+      ],
       "sourcemap": true,
       "dts": true
     }
