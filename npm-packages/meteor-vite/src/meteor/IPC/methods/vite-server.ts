@@ -32,7 +32,7 @@ export type ViteRuntimeConfig = {
 }
 export interface DevServerOptions {
     packageJson: ProjectJson,
-    globalMeteorPackagesDir: string;
+    globalMeteorPackagesDir?: string;
     meteorParentPid: number;
 }
 

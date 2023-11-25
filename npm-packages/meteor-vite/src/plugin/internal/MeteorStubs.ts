@@ -163,7 +163,7 @@ export interface MeteorStubsSettings {
          * @example `react-meteor-data` path
          * /home/john/.meteor/packages/react-meteor-data/2.7.2/web.browser.json
          */
-        globalMeteorPackagesDir: string;
+        globalMeteorPackagesDir?: string;
     }
     
     /**
