@@ -1,5 +1,11 @@
 # vite-bundler
 
+## 1.8.1
+
+### Patch Changes
+
+- ccd17f6: Create release on GitHub
+
 ## 1.8.0
 
 ### Minor Changes
