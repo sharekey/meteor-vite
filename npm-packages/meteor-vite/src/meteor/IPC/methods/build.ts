@@ -3,6 +3,7 @@ import Path from 'path';
 import { RollupOutput, RollupWatcher } from 'rollup';
 import { build, InlineConfig, resolveConfig } from 'vite';
 import { MeteorViteConfig } from '../../../MeteorViteConfig';
+import { meteorBuildConfig } from '../../../plugin/Config';
 import { MeteorStubs } from '../../../plugin/internal';
 import MeteorVitePackage from '../../../../package.json';
 import { MeteorStubsSettings, ProjectJson } from '../../../plugin/internal/MeteorStubs';
@@ -80,7 +81,7 @@ export default CreateIPCInterface({
 })
 
 async function prepareConfig(buildConfig: BuildOptions): Promise<ParsedConfig> {
-    const { viteOutDir, meteor, packageJson } = buildConfig;
+    const { viteOutDir: outDir, meteor, packageJson } = buildConfig;
     const configFile = buildConfig.packageJson?.meteor?.viteConfig;
 
     Object.entries(buildConfig).forEach(([key, value]) => {
@@ -99,20 +100,7 @@ async function prepareConfig(buildConfig: BuildOptions): Promise<ParsedConfig> {
         viteConfig,
         inlineBuildConfig: {
             configFile,
-            build: {
-                lib: {
-                    entry: viteConfig?.meteor?.clientEntry,
-                    formats: ['es'],
-                },
-                rollupOptions: {
-                    output: {
-                        entryFileNames: 'meteor-entry.js',
-                        chunkFileNames: '[name].js',
-                    },
-                },
-                outDir: viteOutDir,
-                minify: false,
-            },
+            build: meteorBuildConfig({ clientEntry: viteConfig.meteor?.clientEntry, outDir }),
             plugins: [
                 MeteorStubs({
                     meteor,
