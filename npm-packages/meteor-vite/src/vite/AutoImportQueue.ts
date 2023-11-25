@@ -2,7 +2,7 @@ import FS from 'fs/promises';
 import pc from 'picocolors';
 import Logger from '../Logger';
 import { RefreshNeeded } from './ViteLoadRequest';
-import MeteorEvents, { EventTimeout } from '../meteor/MeteorEvents';
+import MeteorEvents, { EventTimeout } from '../bin/worker/IPC/MeteorEvents';
 import { viteAutoImportBlock } from '../meteor/package/StubTemplate';
 import PLimit from 'p-limit';
 

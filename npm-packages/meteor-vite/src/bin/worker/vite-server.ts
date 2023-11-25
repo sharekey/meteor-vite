@@ -2,7 +2,7 @@ import FS from 'fs/promises';
 import Path from 'path';
 import { createServer, resolveConfig, ViteDevServer } from 'vite';
 import Logger from '../../Logger';
-import MeteorEvents, { MeteorIPCMessage } from '../../meteor/MeteorEvents';
+import MeteorEvents, { MeteorIPCMessage } from './IPC/MeteorEvents';
 import { MeteorViteConfig } from '../../vite/MeteorViteConfig';
 import { MeteorStubs } from '../../vite';
 import { ProjectJson } from '../../vite/plugin/MeteorStubs';
