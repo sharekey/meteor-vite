@@ -1,5 +1,6 @@
 import { mergeConfig, Plugin } from 'vite';
 import { MeteorViteConfig } from '../MeteorViteConfig';
+import { MeteorStubsSettings } from './internal/MeteorStubs';
 
 export default function configure(config: MeteorViteConfig): Plugin {
     return {
@@ -25,6 +26,16 @@ export interface PluginSettings {
      * stub validation is disabled.
      */
     stubValidation?: StubValidationSettings;
+    
+    /**
+     * Internal configuration injected by the vite:bundler Meteor package. Specifies some important source paths
+     * needed to assist Vite in building your Meteor project.
+     *
+     * If you know what you're doing, you could use this alongside the Internal.MeteorStubs plugin to build your project
+     * using Vite independently of Meteor. Or to host the Vite dev server yourself instead of letting the vite:bundler
+     * plugin do the work for you.
+     */
+    meteorStubs?: MeteorStubsSettings;
 }
 
 export interface StubValidationSettings {
