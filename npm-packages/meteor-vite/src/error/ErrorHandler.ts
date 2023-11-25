@@ -1,5 +1,5 @@
 import ViteLoadRequest, { RefreshNeeded } from '../ViteLoadRequest';
-import { MeteorViteError } from './MeteorViteError';
+import { FatalMeteorViteError, MeteorViteError } from './MeteorViteError';
 
 export function createErrorHandler(fallbackDescription: string, request?: ViteLoadRequest) {
     return async (error: unknown): Promise<never> => {
@@ -14,6 +14,11 @@ export function createErrorHandler(fallbackDescription: string, request?: ViteLo
         }
         
         await viteError.beautify()
+        if (error instanceof FatalMeteorViteError) {
+            console.error(error);
+            process.exit(1);
+        }
+        
         throw error;
     }
 }
