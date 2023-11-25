@@ -78,10 +78,11 @@ export default class ViteLoadRequest {
         const sourcePath = Path.join(pluginSettings.meteor.packagePath, sourceFile);
         const resolverResultCache: ResolverResultCache = JSON.parse(NodeFS.readFileSync(Path.join(pluginSettings.meteor.isopackPath, '../resolver-result-cache.json'), 'utf-8'));
         const packageVersion = resolverResultCache.lastOutput.answer[packageName];
+        const globalMeteorPackagesDir = pluginSettings.meteor.globalMeteorPackagesDir || this.guessMeteorPackagePath();
         
         const manifestPath = {
             local: Path.join(pluginSettings.meteor.isopackPath, sourceName, 'web.browser.json'),
-            globalCache: Path.join(pluginSettings.meteor.globalMeteorPackagesDir, sourceName, packageVersion, 'web.browser.json'),
+            globalCache: Path.join(globalMeteorPackagesDir, sourceName, packageVersion, 'web.browser.json'),
         }
         
         /**
@@ -120,6 +121,26 @@ export default class ViteLoadRequest {
         }
         
         return JSON.parse(await FS.readFile(file.manifestPath, 'utf8')) as ManifestContent;
+    }
+    
+    /**
+     * Try to determine the path to Meteor's shared package cache.
+     * This is used to retrieve isopack metadata for lazy-loaded packages.
+     * @return {string}
+     * @protected
+     */
+    protected static guessMeteorPackagePath() {
+        const [root, ...parts] = process.argv0.split(/[\/\\]/);
+        let packagePath = root || '/';
+        
+        parts.forEach((part) => {
+            if (packagePath.includes('/.meteor/packages/meteor-tool')) {
+                return;
+            }
+            packagePath = Path.posix.join(packagePath, part);
+        });
+        
+        return Path.join(packagePath, '../');
     }
     
     public mainModulePath?: string;
