@@ -5,7 +5,7 @@
   "files": [
     "dist"
   ],
-  "main": "temp/stubs.js",
+  "main": "",
   "exports": {
     "./plugin": "./dist/vite/index.mjs",
     "./client": "./dist/client/index.mjs"
