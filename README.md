@@ -69,35 +69,23 @@ Make sure to have an import client entry (`meteor.mainModule.client`) in your `p
 You can leave your Meteor client entry file empty, but it's necessary to enable Meteor import mode. In the example
 above, we can create an empty `client/main.ts` file.
 
-Create a Vite configuration file (`vite.config.js`) in your project root:
+Create a Vite configuration file (`vite.config.js`) in your project root.
+As we don't use a standard Vite `index.html` file, we need to specify an entry point (different from the Meteor one):
 
 ```js
 import { defineConfig } from 'vite'
 // Example with Vue
 import vue from '@vitejs/plugin-vue'
+import { meteor } from 'meteor-vite/plugin';
 
 export default defineConfig({
     plugins: [
+        meteor({
+          clientEntry: 'imports/ui/main.ts', // This becomes main entrypoint for both Vite and the Meteor client.
+        }),
         vue(),
     ],
     // Other vite options here...
-})
-```
-
-As we don't use a standard Vite `index.html` file, we need to specify an entry point (different from the Meteor one):
-
-```js
-import { defineConfig } from 'vite'
-import vue from '@vitejs/plugin-vue'
-
-export default defineConfig({
-    plugins: [
-        vue(),
-    ],
-
-    meteor: {
-        clientEntry: 'imports/ui/main.ts',
-    },
 })
 ```
 
@@ -118,8 +106,7 @@ entrypoint as specified in the `meteor.mainModule.client` field of your `package
 {
   "meteor": {
     "mainModule": {
-      "client": "client/main.ts",
-      // Lazy loaded packages are checked for and added here.
+      "client": "client/main.ts", // Lazy loaded packages checked for and added to this file.
       "server": "server/main.ts"
     }
   }
@@ -136,33 +123,33 @@ If you do have a package that intentionally has `undefined` exports, you can dis
 package by excluding it in your Meteor settings.json file;
 ```ts
 // vite.config.ts
-
-import type { MeteorViteConfig } from 'meteor-vite';
+import { meteor } from 'meteor-vite/plugin';
 
 export default defineConfig({
-    // ...
-    
-    meteor: {
-        clientEntry: 'imports/ui/main.ts',
-        stubValidation: {
+    plugins: [
+        // ...
+        meteor({
+          clientEntry: 'imports/ui/main.ts',
+          stubValidation: {
             /**
              * list of packages to ignore export validation for.
              */
             ignorePackages: ["ostrio:cookies"],
-            
+
             /**
              * Will only emit warnings in the console instead of throwing an exception that may prevent the client app
              * from loading.
              */
             warnOnly: true,
-            
+
             /**
              * Set to true to completely disable stub validation. Any of the above options will be ignored.
              * This is discuraged as `warnOnly` should give you an important heads up if something might be wrong with Meteor-Vite
              */
             disabled: false,
-        }
-    } satisfies MeteorViteConfig['meteor'],
+          }
+        })
+    ],
 })
 ```
 
