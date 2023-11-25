@@ -21,7 +21,8 @@
     {
       "entry": [
         "./src/bin/worker.ts",
-        "./src/client/index.ts"
+        "./src/client/index.ts",
+        "./src/plugin/index.ts"
       ],
       "outDir": "dist",
       "format": "esm",
