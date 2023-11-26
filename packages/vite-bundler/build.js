@@ -220,7 +220,7 @@ ${meteorViteImport}
     // in node_modules/meteor-vite/temp
     const meteorEntry = path.join(cwd, meteorMainModule)
     const originalEntryContent = fs.readFileSync(meteorEntry, 'utf8');
-    if (!originalEntryContent.includes(moduleImportPath)) {
+    if (!originalEntryContent.includes(moduleImportPath.replace(/['"`]/g, ''))) {
         fs.writeFileSync(meteorEntry, `${meteorViteImportTemplate}\n${originalEntryContent}`, 'utf8')
     }
 
