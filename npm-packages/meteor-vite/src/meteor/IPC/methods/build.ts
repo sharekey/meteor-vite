@@ -90,7 +90,12 @@ async function prepareConfig(buildConfig: BuildOptions): Promise<ParsedConfig> {
         }
     })
 
-    const viteConfig: MeteorViteConfig = await resolveConfig({ configFile }, 'build');
+    const viteConfig: MeteorViteConfig = await resolveConfig({
+        configFile,
+        plugins: [
+            meteorWorker({}) // Fills in defaults for missing fields.
+        ]
+    }, 'build');
 
     if (!viteConfig.meteor?.clientEntry) {
         throw new Error(`You need to specify an entrypoint in your Vite config! See: ${MeteorVitePackage.homepage}`);
