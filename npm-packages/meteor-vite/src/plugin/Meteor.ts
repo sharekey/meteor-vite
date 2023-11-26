@@ -49,6 +49,7 @@ export function meteorWorker(config: PartialPluginOptions): PluginOption {
                             isopackPath: Path.join('.meteor', 'local', 'isopacks'),
                         }
                     },
+                    tempDir: Path.join('.meteor', 'local', 'vite'),
                     stubValidation: {
                         warnOnly: process.env.NODE_ENV === 'production',
                         disabled: false,
@@ -77,7 +78,7 @@ export function meteorWorker(config: PartialPluginOptions): PluginOption {
     ]
 }
 
-type PluginOptions = MakeOptional<PluginSettings, 'stubValidation' | 'meteorStubs'>;
+type PluginOptions = MakeOptional<PluginSettings, 'stubValidation' | 'meteorStubs' | 'tempDir'>;
 export type PartialPluginOptions = DeepPartial<PluginSettings>;
 
 export interface PluginSettings {
@@ -88,6 +89,12 @@ export interface PluginSettings {
      * {@link https://github.com/JorgenVatle/meteor-vite#readme}
      */
     clientEntry: string;
+    
+    /**
+     * Override the destination directory for the intermediary Vite bundle - before the bundle is passed through
+     * its final stage through the Meteor bundler.
+     */
+    tempDir: string;
     
     /**
      * Settings for controlling how stubs created by Meteor-Vite are validated.
