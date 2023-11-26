@@ -25,7 +25,6 @@ const entryModule = path.join('meteor-vite', '.build', 'import-vite-bundle.js');
 const entryModuleFilepath = path.join(cwd, 'node_modules', entryModule)
 const tempMeteorProject = path.resolve(tempDir, 'meteor')
 const tempMeteorOutDir = path.join(tempDir, 'bundle', 'meteor')
-const viteOutDir = path.join(tempDir, 'bundle', 'vite');
 
 // Not in a project (publishing the package or in temporary Meteor build)
 if (process.env.VITE_METEOR_DISABLED) return
@@ -143,8 +142,6 @@ try {
   console.log(pc.blue('⚡️ Building with Vite...'))
   startTime = performance.now()
 
-  fs.ensureDirSync(path.dirname(viteOutDir))
-
   // Build with vite
   const { payload } = Promise.await(new Promise((resolve, reject) => {
     const worker = createWorkerFork({
@@ -154,7 +151,6 @@ try {
     worker.call({
       method: 'vite.build',
       params: [{
-        viteOutDir,
         packageJson: pkg,
         meteor: {
           packagePath: path.join(tempMeteorOutDir, 'bundle', 'programs', 'web.browser', 'packages'),
@@ -181,7 +177,7 @@ try {
     fs.emptyDirSync(viteOutSrcDir)
     const files = payload.output.map(o => o.fileName)
     for (const file of files) {
-      const from = path.join(viteOutDir, file)
+      const from = path.join(payload.outDir, file)
       const to = path.join(viteOutSrcDir, file)
       fs.ensureDirSync(path.dirname(to))
 

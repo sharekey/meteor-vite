@@ -14,7 +14,7 @@ export default CreateIPCInterface({
         buildConfig: BuildOptions
     ) {
         try {
-            const { viteConfig, inlineBuildConfig } = await prepareConfig(buildConfig);
+            const { viteConfig, inlineBuildConfig, outDir } = await prepareConfig(buildConfig);
             const results = await build(inlineBuildConfig);
             const result = Array.isArray(results) ? results[0] : results;
             validateOutput(result);
@@ -24,6 +24,7 @@ export default CreateIPCInterface({
                 kind: 'buildResult',
                 data: {
                     payload: {
+                        outDir,
                         success: true,
                         meteorViteConfig: viteConfig.meteor,
                         output: result.output.map(o => ({
@@ -80,7 +81,7 @@ export default CreateIPCInterface({
 })
 
 async function prepareConfig(buildConfig: BuildOptions): Promise<ParsedConfig> {
-    const { viteOutDir: outDir, meteor, packageJson } = buildConfig;
+    const { meteor, packageJson } = buildConfig;
     const configFile = buildConfig.packageJson?.meteor?.viteConfig;
 
     Object.entries(buildConfig).forEach(([key, value]) => {
@@ -95,8 +96,10 @@ async function prepareConfig(buildConfig: BuildOptions): Promise<ParsedConfig> {
         throw new Error(`You need to specify an entrypoint in your Vite config! See: ${MeteorVitePackage.homepage}`);
     }
 
+    const outDir = Path.join(viteConfig.meteor.tempDir, 'bundle');
     return {
         viteConfig,
+        outDir,
         inlineBuildConfig: {
             configFile,
             build: {
@@ -110,7 +113,7 @@ async function prepareConfig(buildConfig: BuildOptions): Promise<ParsedConfig> {
                         chunkFileNames: '[name].js',
                     },
                 },
-                outDir: buildConfig.viteOutDir,
+                outDir,
                 minify: false,
             },
             plugins: [
@@ -140,7 +143,6 @@ function validateOutput(rollupResult?: RollupOutput | RollupWatcher): asserts ro
 }
 
 export interface BuildOptions {
-    viteOutDir: string;
     meteor: MeteorStubsSettings['meteor'];
     packageJson: ProjectJson;
 }
@@ -150,6 +152,7 @@ type Replies = IPCReply<{
     data: {
         payload: {
                      success: true;
+                     outDir: string;
                      meteorViteConfig: any,
                      output?: {name?: string, type: string, fileName: string}[]
                  } | {
@@ -161,6 +164,7 @@ type Replies = IPCReply<{
 type ParsedConfig = {
     viteConfig: MeteorViteConfig;
     inlineBuildConfig: InlineConfig;
+    outDir: string;
 }
 
 
