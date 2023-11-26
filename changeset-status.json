@@ -3,36 +3,23 @@
     {
       "releases": [
         {
-          "name": "meteor-vite",
-          "type": "minor"
-        },
-        {
           "name": "vite-bundler",
-          "type": "minor"
+          "type": "patch"
         }
       ],
-      "summary": "Use Vite plugin config to customize the intermediary directory for the Vite bundle before it's sent to Meteor",
-      "id": "orange-tomatoes-wait"
+      "summary": "Handle different import string formats when checking for existing meteor-vite import in meteor entry.",
+      "id": "lovely-ducks-kneel"
     }
   ],
   "releases": [
     {
-      "name": "meteor-vite",
-      "type": "minor",
-      "oldVersion": "1.6.0",
-      "changesets": [
-        "orange-tomatoes-wait"
-      ],
-      "newVersion": "1.7.0"
-    },
-    {
       "name": "vite-bundler",
-      "type": "minor",
-      "oldVersion": "1.8.1",
+      "type": "patch",
+      "oldVersion": "1.9.0",
       "changesets": [
-        "orange-tomatoes-wait"
+        "lovely-ducks-kneel"
       ],
-      "newVersion": "1.9.0"
+      "newVersion": "1.9.1"
     }
   ]
 }
