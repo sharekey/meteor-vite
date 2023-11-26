@@ -1,6 +1,6 @@
 {
   "name": "meteor-vite",
-  "version": "1.7.0",
+  "version": "1.7.1",
   "description": "",
   "files": [
     "dist"
@@ -59,7 +59,10 @@
       ]
     }
   },
-  "keywords": ["meteor", "vite"],
+  "keywords": [
+    "meteor",
+    "vite"
+  ],
   "author": "",
   "bugs": {
     "url": "https://github.com/JorgenVatle/meteor-vite/issues"
