@@ -197,6 +197,8 @@ try {
         fs.copyFileSync(from, to)
       }
     }
+    // Add .gitignore file to prevent the transpiled bundle from being committed accidentally.
+    fs.writeFileSync(path.join(viteOutSrcDir, '.gitignore'), '/**');
 
     const moduleImportPath = JSON.stringify(posixPath(entryModule));
     const meteorViteImport = `import ${moduleImportPath};`
