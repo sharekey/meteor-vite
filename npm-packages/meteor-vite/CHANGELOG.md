@@ -1,5 +1,11 @@
 # meteor-vite
 
+## 1.7.0
+
+### Minor Changes
+
+- 12fb8c5: Use Vite plugin config to customize the intermediary directory for the Vite bundle before it's sent to Meteor
+
 ## 1.6.0
 
 ### Minor Changes
