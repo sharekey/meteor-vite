@@ -1,5 +1,6 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
+import { meteor } from 'meteor-vite/plugin';
 
 /**
  * @param npmPackages {string[]}
@@ -59,9 +60,8 @@ export default defineConfig({
       useMeteorBundle({
         npmPackages: ['react']
       }),
+      meteor({
+        clientEntry: "imports/vite-entrypoint.jsx",
+      })
   ],
-
-  meteor: {
-    clientEntry: "imports/vite-entrypoint.jsx",
-  },
 });
