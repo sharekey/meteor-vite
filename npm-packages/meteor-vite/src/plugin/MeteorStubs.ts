@@ -70,7 +70,7 @@ async function storeDebugSnippet({ request, stubTemplate, meteorPackage }: {
     stubTemplate: string,
     meteorPackage: MeteorPackage,
 }) {
-    const baseDir = Path.join(process.cwd(), '.meteor-vite', request.context.file.packageId.replace(':', '_'));
+    const baseDir = Path.join(request.context.pluginSettings.tempDir, 'stubs', request.context.file.packageId.replace(':', '_'));
     const templatePath = Path.join(baseDir, request.context.file.importPath || '', 'template.js');
     const packagePath = Path.join(baseDir, 'package.js');
     const parserPath = Path.join(baseDir, 'parsed.json');
