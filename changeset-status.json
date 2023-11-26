@@ -3,23 +3,36 @@
     {
       "releases": [
         {
+          "name": "meteor-vite",
+          "type": "minor"
+        },
+        {
           "name": "vite-bundler",
-          "type": "patch"
+          "type": "minor"
         }
       ],
-      "summary": "Create release on GitHub",
-      "id": "fluffy-zebras-obey"
+      "summary": "Use Vite plugin config to customize the intermediary directory for the Vite bundle before it's sent to Meteor",
+      "id": "orange-tomatoes-wait"
     }
   ],
   "releases": [
     {
-      "name": "vite-bundler",
-      "type": "patch",
-      "oldVersion": "1.8.0",
+      "name": "meteor-vite",
+      "type": "minor",
+      "oldVersion": "1.6.0",
       "changesets": [
-        "fluffy-zebras-obey"
+        "orange-tomatoes-wait"
       ],
-      "newVersion": "1.8.1"
+      "newVersion": "1.7.0"
+    },
+    {
+      "name": "vite-bundler",
+      "type": "minor",
+      "oldVersion": "1.8.1",
+      "changesets": [
+        "orange-tomatoes-wait"
+      ],
+      "newVersion": "1.9.0"
     }
   ]
 }
