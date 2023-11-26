@@ -59,7 +59,7 @@
       ]
     }
   },
-  "keywords": [],
+  "keywords": ["meteor", "vite"],
   "author": "",
   "bugs": {
     "url": "https://github.com/JorgenVatle/meteor-vite/issues"
