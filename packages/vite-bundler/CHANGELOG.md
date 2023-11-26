@@ -1,5 +1,11 @@
 # vite-bundler
 
+## 1.9.1
+
+### Patch Changes
+
+- bcffa94: Handle different import string formats when checking for existing meteor-vite import in meteor entry.
+
 ## 1.9.0
 
 ### Minor Changes
