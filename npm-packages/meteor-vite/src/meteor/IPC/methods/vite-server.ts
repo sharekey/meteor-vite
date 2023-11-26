@@ -46,7 +46,7 @@ export default CreateIPCInterface({
     
     // todo: Add reply for triggering a server restart
     async 'vite.server.start'(replyInterface: Replies, { packageJson, meteorParentPid }: DevServerOptions) {
-        const backgroundWorker = await BackgroundWorker.init(meteorParentPid);
+        const backgroundWorker = await BackgroundWorker.init({ meteorParentPid, packageJson });
         
         if (backgroundWorker.isRunning) {
             replyInterface({
@@ -103,10 +103,6 @@ async function createViteServer({
     if (server) {
         return server;
     }
-    
-    viteConfig = await resolveConfig({
-        configFile: packageJson?.meteor?.viteConfig,
-    }, 'serve');
     
     server = await createServer({
         configFile: viteConfig.configFile,
@@ -186,8 +182,14 @@ type WorkerRuntimeConfig = {
 
 class BackgroundWorker {
     public static instance: BackgroundWorker;
-    protected static readonly configPath = Path.join('.meteor/local/vite', 'vite-dev-server.pid')
-    public static async init(meteorParentPid: number) {
+    protected static configPath: string;
+    public static async init({
+        meteorParentPid,
+        packageJson,
+    }: {
+        meteorParentPid: number,
+        packageJson: ProjectJson,
+    }) {
         if (BackgroundWorker.instance) {
             return BackgroundWorker.instance;
         }
@@ -197,6 +199,13 @@ class BackgroundWorker {
             meteorParentPid,
             viteConfig: {}
         };
+        viteConfig = await resolveConfig({
+            configFile: packageJson?.meteor?.viteConfig,
+            plugins: [
+                meteorWorker({}), // To fill in defaults in cases where Meteor-Vite isn't configured using the plugin
+            ],
+        }, 'serve');
+        this.configPath = Path.join(viteConfig.meteor!.tempDir, 'vite-dev-server.pid');
         try {
             await FS.mkdir(Path.dirname(this.configPath), { recursive: true });
             const content = await FS.readFile(this.configPath, 'utf-8');
