@@ -19,8 +19,8 @@
     "example": ".bin/example-app.sh",
     "prepare:example": "npm run example prepare",
 
-    "version": "npm run version:vite-bundler && changeset version",
-    "release": "npm run publish:vite-bundler && changeset publish",
+    "version": "(npm run version:vite-bundler || exit 1) && changeset version",
+    "release": "(npm run publish:vite-bundler || exit 1) && changeset publish",
 
     "install:svelte": "cd examples/svelte && meteor npm install",
     "install:vue": "cd examples/vue && meteor npm install",
