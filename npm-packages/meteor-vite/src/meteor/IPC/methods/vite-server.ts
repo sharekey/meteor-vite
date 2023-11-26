@@ -1,14 +1,13 @@
 import FS from 'fs/promises';
 import Path from 'path';
 import { createServer, resolveConfig, ViteDevServer } from 'vite';
-import { meteorWorker } from '../../../plugin/Meteor';
-import Logger from '../../../utilities/Logger';
-import MeteorEvents, { MeteorIPCMessage } from '../MeteorEvents';
 import { MeteorViteConfig } from '../../../MeteorViteConfig';
-import { MeteorStubs } from '../../../plugin/internal';
+import { meteorWorker } from '../../../plugin/Meteor';
 import { ProjectJson } from '../../../plugin/MeteorStubs';
+import Logger from '../../../utilities/Logger';
 import { RefreshNeeded } from '../../../ViteLoadRequest';
 import CreateIPCInterface, { IPCReply } from '../interface';
+import MeteorEvents, { MeteorIPCMessage } from '../MeteorEvents';
 
 let server: ViteDevServer & { config: MeteorViteConfig };
 let viteConfig: MeteorViteConfig;
