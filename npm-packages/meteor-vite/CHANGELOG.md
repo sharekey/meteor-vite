@@ -1,5 +1,11 @@
 # meteor-vite
 
+## 1.7.1
+
+### Patch Changes
+
+- e55afeb: Tag Vite chunks to prevent the Meteor compiler plugin from interfering with server module bundling.
+
 ## 1.7.0
 
 ### Minor Changes

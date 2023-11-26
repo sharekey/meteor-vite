@@ -3,23 +3,23 @@
     {
       "releases": [
         {
-          "name": "vite-bundler",
+          "name": "meteor-vite",
           "type": "patch"
         }
       ],
-      "summary": "Handle different import string formats when checking for existing meteor-vite import in meteor entry.",
-      "id": "lovely-ducks-kneel"
+      "summary": "Tag Vite chunks to prevent the Meteor compiler plugin from interfering with server module bundling.",
+      "id": "yellow-scissors-travel"
     }
   ],
   "releases": [
     {
-      "name": "vite-bundler",
+      "name": "meteor-vite",
       "type": "patch",
-      "oldVersion": "1.9.0",
+      "oldVersion": "1.7.0",
       "changesets": [
-        "lovely-ducks-kneel"
+        "yellow-scissors-travel"
       ],
-      "newVersion": "1.9.1"
+      "newVersion": "1.7.1"
     }
   ]
 }
