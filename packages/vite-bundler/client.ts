@@ -58,7 +58,7 @@ function onChange(config: RuntimeConfig) {
     
     if (hasLoadedVite()) {
         DevConnectionLog.info('Attempting to refresh current Vite session to load new server config...')
-        setTimeout(() => window.location.reload(), 1_000);
+        setTimeout(() => window.location.reload(), 1000);
         return;
     }
     
