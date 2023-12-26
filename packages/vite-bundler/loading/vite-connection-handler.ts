@@ -62,7 +62,7 @@ export class ViteDevScripts {
         
         viteEntrypoint.onerror = (error) => {
             DevConnectionLog.error('Vite entrypoint module failed to load! Will refresh page shortly...', error);
-            setTimeout(() => window.location.reload(), 15_000);
+            setTimeout(() => window.location.reload(), 15000);
         }
         viteEntrypoint.onload = () => {
             DevConnectionLog.info('Loaded Vite module dynamically! Hopefully all went well and your app is usable. 🤞');
