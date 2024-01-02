@@ -30,7 +30,7 @@ Npm.depends({
 });
 
 Package.onUse(function(api) {
-  api.versionsFrom(['1.9', '2.3', '2.12']);
+  api.versionsFrom(['1.8', '2.3', '2.12']);
   api.use([
       'fetch',
       'webapp',
