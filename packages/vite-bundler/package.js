@@ -9,10 +9,10 @@ Package.describe({
 Package.registerBuildPlugin({
   name: 'vite',
   use: [
-    'ecmascript',
-    'caching-compiler',
-    'babel-compiler',
-    'typescript',
+    'ecmascript@0.16.2 || 1.0.0',
+    'caching-compiler@1.2.2',
+    'babel-compiler@7.9.0',
+    'typescript@3.0.0 || 4.0.0 || 5.0.0',
   ],
   sources: [
     'build.js',
