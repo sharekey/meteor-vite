@@ -3,23 +3,42 @@
     {
       "releases": [
         {
+          "name": "vite-bundler",
+          "type": "minor"
+        }
+      ],
+      "summary": "Use looser dependency version requirements.\n\n- Use standard package versions from Meteor [`v1.8`](https://docs.meteor.com/changelog#v18320191219), \n[`v2.3`](https://docs.meteor.com/changelog#v2320210624) and [`v2.12`](https://docs.meteor.com/changelog#v212020230428)\n- Make [`zodern:types`](https://github.com/zodern/meteor-types) a weak dependency\n- Revert use of modern number syntax (#73 #74)",
+      "id": "angry-rats-end"
+    },
+    {
+      "releases": [
+        {
           "name": "meteor-vite",
           "type": "patch"
         }
       ],
-      "summary": "Tag Vite chunks to prevent the Meteor compiler plugin from interfering with server module bundling.",
-      "id": "yellow-scissors-travel"
+      "summary": "Use shortened file hashes over .chunk suffix for Vite build output.",
+      "id": "fresh-plums-beg"
     }
   ],
   "releases": [
     {
+      "name": "vite-bundler",
+      "type": "minor",
+      "oldVersion": "1.9.1",
+      "changesets": [
+        "angry-rats-end"
+      ],
+      "newVersion": "1.10.0"
+    },
+    {
       "name": "meteor-vite",
       "type": "patch",
-      "oldVersion": "1.7.0",
+      "oldVersion": "1.7.1",
       "changesets": [
-        "yellow-scissors-travel"
+        "fresh-plums-beg"
       ],
-      "newVersion": "1.7.1"
+      "newVersion": "1.7.2"
     }
   ]
 }
