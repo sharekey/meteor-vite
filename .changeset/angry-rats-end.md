@@ -1,5 +1,5 @@
 ---
-"vite-bundler": patch
+"vite-bundler": minor
 ---
 
 Use looser dependency version requirements.
