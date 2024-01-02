@@ -1,5 +1,11 @@
 # vite-bundler
 
+## 1.10.1
+
+### Patch Changes
+
+- 86acfbe: Re-add version requirements for build plugin
+
 ## 1.10.0
 
 ### Minor Changes
