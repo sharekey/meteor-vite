@@ -32,13 +32,17 @@ Npm.depends({
 Package.onUse(function(api) {
   api.versionsFrom(['1.3', '2.3']);
   api.use([
+      'fetch',
+      'webapp',
       'ecmascript',
       'typescript',
-      'webapp',
-      'fetch',
       'isobuild:compiler-plugin@1.0.0',
+  ]);
+  api.use([
       'zodern:types@1.0.9',
-  ])
+  ], {
+      weak: true,
+  })
   api.addAssets(['loading/dev-server-splash.html'], 'server');
   api.mainModule('client.ts', 'client');
   api.mainModule('vite-server.ts', 'server')
