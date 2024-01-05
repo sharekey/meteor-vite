@@ -57,6 +57,15 @@ Make sure to have an import client entry (`meteor.mainModule.client`) in your `p
     // Optional additional configuration for Meteor-Vite
     "vite": {
       "configFile": "",   /* If your Vite config file lives in another directory, (e.g. private/vite.config.js) specify that here */
+      
+      // Replace or remove Meteor packages when bundling Vite for production.
+      // This may be useful for a small subset of compiler-plugin packages that interfere with Vite's build process.
+      //
+      // This is only used during the Vite bundling step. The packages included in your final production 
+      // bundle remains unaffected.
+      "replacePackages": [
+        { "startsWith": "refapp:meteor-typescript", replaceWith: "typescript" },
+      ]
     }
   }
 }
