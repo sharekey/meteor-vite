@@ -149,7 +149,8 @@ In most cases, you won't need to add anything here.
       // This is only used during the Vite bundling step. The packages included in your final production 
       // bundle remains unaffected.
       "replacePackages": [
-        { "startsWith": "refapp:meteor-typescript", replaceWith: "typescript" },
+        { "startsWith": "standard-minifier", "replaceWith": "" }, // Removes standard-minifier packages while building with Vite. (default)
+        { "startsWith": "refapp:meteor-typescript", replaceWith: "typescript" }, // Replace refapp:meteor-typescript with the official typescript package. (default)
       ]
     }
   }
