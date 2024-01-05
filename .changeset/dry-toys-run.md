@@ -3,4 +3,8 @@
 "vite-bundler": minor
 ---
 
-Move advanced vite-bundler settings in `package.json` under `meteor.vite`.
+Update configuration options
+
+
+- Move advanced vite-bundler settings in `package.json` under `meteor.vite`.
+- Add option to customize Rollup chunk filenames in plugin config.
