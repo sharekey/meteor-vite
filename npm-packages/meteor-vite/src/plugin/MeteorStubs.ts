@@ -216,6 +216,21 @@ export type ProjectJson = {
         mainModule: {
             client: string;
         },
+        /**
+         * @deprecated Use meteor.vite.configFile instead.
+         * See {@link https://github.com/JorgenVatle/meteor-vite?tab=readme-ov-file#configuration configuration} for
+         * example.
+         */
         viteConfig?: string;
+        vite?: {
+            /**
+             * Specifies an alternative path to the project's Vite config
+             */
+            configFile?: string;
+            replacePackages?: {
+                startsWith: string; // Match any Meteor package name that starts with the provided string.
+                replaceWith: string; // Replace matching packages with the provided string.
+            }[]
+        }
     }
 }

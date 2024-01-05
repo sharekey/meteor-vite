@@ -15,7 +15,7 @@ const meteorMainModule = pkg.meteor?.mainModule?.client
 const replaceMeteorPackages = [
   { startsWith: 'standard-minifier', replaceWith: '' },
   { startsWith: 'refapp:meteor-typescript', replaceWith: 'typescript' },
-  ...pkg?.meteorVite?.replacePackages || []
+  ...pkg?.meteor?.vite?.replacePackages || []
 ]
 const tempDir = getTempDir();
 

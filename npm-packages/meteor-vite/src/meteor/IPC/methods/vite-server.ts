@@ -105,7 +105,9 @@ async function createViteServer({
     }
     
     viteConfig = await resolveConfig({
-        configFile: packageJson?.meteor?.viteConfig,
+        configFile: packageJson?.meteor?.vite?.configFile
+            // Fallback for deprecated config format
+            ?? packageJson?.meteor?.viteConfig,
     }, 'serve');
     
     server = await createServer({

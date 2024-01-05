@@ -82,7 +82,9 @@ export default CreateIPCInterface({
 
 async function prepareConfig(buildConfig: BuildOptions): Promise<ParsedConfig> {
     const { meteor, packageJson } = buildConfig;
-    const configFile = buildConfig.packageJson?.meteor?.viteConfig;
+    const configFile = buildConfig.packageJson?.meteor?.vite?.configFile
+        // Fallback for deprecated config file format
+        ?? buildConfig.packageJson?.meteor?.viteConfig;
 
     Object.entries(buildConfig).forEach(([key, value]) => {
         if (!value) {
@@ -115,7 +117,7 @@ async function prepareConfig(buildConfig: BuildOptions): Promise<ParsedConfig> {
                 rollupOptions: {
                     output: {
                         entryFileNames: 'meteor-entry.js',
-                        chunkFileNames: '[name]-[hash:12].js',
+                        chunkFileNames: viteConfig.meteor.chunkFileNames ?? '[name]-[hash:12].js',
                     },
                 },
                 outDir,

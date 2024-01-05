@@ -1,5 +1,6 @@
 import Path from 'path';
 import pc from 'picocolors';
+import { OutputOptions } from 'rollup';
 import { PluginOption, ResolvedConfig, UserConfig } from 'vite';
 import PackageJSON from '../../package.json';
 import { FatalMeteorViteError } from '../error/MeteorViteError';
@@ -112,6 +113,18 @@ export interface PluginSettings {
      * plugin do the work for you.
      */
     meteorStubs: MeteorStubsSettings;
+    
+    /**
+     * Customize the chunk file name format for Rollup builds.
+     * Filename uniqueness is important as duplicate filenames for server and client modules may prevent your other
+     * build plugins from handling server code, leading to unstable server builds.
+     *
+     * Important: Filenames are not scoped by directory. So the chunk filenames need to be unique across the entirety
+     * of your project.
+     *
+     * Only change this if you are sure you know what you're doing.
+     */
+    chunkFileNames?: OutputOptions['chunkFileNames']
 }
 
 export interface StubValidationSettings {
