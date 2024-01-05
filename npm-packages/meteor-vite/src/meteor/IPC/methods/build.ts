@@ -117,7 +117,7 @@ async function prepareConfig(buildConfig: BuildOptions): Promise<ParsedConfig> {
                 rollupOptions: {
                     output: {
                         entryFileNames: 'meteor-entry.js',
-                        chunkFileNames: '[name]-[hash:12].js',
+                        chunkFileNames: viteConfig.meteor.chunkFileNames ?? '[name]-[hash:12].js',
                     },
                 },
                 outDir,
