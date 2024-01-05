@@ -143,7 +143,8 @@ In most cases, you won't need to add anything here.
     
     // Additional configuration for Meteor-Vite (optional)
     "vite": {
-      "configFile": "",   /* If your Vite config file lives in another directory, (e.g. private/vite.config.js) specify that here */
+      // If your Vite config file lives in another directory (e.g. private/vite.config.ts), specify its path here
+      "configFile": "",
       
       // Replace or remove Meteor packages when bundling Vite for production.
       // This may be useful for a small subset of compiler-plugin packages that interfere with Vite's build process.
