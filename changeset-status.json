@@ -3,23 +3,23 @@
     {
       "releases": [
         {
-          "name": "vite-bundler",
+          "name": "meteor-vite",
           "type": "patch"
         }
       ],
-      "summary": "Re-add version requirements for build plugin",
-      "id": "tall-ties-brush"
+      "summary": "Increase chunk hash length to 12 to address Vite warnings for large projects\n\n- Fixes #77",
+      "id": "big-beds-joke"
     }
   ],
   "releases": [
     {
-      "name": "vite-bundler",
+      "name": "meteor-vite",
       "type": "patch",
-      "oldVersion": "1.10.0",
+      "oldVersion": "1.7.2",
       "changesets": [
-        "tall-ties-brush"
+        "big-beds-joke"
       ],
-      "newVersion": "1.10.1"
+      "newVersion": "1.7.3"
     }
   ]
 }
