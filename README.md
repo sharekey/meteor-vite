@@ -132,14 +132,11 @@ In most cases, you won't need to add anything here.
 ```json5
 // package.json
 {
-  "name": "my-app", 
-  "dependencies": {},
+  "name": "my-app"
   // ...
   
   "meteor": {
-    "mainModule": {
-      // ...
-    },
+    "mainModule": { /* ... */ },
     
     // Additional configuration for Meteor-Vite (optional)
     "vite": {
