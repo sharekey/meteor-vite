@@ -1,5 +1,13 @@
 # meteor-vite
 
+## 1.7.3
+
+### Patch Changes
+
+- c365435: Increase chunk hash length to 12 to address Vite warnings for large projects
+
+  - Fixes #77
+
 ## 1.7.2
 
 ### Patch Changes
