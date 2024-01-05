@@ -52,21 +52,6 @@ Make sure to have an import client entry (`meteor.mainModule.client`) in your `p
       "client": "imports/entrypoint/meteor.ts",
       "server": "server/main.ts"
     },
-    "testModule": "tests/main.js",
-    
-    // Optional additional configuration for Meteor-Vite
-    "vite": {
-      "configFile": "",   /* If your Vite config file lives in another directory, (e.g. private/vite.config.js) specify that here */
-      
-      // Replace or remove Meteor packages when bundling Vite for production.
-      // This may be useful for a small subset of compiler-plugin packages that interfere with Vite's build process.
-      //
-      // This is only used during the Vite bundling step. The packages included in your final production 
-      // bundle remains unaffected.
-      "replacePackages": [
-        { "startsWith": "refapp:meteor-typescript", replaceWith: "typescript" },
-      ]
-    }
   }
 }
 ```
@@ -98,6 +83,8 @@ export default defineConfig({
 You can then write your code from the `vite.ts` entry point and it will be handled by Vite! ⚡️
 
 ## Configuration
+
+### Vite Config
 ```ts
 // vite.config.ts
 import { meteor } from 'meteor-vite/plugin';
@@ -137,6 +124,38 @@ export default defineConfig({
         })
     ],
 })
+```
+
+### Meteor plugin settings
+There are a couple extra advanced settings you can change through your `package.json` file under `meteor.vite`.
+In most cases, you won't need to add anything here.
+```json5
+// package.json
+{
+  "name": "my-app", 
+  "dependencies": {},
+  // ...
+  
+  "meteor": {
+    "mainModule": {
+      // ...
+    },
+    
+    // Additional configuration for Meteor-Vite (optional)
+    "vite": {
+      "configFile": "",   /* If your Vite config file lives in another directory, (e.g. private/vite.config.js) specify that here */
+      
+      // Replace or remove Meteor packages when bundling Vite for production.
+      // This may be useful for a small subset of compiler-plugin packages that interfere with Vite's build process.
+      //
+      // This is only used during the Vite bundling step. The packages included in your final production 
+      // bundle remains unaffected.
+      "replacePackages": [
+        { "startsWith": "refapp:meteor-typescript", replaceWith: "typescript" },
+      ]
+    }
+  }
+}
 ```
 
 ## Features
