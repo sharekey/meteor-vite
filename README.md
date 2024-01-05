@@ -53,7 +53,11 @@ Make sure to have an import client entry (`meteor.mainModule.client`) in your `p
       "server": "server/main.ts"
     },
     "testModule": "tests/main.js",
-    // "viteConfig": "",       /* If you want your Vite config to live in another directory (e.g. .tools/vite.config.js), specify that here. */
+    
+    // Optional additional configuration for Meteor-Vite
+    "vite": {
+      "configFile": "",   /* If your Vite config file lives in another directory, (e.g. private/vite.config.js) specify that here */
+    }
   }
 }
 ```

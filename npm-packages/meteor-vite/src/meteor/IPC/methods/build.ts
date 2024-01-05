@@ -82,7 +82,7 @@ export default CreateIPCInterface({
 
 async function prepareConfig(buildConfig: BuildOptions): Promise<ParsedConfig> {
     const { meteor, packageJson } = buildConfig;
-    const configFile = buildConfig.packageJson?.meteor?.viteConfig;
+    const configFile = buildConfig.packageJson?.meteor?.vite?.configFile;
 
     Object.entries(buildConfig).forEach(([key, value]) => {
         if (!value) {
