@@ -3,3 +3,5 @@
 ---
 
 Increase chunk hash length to 12 to address Vite warnings for large projects
+
+- Fixes #77
