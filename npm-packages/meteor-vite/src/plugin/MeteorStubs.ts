@@ -222,5 +222,15 @@ export type ProjectJson = {
          * example.
          */
         viteConfig?: string;
+        vite?: {
+            /**
+             * Specifies an alternative path to the project's Vite config
+             */
+            configFile?: string;
+            replacePackages?: {
+                startsWith: string; // Match any Meteor package name that starts with the provided string.
+                replaceWith: string; // Replace matching packages with the provided string.
+            }[]
+        }
     }
 }
