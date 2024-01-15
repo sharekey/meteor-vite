@@ -142,7 +142,9 @@ function prepareTemporaryMeteorProject() {
 /**
  * Use temporary Meteor project to build the Vite production bundle without affecting the source project.
  */
-function buildViteBundleWithTemporaryProject() {
+function prepareViteBundle() {
+  prepareTemporaryMeteorProject();
+
   console.log(pc.blue('⚡️ Building with Vite...'))
   let startTime = performance.now()
 
@@ -188,9 +190,7 @@ function viteBuild() {
 }
 
 try {
-  prepareTemporaryMeteorProject();
-  const { payload, entryAsset } = buildViteBundleWithTemporaryProject();
-
+  const { payload, entryAsset } = prepareViteBundle();
 
   // Feed Vite bundle to Meteor
 
