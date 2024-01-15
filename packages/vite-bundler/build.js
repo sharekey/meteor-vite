@@ -60,9 +60,11 @@ const optionalFiles = [
     'tsconfig.json'
 ]
 
-try {
-  // Temporary Meteor build
-
+/**
+ * Build a temporary Meteor project to use for safely building the Vite production bundle to be fed into the Meteor
+ * compiler
+ */
+function prepareTemporaryMeteorProject() {
   console.log(pc.blue('⚡️ Building packages to make them available to export analyzer...'))
   let startTime = performance.now()
 
@@ -136,11 +138,15 @@ try {
   let endTime = performance.now()
 
   console.log(pc.green(`⚡️ Packages built (${Math.round((endTime - startTime) * 100) / 100}ms)`))
+}
+
+try {
+  prepareTemporaryMeteorProject();
 
   // Vite
 
   console.log(pc.blue('⚡️ Building with Vite...'))
-  startTime = performance.now()
+  let startTime = performance.now()
 
   // Build with vite
   const { payload } = Promise.await(new Promise((resolve, reject) => {
@@ -161,7 +167,7 @@ try {
   }))
 
   if (payload.success) {
-    endTime = performance.now()
+    let endTime = performance.now()
     console.log(pc.green(`⚡️ Build successful (${Math.round((endTime - startTime) * 100) / 100}ms)`))
 
     const entryAsset = payload.output.find(o => o.fileName === 'meteor-entry.js' && o.type === 'chunk')
