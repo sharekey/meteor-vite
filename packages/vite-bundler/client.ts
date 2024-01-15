@@ -100,24 +100,23 @@ Meteor.startup(() => {
  */
 function forceConfigRefresh() {
     const forceRefreshAfter = 5 * 1000 // 5 seconds
-    const interval = Meteor.setInterval(() => {
-        const lastUpdateMs = Date.now() - getConfig().lastUpdate;
+    const interval = setInterval(async () => {
+        let config = await getConfig();
+        const lastUpdateMs = Date.now() - config.lastUpdate;
         if (lastUpdateMs < forceRefreshAfter) {
             return;
         }
         if (hasLoadedVite()) {
-            Meteor.clearInterval(interval);
+            clearInterval(interval);
             return;
         }
-        Meteor.call(ViteConnection.methods.refreshConfig, (error?: Error, config?: RuntimeConfig) => {
-            if (error) {
-                throw error;
-            }
-            if (!config) {
-                console.error('Received no config from server!', { error, config })
-            }
-            watchConfig(config || getConfig());
-        })
+        config = await Meteor.callAsync(ViteConnection.methods.refreshConfig);
+        
+        if (!config) {
+            DevConnectionLog.error('Received empty Vite runtime config from server!');
+            return;
+        }
+        watchConfig(config);
     }, 2500);
 }
 
