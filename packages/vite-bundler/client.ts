@@ -78,7 +78,7 @@ Meteor.startup(() => {
         subscription = Meteor.subscribe(ViteConnection.publication);
         const config = getConfig();
         if (!initialConfig && subscription.ready()) {
-            initialConfig = config;
+            config.then((config) => initialConfig = config);
         }
         
         DevConnectionLog.debug('Vite connection config changed', config);
@@ -87,7 +87,9 @@ Meteor.startup(() => {
             return;
         }
         
-        watchConfig(getConfig());
+        getConfig().then((config) => {
+            watchConfig(config);
+        })
     });
     
     if (!hasLoadedVite()) {
