@@ -135,9 +135,8 @@ function prepareTemporaryMeteorProject() {
       VITE_METEOR_DISABLED: 'true',
     },
   })
-  let endTime = performance.now()
 
-  console.log(pc.green(`⚡️ Packages built (${Math.round((endTime - startTime) * 100) / 100}ms)`))
+  console.log(pc.green(`⚡️ Packages built (${Math.round((performance.now() - startTime) * 100) / 100}ms)`))
 }
 
 /**
