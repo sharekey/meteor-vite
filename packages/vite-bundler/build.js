@@ -148,22 +148,7 @@ function buildViteBundleWithTemporaryProject() {
   let startTime = performance.now()
 
   // Build with vite
-  const { payload } = Promise.await(new Promise((resolve, reject) => {
-    const worker = createWorkerFork({
-      buildResult: (result) => resolve(result) ,
-    });
-
-    worker.call({
-      method: 'vite.build',
-      params: [{
-        packageJson: pkg,
-        meteor: {
-          packagePath: path.join(tempMeteorOutDir, 'bundle', 'programs', 'web.browser', 'packages'),
-          isopackPath: path.join(tempMeteorProject, '.meteor', 'local', 'isopacks'),
-        },
-      }],
-    })
-  }));
+  const { payload } = Promise.await(viteBuild());
 
   if (!payload.success) {
     throw new Error('Vite build failed!');
@@ -178,6 +163,29 @@ function buildViteBundleWithTemporaryProject() {
   }
 
   return { payload, entryAsset }
+}
+
+/**
+ * Create a worker to build a Vite production bundle from the temporary Meteor project
+ * @returns {Promise<WorkerResponseData<'buildResult'>>}
+ */
+function viteBuild() {
+  return new Promise((resolve, reject) => {
+    const worker = createWorkerFork({
+      buildResult: (result) => resolve(result) ,
+    });
+
+    worker.call({
+      method: 'vite.build',
+      params: [{
+        packageJson: pkg,
+        meteor: {
+          packagePath: path.join(tempMeteorOutDir, 'bundle', 'programs', 'web.browser', 'packages'),
+          isopackPath: path.join(tempMeteorProject, '.meteor', 'local', 'isopacks'),
+        },
+      }],
+    })
+  });
 }
 
 try {
