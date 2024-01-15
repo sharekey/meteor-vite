@@ -2,7 +2,6 @@ import { Meteor } from 'meteor/meteor'
 import { WebAppInternals } from 'meteor/webapp'
 import type HTTP from 'http'
 import { fetch } from 'meteor/fetch';
-import { MeteorIPCMessage } from '../../npm-packages/meteor-vite/src/meteor/IPC/MeteorEvents';
 import {
     getConfig, DevConnectionLog,
     MeteorViteConfig,
@@ -48,7 +47,18 @@ if (Meteor.isDevelopment) {
         }
     }, { detached: true });
     
-    const sendIpcMessage = Meteor.bindEnvironment(async (message: MeteorIPCMessage) => {
+    viteServer.call({
+        method: 'vite.server.start',
+        params: [{
+            packageJson: getProjectPackageJson(),
+            meteorParentPid: process.ppid,
+        }]
+    });
+    
+    // Forward IPC messages from the `meteor-tool` parent process to the Vite server
+    // Used to notify our Vite build plugin of things like the client bundle or Atmosphere packages being rebuilt.
+    process.on('message', async (message) => {
+        if (!isMeteorIPCMessage(message)) return;
         const { host, port, ready } = await getConfig();
         if (!ready) return;
         
@@ -58,20 +68,6 @@ if (Meteor.isDevelopment) {
         }).catch((error) => {
             console.error(error);
         })
-    })
-    
-    
-    viteServer.call({
-        method: 'vite.server.start',
-        params: [{
-            packageJson: getProjectPackageJson(),
-            meteorParentPid: process.ppid,
-        }]
-    });
-    
-    process.on('message', (message) => {
-        if (!isMeteorIPCMessage(message)) return;
-        sendIpcMessage(message);
     })
     
     Meteor.publish(ViteConnection.publication, () => {
