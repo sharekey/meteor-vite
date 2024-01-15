@@ -15,14 +15,14 @@ if (Meteor.isDevelopment) {
     let tsupWatcherRunning = false;
     DevConnectionLog.info('Starting Vite server...');
     
-    WebAppInternals.registerBoilerplateDataCallback('meteor-vite', (request: HTTP.IncomingMessage, data: BoilerplateData) => {
-        const scripts = new ViteDevScripts(getConfig());
+    WebAppInternals.registerBoilerplateDataCallback('meteor-vite', async (request: HTTP.IncomingMessage, data: BoilerplateData) => {
+        const scripts = new ViteDevScripts(await getConfig());
         data.dynamicBody = `${data.dynamicBody || ''}\n${scripts.stringTemplate()}`;
     });
     
     const viteServer = createWorkerFork({
-        viteConfig(config) {
-            const { ready } = setConfig(config);
+        async viteConfig(config) {
+            const { ready } = await setConfig(config);
             if (ready) {
                 DevConnectionLog.info(`Meteor-Vite ready for connections!`)
             }
@@ -49,7 +49,7 @@ if (Meteor.isDevelopment) {
     }, { detached: true });
     
     const sendIpcMessage = Meteor.bindEnvironment(async (message: MeteorIPCMessage) => {
-        const { host, port, ready } = getConfig();
+        const { host, port, ready } = await getConfig();
         if (!ready) return;
         
         await fetch(`http://${host}:${port}/__meteor__/ipc-message`, {
