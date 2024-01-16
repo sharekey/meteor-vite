@@ -35,3 +35,9 @@ jobs:
     uses: ./.github/workflows/_reuse_.build.yml
     with:
       name: 'solid'
+
+  vue-meteor-v3:
+    name: 'Vue & Meteor v3'
+    uses: ./.github/workflows/_reuse_.build.yml
+    with:
+      name: 'vue-meteor-v3'
