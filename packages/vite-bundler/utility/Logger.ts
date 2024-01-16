@@ -1,4 +1,3 @@
-type LogMethodArgs = unknown[];
 import pc from 'picocolors';
 import * as process from 'process';
 
@@ -24,4 +23,5 @@ class Logger {
     }
 }
 
+type LogMethodArgs = unknown[];
 export default new Logger();
