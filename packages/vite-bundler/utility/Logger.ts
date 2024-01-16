@@ -82,6 +82,7 @@ class GithubActions {
         this.summaryLines.push(`⚡  ${message} ${formattedArgs}`);
         const summary = [
             '```log',
+            'Meteor-Vite build metrics:',
             ...this.summaryLines,
             '```',
             '',
