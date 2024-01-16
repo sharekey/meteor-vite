@@ -18,7 +18,7 @@ class Logger {
         if (!this.debugEnabled) {
             return;
         }
-        console.log(pc.dim(pc.blue(`⚡  ${message}`)), ...args)
+        console.debug(pc.dim(pc.blue(`⚡  ${message}`)), ...args)
     }
 }
 
