@@ -216,6 +216,9 @@ async function prepareViteBundle() {
 }
 
 function transpileViteBundle({ viteOutSrcDir, payload }) {
+  const startTime = performance.now();
+  Logger.info('Transpiling Vite bundle for Meteor...');
+
   fs.ensureDirSync(viteOutSrcDir)
   fs.emptyDirSync(viteOutSrcDir)
   for (const { fileName: file } of payload.output) {
@@ -241,6 +244,9 @@ function transpileViteBundle({ viteOutSrcDir, payload }) {
   }
   // Add .gitignore file to prevent the transpiled bundle from being committed accidentally.
   fs.writeFileSync(path.join(viteOutSrcDir, '.gitignore'), '/**');
+
+  const endTime = performance.now();
+  Logger.success(`Transpile successful (${Math.round((endTime - startTime) * 100) / 100}ms)`)
 }
 
 /**
