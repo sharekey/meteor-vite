@@ -28,6 +28,7 @@ export default class Compiler {
                 basename: this._formatFilename(file.getBasename()),
                 path: this._formatFilename(file.getPathInPackage()),
             }
+            const sourcePath = file.getPathInPackage();
             
             Logger.debug(`Processing: ${fileMeta.basename}`, { fileMeta });
             
@@ -36,18 +37,21 @@ export default class Compiler {
                     file.addJavaScript({
                         path: fileMeta.path,
                         data: file.getContentsAsString(),
+                        sourcePath,
                     })
                     break
                 case '.css':
                     file.addStylesheet({
                         path: fileMeta.path,
                         data: file.getContentsAsString(),
+                        sourcePath,
                     })
                     break
                 default:
                     file.addAsset({
                         path: fileMeta.path,
                         data: file.getContentsAsBuffer(),
+                        sourcePath,
                     })
             }
         })
@@ -73,4 +77,5 @@ interface BuildPluginFile {
 interface FileData {
     path: string;
     data: string | PluginFileBuffer;
+    sourcePath?: string;
 }
