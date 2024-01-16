@@ -14,9 +14,23 @@ export default class Compiler {
         this.cleanupHandlers.push(handler);
     }
     
+    protected _formatFilename(nameOrPath: string) {
+        return nameOrPath.replace(`.${BUNDLE_FILE_EXTENSION}`, '');
+    }
+    
     protected processFilesForTarget(files: BuildPluginFile[]) {
         files.forEach(file => {
-            Logger.debug(`Processing: ${file.getBasename()}`)
+            const metadata = {
+                old: {
+                    basename: file.getBasename(),
+                    path: file.getPathInPackage(),
+                },
+                new: {
+                    basename: this._formatFilename(file.getBasename()),
+                    path: this._formatFilename(file.getPathInPackage()),
+                }
+            }
+            Logger.debug(`Processing: ${metadata.new.basename}`, { metadata });
             switch (Path.extname(file.getBasename())) {
                 case '.js':
                     file.addJavaScript({
