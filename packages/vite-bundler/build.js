@@ -290,6 +290,7 @@ ${meteorViteImport}
     filenames: files.map(file => path.basename(file)),
   }, () => new Compiler())
 } catch (e) {
+  console.error(pc.red('⚡  Failed to complete build process:'), e);
   throw e
 }
 
