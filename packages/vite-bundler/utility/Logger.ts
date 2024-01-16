@@ -24,7 +24,6 @@ class Logger {
         
         const formattedArgs = args.length ? inspect(args) : '';
         fs.appendFileSync(summaryFilePath, `⚡  ${message} ${formattedArgs}`);
-        console.log(`::notice::⚡  ${message} ${formattedArgs}`)
     }
     
     public info(message: string, ...args: LogMethodArgs) {
