@@ -5,8 +5,7 @@ class Logger {
     protected static DEBUG_ENV_TRIGGERS = [
         'true',
         '*',
-        'meteor-vite:*',
-        'meteor-vite:bundler',
+        'vite-bundler:*',
     ]
     constructor() {
         const debugEnv = process.env.DEBUG || 'false';
