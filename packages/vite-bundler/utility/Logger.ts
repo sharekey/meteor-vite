@@ -40,10 +40,6 @@ class Logger {
             return `${key}="${value}"`
         });
         
-        if (options.title) {
-            data.push(`title="${options.title}"`);
-        }
-        
         console.log(`::notice ${data.join()}::${message})`);
     }
     
