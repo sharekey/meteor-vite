@@ -2,9 +2,9 @@ import path from 'node:path'
 import { performance } from 'node:perf_hooks'
 import fs from 'fs-extra'
 import { execaSync } from 'execa'
-import pc from 'picocolors'
 import { createWorkerFork, cwd, getProjectPackageJson } from './workers';
 import os from 'node:os';
+import Logger from './utility/Logger';
 
 const pkg = getProjectPackageJson();
 const BUNDLE_FILE_EXTENSION = '_vite-bundle.tmp';
@@ -154,7 +154,7 @@ ${meteorViteImport}
     fs.writeFileSync(meteorEntry, originalEntryContent, 'utf8');
   });
 } catch (e) {
-  console.error(pc.red('⚡  Failed to complete build process:\n'), e);
+  Logger.error(' Failed to complete build process:\n', e);
   throw e
 }
 
@@ -178,7 +178,7 @@ function prepareTemporaryMeteorProject() {
     'tsconfig.json'
   ]
 
-  console.log(pc.blue('⚡️ Building packages to make them available to export analyzer...'))
+  Logger.info('Building packages to make them available to export analyzer...')
 
   // Check for project files that may be important if available
   for (const file of optionalFiles) {
@@ -248,7 +248,7 @@ function prepareTemporaryMeteorProject() {
     },
   })
 
-  console.log(pc.green(`⚡️ Packages built (${Math.round((performance.now() - startTime) * 100) / 100}ms)`))
+  Logger.success(`Packages built (${Math.round((performance.now() - startTime) * 100) / 100}ms)`)
 }
 
 /**
@@ -257,7 +257,7 @@ function prepareTemporaryMeteorProject() {
 async function prepareViteBundle() {
   prepareTemporaryMeteorProject();
 
-  console.log(pc.blue('⚡️ Building with Vite...'))
+  Logger.info('Building with Vite...')
   let startTime = performance.now()
 
   // Build with vite
@@ -268,7 +268,7 @@ async function prepareViteBundle() {
   }
 
   let endTime = performance.now()
-  console.log(pc.green(`⚡️ Build successful (${Math.round((endTime - startTime) * 100) / 100}ms)`))
+  Logger.success(`Build successful (${Math.round((endTime - startTime) * 100) / 100}ms)`)
 
   const entryAsset = payload.output.find(o => o.fileName === 'meteor-entry.js' && o.type === 'chunk')
   if (!entryAsset) {
