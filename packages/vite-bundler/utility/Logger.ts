@@ -6,8 +6,7 @@ import { msToHumanTime } from './Helpers';
 
 class Logger {
     protected debugEnabled = false;
-    protected logGithubAnnotations = false;
-    protected githubStepSummaryFile;
+    protected github = new GithubActions();
     protected static DEBUG_ENV_TRIGGERS = [
         'true',
         '*',
@@ -18,48 +17,26 @@ class Logger {
         this.debugEnabled = !!debugEnv.trim().split(/\s+/).find((field) => {
             return Logger.DEBUG_ENV_TRIGGERS.includes(field.trim())
         });
-        this.githubStepSummaryFile = process.env.GITHUB_STEP_SUMMARY;
-        this.logGithubAnnotations = !!this.githubStepSummaryFile;
-    }
-    
-    protected addStepSummary(message: string, ...args: LogMethodArgs) {
-        if (!this.githubStepSummaryFile) {
-            return;
-        }
         
-        const formattedArgs = args.length ? inspect(args) : '';
-        fs.appendFileSync(this.githubStepSummaryFile, `⚡  ${message} ${formattedArgs}`);
-    }
-    
-    protected annotate(message: string, options: Partial<{ title: string }>) {
-        if (!this.logGithubAnnotations) {
-            return;
-        }
-        
-        const data: string[] = Object.entries(options).map(([key, value]) => {
-            return `${key}="${value}"`
-        });
-        
-        console.log(`::notice ${data.join()}::${message})`);
     }
     
     public info(message: string, ...args: LogMethodArgs) {
-        this.addStepSummary(message, ...args);
+        this.github.summarize(message, ...args);
         console.info(pc.blue(`⚡  ${message}`), ...args)
     }
     public error(message: string, ...args: LogMethodArgs) {
-        this.addStepSummary(message, ...args);
+        this.github.summarize(message, ...args);
         console.error(pc.red(`⚡  ${message}`), ...args)
     }
     public success(message: string, ...args: LogMethodArgs) {
-        this.addStepSummary(message, ...args);
+        this.github.summarize(message, ...args);
         console.log(pc.green(`⚡  ${message}`), ...args)
     }
     public debug(message: string, ...args: LogMethodArgs) {
         if (!this.debugEnabled) {
             return;
         }
-        this.addStepSummary(message, ...args);
+        this.github.summarize(message, ...args);
         console.debug(pc.dim(pc.blue(`⚡  ${message}`)), ...args)
     }
     
@@ -69,10 +46,44 @@ class Logger {
             complete: (message: string) => {
                 const messageWithTiming = `${message} in ${msToHumanTime(performance.now() - startTime)}`
                 this.success(messageWithTiming);
-                this.annotate(messageWithTiming, options);
+                this.github.annotate(messageWithTiming, options);
             }
         }
     }
+}
+
+class GithubActions {
+    protected stepSummaryFile;
+    protected useAnnotations;
+    
+    constructor() {
+        this.stepSummaryFile = process.env.GITHUB_STEP_SUMMARY;
+        this.useAnnotations = !!this.stepSummaryFile;
+    }
+    
+    public annotate(message: string, options: GithubAnnotationOptions) {
+        if (!this.useAnnotations) {
+            return;
+        }
+        const data: string[] = Object.entries(options).map(([key, value]) => {
+            return `${key}="${value}"`
+        });
+        
+        console.log(`::notice ${data.join()}::⚡  ${message})`);
+    }
+    
+    public summarize(message: string, ...args: LogMethodArgs) {
+        if (!this.stepSummaryFile) {
+            return;
+        }
+        
+        const formattedArgs = args.length ? inspect(args) : '';
+        fs.appendFileSync(this.stepSummaryFile, `⚡  ${message} ${formattedArgs}`);
+    }
+}
+
+interface GithubAnnotationOptions {
+    title?: string;
 }
 
 type LogMethodArgs = unknown[];
