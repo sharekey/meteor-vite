@@ -43,7 +43,7 @@ class Logger {
             complete: (message: string) => {
                 const messageWithTiming = `${message} in ${msToHumanTime(performance.now() - startTime)}`
                 this.success(messageWithTiming);
-                this.github.annotate(messageWithTiming, options);
+                this.github.summarize(messageWithTiming, options);
             }
         }
     }
