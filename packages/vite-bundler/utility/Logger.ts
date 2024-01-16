@@ -17,7 +17,7 @@ class Logger {
         console.info(pc.blue(`⚡  ${message}`), ...args)
     }
     public error(message: string, ...args: LogMethodArgs) {
-        console.info(pc.red(`⚡  ${message}`), ...args)
+        console.error(pc.red(`⚡  ${message}`), ...args)
     }
     public success(message: string, ...args: LogMethodArgs) {
         console.log(pc.green(`⚡  ${message}`), ...args)
