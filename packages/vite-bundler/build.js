@@ -42,6 +42,42 @@ if (!meteorMainModule) {
 
 if (process.env.NODE_ENV !== 'production') return
 
+class Compiler {
+  static cleanupHandlers = [];
+  processFilesForTarget (files) {
+    files.forEach(file => {
+      switch (path.extname(file.getBasename())) {
+        case '.js':
+          file.addJavaScript({
+            path: file.getPathInPackage(),
+            data: file.getContentsAsString(),
+          })
+          break
+        case '.css':
+          file.addStylesheet({
+            path: file.getPathInPackage(),
+            data: file.getContentsAsString(),
+          })
+          break
+        default:
+          file.addAsset({
+            path: file.getPathInPackage(),
+            data: file.getContentsAsBuffer(),
+          })
+      }
+    })
+  }
+
+  afterLink () {
+    Compiler.cleanupHandlers.forEach((handle) => handle());
+    Compiler.cleanupHandlers = [];
+  }
+
+  static addCleanupHandler(handler) {
+    this.cleanupHandlers.push(handler);
+  }
+}
+
 
 /**
  * Build a temporary Meteor project to use for safely building the Vite production bundle to be fed into the Meteor
@@ -263,42 +299,6 @@ ${meteorViteImport}
 } catch (e) {
   console.error(pc.red('⚡  Failed to complete build process:\n'), e);
   throw e
-}
-
-class Compiler {
-  static cleanupHandlers = [];
-  processFilesForTarget (files) {
-    files.forEach(file => {
-      switch (path.extname(file.getBasename())) {
-        case '.js':
-          file.addJavaScript({
-            path: file.getPathInPackage(),
-            data: file.getContentsAsString(),
-          })
-          break
-        case '.css':
-          file.addStylesheet({
-            path: file.getPathInPackage(),
-            data: file.getContentsAsString(),
-          })
-          break
-        default:
-          file.addAsset({
-            path: file.getPathInPackage(),
-            data: file.getContentsAsBuffer(),
-          })
-      }
-    })
-  }
-
-  afterLink () {
-    Compiler.cleanupHandlers.forEach((handle) => handle());
-    Compiler.cleanupHandlers = [];
-  }
-
-  static addCleanupHandler(handler) {
-    this.cleanupHandlers.push(handler);
-  }
 }
 
 function posixPath(filePath) {
