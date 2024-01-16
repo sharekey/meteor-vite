@@ -3,7 +3,8 @@ import Path from 'node:path';
 
 export default class Compiler {
     public static cleanupHandlers: CleanupHandler[] = [];
-    processFilesForTarget(files: BuildPluginFile[]) {
+    
+    protected processFilesForTarget(files: BuildPluginFile[]) {
         files.forEach(file => {
             Logger.debug(`Processing: ${file.getBasename()}`)
             switch (Path.extname(file.getBasename())) {
@@ -28,12 +29,12 @@ export default class Compiler {
         })
     }
     
-    afterLink () {
+    protected afterLink () {
         Compiler.cleanupHandlers.forEach((handle) => handle());
         Compiler.cleanupHandlers = [];
     }
     
-    static addCleanupHandler(handler: CleanupHandler) {
+    public static addCleanupHandler(handler: CleanupHandler) {
         this.cleanupHandlers.push(handler);
     }
 }
