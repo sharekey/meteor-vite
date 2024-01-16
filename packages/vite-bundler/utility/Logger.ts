@@ -31,6 +31,22 @@ class Logger {
         fs.appendFileSync(this.githubStepSummaryFile, `⚡  ${message} ${formattedArgs}`);
     }
     
+    protected annotate(message: string, options: Partial<{ title: string }>) {
+        if (!this.logGithubAnnotations) {
+            return;
+        }
+        
+        const data: string[] = Object.entries(options).map(([key, value]) => {
+            return `${key}="${value}"`
+        });
+        
+        if (options.title) {
+            data.push(`title="${options.title}"`);
+        }
+        
+        console.log(`::notice ${data.join()}::${message})`);
+    }
+    
     public info(message: string, ...args: LogMethodArgs) {
         this.addStepSummary(message, ...args);
         console.info(pc.blue(`⚡  ${message}`), ...args)
