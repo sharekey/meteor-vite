@@ -101,7 +101,7 @@ ${meteorViteImport}
  * compiler
  */
 function prepareTemporaryMeteorProject() {
-  const profile = Logger.startProfiler({ title: 'Meteor Package Build' });
+  const profile = Logger.startProfiler();
   const filesToCopy = [
     path.join('.meteor', '.finished-upgraders'),
     path.join('.meteor', '.id'),
@@ -216,7 +216,7 @@ async function prepareViteBundle() {
 }
 
 function transpileViteBundle({ viteOutSrcDir, payload }) {
-  const profile = Logger.startProfiler({ title: 'Transpile' });
+  const profile = Logger.startProfiler();
   Logger.info('Transpiling Vite bundle for Meteor...');
 
   fs.ensureDirSync(viteOutSrcDir)
