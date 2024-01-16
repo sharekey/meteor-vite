@@ -20,33 +20,33 @@ export default class Compiler {
     
     protected processFilesForTarget(files: BuildPluginFile[]) {
         files.forEach(file => {
-            const metadata = {
-                old: {
+            const fileMeta = {
+                _original: {
                     basename: file.getBasename(),
                     path: file.getPathInPackage(),
                 },
-                new: {
-                    basename: this._formatFilename(file.getBasename()),
-                    path: this._formatFilename(file.getPathInPackage()),
-                }
+                basename: this._formatFilename(file.getBasename()),
+                path: this._formatFilename(file.getPathInPackage()),
             }
-            Logger.debug(`Processing: ${metadata.new.basename}`, { metadata });
-            switch (Path.extname(file.getBasename())) {
+            
+            Logger.debug(`Processing: ${fileMeta.basename}`, { fileMeta });
+            
+            switch (Path.extname(fileMeta.basename)) {
                 case '.js':
                     file.addJavaScript({
-                        path: file.getPathInPackage(),
+                        path: fileMeta.path,
                         data: file.getContentsAsString(),
                     })
                     break
                 case '.css':
                     file.addStylesheet({
-                        path: file.getPathInPackage(),
+                        path: fileMeta.path,
                         data: file.getContentsAsString(),
                     })
                     break
                 default:
                     file.addAsset({
-                        path: file.getPathInPackage(),
+                        path: fileMeta.path,
                         data: file.getContentsAsBuffer(),
                     })
             }
