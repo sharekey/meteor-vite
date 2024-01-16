@@ -250,42 +250,6 @@ ${meteorViteImport}
   const entryModuleContent = `import ${JSON.stringify(`${posixPath(bundleEntryPath)}`)}`
   fs.writeFileSync(entryModuleFilepath, entryModuleContent, 'utf8')
 
-  class Compiler {
-    static cleanupHandlers = [];
-    processFilesForTarget (files) {
-      files.forEach(file => {
-        switch (path.extname(file.getBasename())) {
-          case '.js':
-            file.addJavaScript({
-              path: file.getPathInPackage(),
-              data: file.getContentsAsString(),
-            })
-            break
-          case '.css':
-            file.addStylesheet({
-              path: file.getPathInPackage(),
-              data: file.getContentsAsString(),
-            })
-            break
-          default:
-            file.addAsset({
-              path: file.getPathInPackage(),
-              data: file.getContentsAsBuffer(),
-            })
-        }
-      })
-    }
-
-    afterLink () {
-      Compiler.cleanupHandlers.forEach((handle) => handle());
-      Compiler.cleanupHandlers = [];
-    }
-
-    static addCleanupHandler(handler) {
-      this.cleanupHandlers.push(handler);
-    }
-  }
-
   Compiler.addCleanupHandler(() => {
     if (isSimulatedProduction) return;
     fs.removeSync(viteOutSrcDir);
@@ -299,6 +263,42 @@ ${meteorViteImport}
 } catch (e) {
   console.error(pc.red('⚡  Failed to complete build process:\n'), e);
   throw e
+}
+
+class Compiler {
+  static cleanupHandlers = [];
+  processFilesForTarget (files) {
+    files.forEach(file => {
+      switch (path.extname(file.getBasename())) {
+        case '.js':
+          file.addJavaScript({
+            path: file.getPathInPackage(),
+            data: file.getContentsAsString(),
+          })
+          break
+        case '.css':
+          file.addStylesheet({
+            path: file.getPathInPackage(),
+            data: file.getContentsAsString(),
+          })
+          break
+        default:
+          file.addAsset({
+            path: file.getPathInPackage(),
+            data: file.getContentsAsBuffer(),
+          })
+      }
+    })
+  }
+
+  afterLink () {
+    Compiler.cleanupHandlers.forEach((handle) => handle());
+    Compiler.cleanupHandlers = [];
+  }
+
+  static addCleanupHandler(handler) {
+    this.cleanupHandlers.push(handler);
+  }
 }
 
 function posixPath(filePath) {
