@@ -218,8 +218,7 @@ async function prepareViteBundle() {
 function transpileViteBundle({ viteOutSrcDir, payload }) {
   fs.ensureDirSync(viteOutSrcDir)
   fs.emptyDirSync(viteOutSrcDir)
-  const files = payload.output.map(o => o.fileName)
-  for (const file of files) {
+  for (const { fileName: file } of payload.output) {
     const from = path.join(payload.outDir, file)
     const to = path.join(viteOutSrcDir, `${file}.${BUNDLE_FILE_EXTENSION}`);
     fs.ensureDirSync(path.dirname(to))
