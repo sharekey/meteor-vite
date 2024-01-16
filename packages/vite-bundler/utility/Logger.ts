@@ -58,7 +58,7 @@ class GithubActions {
         this.useAnnotations = !!this.stepSummaryFile;
     }
     
-    public annotate(message: string, options: GithubAnnotationOptions) {
+    public annotate(message: string, options: GithubAnnotationOptions = {}) {
         if (!this.useAnnotations) {
             return;
         }
