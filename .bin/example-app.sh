@@ -102,6 +102,7 @@ link() {
 
 production:install() {
    cd "$BUILD_TARGET/bundle/programs/server" || exit 1
+   chmod +w npm-shrinkwrap.json
    meteor npm install
 }
 
