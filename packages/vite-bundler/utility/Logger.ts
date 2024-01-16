@@ -6,6 +6,8 @@ import { msToHumanTime } from './Helpers';
 
 class Logger {
     protected debugEnabled = false;
+    protected logGithubAnnotations = false;
+    protected githubStepSummaryFile;
     protected static DEBUG_ENV_TRIGGERS = [
         'true',
         '*',
@@ -16,16 +18,17 @@ class Logger {
         this.debugEnabled = !!debugEnv.trim().split(/\s+/).find((field) => {
             return Logger.DEBUG_ENV_TRIGGERS.includes(field.trim())
         });
+        this.githubStepSummaryFile = process.env.GITHUB_STEP_SUMMARY;
+        this.logGithubAnnotations = !!this.githubStepSummaryFile;
     }
     
     protected addStepSummary(message: string, ...args: LogMethodArgs) {
-        const summaryFilePath = process.env.GITHUB_STEP_SUMMARY;
-        if (!summaryFilePath) {
+        if (!this.githubStepSummaryFile) {
             return;
         }
         
         const formattedArgs = args.length ? inspect(args) : '';
-        fs.appendFileSync(summaryFilePath, `⚡  ${message} ${formattedArgs}`);
+        fs.appendFileSync(this.githubStepSummaryFile, `⚡  ${message} ${formattedArgs}`);
     }
     
     public info(message: string, ...args: LogMethodArgs) {
