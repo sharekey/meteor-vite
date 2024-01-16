@@ -66,7 +66,7 @@ class GithubActions {
             return `${key}="${value}"`
         });
         
-        console.log(`::notice ${data.join()}::⚡  ${message})`);
+        console.log(`::notice ${data.join()}::⚡  ${message}`);
     }
     
     public summarize(message: string, ...args: LogMethodArgs) {
