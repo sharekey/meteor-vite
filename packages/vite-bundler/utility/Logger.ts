@@ -21,22 +21,18 @@ class Logger {
     }
     
     public info(message: string, ...args: LogMethodArgs) {
-        this.github.summarize(message, ...args);
         console.info(pc.blue(`⚡  ${message}`), ...args)
     }
     public error(message: string, ...args: LogMethodArgs) {
-        this.github.summarize(message, ...args);
         console.error(pc.red(`⚡  ${message}`), ...args)
     }
     public success(message: string, ...args: LogMethodArgs) {
-        this.github.summarize(message, ...args);
         console.log(pc.green(`⚡  ${message}`), ...args)
     }
     public debug(message: string, ...args: LogMethodArgs) {
         if (!this.debugEnabled) {
             return;
         }
-        this.github.summarize(message, ...args);
         console.debug(pc.dim(pc.blue(`⚡  ${message}`)), ...args)
     }
     
