@@ -1,6 +1,12 @@
 import Logger from '../utility/Logger';
 import Path from 'node:path';
 
+/**
+ * Temporary file extension to apply to all files bundled by Vite.
+ * This makes it easier to filter out any files that shouldn't be processed by our Meteor compiler plugin.
+ */
+export const BUNDLE_FILE_EXTENSION = '_vite-bundle.tmp'
+
 export default class Compiler {
     protected static cleanupHandlers: CleanupHandler[] = [];
     

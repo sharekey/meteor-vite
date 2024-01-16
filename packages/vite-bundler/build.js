@@ -5,10 +5,9 @@ import { execaSync } from 'execa'
 import { createWorkerFork, cwd, getProjectPackageJson } from './workers';
 import os from 'node:os';
 import Logger from './utility/Logger';
-import Compiler from './plugin/Compiler';
+import Compiler, { BUNDLE_FILE_EXTENSION } from './plugin/Compiler';
 
 const pkg = getProjectPackageJson();
-const BUNDLE_FILE_EXTENSION = '_vite-bundle.tmp';
 
 const meteorMainModule = pkg.meteor?.mainModule?.client
 // Meteor packages to omit or replace the temporary build.
