@@ -30,7 +30,7 @@ export default class Compiler {
             }
             const sourcePath = file.getPathInPackage();
             
-            Logger.debug(`Processing: ${fileMeta.basename}`, { fileMeta });
+            Logger.debug(`[${file.getArch()}] Processing: ${fileMeta.basename}`, { fileMeta });
             
             switch (Path.extname(fileMeta.basename)) {
                 case '.js':
@@ -73,6 +73,7 @@ interface BuildPluginFile {
     addAsset(data: FileData): void;
     addStylesheet(data: FileData): void;
     addJavaScript(data: FileData): void;
+    getArch(): string;
 }
 interface FileData {
     path: string;
