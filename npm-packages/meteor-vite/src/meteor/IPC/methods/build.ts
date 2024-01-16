@@ -104,6 +104,7 @@ async function prepareConfig(buildConfig: BuildOptions): Promise<ParsedConfig> {
     }
 
     const outDir = Path.join(viteConfig.meteor.tempDir, 'bundle');
+    const bundleId = '_vite-bundle'; // Used to help the Meteor build plugin identify files built by Vite.
     return {
         viteConfig,
         outDir,
@@ -116,8 +117,9 @@ async function prepareConfig(buildConfig: BuildOptions): Promise<ParsedConfig> {
                 },
                 rollupOptions: {
                     output: {
-                        entryFileNames: 'meteor-entry.js',
-                        chunkFileNames: viteConfig.meteor.chunkFileNames ?? '[name]-[hash:12].js',
+                        entryFileNames: `meteor-entry.${bundleId}.js`,
+                        chunkFileNames: viteConfig.meteor.chunkFileNames ?? `[name]-[hash:12].${bundleId}.js`,
+                        assetFileNames: `assets/[name]-[hash:12].${bundleId}.[ext]`
                     },
                 },
                 outDir,
