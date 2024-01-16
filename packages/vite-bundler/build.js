@@ -6,6 +6,7 @@ import { createWorkerFork, cwd, getProjectPackageJson } from './workers';
 import os from 'node:os';
 import Logger from './utility/Logger';
 import Compiler, { BUNDLE_FILE_EXTENSION } from './plugin/Compiler';
+import { msToHumanTime } from './utility/Helpers';
 
 const pkg = getProjectPackageJson();
 
@@ -185,7 +186,7 @@ function prepareTemporaryMeteorProject() {
     },
   })
 
-  Logger.success(`Packages built (${Math.round((performance.now() - startTime) * 100) / 100}ms)`)
+  Logger.success(`Packages built (${msToHumanTime(performance.now() - startTime)}ms)`)
 }
 
 /**
@@ -205,7 +206,7 @@ async function prepareViteBundle() {
   }
 
   let endTime = performance.now()
-  Logger.success(`Build successful (${Math.round((endTime - startTime) * 100) / 100}ms)`)
+  Logger.success(`Build successful (${msToHumanTime(endTime - startTime)}ms)`)
 
   const entryAsset = payload.output.find(o => o.fileName === 'meteor-entry.js' && o.type === 'chunk')
   if (!entryAsset) {
@@ -246,7 +247,7 @@ function transpileViteBundle({ viteOutSrcDir, payload }) {
   fs.writeFileSync(path.join(viteOutSrcDir, '.gitignore'), '/**');
 
   const endTime = performance.now();
-  Logger.success(`Transpile successful (${Math.round((endTime - startTime) * 100) / 100}ms)`)
+  Logger.success(`Transpile successful (${msToHumanTime(endTime - startTime)}ms)`)
 }
 
 /**
