@@ -251,6 +251,7 @@ ${meteorViteImport}
   fs.writeFileSync(entryModuleFilepath, entryModuleContent, 'utf8')
 
   class Compiler {
+    static cleanupHandlers = [];
     processFilesForTarget (files) {
       files.forEach(file => {
         switch (path.extname(file.getBasename())) {
@@ -276,11 +277,20 @@ ${meteorViteImport}
     }
 
     afterLink () {
-      if (isSimulatedProduction) return;
-      fs.removeSync(viteOutSrcDir);
-      fs.writeFileSync(meteorEntry, originalEntryContent, 'utf8');
+      Compiler.cleanupHandlers.forEach((handle) => handle());
+      Compiler.cleanupHandlers = [];
+    }
+
+    static addCleanupHandler(handler) {
+      this.cleanupHandlers.push(handler);
     }
   }
+
+  Compiler.addCleanupHandler(() => {
+    if (isSimulatedProduction) return;
+    fs.removeSync(viteOutSrcDir);
+    fs.writeFileSync(meteorEntry, originalEntryContent, 'utf8');
+  });
 
   Plugin.registerCompiler({
     extensions: [],
