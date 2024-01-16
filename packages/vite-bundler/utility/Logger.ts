@@ -37,13 +37,13 @@ class Logger {
         console.debug(pc.dim(pc.blue(`⚡  ${message}`)), ...args)
     }
     
-    public startProfiler(options: { title?: string }) {
+    public startProfiler() {
         const startTime = performance.now();
         return {
             complete: (message: string) => {
                 const messageWithTiming = `${message} in ${msToHumanTime(performance.now() - startTime)}`
                 this.success(messageWithTiming);
-                this.github.summarize(messageWithTiming, options);
+                this.github.summarize(messageWithTiming);
             }
         }
     }
