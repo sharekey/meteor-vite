@@ -43,30 +43,27 @@ if (!meteorMainModule) {
 if (process.env.NODE_ENV !== 'production') return
 
 
-// Temporary Meteor build
-
-const filesToCopy = [
-  path.join('.meteor', '.finished-upgraders'),
-  path.join('.meteor', '.id'),
-  path.join('.meteor', 'packages'),
-  path.join('.meteor', 'platforms'),
-  path.join('.meteor', 'release'),
-  path.join('.meteor', 'versions'),
-  'package.json',
-  meteorMainModule,
-]
-
-const optionalFiles = [
-    'tsconfig.json'
-]
-
 /**
  * Build a temporary Meteor project to use for safely building the Vite production bundle to be fed into the Meteor
  * compiler
  */
 function prepareTemporaryMeteorProject() {
+  const startTime = performance.now()
+  const filesToCopy = [
+    path.join('.meteor', '.finished-upgraders'),
+    path.join('.meteor', '.id'),
+    path.join('.meteor', 'packages'),
+    path.join('.meteor', 'platforms'),
+    path.join('.meteor', 'release'),
+    path.join('.meteor', 'versions'),
+    'package.json',
+    meteorMainModule,
+  ]
+  const optionalFiles = [
+    'tsconfig.json'
+  ]
+
   console.log(pc.blue('⚡️ Building packages to make them available to export analyzer...'))
-  let startTime = performance.now()
 
   // Check for project files that may be important if available
   for (const file of optionalFiles) {
