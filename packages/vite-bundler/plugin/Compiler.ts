@@ -59,7 +59,10 @@ export default class Compiler {
     }
     
     protected afterLink () {
-        Compiler.cleanupHandlers.forEach((handle) => handle());
+        Compiler.cleanupHandlers.forEach((handle, index) => {
+            Logger.debug(`Processing cleanup handler #${index}`)
+            handle();
+        });
         Compiler.cleanupHandlers = [];
     }
     
