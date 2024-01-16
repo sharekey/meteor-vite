@@ -47,6 +47,7 @@ class Compiler {
   static cleanupHandlers = [];
   processFilesForTarget (files) {
     files.forEach(file => {
+      Logger.debug(`Processing: ${file.getBasename()}`)
       switch (path.extname(file.getBasename())) {
         case '.js':
           file.addJavaScript({
