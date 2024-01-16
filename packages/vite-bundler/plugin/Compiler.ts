@@ -12,6 +12,7 @@ export default class Compiler {
     
     public static addCleanupHandler(handler: CleanupHandler) {
         this.cleanupHandlers.push(handler);
+        Logger.debug(`Added cleanup handler. Pending cleanups: ${this.cleanupHandlers.length}`, this.cleanupHandlers);
     }
     
     protected _formatFilename(nameOrPath: string) {
