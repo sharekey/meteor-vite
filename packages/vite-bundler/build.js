@@ -79,6 +79,11 @@ class Compiler {
   }
 }
 
+Plugin.registerCompiler({
+  extensions: [BUNDLE_FILE_EXTENSION],
+  filenames: [],
+}, () => new Compiler())
+
 try {
   const { payload, entryAsset } = await prepareViteBundle();
 
@@ -148,11 +153,6 @@ ${meteorViteImport}
     fs.removeSync(viteOutSrcDir);
     fs.writeFileSync(meteorEntry, originalEntryContent, 'utf8');
   });
-
-  Plugin.registerCompiler({
-    extensions: [BUNDLE_FILE_EXTENSION],
-    filenames: [],
-  }, () => new Compiler())
 } catch (e) {
   console.error(pc.red('⚡  Failed to complete build process:\n'), e);
   throw e
