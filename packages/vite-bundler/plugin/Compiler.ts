@@ -2,7 +2,11 @@ import Logger from '../utility/Logger';
 import Path from 'node:path';
 
 export default class Compiler {
-    public static cleanupHandlers: CleanupHandler[] = [];
+    protected static cleanupHandlers: CleanupHandler[] = [];
+    
+    public static addCleanupHandler(handler: CleanupHandler) {
+        this.cleanupHandlers.push(handler);
+    }
     
     protected processFilesForTarget(files: BuildPluginFile[]) {
         files.forEach(file => {
@@ -34,9 +38,6 @@ export default class Compiler {
         Compiler.cleanupHandlers = [];
     }
     
-    public static addCleanupHandler(handler: CleanupHandler) {
-        this.cleanupHandlers.push(handler);
-    }
 }
 type CleanupHandler = () => void;
 type PluginFileBuffer = ArrayBufferLike;
