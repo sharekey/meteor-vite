@@ -1,5 +1,4 @@
 import pc from 'picocolors';
-import * as process from 'process';
 
 class Logger {
     protected debugEnabled = false;
