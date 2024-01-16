@@ -1,6 +1,8 @@
 import pc from 'picocolors';
 import { inspect } from 'node:util';
 import fs from 'node:fs';
+import { performance } from 'node:perf_hooks';
+import { msToHumanTime } from './Helpers';
 
 class Logger {
     protected debugEnabled = false;
@@ -44,6 +46,13 @@ class Logger {
         }
         this.addStepSummary(message, ...args);
         console.debug(pc.dim(pc.blue(`⚡  ${message}`)), ...args)
+    }
+    
+    public startProfiler(options: { title?: string }) {
+        const startTime = performance.now();
+        return {
+            complete: (message: string) => this.success(`${message} in ${msToHumanTime(performance.now() - startTime)}`)
+        }
     }
 }
 
