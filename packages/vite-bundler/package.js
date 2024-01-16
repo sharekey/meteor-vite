@@ -34,6 +34,7 @@ Package.onUse(function(api) {
   api.use([
       'fetch',
       'webapp',
+      'mongo',
       'typescript@3.0.0 || 4.0.0 || 5.0.0',
       'isobuild:compiler-plugin@1.0.0',
   ]);
