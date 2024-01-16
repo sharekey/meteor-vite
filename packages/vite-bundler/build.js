@@ -186,7 +186,7 @@ function prepareTemporaryMeteorProject() {
     },
   })
 
-  Logger.success(`Packages built (${msToHumanTime(performance.now() - startTime)}ms)`)
+  Logger.success(`Packages built (${msToHumanTime(performance.now() - startTime)})`)
 }
 
 /**
@@ -206,7 +206,7 @@ async function prepareViteBundle() {
   }
 
   let endTime = performance.now()
-  Logger.success(`Build successful (${msToHumanTime(endTime - startTime)}ms)`)
+  Logger.success(`Build successful (${msToHumanTime(endTime - startTime)})`)
 
   const entryAsset = payload.output.find(o => o.fileName === 'meteor-entry.js' && o.type === 'chunk')
   if (!entryAsset) {
@@ -247,7 +247,7 @@ function transpileViteBundle({ viteOutSrcDir, payload }) {
   fs.writeFileSync(path.join(viteOutSrcDir, '.gitignore'), '/**');
 
   const endTime = performance.now();
-  Logger.success(`Transpile successful (${msToHumanTime(endTime - startTime)}ms)`)
+  Logger.success(`Transpile successful (${msToHumanTime(endTime - startTime)})`)
 }
 
 /**
