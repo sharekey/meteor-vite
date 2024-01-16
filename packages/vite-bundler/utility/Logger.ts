@@ -50,6 +50,7 @@ class Logger {
 }
 
 class GithubActions {
+    protected readonly summaryLines: string[] = [];
     protected stepSummaryFile;
     protected useAnnotations;
     
@@ -75,7 +76,13 @@ class GithubActions {
         }
         
         const formattedArgs = args.length ? inspect(args) : '';
-        fs.appendFileSync(this.stepSummaryFile, `⚡  ${message} ${formattedArgs}`);
+        this.summaryLines.push(`⚡  ${message} ${formattedArgs}`);
+        const summary = [
+            '```log',
+            ...this.summaryLines,
+            '```',
+        ]
+        fs.writeFileSync(this.stepSummaryFile, summary.join('\n'));
     }
 }
 
