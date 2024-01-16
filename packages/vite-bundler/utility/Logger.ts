@@ -2,8 +2,17 @@ import pc from 'picocolors';
 
 class Logger {
     protected debugEnabled = false;
+    protected static DEBUG_ENV_TRIGGERS = [
+        'true',
+        '*',
+        'meteor-vite:*',
+        'meteor-vite:bundler',
+    ]
     constructor() {
-        this.debugEnabled = ['true', '*', 'meteor-vite:*'].includes(process.env.DEBUG || 'false')
+        const debugEnv = process.env.DEBUG || 'false';
+        this.debugEnabled = !!debugEnv.trim().split(/\s+/).find((field) => {
+            return Logger.DEBUG_ENV_TRIGGERS.includes(field.trim())
+        });
     }
     public info(message: string, ...args: LogMethodArgs) {
         console.info(pc.blue(`⚡  ${message}`), ...args)
