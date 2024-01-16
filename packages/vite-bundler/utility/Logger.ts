@@ -24,6 +24,7 @@ class Logger {
         console.info(pc.blue(`⚡  ${message}`), ...args)
     }
     public error(message: string, ...args: LogMethodArgs) {
+        this.github.annotate(message, {});
         console.error(pc.red(`⚡  ${message}`), ...args)
     }
     public success(message: string, ...args: LogMethodArgs) {
