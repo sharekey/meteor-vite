@@ -66,7 +66,11 @@ class Logger {
     public startProfiler(options: { title?: string }) {
         const startTime = performance.now();
         return {
-            complete: (message: string) => this.success(`${message} in ${msToHumanTime(performance.now() - startTime)}`)
+            complete: (message: string) => {
+                const messageWithTiming = `${message} in ${msToHumanTime(performance.now() - startTime)}`
+                this.success(messageWithTiming);
+                this.annotate(messageWithTiming, options);
+            }
         }
     }
 }
