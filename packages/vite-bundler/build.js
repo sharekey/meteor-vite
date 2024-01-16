@@ -5,6 +5,7 @@ import { execaSync } from 'execa'
 import { createWorkerFork, cwd, getProjectPackageJson } from './workers';
 import os from 'node:os';
 import Logger from './utility/Logger';
+import Compiler from './plugin/Compiler';
 
 const pkg = getProjectPackageJson();
 const BUNDLE_FILE_EXTENSION = '_vite-bundle.tmp';
@@ -42,43 +43,6 @@ if (!meteorMainModule) {
 
 
 if (process.env.NODE_ENV !== 'production') return
-
-class Compiler {
-  static cleanupHandlers = [];
-  processFilesForTarget (files) {
-    files.forEach(file => {
-      Logger.debug(`Processing: ${file.getBasename()}`)
-      switch (path.extname(file.getBasename())) {
-        case '.js':
-          file.addJavaScript({
-            path: file.getPathInPackage(),
-            data: file.getContentsAsString(),
-          })
-          break
-        case '.css':
-          file.addStylesheet({
-            path: file.getPathInPackage(),
-            data: file.getContentsAsString(),
-          })
-          break
-        default:
-          file.addAsset({
-            path: file.getPathInPackage(),
-            data: file.getContentsAsBuffer(),
-          })
-      }
-    })
-  }
-
-  afterLink () {
-    Compiler.cleanupHandlers.forEach((handle) => handle());
-    Compiler.cleanupHandlers = [];
-  }
-
-  static addCleanupHandler(handler) {
-    this.cleanupHandlers.push(handler);
-  }
-}
 
 Plugin.registerCompiler({
   extensions: [BUNDLE_FILE_EXTENSION],
