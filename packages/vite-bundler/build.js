@@ -7,6 +7,7 @@ import { createWorkerFork, cwd, getProjectPackageJson } from './workers';
 import os from 'node:os';
 
 const pkg = getProjectPackageJson();
+const BUNDLE_FILE_EXTENSION = '_vite-bundle.tmp';
 
 const meteorMainModule = pkg.meteor?.mainModule?.client
 // Meteor packages to omit or replace the temporary build.
@@ -90,7 +91,7 @@ try {
   const files = payload.output.map(o => o.fileName)
   for (const file of files) {
     const from = path.join(payload.outDir, file)
-    const to = path.join(viteOutSrcDir, file)
+    const to = path.join(viteOutSrcDir, `${file}.${BUNDLE_FILE_EXTENSION}`);
     fs.ensureDirSync(path.dirname(to))
 
     if (path.extname(from) === '.js') {
@@ -149,8 +150,8 @@ ${meteorViteImport}
   });
 
   Plugin.registerCompiler({
-    extensions: [],
-    filenames: files.map(file => path.basename(file)),
+    extensions: [BUNDLE_FILE_EXTENSION],
+    filenames: [],
   }, () => new Compiler())
 } catch (e) {
   console.error(pc.red('⚡  Failed to complete build process:\n'), e);
