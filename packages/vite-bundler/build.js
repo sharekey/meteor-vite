@@ -49,38 +49,11 @@ Plugin.registerCompiler({
 }, () => new Compiler())
 
 try {
+  const viteOutSrcDir = path.join(cwd, 'client', 'vite')
   const { payload, entryAsset } = await prepareViteBundle();
 
-  // Feed Vite bundle to Meteor
-
-  // Copy the assets to the Meteor auto-imported sources
-  const viteOutSrcDir = path.join(cwd, 'client', 'vite')
-  fs.ensureDirSync(viteOutSrcDir)
-  fs.emptyDirSync(viteOutSrcDir)
-  const files = payload.output.map(o => o.fileName)
-  for (const file of files) {
-    const from = path.join(payload.outDir, file)
-    const to = path.join(viteOutSrcDir, `${file}.${BUNDLE_FILE_EXTENSION}`);
-    fs.ensureDirSync(path.dirname(to))
-
-    if (path.extname(from) === '.js') {
-      // Transpile to Meteor target (Dynamic import support)
-      // @TODO don't use Babel
-      const source = fs.readFileSync(from, 'utf8')
-      const babelOptions = Babel.getDefaultOptions()
-      babelOptions.babelrc = true
-      babelOptions.sourceMaps = true
-      babelOptions.filename = babelOptions.sourceFileName = from
-      const transpiled = Babel.compile(source, babelOptions, {
-        cacheDirectory: path.join(cwd, 'node_modules', '.babel-cache'),
-      })
-      fs.writeFileSync(to, transpiled.code, 'utf8')
-    } else {
-      fs.copyFileSync(from, to)
-    }
-  }
-  // Add .gitignore file to prevent the transpiled bundle from being committed accidentally.
-  fs.writeFileSync(path.join(viteOutSrcDir, '.gitignore'), '/**');
+  // Transpile and push the Vite bundle into the Meteor project's source directory
+  transpileViteBundle({ viteOutSrcDir, payload });
 
   const moduleImportPath = JSON.stringify(posixPath(entryModule));
   const meteorViteImport = `import ${moduleImportPath};`
@@ -240,6 +213,35 @@ async function prepareViteBundle() {
   }
 
   return { payload, entryAsset }
+}
+
+function transpileViteBundle({ viteOutSrcDir, payload }) {
+  fs.ensureDirSync(viteOutSrcDir)
+  fs.emptyDirSync(viteOutSrcDir)
+  const files = payload.output.map(o => o.fileName)
+  for (const file of files) {
+    const from = path.join(payload.outDir, file)
+    const to = path.join(viteOutSrcDir, `${file}.${BUNDLE_FILE_EXTENSION}`);
+    fs.ensureDirSync(path.dirname(to))
+
+    if (path.extname(from) === '.js') {
+      // Transpile to Meteor target (Dynamic import support)
+      // @TODO don't use Babel
+      const source = fs.readFileSync(from, 'utf8')
+      const babelOptions = Babel.getDefaultOptions()
+      babelOptions.babelrc = true
+      babelOptions.sourceMaps = true
+      babelOptions.filename = babelOptions.sourceFileName = from
+      const transpiled = Babel.compile(source, babelOptions, {
+        cacheDirectory: path.join(cwd, 'node_modules', '.babel-cache'),
+      })
+      fs.writeFileSync(to, transpiled.code, 'utf8')
+    } else {
+      fs.copyFileSync(from, to)
+    }
+  }
+  // Add .gitignore file to prevent the transpiled bundle from being committed accidentally.
+  fs.writeFileSync(path.join(viteOutSrcDir, '.gitignore'), '/**');
 }
 
 /**
