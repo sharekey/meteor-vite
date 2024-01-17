@@ -42,7 +42,9 @@ jobs:
       - name: Build & Push
         uses: docker/build-push-action@v5
         with:
-          context: examples/${{ inputs.appDir }}
+          context: .
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
+          build-args: |
+            APP_DIR=./examples/${{ inputs.appDir }}
 
