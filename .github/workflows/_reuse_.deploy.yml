@@ -38,7 +38,7 @@ jobs:
         id: meta
         with:
           images: |
-            ghcr.io/JorgenVatle/meteor-vite.example.${{ inputs.appDir }}
+            ${{ inputs.imageRegistry }}/${{ inputs.imageName }}
 
       - name: Login to GHCR
         uses: docker/login-action@v3
