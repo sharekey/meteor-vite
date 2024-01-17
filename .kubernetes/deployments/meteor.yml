@@ -14,6 +14,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: "${APP_NAME}"
+  namespace: meteor-vite
   labels:
     app.kubernetes.io/name: meteor-vite-example
     app.kubernetes.io/component: meteor
