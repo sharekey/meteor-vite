@@ -40,24 +40,20 @@ COPY ./packages $METEOR_PACKAGES_FOLDER
 COPY ./npm-packages $NPM_PACKAGES_FOLDER
 
 # Prepare meteor-vite package for local reference when preparing npm dependencies.
-RUN cd $NPM_PACKAGES_FOLDER/meteor-vite && meteor npm link
+RUN cd $NPM_PACKAGES_FOLDER/meteor-vite && meteor npm ci && meteor npm link
 
 WORKDIR $APP_SOURCE_FOLDER
 
 # Meteor.js base image with pre-built npm and atmosphere dependencies
 FROM meteor-base as meteor-bundler
 
-# Prepare files needed for building Meteor packages and npm dependencies.
+# Install local and external npm dependencies
 COPY $APP_DIR/package*.json $APP_SOURCE_FOLDER/
-
-# Install npm dependencies
 RUN bash $SCRIPTS_FOLDER/build-app-npm-dependencies.sh
 RUN meteor npm link meteor-vite
 
-# Copy application source code
+# Build for production
 COPY $APP_DIR $APP_SOURCE_FOLDER/
-
-# Build Meteor bundle
 RUN bash $SCRIPTS_FOLDER/build-meteor-bundle.sh
 
 # Meteor Production Server
