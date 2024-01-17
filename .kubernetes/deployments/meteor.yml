@@ -27,6 +27,12 @@ spec:
       app.kubernetes.io/component: meteor
       app.kubernetes.io/instance: "${APP_NAME}"
   template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: meteor-vite-example
+        app.kubernetes.io/component: meteor
+        app.kubernetes.io/instance: "${APP_NAME}"
+        app.kubernetes.io/version: "${APP_VERSION}"
     spec:
       containers:
         - name: meteor
