@@ -1,6 +1,14 @@
 # Base deployment manifest
 # Use `$ envsubst` to populate fields in the manifest before applying it.
-# Ex: `cat .kubernetes/deployments/meteor.yml | envsubst | kubectl apply -f -`
+#
+# Example environment variables:
+# APP_NAME="vue3"
+# APP_IMAGE="example.vue3.meteor-vite:latest"
+# APP_VERSION="sha-abc123" # (optional)
+#
+# Example usage:
+# $ cat .kubernetes/deployments/meteor.yml | envsubst | kubectl apply -f -
+#
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -10,7 +18,7 @@ metadata:
     app.kubernetes.io/name: meteor-vite-example
     app.kubernetes.io/component: meteor
     app.kubernetes.io/instance: "${APP_NAME}"
-    app.kubernetes.io/version: "${DEPLOYMENT_VERSION}"
+    app.kubernetes.io/version: "${APP_VERSION}"
 spec:
   selector:
     matchLabels:
@@ -21,7 +29,7 @@ spec:
     spec:
       containers:
         - name: meteor
-          image: "${IMAGE_TAG}"
+          image: "${APP_IMAGE}"
           ports:
             - containerPort: 3000
               name: meteor
