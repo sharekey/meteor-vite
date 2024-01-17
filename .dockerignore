@@ -2,3 +2,4 @@
 **/.meteor-vite
 **/.meteor/local
 **/.npm
+npm-packages/**/dist
