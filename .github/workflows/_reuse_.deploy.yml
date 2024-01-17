@@ -13,7 +13,7 @@ on:
         required: true
       imageName:
         type: string
-        default: '${{ env.github.repository.owner }}/meteor-vite.example.${{ inputs.appDir }}'
+        default: '${{ github.repository.owner }}/meteor-vite.example.${{ inputs.appDir }}'
       imageRegistry:
         type: string
         default: ghcr.io
