@@ -1,0 +1,45 @@
+name: 'Deploy: Example Apps'
+run-name: '🚀 Deploy: Example Apps'
+
+on:
+  push:
+    branches:
+      - main
+      - release
+      - deploy-previews
+
+jobs:
+  vue:
+    name: 'Vue'
+    uses: ./.github/workflows/_reuse_.deploy.yml
+    with:
+      displayName: 'vue'
+      appDir: 'vue'
+
+  svelte:
+    name: 'Svelte'
+    uses: ./.github/workflows/_reuse_.deploy.yml
+    with:
+      displayName: 'svelte'
+      appDir: 'svelte'
+
+  react:
+    name: 'React'
+    uses: ./.github/workflows/_reuse_.deploy.yml
+    with:
+      displayName: 'react'
+      appDir: 'react'
+
+  solid:
+    name: 'Solid'
+    uses: ./.github/workflows/_reuse_.deploy.yml
+    with:
+      displayName: 'solid'
+      appDir: 'solid'
+
+  vue-meteor-v3:
+    name: 'Meteor v3'
+    uses: ./.github/workflows/_reuse_.deploy.yml
+    with:
+      displayName: 'vue-meteor-v3'
+      appDir: 'vue-meteor-v3'
