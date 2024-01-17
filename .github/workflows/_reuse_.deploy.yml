@@ -33,6 +33,7 @@ jobs:
         # language="bashpro shell script"
         run: |
           imageName="${{ inputs.imageRegistry }}/${{ github.repository_owner }}/meteor-vite.example.${{ inputs.appDir }}"
+          imageName="$(echo $imageName | tr '[:upper:]' '[:lower:]')"
           echo "imageName=$imageName" >> $GITHUB_OUTPUT
           echo "cacheTag=$imageName:buildcache" >> $GITHUB_OUTPUT
 
