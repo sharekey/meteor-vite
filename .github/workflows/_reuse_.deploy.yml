@@ -80,6 +80,7 @@ jobs:
       - name: Setup kubectl
         # language="bashpro shell script"
         run: |
+          mkdir -p ~/.kube
           echo '${{ secrets.KUBE_CONFIG_DATA }}' | base64 -d > ~/.kube/config
 
       - name: Apply manifest
