@@ -23,3 +23,8 @@ ostrio:cookies
 zodern:types
 
 jorgenvatle:vite-bundler
+
+test:lazy
+test:modules
+test:ts-modules
+test:stub-validation
