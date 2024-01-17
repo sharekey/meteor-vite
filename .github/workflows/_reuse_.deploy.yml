@@ -95,4 +95,20 @@ jobs:
           APP_IMAGE: ${{ needs.build.outputs.deploymentImage }}
         # language="bashpro shell script"
         run: |
-          cat .kubernetes/deployments/meteor.yml | envsubst | kubectl apply -f -
+          MANIFEST_STORE_PATH='/opt/manifests/deployments'
+          DEPLOYMENT_FILE_PATH="$MANIFEST_STORE_PATH/meteor.yml"
+          
+          # Populate environment variables in deployment manifest
+          mkdir -p "$MANIFEST_STORE_PATH"
+          cat .kubernetes/deployments/meteor.yml | envsubst > $DEPLOYMENT_FILE_PATH
+          
+          # Emit copy of final manifest to step summary
+          echo 'Deployment manifest:
+          ```yaml
+          ' >> $GITHUB_STEP_SUMMARY
+          cat $DEPLOYMENT_FILE_PATH >> $GITHUB_STEP_SUMMARY
+          echo '
+          ```' >> $GITHUB_STEP_SUMMARY
+          
+          # Deploy
+          kubectl apply -f "$DEPLOYMENT_FILE_PATH"
