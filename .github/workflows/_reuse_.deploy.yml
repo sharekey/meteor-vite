@@ -11,10 +11,18 @@ on:
         type: string
         description: Basename for the directory containing the example app being deployed.
         required: true
+      imageName:
+        type: string
+        default: '${{ env.github.repository.owner }}/meteor-vite.example.${{ inputs.appDir }}'
+      imageRegistry:
+        type: string
+        default: ghcr.io
 jobs:
   build:
     runs-on: ubuntu-latest
     name: Build
+    env:
+      DOCKER_CACHE_TAG: ${{ inputs.imageRegistry }}/${{ inputs.imageName }}:buildcache
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -45,6 +53,8 @@ jobs:
           context: .
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=registry,ref=${{ env.DOCKER_CACHE_TAG }}
+          cache-to: type=registry,ref=${{ env.DOCKER_CACHE_TAG }},mode=max
           build-args: |
             APP_DIR=./examples/${{ inputs.appDir }}
 
