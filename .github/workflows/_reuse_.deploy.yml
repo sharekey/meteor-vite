@@ -19,7 +19,8 @@ jobs:
     runs-on: ubuntu-latest
     name: Build 🐋
     outputs:
-      imageTag: ${{ steps.image.outputs.shaTag }}
+      deploymentImage: ${{ steps.image.outputs.deploymentImage }}
+      imageVersion: ${{ steps.image.outputs.imageVersion }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -36,9 +37,13 @@ jobs:
         run: |
           imageName="${{ inputs.imageRegistry }}/${{ github.repository_owner }}/meteor-vite.example.${{ inputs.appDir }}"
           imageName="$(echo $imageName | tr '[:upper:]' '[:lower:]')"
-          echo "imageName=$imageName" >> $GITHUB_OUTPUT
+          imageVersion="${{ github.ref_name }}-${GITHUB_SHA:0:7}"
+          
           echo "cacheTag=$imageName:buildcache" >> $GITHUB_OUTPUT
-          echo "shaTag=$imageName:${GITHUB_SHA:0:7}"
+          echo "deploymentImage=$imageName:$imageVersion" >> $GITHUB_OUTPUT
+          
+          echo "imageName=$imageName" >> $GITHUB_OUTPUT
+          echo "imageVersion=$imageVersion" >> $GITHUB_OUTPUT
 
       - name: Prepare metadata
         uses: docker/metadata-action@v5
@@ -60,7 +65,7 @@ jobs:
           context: .
           push: true
           tags: |
-            ${{ steps.image.outputs.shaTag }}
+            ${{ steps.image.outputs.deploymentImage }}
             ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=registry,ref=${{ steps.image.outputs.cacheTag }}
@@ -86,8 +91,8 @@ jobs:
       - name: Apply manifest
         env:
           APP_NAME: ${{ inputs.appDir }}
-          APP_VERSION: ${{ github.ref_name }}-${{ github.sha }}
-          APP_IMAGE: ${{ needs.build.outputs.imageTag }}
+          APP_VERSION: ${{ needs.build.outputs.imageVersion }}
+          APP_IMAGE: ${{ needs.build.outputs.deploymentImage }}
         # language="bashpro shell script"
         run: |
           cat .kubernetes/deployments/meteor.yml | envsubst | kubectl apply -f -
