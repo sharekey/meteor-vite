@@ -35,7 +35,7 @@ jobs:
         id: image
         # language="bashpro shell script"
         run: |
-          imageName="${{ inputs.imageRegistry }}/${{ github.repository_owner }}/meteor-vite.example.${{ inputs.appDir }}"
+          imageName="${{ inputs.imageRegistry }}/${{ github.repository_owner }}/${{ inputs.appDir }}.example.meteor-vite"
           imageName="$(echo $imageName | tr '[:upper:]' '[:lower:]')"
           imageVersion="${{ github.ref_name }}-${GITHUB_SHA:0:7}"
           
