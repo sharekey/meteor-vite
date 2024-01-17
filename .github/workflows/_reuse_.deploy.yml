@@ -103,12 +103,17 @@ jobs:
           cat .kubernetes/deployments/meteor.yml | envsubst > $DEPLOYMENT_FILE_PATH
           
           # Emit copy of final manifest to step summary
-          echo 'Deployment manifest:
+          echo '
+          <details>
+          <summary>Deployment manifest</summary>
+          
           ```yaml
           ' >> $GITHUB_STEP_SUMMARY
           cat $DEPLOYMENT_FILE_PATH >> $GITHUB_STEP_SUMMARY
           echo '
-          ```' >> $GITHUB_STEP_SUMMARY
+          ```
+          </details>
+          ' >> $GITHUB_STEP_SUMMARY
           
           # Deploy
           kubectl apply -f "$DEPLOYMENT_FILE_PATH"
