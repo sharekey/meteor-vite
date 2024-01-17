@@ -32,7 +32,7 @@ jobs:
         id: image
         # language="bashpro shell script"
         run: |
-          imageName="${{ github.repository_owner }}/meteor-vite.example.${{ inputs.appDir }}"
+          imageName="${{ inputs.imageRegistry }}/${{ github.repository_owner }}/meteor-vite.example.${{ inputs.appDir }}"
           echo "imageName=$imageName" >> $GITHUB_OUTPUT
           echo "cacheTag=$imageName:buildcache" >> $GITHUB_OUTPUT
 
