@@ -5,6 +5,7 @@
 
 # Build output from npm packages
 npm-packages/**/dist
+npm-packages/meteor-vite/.build
 
 # Debugging output
 **/.meteor-vite
