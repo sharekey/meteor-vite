@@ -6,6 +6,10 @@ ARG NODE_VERSION="14-alpine"
 # Meteor release (Needs to match the release in .meteor/release)
 ARG METEOR_RELEASE="2.12"
 
+# Path relative to the repository root to the Meteor app to build
+# Ex: ./examples/vue
+ARG APP_DIR
+
 # Node.js production runtime
 # This is the smallest possible image we can use to run the pre-built Meteor bundle.
 FROM node:$NODE_VERSION as nodejs-runtime
@@ -24,10 +28,19 @@ RUN apk --no-cache add \
 # Has `meteor` installed for building the production server as well as running any
 # development/testing environments if that's more convenient to use.
 FROM geoffreybooth/meteor-base:$METEOR_RELEASE as meteor-base
-ENV METEOR_CACHE_FOLDER /root/.meteor
-ENV METEOR_LOCAL_CACHE_FOLDER $APP_SOURCE_FOLDER/.meteor
-ENV NODE_MODULES_FOLDER $APP_SOURCE_FOLDER/node_modules
-ENV METEOR_PACKAGES_FOLDER $APP_SOURCE_FOLDER/packages
+ARG APP_DIR
+RUN test -n "$APP_DIR"
+
+ENV APP_DIR $APP_DIR
+ENV METEOR_PACKAGES_FOLDER /root/packages
+ENV NPM_PACKAGES_FOLDER /root/npm-packages
+ENV METEOR_PACKAGE_DIRS $METEOR_PACKAGES_FOLDER
+
+COPY ./packages $METEOR_PACKAGES_FOLDER
+COPY ./npm-packages $NPM_PACKAGES_FOLDER
+
+# Prepare meteor-vite package for local reference when preparing npm dependencies.
+RUN cd $NPM_PACKAGES_FOLDER/meteor-vite && meteor npm link
 
 WORKDIR $APP_SOURCE_FOLDER
 
@@ -35,15 +48,14 @@ WORKDIR $APP_SOURCE_FOLDER
 FROM meteor-base as meteor-bundler
 
 # Prepare files needed for building Meteor packages and npm dependencies.
-COPY ./package*.json $APP_SOURCE_FOLDER/
-COPY ./vite.config.ts $APP_SOURCE_FOLDER/
-COPY ./tsconfig.json $APP_SOURCE_FOLDER/
-COPY --chown=root:root ./.meteor $APP_SOURCE_FOLDER/.meteor
+COPY $APP_DIR/package*.json $APP_SOURCE_FOLDER/
 
+# Install npm dependencies
 RUN bash $SCRIPTS_FOLDER/build-app-npm-dependencies.sh
+RUN meteor npm link meteor-vite
 
 # Copy application source code
-COPY . $APP_SOURCE_FOLDER/
+COPY $APP_DIR $APP_SOURCE_FOLDER/
 
 # Build Meteor bundle
 RUN bash $SCRIPTS_FOLDER/build-meteor-bundle.sh
