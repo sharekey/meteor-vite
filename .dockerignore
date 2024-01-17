@@ -1,5 +1,10 @@
+# Meteor and npm package stores
 **/node_modules
-**/.meteor-vite
 **/.meteor/local
 **/.npm
+
+# Build output from npm packages
 npm-packages/**/dist
+
+# Debugging output
+**/.meteor-vite
