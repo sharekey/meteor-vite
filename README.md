@@ -3,10 +3,12 @@
 Use [Vite](https://vitejs.dev) in your Meteor app! ⚡️
 
 ## Key features
-> ⚡**Significantly speeds up Meteor's client-side build process. Uses the Vite dev server under-the-hood, leading to blazing fast hot-module-replacement.** 
--  Handles lazy-loaded Meteor packages & automatic code splitting for dynamic imports.
+> ⚡**Significantly speeds up Meteor's client-side build process. Uses the Vite dev server under-the-hood, leading to blazing fast hot-module-replacement.**
+
+- Minimal migration steps for existing Meteor projects
+- Handles lazy-loaded Meteor packages & automatic code splitting for dynamic imports
 - Modernizes your client bundle's build process, giving you more flexibility by tapping into the Vite plugin ecosystem.
-- Simplifies a lot of the setup for things like CSS preprocessors and UI frameworks.
+- Simplifies a lot of the setup for things like CSS preprocessors and UI frameworks
 
 ## Starter templates
   - Vue 3 
