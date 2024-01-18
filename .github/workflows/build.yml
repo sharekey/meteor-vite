@@ -41,4 +41,4 @@ jobs:
     name: 'Meteor v3'
     uses: ./.github/workflows/_reuse_.build.yml
     with:
-      name: 'vue-meteor-v3'
+      name: 'meteor-v3-vue'

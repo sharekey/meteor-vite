@@ -42,4 +42,4 @@ jobs:
     uses: ./.github/workflows/_reuse_.deploy.yml
     secrets: inherit
     with:
-      appBasename: 'vue-meteor-v3'
+      appBasename: 'meteor-v3-vue'

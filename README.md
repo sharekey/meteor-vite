@@ -24,8 +24,8 @@ Use [Vite](https://vitejs.dev) in your Meteor app! ⚡️
         - [Live demo](https://react--meteor-vite.wcaserver.com/)
     - [x] [SolidJS](/examples/solid)
         - [Live demo](https://solid--meteor-vite.wcaserver.com/)
-    - [x] [Meteor v3 + Vue](/examples/vue-meteor-v3)
-        - [Live demo](https://vue-meteor-v3--meteor-vite.wcaserver.com/)
+    - [x] [Meteor v3 + Vue](/examples/meteor-v3-vue)
+        - [Live demo](https://meteor-v3-vue--meteor-vite.wcaserver.com/)
 
 ## Installation
 
