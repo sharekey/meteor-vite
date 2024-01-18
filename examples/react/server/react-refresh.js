@@ -10,8 +10,8 @@ import { getConfig } from 'meteor/jorgenvatle:vite-bundler/loading/vite-connecti
  * {@link https://github.com/vitejs/vite-plugin-react/issues/11#discussion_r430879201}
  */
 if (Meteor.isDevelopment) {
-    WebAppInternals.registerBoilerplateDataCallback('react-preamble', (request, data) => {
-        const { host, port } = getConfig();
+    WebAppInternals.registerBoilerplateDataCallback('react-preamble', async (request, data) => {
+        const { host, port } = await getConfig();
         data.dynamicHead = data.dynamicHead || '';
         data.dynamicHead += `
 <script type="module">
