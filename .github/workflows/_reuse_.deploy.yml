@@ -13,6 +13,12 @@ on:
       imageRegistry:
         type: string
         default: ghcr.io
+      meteorBaseImage:
+        type: string
+        default: geoffreybooth/meteor-base
+        description: |
+          Meteor base image for bundling. Useful to override if you need a Meteor release not officially
+          supported yet by the original geoffreybooth image.
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -75,6 +81,7 @@ jobs:
           build-args: |
             APP_BASENAME=${{ inputs.appBasename }}
             METEOR_RELEASE=${{ steps.image.outputs.meteorRelease }}
+            METEOR_BASE_IMAGE=${{ inputs.meteorBaseImage }}
 
   deploy:
     name: Deploy 🚀
