@@ -17,6 +17,7 @@
 
   $: links = LinksCollection.find({});
   $: clicks = useTracker(() => RuntimeCollection.findOne({ _id: 'clicks' }))
+  $: serverTime = useTracker(() => RuntimeCollection.findOne({ _id: 'time' }));
 
   const reverseTitle = (linkId) => {
     Meteor.call('links.reverse-title', linkId)
@@ -26,6 +27,7 @@
 
 <div class="container">
   <h1>Welcome to Meteor!</h1>
+  <h3>The current server time is {$serverTime?.value}</h3>
 
   <button on:click={addToCounter}>Click Me</button>
   <p>
