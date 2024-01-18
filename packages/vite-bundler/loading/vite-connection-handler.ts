@@ -90,8 +90,8 @@ export const ViteConnection = {
     configSelector: { _id: 'viteConfig' },
 }
 
-export function getConfig() {
-    const viteConfig = MeteorViteConfig.findOne(ViteConnection.configSelector);
+export async function getConfig() {
+    const viteConfig = await MeteorViteConfig.findOneAsync(ViteConnection.configSelector);
     const config = viteConfig || runtimeConfig;
     return {
         ...config,
@@ -99,14 +99,14 @@ export function getConfig() {
     }
 }
 
-export function setConfig<TConfig extends Partial<RuntimeConfig>>(config: TConfig) {
+export async function setConfig<TConfig extends Partial<RuntimeConfig>>(config: TConfig) {
     Object.assign(runtimeConfig, config, ViteConnection.configSelector, { lastUpdate: Date.now() });
     
     if (runtimeConfig.port && runtimeConfig.host && runtimeConfig.entryFile) {
         runtimeConfig.ready = true;
     }
     
-    MeteorViteConfig.upsert(ViteConnection.configSelector, runtimeConfig);
+    await MeteorViteConfig.upsertAsync(ViteConnection.configSelector, runtimeConfig);
     return runtimeConfig;
 }
 
