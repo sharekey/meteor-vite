@@ -26,4 +26,8 @@ Meteor.startup(() => {
     Meteor.publish('runtime', () => {
         return RuntimeCollection.find();
     });
+    
+    Meteor.setInterval(() => {
+        RuntimeCollection.upsert({ _id: 'time' }, { $set: { value: new Date() } })
+    }, 2500);
 })
