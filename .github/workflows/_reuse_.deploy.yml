@@ -70,7 +70,7 @@ jobs:
           cache-from: type=registry,ref=${{ steps.image.outputs.cacheTag }}
           cache-to: type=registry,ref=${{ steps.image.outputs.cacheTag }},mode=max
           build-args: |
-            APP_DIR=./examples/${{ inputs.appBasename }}
+            APP_BASENAME=${{ inputs.appBasename }}
 
   deploy:
     name: Deploy 🚀

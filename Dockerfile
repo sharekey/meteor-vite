@@ -8,7 +8,7 @@ ARG METEOR_RELEASE="2.12"
 
 # Path relative to the repository root to the Meteor app to build
 # Ex: ./examples/vue
-ARG APP_DIR
+ARG APP_BASENAME
 
 # Node.js production runtime
 # This is the smallest possible image we can use to run the pre-built Meteor bundle.
@@ -29,10 +29,11 @@ RUN apk --no-cache add \
 # Has `meteor` installed for building the production server as well as running any
 # development/testing environments if that's more convenient to use.
 FROM geoffreybooth/meteor-base:$METEOR_RELEASE as meteor-base
-ARG APP_DIR
-RUN test -n "$APP_DIR"
+ARG APP_BASENAME
+RUN test -n "$APP_BASENAME"
 
-ENV APP_DIR $APP_DIR
+ENV APP_BASENAME $APP_BASENAME
+ENV APP_DIR ./examples/$APP_BASENAME
 ENV METEOR_PACKAGES_FOLDER /root/packages
 ENV NPM_PACKAGES_FOLDER /root/npm-packages
 ENV METEOR_PACKAGE_DIRS $METEOR_PACKAGES_FOLDER
