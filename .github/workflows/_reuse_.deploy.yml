@@ -3,7 +3,7 @@ run-name: '🚀 Deploy: ${{ inputs.appBasename }}'
 on:
   workflow_call:
     inputs:
-      name:
+      appBasename:
         type: string
         description: | 
           Basename for the directory containing the example app being deployed.
