@@ -44,7 +44,7 @@ spec:
             - name: PORT
               value: '3000'
             - name: ROOT_URL
-              value: 'https://${APP_NAME}--meteor-vite.example.com'
+              value: 'https://${APP_NAME}--meteor-vite.wcaserver.com'
             - name: MONGO_URL
               valueFrom:
                 secretKeyRef:
@@ -83,3 +83,28 @@ spec:
     app.kubernetes.io/name: meteor-vite-example
     app.kubernetes.io/component: meteor
     app.kubernetes.io/instance: "${APP_NAME}"
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: '${APP_NAME}'
+  namespace: meteor-vite
+  labels:
+    app.kubernetes.io/name: meteor-vite-example
+    app.kubernetes.io/component: meteor
+    app.kubernetes.io/instance: "${APP_NAME}"
+    app.kubernetes.io/version: "${APP_VERSION}"
+spec:
+  rules:
+    - host: '${APP_NAME}--meteor-vite.wcaserver.com'
+      http:
+        paths:
+          - pathType: Prefix
+            path: /
+
+            backend:
+              service:
+                name: "${APP_NAME}"
+                port:
+                  - number: 3000
+
