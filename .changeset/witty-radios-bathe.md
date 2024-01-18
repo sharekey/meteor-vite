@@ -8,7 +8,5 @@ Add minimal support for Meteor v3 (#83)
 - Increased minimum Meteor version requirement to v2.8.2
 - Add previously missing `mongo` dependency to `package.js` dependencies.
 
-Issue ref: #81 
-
 Todo:
-- [ ] Update Meteor bundle parser to handle new bundle format from v3. 
+- [ ] Update Meteor bundle parser to handle new bundle format from v3. (#81) 
