@@ -76,6 +76,11 @@ jobs:
   deploy:
     name: Deploy 🚀
     runs-on: ubuntu-latest
+    env:
+      APP_NAME: ${{ inputs.appDir }}
+      APP_VERSION: ${{ needs.build.outputs.imageVersion }}
+      APP_IMAGE: ${{ needs.build.outputs.deploymentImage }}
+      APP_NAMESPACE: meteor-vite
     needs:
       - build
     steps:
@@ -89,11 +94,6 @@ jobs:
           echo '${{ secrets.KUBE_CONFIG_DATA }}' | base64 -d > ~/.kube/config
 
       - name: Apply manifest
-        env:
-          APP_NAME: ${{ inputs.appDir }}
-          APP_VERSION: ${{ needs.build.outputs.imageVersion }}
-          APP_IMAGE: ${{ needs.build.outputs.deploymentImage }}
-          APP_NAMESPACE: meteor-vite
         # language="bashpro shell script"
         run: |
           MANIFEST_STORE_PATH='/opt/manifests/deployments'
@@ -118,3 +118,8 @@ jobs:
           
           # Deploy
           kubectl apply -f "$DEPLOYMENT_FILE_PATH"
+
+      - name: Verify deployment
+        # language="bashpro shell script"
+        run: |
+          kubectl rollout status deployment --watch --timeout 30s -n "$APP_NAMESPACE" "$APP_NAME"
