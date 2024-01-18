@@ -11,16 +11,16 @@ Use [Vite](https://vitejs.dev) in your Meteor app! ⚡️
 - Simplifies a lot of the setup for things like CSS preprocessors and UI frameworks
 
 ## Starter templates
-  - Vue 3 
+  - [**Vue 3**](https://vuejs.org/)
     - [Example Project](/examples/vue) 
     - [Preview](https://vue--meteor-vite.wcaserver.com) 
-  - Svelte
+  - [**Svelte**](https://svelte.dev/)
     - [Example Project](/examples/svelte)
     - [Preview](https://svelte--meteor-vite.wcaserver.com)
-  - React
+  - [**React**](https://react.dev/)
     - [Example Project](/examples/react)
     - [Preview](https://react--meteor-vite.wcaserver.com)
-  - Solid.js
+  - [**Solid.js**](https://www.solidjs.com/)
     - [Example Project](/examples/solid)
     - [Preview](https://solid--meteor-vite.wcaserver.com)
   - Meteor v3 (Work in progress)
