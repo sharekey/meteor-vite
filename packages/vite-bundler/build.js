@@ -101,7 +101,7 @@ ${meteorViteImport}
  * compiler
  */
 function prepareTemporaryMeteorProject() {
-  const startTime = performance.now()
+  const profile = Logger.startProfiler();
   const filesToCopy = [
     path.join('.meteor', '.finished-upgraders'),
     path.join('.meteor', '.id'),
@@ -186,7 +186,7 @@ function prepareTemporaryMeteorProject() {
     },
   })
 
-  Logger.success(`Packages built in ${msToHumanTime(performance.now() - startTime)}`)
+  profile.complete(`Packages built`);
 }
 
 /**
@@ -194,9 +194,9 @@ function prepareTemporaryMeteorProject() {
  */
 async function prepareViteBundle() {
   prepareTemporaryMeteorProject();
+  const profile = Logger.startProfiler();
 
   Logger.info('Building with Vite...')
-  let startTime = performance.now()
 
   // Build with vite
   const { payload } = await viteBuild();
@@ -205,8 +205,7 @@ async function prepareViteBundle() {
     throw new Error('Vite build failed!');
   }
 
-  let endTime = performance.now()
-  Logger.success(`Build completed in ${msToHumanTime(endTime - startTime)}`)
+  profile.complete(`Vite build completed`);
 
   const entryAsset = payload.output.find(o => o.fileName === 'meteor-entry.js' && o.type === 'chunk')
   if (!entryAsset) {
@@ -217,7 +216,7 @@ async function prepareViteBundle() {
 }
 
 function transpileViteBundle({ viteOutSrcDir, payload }) {
-  const startTime = performance.now();
+  const profile = Logger.startProfiler();
   Logger.info('Transpiling Vite bundle for Meteor...');
 
   fs.ensureDirSync(viteOutSrcDir)
@@ -246,8 +245,7 @@ function transpileViteBundle({ viteOutSrcDir, payload }) {
   // Add .gitignore file to prevent the transpiled bundle from being committed accidentally.
   fs.writeFileSync(path.join(viteOutSrcDir, '.gitignore'), '/**');
 
-  const endTime = performance.now();
-  Logger.success(`Transpile completed in ${msToHumanTime(endTime - startTime)}`)
+  profile.complete('Transpile completed');
 }
 
 /**
