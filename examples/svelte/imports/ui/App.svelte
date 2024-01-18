@@ -1,13 +1,20 @@
 <script lang="ts">
+  import RuntimeCollection from '/imports/api/runtime';
   import { Meteor } from "meteor/meteor";
   import { LinksCollection } from '../api/links';
 
   let counter = 0;
   const addToCounter = () => {
     counter += 1;
+    Meteor.call('runtime.click', (err) => {
+        if (err) {
+            alert(err.message);
+        }
+    })
   }
 
   $: links = LinksCollection.find({});
+  $: clicks = RuntimeCollection.findOne({ _id: 'clicks' });
 
   const reverseTitle = (linkId) => {
     Meteor.call('links.reverse-title', linkId)
@@ -19,7 +26,7 @@
   <h1>Welcome to Meteor!</h1>
 
   <button on:click={addToCounter}>Click Me</button>
-  <p>You've pressed the button {counter} times.</p>
+  <p>You've pressed the button {clicks} times.</p>
 
   <h2>Learn Meteor!</h2>
   {#await Meteor.subscribe('links.all')}
