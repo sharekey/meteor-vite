@@ -6,6 +6,9 @@ ARG NODE_VERSION="14-alpine"
 # Meteor release (Needs to match the release in .meteor/release)
 ARG METEOR_RELEASE="2.12"
 
+# Meteor base image name
+ARG METEOR_BASE="geoffreybooth/meteor-base"
+
 # Path relative to the repository root to the Meteor app to build
 # Ex: ./examples/vue
 ARG APP_BASENAME
@@ -30,7 +33,7 @@ RUN apk --no-cache add \
 # Meteor.js Base Image
 # Has `meteor` installed for building the production server as well as running any
 # development/testing environments if that's more convenient to use.
-FROM geoffreybooth/meteor-base:$METEOR_RELEASE as meteor-base
+FROM $METEOR_BASE:$METEOR_RELEASE as meteor-base
 ARG APP_BASENAME
 RUN test -n "$APP_BASENAME"
 
