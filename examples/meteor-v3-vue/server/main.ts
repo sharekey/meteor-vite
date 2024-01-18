@@ -12,7 +12,6 @@ Meteor.startup(async () => {
   }
   
   LinksCollection.insertAsync({
-    _id: 0,
     title: 'Meteor.com',
     url: 'https://meteor.com',
   });
