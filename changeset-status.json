@@ -4,22 +4,35 @@
       "releases": [
         {
           "name": "meteor-vite",
-          "type": "patch"
+          "type": "minor"
+        },
+        {
+          "name": "vite-bundler",
+          "type": "minor"
         }
       ],
-      "summary": "Increase chunk hash length to 12 to address Vite warnings for large projects\n\n- Fixes #77",
-      "id": "big-beds-joke"
+      "summary": "Update configuration options\n\n\n- Move advanced vite-bundler settings in `package.json` under `meteor.vite`.\n- Add option to customize Rollup chunk filenames in plugin config.",
+      "id": "dry-toys-run"
     }
   ],
   "releases": [
     {
       "name": "meteor-vite",
-      "type": "patch",
-      "oldVersion": "1.7.2",
+      "type": "minor",
+      "oldVersion": "1.7.3",
       "changesets": [
-        "big-beds-joke"
+        "dry-toys-run"
       ],
-      "newVersion": "1.7.3"
+      "newVersion": "1.8.0"
+    },
+    {
+      "name": "vite-bundler",
+      "type": "minor",
+      "oldVersion": "1.10.1",
+      "changesets": [
+        "dry-toys-run"
+      ],
+      "newVersion": "1.11.0"
     }
   ]
 }
