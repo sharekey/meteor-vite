@@ -61,6 +61,13 @@ spec:
             limits:
               cpu: 500m
               memory: 512Mi
+          readinessProbe:
+            failureThreshold: 10
+            periodSeconds: 5
+            httpGet:
+              port: 3000
+              path: /
+
 
 ---
 apiVersion: v1
