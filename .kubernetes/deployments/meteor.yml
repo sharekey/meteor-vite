@@ -101,7 +101,6 @@ spec:
         paths:
           - pathType: Prefix
             path: /
-
             backend:
               service:
                 name: "${APP_NAME}"
