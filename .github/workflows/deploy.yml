@@ -44,3 +44,4 @@ jobs:
     with:
       appBasename: 'meteor-v3-vue'
       meteorBaseImage: 'jorgenvatle/meteor-base'
+      nodeVersion: '20-alpine'
