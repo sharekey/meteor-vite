@@ -1,5 +1,6 @@
 <script lang="ts">
   import RuntimeCollection from '/imports/api/runtime';
+  import { useTracker } from 'meteor/rdb:svelte-meteor-data'
   import { Meteor } from "meteor/meteor";
   import { LinksCollection } from '../api/links';
 
@@ -11,12 +12,11 @@
         if (error) {
             alert(error.message);
         }
-        clicks = RuntimeCollection.findOne({ _id: 'clicks' }).value
     })
   }
 
   $: links = LinksCollection.find({});
-  let clicks = 0
+  $: clicks = useTracker(() => RuntimeCollection.findOne({ _id: 'clicks' }))
 
   const reverseTitle = (linkId) => {
     Meteor.call('links.reverse-title', linkId)
@@ -34,7 +34,7 @@
       {#await Meteor.subscribe('runtime')}
         (loading...)
       {:then}
-        {clicks}
+        {$clicks?.value}
       {/await}
     </span>
     times.
