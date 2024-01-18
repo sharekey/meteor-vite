@@ -34,4 +34,6 @@ Meteor.startup(async () => {
   Meteor.publish('links', function () {
     return LinksCollection.find();
   });
+
+  console.log(`Meteor server started up successfully: ${Meteor.absoluteUrl()}`)
 });

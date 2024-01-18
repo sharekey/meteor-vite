@@ -41,4 +41,6 @@ Meteor.startup(async () => {
       url: 'https://forums.meteor.com',
     });
   }
+  
+  console.log(`Meteor server started up successfully: ${Meteor.absoluteUrl()}`)
 });
