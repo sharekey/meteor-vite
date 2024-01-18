@@ -29,7 +29,17 @@
   <h1>Welcome to Meteor!</h1>
 
   <button on:click={addToCounter}>Click Me</button>
-  <p>You've pressed the button {clicks} times.</p>
+  <p>
+    You've pressed the button
+    <span>
+      {#await Meteor.subscribe('runtime')}
+        (loading...)
+      {:then}
+        {clicks}
+      {/await}
+    </span>
+    times.
+  </p>
 
   <h2>Learn Meteor!</h2>
   {#await Meteor.subscribe('links.all')}
