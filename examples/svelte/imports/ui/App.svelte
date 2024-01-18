@@ -16,7 +16,7 @@
   }
 
   $: links = LinksCollection.find({});
-  $: clicks = RuntimeCollection.findOne({ _id: 'clicks' });
+  $: clicks = RuntimeCollection.findOne({ _id: 'clicks' })?.value;
 
   const reverseTitle = (linkId) => {
     Meteor.call('links.reverse-title', linkId)
