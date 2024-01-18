@@ -36,9 +36,8 @@ Plugin.registerCompiler({
   filenames: [],
 }, () => new Compiler())
 
-try {
+const viteBuildProcess = prepareViteBundle().then(({ payload, entryAsset }) => {
   const viteOutSrcDir = path.join(cwd, 'client', 'vite')
-  const { payload, entryAsset } = await prepareViteBundle();
 
   // Transpile and push the Vite bundle into the Meteor project's source directory
   transpileViteBundle({ viteOutSrcDir, payload });
@@ -64,7 +63,7 @@ ${meteorViteImport}
   const meteorEntry = path.join(cwd, meteorMainModule)
   const originalEntryContent = fs.readFileSync(meteorEntry, 'utf8');
   if (!originalEntryContent.includes(moduleImportPath.replace(/['"`]/g, ''))) {
-      fs.writeFileSync(meteorEntry, `${meteorViteImportTemplate}\n${originalEntryContent}`, 'utf8')
+    fs.writeFileSync(meteorEntry, `${meteorViteImportTemplate}\n${originalEntryContent}`, 'utf8')
   }
 
   // Patch the meteor-vite entry module with an import for the project's Vite production bundle
@@ -78,10 +77,12 @@ ${meteorViteImport}
     fs.removeSync(viteOutSrcDir);
     fs.writeFileSync(meteorEntry, originalEntryContent, 'utf8');
   });
-} catch (e) {
+}).catch((error) => {
   Logger.error(' Failed to complete build process:\n', e);
-  throw e
-}
+  throw error;
+});
+
+await viteBuildProcess;
 
 /**
  * Build a temporary Meteor project to use for safely building the Vite production bundle to be fed into the Meteor
