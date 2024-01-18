@@ -1,5 +1,5 @@
 name: 'Deploy: Example Apps'
-run-name: '🚀 Deploy: Example Apps'
+run-name: '🚀 Deploy: Example Apps | ${{ github.event.head_commit.message || github.event.pull_request.title }}'
 
 on:
   push:
