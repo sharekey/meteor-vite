@@ -14,7 +14,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: "${APP_NAME}"
-  namespace: meteor-vite
+  namespace: "${APP_NAMESPACE}"
   labels:
     app.kubernetes.io/name: meteor-vite-example
     app.kubernetes.io/component: meteor
@@ -67,8 +67,8 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: '${APP_NAME}'
-  namespace: meteor-vite
+  name: "${APP_NAME}"
+  namespace: "${APP_NAMESPACE}"
   labels:
     app.kubernetes.io/name: meteor-vite-example
     app.kubernetes.io/component: meteor
@@ -87,8 +87,8 @@ spec:
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: '${APP_NAME}'
-  namespace: meteor-vite
+  name: "${APP_NAME}"
+  namespace: "${APP_NAMESPACE}"
   labels:
     app.kubernetes.io/name: meteor-vite-example
     app.kubernetes.io/component: meteor
@@ -96,7 +96,7 @@ metadata:
     app.kubernetes.io/version: "${APP_VERSION}"
 spec:
   rules:
-    - host: '${APP_NAME}--meteor-vite.wcaserver.com'
+    - host: "${APP_NAME}--meteor-vite.wcaserver.com"
       http:
         paths:
           - pathType: Prefix
