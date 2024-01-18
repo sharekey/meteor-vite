@@ -1,12 +1,10 @@
-import path from 'node:path'
-import { performance } from 'node:perf_hooks'
-import fs from 'fs-extra'
-import { execaSync } from 'execa'
+import path from 'node:path';
+import fs from 'fs-extra';
+import { execaSync } from 'execa';
 import { createWorkerFork, cwd, getProjectPackageJson } from './workers';
 import os from 'node:os';
 import Logger from './utility/Logger';
 import Compiler, { BUNDLE_FILE_EXTENSION } from './plugin/Compiler';
-import { msToHumanTime } from './utility/Helpers';
 
 const pkg = getProjectPackageJson();
 
