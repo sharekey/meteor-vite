@@ -82,7 +82,11 @@ ${meteorViteImport}
   throw error;
 });
 
-await viteBuildProcess;
+if (Meteor.isFibersDisabled) {
+  await viteBuildProcess;
+} else {
+  Promise.await(viteBuildProcess);
+}
 
 /**
  * Build a temporary Meteor project to use for safely building the Vite production bundle to be fed into the Meteor
