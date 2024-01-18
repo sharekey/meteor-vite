@@ -1,0 +1,47 @@
+name: 'Deploy: Example Apps'
+run-name: '🚀 Deploy: Example Apps | ${{ github.event.head_commit.message || github.event.pull_request.title }}'
+
+on:
+  push:
+    branches:
+      - main
+      - release
+      - deploy-previews
+
+jobs:
+  vue:
+    name: 'Vue'
+    uses: ./.github/workflows/_reuse_.deploy.yml
+    secrets: inherit
+    with:
+      appBasename: 'vue'
+
+  svelte:
+    name: 'Svelte'
+    uses: ./.github/workflows/_reuse_.deploy.yml
+    secrets: inherit
+    with:
+      appBasename: 'svelte'
+
+  react:
+    name: 'React'
+    uses: ./.github/workflows/_reuse_.deploy.yml
+    secrets: inherit
+    with:
+      appBasename: 'react'
+
+  solid:
+    name: 'Solid'
+    uses: ./.github/workflows/_reuse_.deploy.yml
+    secrets: inherit
+    with:
+      appBasename: 'solid'
+
+  vue-meteor-v3:
+    name: 'Meteor v3'
+    uses: ./.github/workflows/_reuse_.deploy.yml
+    secrets: inherit
+    with:
+      appBasename: 'meteor-v3-vue'
+      meteorBaseImage: 'jorgenvatle/meteor-base'
+      nodeVersion: '20-alpine'

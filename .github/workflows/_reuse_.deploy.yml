@@ -1,0 +1,145 @@
+name: 'Deploy Preview'
+run-name: '🚀 Deploy: ${{ inputs.appBasename }}'
+on:
+  workflow_call:
+    inputs:
+      appBasename:
+        type: string
+        description: | 
+          Basename for the directory containing the example app being deployed.
+          Can only contain lowercase alphanumeric characters, `-` and `_`.
+          Example: vue, react, vue-meteor-v3
+        required: true
+      imageRegistry:
+        type: string
+        default: ghcr.io
+      meteorBaseImage:
+        type: string
+        default: geoffreybooth/meteor-base
+        description: |
+          Meteor base image for bundling. Useful to override if you need a Meteor release not officially
+          supported yet by the original geoffreybooth image.
+      nodeVersion:
+        type: string
+        default: 14-alpine
+        description: Node.js Docker image version to use for the final production build.
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    name: Build 🐋
+    outputs:
+      deploymentImage: ${{ steps.image.outputs.deploymentImage }}
+      imageVersion: ${{ steps.image.outputs.imageVersion }}
+      meteorRelease: ${{ steps.image.outputs.meteorRelease }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Format image name
+        id: image
+        # language="bashpro shell script"
+        run: |
+          meteorRelease="$(cat 'examples/${{ inputs.appBasename }}/.meteor/release' | cut -d '@' -f 2)"
+          imageName="${{ inputs.imageRegistry }}/${{ github.repository_owner }}/${{ inputs.appBasename }}.example.meteor-vite"
+          imageName="$(echo $imageName | tr '[:upper:]' '[:lower:]')"
+          imageVersion="${{ github.ref_name }}-${GITHUB_SHA:0:7}"
+          
+          echo "cacheTag=$imageName:buildcache" >> $GITHUB_OUTPUT
+          echo "deploymentImage=$imageName:$imageVersion" >> $GITHUB_OUTPUT
+          
+          echo "imageName=$imageName" >> $GITHUB_OUTPUT
+          echo "imageVersion=$imageVersion" >> $GITHUB_OUTPUT
+          echo "meteorRelease=$meteorRelease" >> $GITHUB_OUTPUT
+
+      - name: Prepare metadata
+        uses: docker/metadata-action@v5
+        id: meta
+        with:
+          images: |
+            ${{ steps.image.outputs.imageName }}
+
+      - name: Login to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build & Push
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: true
+          tags: |
+            ${{ steps.image.outputs.deploymentImage }}
+            ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=registry,ref=${{ steps.image.outputs.cacheTag }}
+          cache-to: type=registry,ref=${{ steps.image.outputs.cacheTag }},mode=max
+          build-args: |
+            APP_BASENAME=${{ inputs.appBasename }}
+            METEOR_RELEASE=${{ steps.image.outputs.meteorRelease }}
+            METEOR_BASE_IMAGE=${{ inputs.meteorBaseImage }}
+            NODE_VERSION=${{ inputs.nodeVersion }}
+
+  deploy:
+    name: Deploy 🚀
+    runs-on: ubuntu-latest
+    environment:
+      name: ${{ inputs.appBasename }}
+      url: https://${{ env.APP_HOSTNAME }}
+    env:
+      APP_NAME: ${{ inputs.appBasename }}
+      APP_VERSION: ${{ needs.build.outputs.imageVersion }}
+      APP_IMAGE: ${{ needs.build.outputs.deploymentImage }}
+      APP_HOSTNAME: ${{ inputs.appBasename }}--meteor-vite.wcaserver.com
+      APP_NAMESPACE: meteor-vite
+      METEOR_RELEASE: ${{ needs.build.outputs.meteorRelease }}
+    needs:
+      - build
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup kubectl
+        # language="bashpro shell script"
+        run: |
+          mkdir -p ~/.kube
+          echo '${{ secrets.KUBE_CONFIG_DATA }}' | base64 -d > ~/.kube/config
+
+      - name: Apply manifest
+        # language="bashpro shell script"
+        run: |
+          MANIFEST_STORE_PATH='/opt/manifests/deployments'
+          DEPLOYMENT_FILE_PATH="$MANIFEST_STORE_PATH/meteor.yml"
+          
+          # Populate environment variables in deployment manifest
+          mkdir -p "$MANIFEST_STORE_PATH"
+          cat .kubernetes/deployments/meteor.yml | envsubst > $DEPLOYMENT_FILE_PATH
+          
+          # Emit copy of final manifest to step summary
+          echo '
+          <details>
+          <summary>Deployment manifest</summary>
+          
+          ```yaml
+          ' >> $GITHUB_STEP_SUMMARY
+          cat $DEPLOYMENT_FILE_PATH >> $GITHUB_STEP_SUMMARY
+          echo '
+          ```
+          </details>
+          ' >> $GITHUB_STEP_SUMMARY
+          
+          # Deploy
+          kubectl apply -f "$DEPLOYMENT_FILE_PATH" -n "$APP_NAMESPACE"
+
+      - name: Verify deployment
+        # language="bashpro shell script"
+        run: |
+          kubectl rollout status deployment --watch --timeout 30s -n "$APP_NAMESPACE" "$APP_NAME"
