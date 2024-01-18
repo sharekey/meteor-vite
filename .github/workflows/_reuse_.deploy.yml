@@ -88,6 +88,7 @@ jobs:
       APP_IMAGE: ${{ needs.build.outputs.deploymentImage }}
       APP_HOSTNAME: ${{ inputs.appBasename }}--meteor-vite.wcaserver.com
       APP_NAMESPACE: meteor-vite
+      METEOR_RELEASE: ${{ needs.build.outputs.meteorRelease }}
     needs:
       - build
     steps:
