@@ -37,7 +37,20 @@ Plugin.registerCompiler({
   filenames: [],
 }, () => new Compiler())
 
-const viteBuildProcess = prepareViteBundle().then(({ payload, entryAsset }) => {
+try {
+  if (Meteor.isFibersDisabled) {
+    processViteBundle(await prepareViteBundle());
+    return;
+  }
+
+  const bundle = Promise.await(prepareViteBundle());
+  processViteBundle(bundle);
+} catch (error) {
+  Logger.error(' Failed to complete build process:\n', error);
+  throw error;
+}
+
+function processViteBundle({ payload, entryAsset }) {
   const viteOutSrcDir = path.join(cwd, 'client', 'vite')
 
   // Transpile and push the Vite bundle into the Meteor project's source directory
@@ -78,10 +91,7 @@ ${meteorViteImport}
     fs.removeSync(viteOutSrcDir);
     fs.writeFileSync(meteorEntry, originalEntryContent, 'utf8');
   });
-}).catch((error) => {
-  Logger.error(' Failed to complete build process:\n', error);
-  throw error;
-});
+}
 
 if (Meteor.isFibersDisabled) {
   await viteBuildProcess;
