@@ -2,34 +2,29 @@
 
 Use [Vite](https://vitejs.dev) in your Meteor app! ⚡️
 
-## Roadmap
+## Key features
+> ⚡**Significantly speeds up Meteor's client-side build process. Uses the Vite dev server under-the-hood, leading to blazing fast hot-module-replacement.** 
+-  Handles lazy-loaded Meteor packages & automatic code splitting for dynamic imports.
+- Modernizes your client bundle's build process, giving you more flexibility by tapping into the Vite plugin ecosystem.
+- Simplifies a lot of the setup for things like CSS preprocessors and UI frameworks.
 
-- [x] Development mode
-- [x] Build
-- [x] Importing non-core Meteor packages
-- [x] Lazy meteor packages
-- [x] Reify support
-    - [x] Named exports
-    - [x] Default exports
-    - [x] Re-exports (named + wildcard)
-    - [x] Re-exports via intermediary variable
-- [ ] Meteor v3 Support
-  - [x] Migrate bundler from Fibers to Async/Await
-  - [ ] Update Meteor bundle parser to support new format introduced in v3.
-- [x] Code-splitting/Dynamic imports
-- [ ] Migrate intermediary production-build transpile step from Babel to esbuild.
-- [ ] SSR (not tested)
-- [ ] Starter/demo templates
-    - [x] [Vue 3](/examples/vue)
-        - [Live demo](https://vue--meteor-vite.wcaserver.com/)
-    - [x] [Svelte](/examples/svelte)
-        - [Live demo](https://svelte--meteor-vite.wcaserver.com/)
-    - [x] [React](/examples/react)
-        - [Live demo](https://react--meteor-vite.wcaserver.com/)
-    - [x] [SolidJS](/examples/solid)
-        - [Live demo](https://solid--meteor-vite.wcaserver.com/)
-    - [ ] [Meteor v3 + Vue](/examples/meteor-v3-vue) (Isopack compatability still pending)
-      - [Live demo](https://meteor-v3-vue--meteor-vite.wcaserver.com/)
+## Starter templates
+  - Vue 3 
+    - [Example Project](/examples/vue) 
+    - [Preview](https://vue--meteor-vite.wcaserver.com) 
+  - Svelte
+    - [Example Project](/examples/svelte)
+    - [Preview](https://svelte--meteor-vite.wcaserver.com)
+  - React
+    - [Example Project](/examples/react)
+    - [Preview](https://react--meteor-vite.wcaserver.com)
+  - Solid.js
+    - [Example Project](/examples/solid)
+    - [Preview](https://solid--meteor-vite.wcaserver.com)
+  - Meteor v3 (Work in progress)
+    - [Example Project](/examples/meteor-v3-vue)
+    - [Preview](https://meteor-v3-vue--meteor-vite.wcaserver.com)
+
 
 ## Installation
 
@@ -173,7 +168,7 @@ In most cases, you won't need to add anything here.
 }
 ```
 
-## Features
+## Features in-depth
 
 ### Lazy Loaded Meteor Packages
 Meteor-Vite will automatically detect lazy loaded Meteor packages and import them into your Meteor client's entrypoint.
@@ -235,3 +230,32 @@ The Vite integration comes with two dependencies that work together to enable co
 - [`jorgenvatle:vite-bundler`](/packages/vite-bundler/) - Meteor build plugin for launching Vite workers and compiling production bundles from Vite and Meteor.
     - [View changelog](/packages/vite-bundler/CHANGELOG.md)
     - [View on Atmosphere](https://atmospherejs.com/jorgenvatle/vite-bundler)
+
+
+## Roadmap
+- [x] Development mode
+- [x] Build
+- [x] Importing non-core Meteor packages
+- [x] Lazy meteor packages
+- [x] Reify support
+    - [x] Named exports
+    - [x] Default exports
+    - [x] Re-exports (named + wildcard)
+    - [x] Re-exports via intermediary variable
+- [ ] Meteor v3 Support
+    - [x] Migrate bundler from Fibers to Async/Await
+    - [ ] Update Meteor bundle parser to support new format introduced in v3.
+- [x] Code-splitting/Dynamic imports
+- [ ] Migrate intermediary production-build transpile step from Babel to esbuild.
+- [ ] SSR (not tested)
+- [ ] Starter/demo templates
+    - [x] [Vue 3](/examples/vue)
+        - [Live demo](https://vue--meteor-vite.wcaserver.com/)
+    - [x] [Svelte](/examples/svelte)
+        - [Live demo](https://svelte--meteor-vite.wcaserver.com/)
+    - [x] [React](/examples/react)
+        - [Live demo](https://react--meteor-vite.wcaserver.com/)
+    - [x] [SolidJS](/examples/solid)
+        - [Live demo](https://solid--meteor-vite.wcaserver.com/)
+    - [ ] [Meteor v3 + Vue](/examples/meteor-v3-vue) (Isopack compatability still pending)
+        - [Live demo](https://meteor-v3-vue--meteor-vite.wcaserver.com/)
