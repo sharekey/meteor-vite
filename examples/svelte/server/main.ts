@@ -1,5 +1,6 @@
 import { Meteor } from 'meteor/meteor';
 import { LinksCollection } from '/imports/api/links';
+import RuntimeCollection, { RuntimeCollection } from '/imports/api/runtime';
 
 async function insertLink({ title, url }) {
   await LinksCollection.insertAsync({ title, url, createdAt: new Date() });
@@ -40,6 +41,10 @@ Meteor.startup(async () => {
       title: 'Discussions',
       url: 'https://forums.meteor.com',
     });
+  }
+  
+  if (await RuntimeCollection.find({ _id: 'clicks' }).countAsync() === 0) {
+    await RuntimeCollection.insertAsync({ _id: 'clicks', value: 0 });
   }
   
   console.log(`Meteor server started up successfully: ${Meteor.absoluteUrl()}`)
