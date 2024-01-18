@@ -22,7 +22,8 @@ RUN apk --no-cache add \
 		ca-certificates \
 		python3 \
 		make \
-		g++
+		g++ \
+        gettext
 
 # Meteor.js Base Image
 # Has `meteor` installed for building the production server as well as running any
