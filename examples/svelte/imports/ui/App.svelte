@@ -3,8 +3,6 @@
   import { Meteor } from "meteor/meteor";
   import { LinksCollection } from '../api/links';
 
-  Meteor.subscribe('runtime');
-
   let counter = 0;
   const addToCounter = () => {
     counter += 1;
