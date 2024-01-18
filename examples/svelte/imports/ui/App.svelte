@@ -8,9 +8,10 @@
   let counter = 0;
   const addToCounter = () => {
     counter += 1;
-    Meteor.call('runtime.click', (err) => {
-        if (err) {
-            alert(err.message);
+    Meteor.call('runtime.click', (error, response) => {
+        console.log('Click method call completed!', { error, response })
+        if (error) {
+            alert(error.message);
         }
     })
   }
