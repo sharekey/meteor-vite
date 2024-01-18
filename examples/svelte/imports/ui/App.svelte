@@ -34,7 +34,7 @@
       {#await Meteor.subscribe('runtime')}
         (loading...)
       {:then}
-        {$clicks?.value}
+        {$clicks?.value.toLocaleString()}
       {/await}
     </span>
     times.
