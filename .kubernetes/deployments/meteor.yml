@@ -105,5 +105,5 @@ spec:
               service:
                 name: "${APP_NAME}"
                 port:
-                  - number: 3000
+                  number: 3000
 
