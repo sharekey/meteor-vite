@@ -5,6 +5,7 @@ import { createWorkerFork, cwd, getProjectPackageJson } from './workers';
 import os from 'node:os';
 import Logger from './utility/Logger';
 import Compiler, { BUNDLE_FILE_EXTENSION } from './plugin/Compiler';
+import { Meteor } from 'meteor/meteor';
 
 const pkg = getProjectPackageJson();
 const meteorMainModule = pkg.meteor?.mainModule?.client
