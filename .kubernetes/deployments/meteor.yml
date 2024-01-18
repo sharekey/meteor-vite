@@ -14,7 +14,6 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: "${APP_NAME}"
-  namespace: "${APP_NAMESPACE}"
   labels:
     app.kubernetes.io/name: meteor-vite-example
     app.kubernetes.io/component: meteor
@@ -68,7 +67,6 @@ apiVersion: v1
 kind: Service
 metadata:
   name: "${APP_NAME}"
-  namespace: "${APP_NAMESPACE}"
   labels:
     app.kubernetes.io/name: meteor-vite-example
     app.kubernetes.io/component: meteor
@@ -88,7 +86,6 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: "${APP_NAME}"
-  namespace: "${APP_NAMESPACE}"
   labels:
     app.kubernetes.io/name: meteor-vite-example
     app.kubernetes.io/component: meteor

@@ -117,7 +117,7 @@ jobs:
           ' >> $GITHUB_STEP_SUMMARY
           
           # Deploy
-          kubectl apply -f "$DEPLOYMENT_FILE_PATH"
+          kubectl apply -f "$DEPLOYMENT_FILE_PATH" -n "$APP_NAMESPACE"
 
       - name: Verify deployment
         # language="bashpro shell script"
