@@ -11,11 +11,12 @@
         if (error) {
             alert(error.message);
         }
+        clicks = RuntimeCollection.findOne({ _id: 'clicks' }).value
     })
   }
 
   $: links = LinksCollection.find({});
-  $: clicks = RuntimeCollection.find({ _id: 'clicks' }).fetch()?.[0]?.value || '(no data)';
+  let clicks = 0
 
   const reverseTitle = (linkId) => {
     Meteor.call('links.reverse-title', linkId)
