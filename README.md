@@ -3,7 +3,7 @@
 Use [Vite](https://vitejs.dev) in your Meteor app! ⚡️
 
 ## Key features
-> ⚡**Significantly speeds up Meteor's client-side build process. Uses the Vite dev server under-the-hood, leading to blazing fast hot-module-replacement.**
+> ⚡**Significantly speeds up Meteor's client-side build process. Uses the Vite dev server under-the-hood, leading to blazing fast hot-module-replacement during development.**
 
 - Minimal migration steps for existing Meteor projects
 - Handles lazy-loaded Meteor packages & automatic code splitting for dynamic imports
