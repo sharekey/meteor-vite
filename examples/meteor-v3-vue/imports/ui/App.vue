@@ -5,7 +5,7 @@
       <h3>Vue links</h3>
       <ul>
         <li v-for="{ title, url } in links">
-          {{ title }}
+          <a :href="url">{{ title }}</a>
         </li>
       </ul>
     </div>
