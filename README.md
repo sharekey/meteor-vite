@@ -15,7 +15,7 @@ Use [Vite](https://vitejs.dev) in your Meteor app! ⚡️
     - [x] Re-exports via intermediary variable
 - [x] Code-splitting/Dynamic imports
 - [ ] SSR (not tested)
-- [ ] Starter/demo templates
+- [x] Starter/demo templates
     - [x] [Vue 3](/examples/vue)
         - [Live demo](https://vue--meteor-vite.wcaserver.com/)
     - [x] [Svelte](/examples/svelte)
