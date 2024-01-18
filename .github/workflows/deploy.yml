@@ -14,37 +14,32 @@ jobs:
     uses: ./.github/workflows/_reuse_.deploy.yml
     secrets: inherit
     with:
-      displayName: 'vue'
-      appDir: 'vue'
+      appBasename: 'vue'
 
   svelte:
     name: 'Svelte'
     uses: ./.github/workflows/_reuse_.deploy.yml
     secrets: inherit
     with:
-      displayName: 'svelte'
-      appDir: 'svelte'
+      appBasename: 'svelte'
 
   react:
     name: 'React'
     uses: ./.github/workflows/_reuse_.deploy.yml
     secrets: inherit
     with:
-      displayName: 'react'
-      appDir: 'react'
+      appBasename: 'react'
 
   solid:
     name: 'Solid'
     uses: ./.github/workflows/_reuse_.deploy.yml
     secrets: inherit
     with:
-      displayName: 'solid'
-      appDir: 'solid'
+      appBasename: 'solid'
 
   vue-meteor-v3:
     name: 'Meteor v3'
     uses: ./.github/workflows/_reuse_.deploy.yml
     secrets: inherit
     with:
-      displayName: 'vue-meteor-v3'
-      appDir: 'vue-meteor-v3'
+      appBasename: 'vue-meteor-v3'

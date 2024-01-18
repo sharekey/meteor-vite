@@ -1,15 +1,14 @@
 name: 'Deploy Preview'
-run-name: '🚀 Deploy: ${{ inputs.displayName }}'
+run-name: '🚀 Deploy: ${{ inputs.appBasename }}'
 on:
   workflow_call:
     inputs:
-      displayName:
+      name:
         type: string
-        description: Name of the app being deployed
-        required: true
-      appDir:
-        type: string
-        description: Basename for the directory containing the example app being deployed.
+        description: | 
+          Basename for the directory containing the example app being deployed.
+          Can only contain lowercase alphanumeric characters, `-` and `_`.
+          Example: vue, react, vue-meteor-v3
         required: true
       imageRegistry:
         type: string
@@ -35,7 +34,7 @@ jobs:
         id: image
         # language="bashpro shell script"
         run: |
-          imageName="${{ inputs.imageRegistry }}/${{ github.repository_owner }}/${{ inputs.appDir }}.example.meteor-vite"
+          imageName="${{ inputs.imageRegistry }}/${{ github.repository_owner }}/${{ inputs.appBasename }}.example.meteor-vite"
           imageName="$(echo $imageName | tr '[:upper:]' '[:lower:]')"
           imageVersion="${{ github.ref_name }}-${GITHUB_SHA:0:7}"
           
@@ -71,16 +70,16 @@ jobs:
           cache-from: type=registry,ref=${{ steps.image.outputs.cacheTag }}
           cache-to: type=registry,ref=${{ steps.image.outputs.cacheTag }},mode=max
           build-args: |
-            APP_DIR=./examples/${{ inputs.appDir }}
+            APP_DIR=./examples/${{ inputs.appBasename }}
 
   deploy:
     name: Deploy 🚀
     runs-on: ubuntu-latest
     environment:
-      name: ${{ inputs.appDir }}
-      url: ${{ inputs.appDir }}--meteor-vite.wcaserver.com
+      name: ${{ inputs.appBasename }}
+      url: ${{ inputs.appBasename }}--meteor-vite.wcaserver.com
     env:
-      APP_NAME: ${{ inputs.appDir }}
+      APP_NAME: ${{ inputs.appBasename }}
       APP_VERSION: ${{ needs.build.outputs.imageVersion }}
       APP_IMAGE: ${{ needs.build.outputs.deploymentImage }}
       APP_NAMESPACE: meteor-vite
