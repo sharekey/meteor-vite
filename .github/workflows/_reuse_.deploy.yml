@@ -76,6 +76,9 @@ jobs:
   deploy:
     name: Deploy 🚀
     runs-on: ubuntu-latest
+    environment:
+      name: ${{ inputs.appDir }}
+      url: ${{ inputs.appDir }}--meteor-vite.wcaserver.com
     env:
       APP_NAME: ${{ inputs.appDir }}
       APP_VERSION: ${{ needs.build.outputs.imageVersion }}
