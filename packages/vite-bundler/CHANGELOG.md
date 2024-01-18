@@ -1,5 +1,14 @@
 # vite-bundler
 
+## 1.11.0
+
+### Minor Changes
+
+- 394ad2e: Update configuration options
+
+  - Move advanced vite-bundler settings in `package.json` under `meteor.vite`.
+  - Add option to customize Rollup chunk filenames in plugin config.
+
 ## 1.10.1
 
 ### Patch Changes
