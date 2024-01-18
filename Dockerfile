@@ -15,6 +15,8 @@ ARG APP_BASENAME
 FROM node:$NODE_VERSION as nodejs-runtime
 ENV APP_BUNDLE_FOLDER /opt/bundle
 ENV SCRIPTS_FOLDER /docker
+ARG APP_BASENAME
+ENV APP_BASENAME $APP_BASENAME
 
 # Runtime dependencies; (For node-sass, bcrypt etc.)
 RUN apk --no-cache add \
