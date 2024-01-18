@@ -74,7 +74,7 @@ COPY --from=meteor-bundler $APP_BUNDLE_FOLDER $APP_BUNDLE_FOLDER/
 # Install production npm dependencies
 RUN bash $SCRIPTS_FOLDER/build-meteor-npm-dependencies.sh
 
-COPY .docker/scripts/ $SCRIPTS_FOLDER/custom/
+COPY .docker/scripts $SCRIPTS_FOLDER/custom
 
 # Start app
 ENTRYPOINT ["/docker/custom/entrypoint.sh"]
