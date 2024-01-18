@@ -67,10 +67,11 @@ FROM nodejs-runtime as production-server
 # Import entrypoint script and production bundle
 COPY --from=meteor-bundler $SCRIPTS_FOLDER $SCRIPTS_FOLDER/
 COPY --from=meteor-bundler $APP_BUNDLE_FOLDER $APP_BUNDLE_FOLDER/
-COPY .docker/scripts/ $SCRIPTS_FOLDER/custom/
 
 # Install production npm dependencies
 RUN bash $SCRIPTS_FOLDER/build-meteor-npm-dependencies.sh
+
+COPY .docker/scripts/ $SCRIPTS_FOLDER/custom/
 
 # Start app
 ENTRYPOINT ["/docker/custom/entrypoint.sh"]
