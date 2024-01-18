@@ -77,5 +77,5 @@ RUN bash $SCRIPTS_FOLDER/build-meteor-npm-dependencies.sh
 COPY .docker/scripts $SCRIPTS_FOLDER/custom
 
 # Start app
-ENTRYPOINT ["/docker/custom/entrypoint.sh"]
+ENTRYPOINT ["/docker/entrypoint.sh"]
 CMD ["node", "main.js"]
