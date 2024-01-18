@@ -3,9 +3,6 @@ import { Meteor } from 'meteor/meteor';
 
 const RuntimeCollection = new Mongo.Collection<RuntimeDocument>('runtime');
 
-Meteor.publish('runtime', () => {
-    return RuntimeCollection.find();
-});
 
 Meteor.methods({
     'runtime.click': () => {
@@ -20,3 +17,13 @@ export interface RuntimeDocument {
 }
 
 export default RuntimeCollection;
+
+Meteor.startup(() => {
+    if (!Meteor.isServer) {
+        return;
+    }
+    
+    Meteor.publish('runtime', () => {
+        return RuntimeCollection.find();
+    });
+})
