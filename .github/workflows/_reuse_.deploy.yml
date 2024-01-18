@@ -20,6 +20,7 @@ jobs:
     outputs:
       deploymentImage: ${{ steps.image.outputs.deploymentImage }}
       imageVersion: ${{ steps.image.outputs.imageVersion }}
+      meteorRelease: ${{ steps.image.outputs.meteorRelease }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -34,6 +35,7 @@ jobs:
         id: image
         # language="bashpro shell script"
         run: |
+          meteorRelease="$(cat 'examples/${{ inputs.appBasename }}/.meteor/release' | cut -d '@' -f 2)"
           imageName="${{ inputs.imageRegistry }}/${{ github.repository_owner }}/${{ inputs.appBasename }}.example.meteor-vite"
           imageName="$(echo $imageName | tr '[:upper:]' '[:lower:]')"
           imageVersion="${{ github.ref_name }}-${GITHUB_SHA:0:7}"
@@ -43,6 +45,7 @@ jobs:
           
           echo "imageName=$imageName" >> $GITHUB_OUTPUT
           echo "imageVersion=$imageVersion" >> $GITHUB_OUTPUT
+          echo "meteorRelease=$meteorRelease" >> $GITHUB_OUTPUT
 
       - name: Prepare metadata
         uses: docker/metadata-action@v5
