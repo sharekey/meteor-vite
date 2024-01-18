@@ -78,7 +78,7 @@ ${meteorViteImport}
     fs.writeFileSync(meteorEntry, originalEntryContent, 'utf8');
   });
 }).catch((error) => {
-  Logger.error(' Failed to complete build process:\n', e);
+  Logger.error(' Failed to complete build process:\n', error);
   throw error;
 });
 
