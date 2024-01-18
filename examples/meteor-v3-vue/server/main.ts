@@ -1,10 +1,21 @@
 import { Meteor } from "meteor/meteor";
 import { onPageLoad } from "meteor/server-render";
+import LinksCollection from '../imports/api/links/links.collection';
 
-Meteor.startup(() => {
+Meteor.startup(async () => {
   // Code to run on server startup.
   console.log(`Greetings from ${module.id}!`);
-  console.log(`Meteor server started up successfully: ${Meteor.absoluteUrl()}`)
+  console.log(`Meteor server started up successfully: ${Meteor.absoluteUrl()}`);
+  
+  if (await LinksCollection.find({}).countAsync() > 0) {
+    return;
+  }
+  
+  LinksCollection.insertAsync({
+    _id: 0,
+    title: 'Meteor.com',
+    url: 'https://meteor.com',
+  });
 });
 
 onPageLoad(sink => {
