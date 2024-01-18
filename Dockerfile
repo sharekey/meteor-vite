@@ -33,7 +33,7 @@ RUN apk --no-cache add \
 # Meteor.js Base Image
 # Has `meteor` installed for building the production server as well as running any
 # development/testing environments if that's more convenient to use.
-FROM $METEOR_BASE:$METEOR_RELEASE as meteor-base
+FROM $METEOR_BASE_IMAGE:$METEOR_RELEASE as meteor-base
 ARG APP_BASENAME
 RUN test -n "$APP_BASENAME"
 
