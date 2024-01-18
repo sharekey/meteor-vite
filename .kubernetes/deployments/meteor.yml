@@ -43,7 +43,7 @@ spec:
             - name: PORT
               value: '3000'
             - name: ROOT_URL
-              value: 'https://${APP_NAME}--meteor-vite.wcaserver.com'
+              value: 'https://${APP_HOSTNAME}'
             - name: MONGO_URL
               valueFrom:
                 secretKeyRef:
@@ -93,7 +93,7 @@ metadata:
     app.kubernetes.io/version: "${APP_VERSION}"
 spec:
   rules:
-    - host: "${APP_NAME}--meteor-vite.wcaserver.com"
+    - host: "${APP_HOSTNAME}"
       http:
         paths:
           - pathType: Prefix
