@@ -77,7 +77,7 @@ jobs:
     runs-on: ubuntu-latest
     environment:
       name: ${{ inputs.appBasename }}
-      url: https://${{ inputs.appBasename }}--meteor-vite.wcaserver.com
+      url: https://${{ env.APP_HOSTNAME }}
     env:
       APP_NAME: ${{ inputs.appBasename }}
       APP_VERSION: ${{ needs.build.outputs.imageVersion }}
