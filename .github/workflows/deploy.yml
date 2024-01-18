@@ -43,3 +43,4 @@ jobs:
     secrets: inherit
     with:
       appBasename: 'meteor-v3-vue'
+      meteorBaseImage: 'jorgenvatle/meteor-base'
