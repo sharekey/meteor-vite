@@ -74,6 +74,7 @@ jobs:
           cache-to: type=registry,ref=${{ steps.image.outputs.cacheTag }},mode=max
           build-args: |
             APP_BASENAME=${{ inputs.appBasename }}
+            METEOR_RELEASE=${{ steps.image.outputs.meteorRelease }}
 
   deploy:
     name: Deploy 🚀
