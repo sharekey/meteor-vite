@@ -7,20 +7,9 @@ import Logger from './utility/Logger';
 import Compiler, { BUNDLE_FILE_EXTENSION } from './plugin/Compiler';
 
 const pkg = getProjectPackageJson();
-
 const meteorMainModule = pkg.meteor?.mainModule?.client
-// Meteor packages to omit or replace the temporary build.
-
-// Useful for other build-time packages that may conflict with Meteor-Vite's temporary build.
-const replaceMeteorPackages = [
-  { startsWith: 'standard-minifier', replaceWith: '' },
-  { startsWith: 'refapp:meteor-typescript', replaceWith: 'typescript' },
-  ...pkg?.meteor?.vite?.replacePackages || []
-]
 const tempDir = getTempDir();
-
 const isSimulatedProduction = process.argv.includes('--production');
-
 const entryModule = path.join('meteor-vite', '.build', 'import-vite-bundle.js');
 const entryModuleFilepath = path.join(cwd, 'node_modules', entryModule)
 const tempMeteorProject = path.resolve(tempDir, 'meteor')
@@ -109,6 +98,13 @@ function prepareTemporaryMeteorProject() {
     path.join('.meteor', 'versions'),
     'package.json',
     meteorMainModule,
+  ]
+  // List of packages to remove for the placeholder project.
+  // This comes in handy for some Meteor build plugins that can conflict with Meteor-Vite.
+  const replaceMeteorPackages = [
+    { startsWith: 'standard-minifier', replaceWith: '' },
+    { startsWith: 'refapp:meteor-typescript', replaceWith: 'typescript' },
+    ...pkg?.meteor?.vite?.replacePackages || []
   ]
   const optionalFiles = [
     'tsconfig.json'
