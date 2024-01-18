@@ -4,9 +4,9 @@
   import { Meteor } from "meteor/meteor";
   import { LinksCollection } from '../api/links';
 
-  let counter = 0;
+  let myClickCount = 0;
   const addToCounter = () => {
-    counter += 1;
+    myClickCount += 1;
     Meteor.call('runtime.click', (error, response) => {
         console.log('Click method call completed!', { error, response })
         if (error) {
@@ -31,7 +31,7 @@
 
   <button on:click={addToCounter}>Click Me</button>
   <p>
-    You've pressed the button
+    You've pressed the button {myClickCount} times. In total, it has been clicked
     <span>
       {#await Meteor.subscribe('runtime')}
         (loading...)
