@@ -17,5 +17,9 @@
       "server": "imports/entrypoints/meteor-server.ts"
     },
     "testModule": "tests/main.js"
+  },
+  "devDependencies": {
+    "meteor-vite": "^1.8.0",
+    "typescript": "^5.3.3"
   }
 }
