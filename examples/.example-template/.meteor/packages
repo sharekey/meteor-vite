@@ -15,5 +15,6 @@ shell-server@0.5.0            # Server-side component of the `meteor shell` comm
 webapp@1.13.6                  # Serves a Meteor app over HTTP
 server-render@0.4.1           # Support for server-side rendering
 hot-module-replacement@0.5.3  # Rebuilds the client if there is a change on the client without restarting the server
+mongo                         # Adaptor for running MongoDB and Minimongo over DDP
 
 jorgenvatle:vite-bundler
