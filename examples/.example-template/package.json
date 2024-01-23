@@ -1,5 +1,5 @@
 {
-  "name": ".example-template",
+  "name": "meteor-example-app",
   "private": true,
   "scripts": {
     "start": "meteor run",
