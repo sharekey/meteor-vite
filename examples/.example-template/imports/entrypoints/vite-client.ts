@@ -1,1 +1,1 @@
-console.log(`[${module.id}] Vite client entrypoint loaded!`);
+console.log(`Vite client entrypoint loaded!`);
