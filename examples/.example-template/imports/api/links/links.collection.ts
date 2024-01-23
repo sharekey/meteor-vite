@@ -1,5 +1,5 @@
 import { Mongo } from 'meteor/mongo';
-import Valibot from 'valibot';
+import * as Valibot from 'valibot';
 
 export default new Mongo.Collection<LinkDocument>('links');
 
