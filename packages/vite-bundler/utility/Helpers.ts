@@ -40,3 +40,49 @@ export function getTempDir() {
         return Path.resolve(cwd, 'node_modules', '.vite-meteor-temp');
     }
 }
+
+export function getBuildConfig() {
+    const packageJson = getProjectPackageJson();
+    const tempDir = getTempDir();
+    
+    /**
+     * Meteor client mainModule as specified in the package.json file. This is where we will push the final Vite bundle.
+     */
+    const meteorMainModule = packageJson.meteor?.mainModule?.client
+    
+    /**
+     * Entry module for the final Vite bundle. (Not the entrypoint specified in the Vite plugin config)
+     * This is appended to the Meteor client's mainModule to force Meteor into loading files built by Vite.
+     */
+    const entryModule = Path.join('meteor-vite', '.build', 'import-vite-bundle.js');
+    const entryModuleFilepath = Path.join(cwd, 'node_modules', entryModule)
+    
+    /**
+     * Check if Meteor is running using the --production flag and not actually bundling for production.
+     * This is important to check for as we normally clean up the files created for production once our compiler
+     * plugin finishes.
+     */
+    const isSimulatedProduction = process.argv.includes('--production');
+    
+    /**
+     * Intermediary Meteor project - used to build the Vite bundle in a safe environment where all the Meteor
+     * packages from the source project are available to our Vite plugin to analyze for creating ESM export stubs.
+     */
+    const tempMeteorProject = Path.resolve(tempDir, 'meteor') // Temporary Meteor project source
+    const tempMeteorOutDir = Path.join(tempDir, 'bundle', 'meteor'); // Temporary Meteor production bundle
+    
+    
+    if (!packageJson.meteor.mainModule) {
+        throw new MeteorViteError('No meteor main module found, please add meteor.mainModule.client to your package.json')
+    }
+    
+    return {
+        packageJson,
+        tempMeteorOutDir,
+        tempMeteorProject,
+        isSimulatedProduction,
+        entryModule,
+        entryModuleFilepath,
+        meteorMainModule,
+    }
+}
