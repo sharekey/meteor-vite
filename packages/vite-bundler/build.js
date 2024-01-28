@@ -1,26 +1,20 @@
 import path from 'node:path';
 import fs from 'fs-extra';
-import { createWorkerFork, cwd } from './workers';
+import { cwd } from './workers';
 import Logger from './utility/Logger';
 import Compiler, { BUNDLE_FILE_EXTENSION } from './plugin/Compiler';
 import { Meteor } from 'meteor/meteor';
 import { getBuildConfig, posixPath } from './utility/Helpers';
-import { MeteorViteError } from './utility/Errors';
 import { prepareTemporaryMeteorProject, prepareViteBundle } from './plugin/IntermediaryMeteorProject';
-
-
 
 // Not in a project (publishing the package or in temporary Meteor build)
 if (process.env.VITE_METEOR_DISABLED) return
 
 const {
-    packageJson: pkg,
     meteorMainModule,
     isSimulatedProduction,
     entryModule,
     entryModuleFilepath,
-    tempMeteorProject,
-    tempMeteorOutDir,
 } = getBuildConfig();
 
 // Empty stubs from any previous builds
