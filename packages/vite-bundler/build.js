@@ -40,11 +40,13 @@ Plugin.registerCompiler({
 }, () => new Compiler())
 
 try {
+  // Meteor v3 build process (Async-await)
   if (Meteor.isFibersDisabled) {
     processViteBundle(await prepareViteBundle());
     return;
   }
 
+  // Meteor v2 build process (Fibers)
   const bundle = Promise.await(prepareViteBundle());
   processViteBundle(bundle);
 } catch (error) {
