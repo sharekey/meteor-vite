@@ -5,7 +5,7 @@ import Logger from './utility/Logger';
 import Compiler, { BUNDLE_FILE_EXTENSION } from './plugin/Compiler';
 import { Meteor } from 'meteor/meteor';
 import { getBuildConfig, posixPath } from './utility/Helpers';
-import { prepareViteBundle } from './plugin/IntermediaryMeteorProject';
+import { prepareViteBundle, ViteBundleOutput } from './plugin/IntermediaryMeteorProject';
 
 // Not in a project (publishing the package or in temporary Meteor build)
 if (process.env.VITE_METEOR_DISABLED) return
@@ -15,6 +15,7 @@ const {
   isSimulatedProduction,
   entryModule,
   entryModuleFilepath,
+  viteOutSrcDir,
 } = getBuildConfig();
 
 // Empty stubs from any previous builds
@@ -53,7 +54,7 @@ function processViteBundle({ payload, entryAsset }) {
   const viteOutSrcDir = path.join(cwd, 'client', 'vite')
   
   // Transpile and push the Vite bundle into the Meteor project's source directory
-  transpileViteBundle({ viteOutSrcDir, payload });
+  transpileViteBundle({ payload });
   
   const moduleImportPath = JSON.stringify(posixPath(entryModule));
   const meteorViteImport = `import ${moduleImportPath};`
@@ -92,7 +93,7 @@ ${meteorViteImport}
   });
 }
 
-function transpileViteBundle({ viteOutSrcDir, payload }) {
+function transpileViteBundle({ payload }: Pick<ViteBundleOutput, 'payload'>) {
   const profile = Logger.startProfiler();
   Logger.info('Transpiling Vite bundle for Meteor...');
   
