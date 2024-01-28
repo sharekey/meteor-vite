@@ -37,20 +37,19 @@ Plugin.registerCompiler({
 try {
   // Meteor v3 build process (Async-await)
   if (Meteor.isFibersDisabled) {
-    const bundle = await prepareViteBundle();
-    processViteBundle(bundle);
+    await processViteBundle();
     return;
   }
   
   // Meteor v2 build process (Fibers)
-  const bundle = Promise.await(prepareViteBundle());
-  processViteBundle(bundle);
+  Promise.await(processViteBundle());
 } catch (error) {
   Logger.error(' Failed to complete build process:\n', error);
   throw error;
 }
 
-function processViteBundle({ payload, entryAsset }) {
+async function processViteBundle() {
+  const { payload, entryAsset } = await prepareViteBundle();
   const viteOutSrcDir = path.join(cwd, 'client', 'vite')
   
   // Transpile and push the Vite bundle into the Meteor project's source directory
