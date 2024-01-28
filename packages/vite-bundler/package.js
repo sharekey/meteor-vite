@@ -15,7 +15,7 @@ Package.registerBuildPlugin({
         'typescript@3.0.0 || 4.0.0 || 5.0.0',
     ],
     sources: [
-        'build.js',
+        'build.ts',
         'workers.ts',
         'plugin/Compiler.ts',
         'plugin/IntermediaryMeteorProject.ts',
