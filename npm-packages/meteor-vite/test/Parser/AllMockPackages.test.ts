@@ -38,6 +38,14 @@ describe('Validate known exports for mock packages', () => {
                 }
                 
                 expect(mainModuleExports).toEqual(mockModuleExports);
+            });
+            
+            it('has export keys for all package-scope exports', () => {
+                const meteorPackage = new MeteorPackage(parsedPackage, { timeSpent: 'none' }).serialize({});
+                
+                Object.values(mockPackage.packageScopeExports).flat().forEach((exportKey) => {
+                    expect(meteorPackage.exportKeys).toContain(exportKey);
+                })
             })
         })
         
