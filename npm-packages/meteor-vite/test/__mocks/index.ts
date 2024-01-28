@@ -212,14 +212,16 @@ export const LazyLoadedPackage = new class {
         TestLazy: this.prepareMock({
             fileName: 'test_lazy.js',
             packageName: 'test:lazy',
+            meteorVersion: 2,
         }),
     }
     
     protected prepareMock(lazyMock: {
         fileName: string;
         packageName: string;
+        meteorVersion: 3 | 2,
     }) {
-        const filePath = Path.join(__dirname, 'meteor-bundle/pre-auto-import/', `${lazyMock.fileName}.bundle`);
+        const filePath = Path.join(__dirname, `meteor-bundle/meteor-v${lazyMock.meteorVersion}/pre-auto-import/`, `${lazyMock.fileName}.bundle`);
         return {
             filePath,
             fileContent: FS.readFile(filePath, 'utf-8'),
