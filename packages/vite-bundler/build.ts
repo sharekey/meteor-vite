@@ -37,18 +37,18 @@ Plugin.registerCompiler({
 try {
   // Meteor v3 build process (Async-await)
   if (Meteor.isFibersDisabled) {
-    await processViteBundle();
+    await build();
     return;
   }
   
   // Meteor v2 build process (Fibers)
-  Promise.await(processViteBundle());
+  Promise.await(build());
 } catch (error) {
   Logger.error(' Failed to complete build process:\n', error);
   throw error;
 }
 
-async function processViteBundle() {
+async function build() {
   const { payload, entryAsset } = await prepareViteBundle();
   const viteOutSrcDir = path.join(cwd, 'client', 'vite')
   
