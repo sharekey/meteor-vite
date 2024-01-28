@@ -4,10 +4,12 @@ declare global {
     }
     
     module Plugin {
-        function registerCompiler(config: {
+        type CompilerPluginConfig = {
             extensions: string[];
             filenames: string[];
-        }, compilerFactory: () => object): void;
+        }
+        type FactoryFunction = () => { processFilesForTarget(): void };
+        function registerCompiler(config: CompilerPluginConfig, compilerFactory: FactoryFunction): void;
     }
     
     module Babel {
