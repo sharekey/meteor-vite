@@ -1,21 +1,23 @@
 import path from 'node:path';
 import fs from 'fs-extra';
 import { execaSync } from 'execa';
-import { createWorkerFork, cwd, getProjectPackageJson } from './workers';
+import { createWorkerFork, cwd } from './workers';
 import Logger from './utility/Logger';
 import Compiler, { BUNDLE_FILE_EXTENSION } from './plugin/Compiler';
 import { Meteor } from 'meteor/meteor';
-import { getTempDir, posixPath } from './utility/Helpers';
+import { getBuildConfig, posixPath } from './utility/Helpers';
 import { MeteorViteError } from './utility/Errors';
 
-const pkg = getProjectPackageJson();
-const meteorMainModule = pkg.meteor?.mainModule?.client
-const tempDir = getTempDir();
-const isSimulatedProduction = process.argv.includes('--production');
-const entryModule = path.join('meteor-vite', '.build', 'import-vite-bundle.js');
-const entryModuleFilepath = path.join(cwd, 'node_modules', entryModule)
-const tempMeteorProject = path.resolve(tempDir, 'meteor')
-const tempMeteorOutDir = path.join(tempDir, 'bundle', 'meteor')
+const {
+    packageJson: pkg,
+    meteorMainModule,
+    isSimulatedProduction,
+    entryModule,
+    entryModuleFilepath,
+    tempMeteorProject,
+    tempMeteorOutDir,
+} = getBuildConfig();
+
 
 // Not in a project (publishing the package or in temporary Meteor build)
 if (process.env.VITE_METEOR_DISABLED) return
