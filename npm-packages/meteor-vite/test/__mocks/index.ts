@@ -182,8 +182,8 @@ export const MeteorV3Mocks = {
     })
 }
 
-function prepareMock<Modules extends ModuleList>({ fileName, meteorVersion, ...details }: PrepareMockModule<Modules>): MockModule<Modules> {
-    const filePath = Path.join(__dirname, `meteor-bundle/${fileName}.bundle`);
+function prepareMock<Modules extends ModuleList>({ fileName, meteorVersion = '2', ...details }: PrepareMockModule<Modules>): MockModule<Modules> {
+    const filePath = Path.join(__dirname, `meteor-bundle`, `meteor-v${meteorVersion}`, `${fileName}.bundle`);
     const packageId = `meteor/${details.packageName}`;
     
     const mock = {
