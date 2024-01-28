@@ -1,22 +1,25 @@
 import { parse } from '@babel/parser';
 import {
-    CallExpression, Expression, ExpressionStatement,
-    FunctionExpression, Identifier, is, MemberExpression,
-    Node, NumericLiteral,
-    ObjectExpression, ObjectMethod,
-    ObjectProperty, shallowEqual, StringLiteral,
-    traverse, VariableDeclarator,
+    is,
+    Node,
+    NumericLiteral,
+    ObjectExpression,
+    ObjectMethod,
+    ObjectProperty,
+    StringLiteral,
+    traverse,
+    VariableDeclarator,
 } from '@babel/types';
 import FS from 'fs/promises';
 import { inspect } from 'util';
-import Logger from '../../utilities/Logger';
 import { MeteorViteError } from '../../error/MeteorViteError';
+import Logger from '../../utilities/Logger';
 import {
     KnownModuleMethodNames,
+    MeteorInstallCallExpression,
     MeteorPackageProperty,
     ModuleMethod,
     ModuleMethodName,
-    MeteorInstallObject, MeteorInstallCallExpression,
 } from './ParserTypes';
 
 interface ParseOptions {
