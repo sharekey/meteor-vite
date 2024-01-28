@@ -155,7 +155,7 @@ export const RdbSvelteMeteorData = prepareMock({
 })
 
 function prepareMock<Modules extends ModuleList>({ fileName, ...details }: PrepareMockModule<Modules>): MockModule<Modules> {
-    const filePath = Path.join(__dirname, `meteor-bundle/${fileName}`);
+    const filePath = Path.join(__dirname, `meteor-bundle/${fileName}.bundle`);
     const packageId = `meteor/${details.packageName}`;
     
     const mock = {
@@ -186,7 +186,7 @@ export const LazyLoadedPackage = new class {
         fileName: string;
         packageName: string;
     }) {
-        const filePath = Path.join(__dirname, 'meteor-bundle/pre-auto-import/', lazyMock.fileName);
+        const filePath = Path.join(__dirname, 'meteor-bundle/pre-auto-import/', `${lazyMock.fileName}.bundle`);
         return {
             filePath,
             fileContent: FS.readFile(filePath, 'utf-8'),
