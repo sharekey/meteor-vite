@@ -46,7 +46,7 @@ export function getBuildConfig() {
     const tempDir = getTempDir();
     
     // Not in a project (publishing the package or in temporary Meteor build)
-    const pluginDisabled = !!process.env.VITE_METEOR_DISABLED;
+    const pluginEnabled = !process.env.VITE_METEOR_DISABLED;
     
     /**
      * Meteor client mainModule as specified in the package.json file. This is where we will push the final Vite bundle.
@@ -75,7 +75,7 @@ export function getBuildConfig() {
     const tempMeteorOutDir = Path.join(tempDir, 'bundle', 'meteor'); // Temporary Meteor production bundle
     
     
-    if (!packageJson.meteor.mainModule) {
+    if (pluginEnabled && !packageJson.meteor.mainModule) {
         throw new MeteorViteError('No meteor main module found, please add meteor.mainModule.client to your package.json')
     }
     
@@ -87,6 +87,6 @@ export function getBuildConfig() {
         entryModule,
         entryModuleFilepath,
         meteorMainModule,
-        pluginDisabled,
+        pluginEnabled,
     }
 }
