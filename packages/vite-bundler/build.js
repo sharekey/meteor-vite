@@ -8,6 +8,11 @@ import { Meteor } from 'meteor/meteor';
 import { getBuildConfig, posixPath } from './utility/Helpers';
 import { MeteorViteError } from './utility/Errors';
 
+
+
+// Not in a project (publishing the package or in temporary Meteor build)
+if (process.env.VITE_METEOR_DISABLED) return
+
 const {
     packageJson: pkg,
     meteorMainModule,
@@ -17,10 +22,6 @@ const {
     tempMeteorProject,
     tempMeteorOutDir,
 } = getBuildConfig();
-
-
-// Not in a project (publishing the package or in temporary Meteor build)
-if (process.env.VITE_METEOR_DISABLED) return
 
 if (!meteorMainModule) {
   throw new MeteorViteError('No meteor main module found, please add meteor.mainModule.client to your package.json')
