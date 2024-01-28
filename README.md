@@ -244,7 +244,7 @@ The Vite integration comes with two dependencies that work together to enable co
     - [x] Default exports
     - [x] Re-exports (named + wildcard)
     - [x] Re-exports via intermediary variable
-- [x] Meteor v3 Support
+- [x] Meteor v3 support
     - [x] Migrate bundler from Fibers to Async/Await
     - [x] Update Meteor bundle parser to support new format introduced in v3.
 - [x] Code-splitting/Dynamic imports
