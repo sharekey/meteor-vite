@@ -51,6 +51,6 @@ const linkForm = reactive({
 Tracker.autorun(() => {
     const subscription = Meteor.subscribe('links');
     ready.value = subscription.ready();
-    links.value = LinksCollection.find({});
+    links.value = LinksCollection.find({}).fetch();
 });
 </script>
