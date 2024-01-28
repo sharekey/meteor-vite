@@ -15,11 +15,13 @@ Package.registerBuildPlugin({
         'typescript@3.0.0 || 4.0.0 || 5.0.0',
     ],
     sources: [
-        'build.js',
+        'build.ts',
         'workers.ts',
         'plugin/Compiler.ts',
+        'plugin/IntermediaryMeteorProject.ts',
         'utility/Logger.ts',
-        'utility/Helpers.ts'
+        'utility/Helpers.ts',
+        'utility/Errors.ts'
     ],
     npmDependencies: {
         execa: '6.1.0',
