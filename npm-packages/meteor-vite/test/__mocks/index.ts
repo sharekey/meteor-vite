@@ -191,6 +191,7 @@ function prepareMock<Modules extends ModuleList>({ fileName, meteorVersion = '2'
         filePath,
         packageId,
         fileContent: FS.readFile(filePath, 'utf-8'),
+        meteorVersion,
         ...details,
     }
     
@@ -271,4 +272,5 @@ interface MockModule<Modules extends ModuleList> extends PrepareMockModule<Modul
     filePath: string;
     fileContent: Promise<string>;
     packageId: string;
+    meteorVersion: '2' | '3';
 }
