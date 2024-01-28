@@ -2,7 +2,7 @@ import FS from 'fs/promises';
 import Path from 'path';
 import { ModuleList, PackageScopeExports } from '../../src/meteor/parser/Parser';
 
-export const AllMockPackages: MockModule<ModuleList>[] = [];
+export const AllMockPackages_MeteorV2: MockModule<ModuleList>[] = [];
 export const AllMockPackages_MeteorV3: MockModule<ModuleList>[] = [];
 
 export const TsModules = prepareMock({
@@ -197,7 +197,7 @@ function prepareMock<Modules extends ModuleList>({ fileName, meteorVersion = '2'
     if (meteorVersion === '3') {
         AllMockPackages_MeteorV3.push(mock);
     } else {
-        AllMockPackages.push(mock);
+        AllMockPackages_MeteorV2.push(mock);
     }
     
     return mock;

@@ -2,11 +2,11 @@ import Path from 'path';
 import { describe, expect, it, test } from 'vitest';
 import MeteorPackage from '../../src/meteor/package/components/MeteorPackage';
 import { parseMeteorPackage } from '../../src/meteor/parser/Parser';
-import { AllMockPackages } from '../__mocks';
+import { AllMockPackages_MeteorV2 } from '../__mocks';
 
 describe('Validate known exports for mock packages', () => {
     
-    describe.each(AllMockPackages)(`meteor/$packageName`, async (mockPackage) => {
+    describe.each(AllMockPackages_MeteorV2)(`meteor/$packageName`, async (mockPackage) => {
         const { result: parsedPackage } = await parseMeteorPackage({
             filePath: mockPackage.filePath,
             fileContent: mockPackage.fileContent,
