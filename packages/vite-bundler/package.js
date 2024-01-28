@@ -19,7 +19,8 @@ Package.registerBuildPlugin({
         'workers.ts',
         'plugin/Compiler.ts',
         'utility/Logger.ts',
-        'utility/Helpers.ts'
+        'utility/Helpers.ts',
+        'utility/Errors.ts'
     ],
     npmDependencies: {
         execa: '6.1.0',
