@@ -2,6 +2,7 @@ import { cwd, getProjectPackageJson } from '../workers';
 import Path from 'node:path';
 import OS from 'node:os';
 import FS from 'node:fs';
+import { MeteorViteError } from './Errors';
 
 export function msToHumanTime(milliseconds: number) {
     const duration = {
@@ -33,7 +34,7 @@ export function getTempDir() {
         FS.mkdirSync(tempDir, { recursive: true });
         return tempDir;
     } catch (error) {
-        console.warn(new Error(`⚡  Unable to set up temp directory for meteor-vite bundles. Will use node_modules instead`, { cause: error }));
+        console.warn(new MeteorViteError(`Unable to set up temp directory for meteor-vite bundles. Will use node_modules instead`, { cause: error }));
         return Path.resolve(cwd, 'node_modules', '.vite-meteor-temp');
     }
 }
