@@ -3,6 +3,8 @@ import { getBuildConfig } from '../utility/Helpers';
 import Logger from '../utility/Logger';
 import { cwd } from '../workers';
 import fs from 'fs-extra';
+
+// @ts-ignore
 import { execaSync } from 'execa';
 
 const {
@@ -93,6 +95,8 @@ export function prepareTemporaryMeteorProject() {
         const imports = lines.filter(line => line.startsWith('import') && line.includes('meteor/'))
         fs.writeFileSync(file, imports.join('\n'))
     }
+    
+    // todo: drop execa as a dependency and use a promise instead
     execaSync('meteor', [
         'build',
         tempMeteorOutDir,
