@@ -29,8 +29,10 @@ export function posixPath(filePath: string) {
 
 export function getTempDir() {
     const packageJson = getProjectPackageJson();
+    const tempRootDir = packageJson?.meteor?.vite?.tempBuildDir || OS.tmpdir();
+    
     try {
-        const tempDir = Path.resolve(packageJson?.meteorVite?.tempDir || OS.tmpdir(), 'meteor-vite', packageJson.name);
+        const tempDir = Path.resolve(tempRootDir, 'meteor-vite', packageJson.name);
         FS.mkdirSync(tempDir, { recursive: true });
         return tempDir;
     } catch (error) {
