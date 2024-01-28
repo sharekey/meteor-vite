@@ -6,7 +6,7 @@ import Compiler, { BUNDLE_FILE_EXTENSION } from './plugin/Compiler';
 import { Meteor } from 'meteor/meteor';
 import { getBuildConfig, posixPath } from './utility/Helpers';
 import { MeteorViteError } from './utility/Errors';
-import { prepareTemporaryMeteorProject } from './plugin/IntermediaryMeteorProject';
+import { prepareTemporaryMeteorProject, prepareViteBundle } from './plugin/IntermediaryMeteorProject';
 
 
 
@@ -97,32 +97,6 @@ ${meteorViteImport}
   });
 }
 
-/**
- * Use temporary Meteor project to build the Vite production bundle without affecting the source project.
- */
-async function prepareViteBundle() {
-  prepareTemporaryMeteorProject();
-  const profile = Logger.startProfiler();
-
-  Logger.info('Building with Vite...')
-
-  // Build with vite
-  const { payload } = await viteBuild();
-
-  if (!payload.success) {
-    throw new MeteorViteError('Vite build failed!');
-  }
-
-  profile.complete(`Vite build completed`);
-
-  const entryAsset = payload.output.find(o => o.fileName === 'meteor-entry.js' && o.type === 'chunk')
-  if (!entryAsset) {
-    throw new MeteorViteError('No meteor-entry chunk found')
-  }
-
-  return { payload, entryAsset }
-}
-
 function transpileViteBundle({ viteOutSrcDir, payload }) {
   const profile = Logger.startProfiler();
   Logger.info('Transpiling Vite bundle for Meteor...');
@@ -154,27 +128,4 @@ function transpileViteBundle({ viteOutSrcDir, payload }) {
   fs.writeFileSync(path.join(viteOutSrcDir, '.gitignore'), '/**');
 
   profile.complete('Transpile completed');
-}
-
-/**
- * Create a worker to build a Vite production bundle from the temporary Meteor project
- * @returns {Promise<WorkerResponseData<'buildResult'>>}
- */
-function viteBuild() {
-  return new Promise((resolve, reject) => {
-    const worker = createWorkerFork({
-      buildResult: (result) => resolve(result) ,
-    });
-
-    worker.call({
-      method: 'vite.build',
-      params: [{
-        packageJson: pkg,
-        meteor: {
-          packagePath: path.join(tempMeteorOutDir, 'bundle', 'programs', 'web.browser', 'packages'),
-          isopackPath: path.join(tempMeteorProject, '.meteor', 'local', 'isopacks'),
-        },
-      }],
-    })
-  });
 }

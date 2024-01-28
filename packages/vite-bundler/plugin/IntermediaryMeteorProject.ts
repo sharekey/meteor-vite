@@ -1,7 +1,9 @@
 import path from 'node:path';
+import { WorkerResponseData } from '../../../npm-packages/meteor-vite/src/meteor/IPC/methods';
+import { MeteorViteError } from '../utility/Errors';
 import { getBuildConfig } from '../utility/Helpers';
 import Logger from '../utility/Logger';
-import { cwd } from '../workers';
+import { createWorkerFork, cwd } from '../workers';
 import fs from 'fs-extra';
 
 // @ts-ignore
@@ -18,7 +20,7 @@ const {
  * Build a temporary Meteor project to use for safely building the Vite production bundle to be fed into the Meteor
  * compiler
  */
-export function prepareTemporaryMeteorProject() {
+function prepareTemporaryMeteorProject() {
     const profile = Logger.startProfiler();
     const filesToCopy = [
         path.join('.meteor', '.finished-upgraders'),
@@ -114,4 +116,55 @@ export function prepareTemporaryMeteorProject() {
     })
     
     profile.complete(`Packages built`);
+}
+
+/**
+ * Use temporary Meteor project to build the Vite production bundle without affecting the source project.
+ */
+export async function prepareViteBundle() {
+    prepareTemporaryMeteorProject();
+    const profile = Logger.startProfiler();
+    
+    Logger.info('Building with Vite...')
+    
+    // Build with vite
+    const { payload } = await viteBuild();
+    
+    if (!payload.success) {
+        throw new MeteorViteError('Vite build failed!');
+    }
+    
+    profile.complete(`Vite build completed`);
+    
+    const entryAsset = payload.output?.find(o => o.fileName === 'meteor-entry.js' && o.type === 'chunk')
+    
+    if (!entryAsset) {
+        throw new MeteorViteError('No meteor-entry chunk found')
+    }
+    
+    return { payload, entryAsset }
+}
+
+
+/**
+ * Create a worker to build a Vite production bundle from the temporary Meteor project
+ * @returns {Promise<WorkerResponseData<'buildResult'>>}
+ */
+function viteBuild(): Promise<WorkerResponseData<'buildResult'>> {
+    return new Promise((resolve, reject) => {
+        const worker = createWorkerFork({
+            buildResult: (result) => resolve(result) ,
+        });
+        
+        worker.call({
+            method: 'vite.build',
+            params: [{
+                packageJson: pkg,
+                meteor: {
+                    packagePath: path.join(tempMeteorOutDir, 'bundle', 'programs', 'web.browser', 'packages'),
+                    isopackPath: path.join(tempMeteorProject, '.meteor', 'local', 'isopacks'),
+                },
+            }],
+        })
+    });
 }
