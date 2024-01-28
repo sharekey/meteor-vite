@@ -36,7 +36,8 @@ Plugin.registerCompiler({
 try {
   // Meteor v3 build process (Async-await)
   if (Meteor.isFibersDisabled) {
-    processViteBundle(await prepareViteBundle());
+    const bundle = await prepareViteBundle();
+    processViteBundle(bundle);
     return;
   }
 
