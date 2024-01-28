@@ -30,6 +30,8 @@ if (!meteorMainModule) {
 }
 
 
+// In development, clients will connect to the Vite development server directly. So there is no need for Meteor
+// to do any work.
 if (process.env.NODE_ENV !== 'production') return
 
 Plugin.registerCompiler({
