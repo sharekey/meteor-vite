@@ -3,7 +3,7 @@ declare global {
         await<T>(promise: Promise<T>): T;
     }
     
-    namespace Plugin {
+    module Plugin {
         function registerCompiler(config: {
             extensions: string[];
             filenames: string[];
