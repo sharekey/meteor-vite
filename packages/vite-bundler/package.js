@@ -18,6 +18,7 @@ Package.registerBuildPlugin({
         'build.js',
         'workers.ts',
         'plugin/Compiler.ts',
+        'plugin/IntermediaryMeteorProject.ts',
         'utility/Logger.ts',
         'utility/Helpers.ts',
         'utility/Errors.ts'
