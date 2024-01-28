@@ -5,7 +5,7 @@ import Logger from './utility/Logger';
 import Compiler, { BUNDLE_FILE_EXTENSION } from './plugin/Compiler';
 import { Meteor } from 'meteor/meteor';
 import { getBuildConfig, posixPath } from './utility/Helpers';
-import { prepareTemporaryMeteorProject, prepareViteBundle } from './plugin/IntermediaryMeteorProject';
+import { prepareViteBundle } from './plugin/IntermediaryMeteorProject';
 
 // Not in a project (publishing the package or in temporary Meteor build)
 if (process.env.VITE_METEOR_DISABLED) return
