@@ -166,6 +166,20 @@ export const RdbSvelteMeteorData = prepareMock({
     mainModulePath: '/node_modules/meteor/rdb:svelte-meteor-data/index.js',
 })
 
+export const MeteorV3Mocks = {
+    Mongo: prepareMock({
+        fileName: 'meteor-v3/mongo.js',
+        modules: {
+        
+        },
+        packageName: 'mongo',
+        packageScopeExports: {
+            'mongo': ['Mongo'],
+        },
+        mainModulePath: ''
+    })
+}
+
 function prepareMock<Modules extends ModuleList>({ fileName, ...details }: PrepareMockModule<Modules>): MockModule<Modules> {
     const filePath = Path.join(__dirname, `meteor-bundle/${fileName}.bundle`);
     const packageId = `meteor/${details.packageName}`;
