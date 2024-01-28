@@ -7,43 +7,51 @@ import { Meteor } from 'meteor/meteor';
 import { getBuildConfig, posixPath } from './utility/Helpers';
 import { prepareViteBundle } from './plugin/IntermediaryMeteorProject';
 
-// Not in a project (publishing the package or in temporary Meteor build)
-if (process.env.VITE_METEOR_DISABLED) return
-
-const {
-    meteorMainModule,
-    isSimulatedProduction,
-    entryModule,
-    entryModuleFilepath,
-} = getBuildConfig();
-
-// Empty stubs from any previous builds
-{
-  fs.ensureDirSync(path.dirname(entryModuleFilepath));
-  fs.writeFileSync(entryModuleFilepath, `// Stub file for Meteor-Vite\n`, 'utf8');
+function prepareEnvironment() {
+  // Not in a project (publishing the package or in temporary Meteor build)
+  if (process.env.VITE_METEOR_DISABLED) {
+    return { shouldBuild: false };
+  }
+  
+  // Empty stubs from any previous builds
+  {
+    const { entryModuleFilepath } = getBuildConfig();
+    fs.ensureDirSync(path.dirname(entryModuleFilepath));
+    fs.writeFileSync(entryModuleFilepath, `// Stub file for Meteor-Vite\n`, 'utf8');
+  }
+  
+  // In development, clients will connect to the Vite development server directly. So there is no need for Meteor
+  // to do any work.
+  if (process.env.NODE_ENV !== 'production') {
+    return { shouldBuild: false };
+  }
+  
+  Plugin.registerCompiler({
+    extensions: [BUNDLE_FILE_EXTENSION],
+    filenames: [],
+  }, () => new Compiler())
+  
+  return { shouldBuild: true };
 }
 
-
-// In development, clients will connect to the Vite development server directly. So there is no need for Meteor
-// to do any work.
-if (process.env.NODE_ENV !== 'production') return
-
-Plugin.registerCompiler({
-  extensions: [BUNDLE_FILE_EXTENSION],
-  filenames: [],
-}, () => new Compiler())
-
 try {
+  const { shouldBuild } = prepareEnvironment();
+  
+  if (!shouldBuild) {
+    // Build not necessary
+  }
+  
   // Meteor v3 build process (Async-await)
-  if (Meteor.isFibersDisabled) {
+  else if (Meteor.isFibersDisabled) {
     const bundle = await prepareViteBundle();
     processViteBundle(bundle);
-    return;
   }
-
+  
   // Meteor v2 build process (Fibers)
-  const bundle = Promise.await(prepareViteBundle());
-  processViteBundle(bundle);
+  else {
+    const bundle = Promise.await(prepareViteBundle());
+    processViteBundle(bundle);
+  }
 } catch (error) {
   Logger.error(' Failed to complete build process:\n', error);
   throw error;
