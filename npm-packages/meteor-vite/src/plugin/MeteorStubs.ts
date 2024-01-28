@@ -206,6 +206,7 @@ type ResolvedPluginConfig = Required<PluginSettings>;
  * todo: expand types
  */
 export type ProjectJson = {
+    name: string;
     dependencies: {
         'meteor-vite'?: string;
     }
