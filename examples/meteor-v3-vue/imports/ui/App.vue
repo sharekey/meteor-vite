@@ -38,14 +38,8 @@ const linkForm = reactive({
       title: '',
       url: '',
     },
-    create() {
-        Meteor.call('links.create', linkForm.data, (error, response) => {
-            if (error) {
-                console.error(error);
-                return;
-            }
-            console.log({ response });
-        });
+    async create() {
+        await Meteor.callAsync('links.create', linkForm.data);
     }
 })
 Tracker.autorun(() => {
