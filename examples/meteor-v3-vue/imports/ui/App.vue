@@ -15,6 +15,7 @@
 <script lang="ts" setup>
 import { ref } from 'vue';
 import LinksCollection, { LinkDocument } from '../api/links/links.collection';
+import { Tracker } from 'meteor/tracker';
 
 const links = ref<LinkDocument[]>([]);
 const ready = ref(false);
