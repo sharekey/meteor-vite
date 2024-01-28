@@ -6,6 +6,7 @@ import Logger from './utility/Logger';
 import Compiler, { BUNDLE_FILE_EXTENSION } from './plugin/Compiler';
 import { Meteor } from 'meteor/meteor';
 import { getTempDir, posixPath } from './utility/Helpers';
+import { MeteorViteError } from './utility/Errors';
 
 const pkg = getProjectPackageJson();
 const meteorMainModule = pkg.meteor?.mainModule?.client
@@ -20,7 +21,7 @@ const tempMeteorOutDir = path.join(tempDir, 'bundle', 'meteor')
 if (process.env.VITE_METEOR_DISABLED) return
 
 if (!meteorMainModule) {
-  throw new Error('No meteor main module found, please add meteor.mainModule.client to your package.json')
+  throw new MeteorViteError('No meteor main module found, please add meteor.mainModule.client to your package.json')
 }
 
 // Empty stubs from any previous builds
@@ -208,14 +209,14 @@ async function prepareViteBundle() {
   const { payload } = await viteBuild();
 
   if (!payload.success) {
-    throw new Error('Vite build failed!');
+    throw new MeteorViteError('Vite build failed!');
   }
 
   profile.complete(`Vite build completed`);
 
   const entryAsset = payload.output.find(o => o.fileName === 'meteor-entry.js' && o.type === 'chunk')
   if (!entryAsset) {
-    throw new Error('No meteor-entry chunk found')
+    throw new MeteorViteError('No meteor-entry chunk found')
   }
 
   return { payload, entryAsset }
