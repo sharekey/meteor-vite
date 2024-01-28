@@ -168,3 +168,5 @@ function viteBuild(): Promise<WorkerResponseData<'buildResult'>> {
         })
     });
 }
+
+export type ViteBundleOutput = Awaited<ReturnType<typeof prepareViteBundle>>;
