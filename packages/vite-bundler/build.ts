@@ -1,5 +1,6 @@
 import path from 'node:path';
 import fs from 'fs-extra';
+import * as process from 'process';
 import { cwd } from './workers';
 import Logger from './utility/Logger';
 import Compiler, { BUNDLE_FILE_EXTENSION } from './plugin/Compiler';
@@ -7,45 +8,51 @@ import { Meteor } from 'meteor/meteor';
 import { getBuildConfig, posixPath } from './utility/Helpers';
 import { prepareViteBundle, ViteBundleOutput } from './plugin/IntermediaryMeteorProject';
 
-// Not in a project (publishing the package or in temporary Meteor build)
-if (process.env.VITE_METEOR_DISABLED) return
-
 const {
   meteorMainModule,
   isSimulatedProduction,
   entryModule,
   entryModuleFilepath,
   viteOutSrcDir,
+  pluginEnabled,
 } = getBuildConfig();
 
 // Empty stubs from any previous builds
-{
+if (pluginEnabled) {
   fs.ensureDirSync(path.dirname(entryModuleFilepath));
   fs.writeFileSync(entryModuleFilepath, `// Stub file for Meteor-Vite\n`, 'utf8');
 }
 
+if (!pluginEnabled) {
+  Logger.info('Build plugin is disabled')
+}
 
 // In development, clients will connect to the Vite development server directly. So there is no need for Meteor
 // to do any work.
-if (process.env.NODE_ENV !== 'production') return
+else if (process.env.NODE_ENV !== 'production') {}
 
-Plugin.registerCompiler({
-  extensions: [BUNDLE_FILE_EXTENSION],
-  filenames: [],
-}, () => new Compiler())
-
-try {
-  // Meteor v3 build process (Async-await)
-  if (Meteor.isFibersDisabled) {
-    await build();
-    return;
-  }
+// Register compiler and start build process
+else {
+  Plugin.registerCompiler({
+    extensions: [BUNDLE_FILE_EXTENSION],
+    filenames: [],
+  }, () => new Compiler());
   
-  // Meteor v2 build process (Fibers)
-  Promise.await(build());
-} catch (error) {
-  Logger.error(' Failed to complete build process:\n', error);
-  throw error;
+  try {
+    // Meteor v3 build process (Async-await)
+    if (Meteor.isFibersDisabled) {
+      await build();
+    }
+    
+    // Meteor v2 build process (Fibers)
+    else {
+      Promise.await(build());
+    }
+    
+  } catch (error) {
+    Logger.error(' Failed to complete build process:\n', error);
+    throw error;
+  }
 }
 
 async function build() {
