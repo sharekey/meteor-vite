@@ -69,6 +69,18 @@ export const Check = prepareMock({
     mainModulePath: '/node_modules/meteor/check/match.js'
 });
 
+export const Mongo = prepareMock({
+    fileName: 'mongo.js',
+    modules: {
+    
+    },
+    packageName: 'mongo',
+    packageScopeExports: {
+        'mongo': ['Mongo'],
+    },
+    mainModulePath: ''
+})
+
 export const MeteorJs = prepareMock({
     fileName: 'meteor.js',
     modules: {},
