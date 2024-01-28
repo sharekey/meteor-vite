@@ -23,10 +23,6 @@ const {
     tempMeteorOutDir,
 } = getBuildConfig();
 
-if (!meteorMainModule) {
-  throw new MeteorViteError('No meteor main module found, please add meteor.mainModule.client to your package.json')
-}
-
 // Empty stubs from any previous builds
 {
   fs.ensureDirSync(path.dirname(entryModuleFilepath));
