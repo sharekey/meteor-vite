@@ -7,51 +7,43 @@ import { Meteor } from 'meteor/meteor';
 import { getBuildConfig, posixPath } from './utility/Helpers';
 import { prepareViteBundle } from './plugin/IntermediaryMeteorProject';
 
-function prepareEnvironment() {
-  // Not in a project (publishing the package or in temporary Meteor build)
-  if (process.env.VITE_METEOR_DISABLED) {
-    return { shouldBuild: false };
-  }
-  
-  // Empty stubs from any previous builds
-  {
-    const { entryModuleFilepath } = getBuildConfig();
-    fs.ensureDirSync(path.dirname(entryModuleFilepath));
-    fs.writeFileSync(entryModuleFilepath, `// Stub file for Meteor-Vite\n`, 'utf8');
-  }
-  
-  // In development, clients will connect to the Vite development server directly. So there is no need for Meteor
-  // to do any work.
-  if (process.env.NODE_ENV !== 'production') {
-    return { shouldBuild: false };
-  }
-  
-  Plugin.registerCompiler({
-    extensions: [BUNDLE_FILE_EXTENSION],
-    filenames: [],
-  }, () => new Compiler())
-  
-  return { shouldBuild: true };
+// Not in a project (publishing the package or in temporary Meteor build)
+if (process.env.VITE_METEOR_DISABLED) return
+
+const {
+  meteorMainModule,
+  isSimulatedProduction,
+  entryModule,
+  entryModuleFilepath,
+} = getBuildConfig();
+
+// Empty stubs from any previous builds
+{
+  fs.ensureDirSync(path.dirname(entryModuleFilepath));
+  fs.writeFileSync(entryModuleFilepath, `// Stub file for Meteor-Vite\n`, 'utf8');
 }
 
+
+// In development, clients will connect to the Vite development server directly. So there is no need for Meteor
+// to do any work.
+if (process.env.NODE_ENV !== 'production') return
+
+Plugin.registerCompiler({
+  extensions: [BUNDLE_FILE_EXTENSION],
+  filenames: [],
+}, () => new Compiler())
+
 try {
-  const { shouldBuild } = prepareEnvironment();
-  
-  if (!shouldBuild) {
-    // Build not necessary
-  }
-  
   // Meteor v3 build process (Async-await)
-  else if (Meteor.isFibersDisabled) {
+  if (Meteor.isFibersDisabled) {
     const bundle = await prepareViteBundle();
     processViteBundle(bundle);
+    return;
   }
   
   // Meteor v2 build process (Fibers)
-  else {
-    const bundle = Promise.await(prepareViteBundle());
-    processViteBundle(bundle);
-  }
+  const bundle = Promise.await(prepareViteBundle());
+  processViteBundle(bundle);
 } catch (error) {
   Logger.error(' Failed to complete build process:\n', error);
   throw error;
@@ -59,10 +51,10 @@ try {
 
 function processViteBundle({ payload, entryAsset }) {
   const viteOutSrcDir = path.join(cwd, 'client', 'vite')
-
+  
   // Transpile and push the Vite bundle into the Meteor project's source directory
   transpileViteBundle({ viteOutSrcDir, payload });
-
+  
   const moduleImportPath = JSON.stringify(posixPath(entryModule));
   const meteorViteImport = `import ${moduleImportPath};`
   const meteorViteImportTemplate = `
@@ -78,7 +70,7 @@ ${meteorViteImport}
 
 
 `.trimLeft();
-
+  
   // Patch project's meteor entry with import for meteor-vite's entry module.
   // in node_modules/meteor-vite/temp
   const meteorEntry = path.join(cwd, meteorMainModule)
@@ -86,13 +78,13 @@ ${meteorViteImport}
   if (!originalEntryContent.includes(moduleImportPath.replace(/['"`]/g, ''))) {
     fs.writeFileSync(meteorEntry, `${meteorViteImportTemplate}\n${originalEntryContent}`, 'utf8')
   }
-
+  
   // Patch the meteor-vite entry module with an import for the project's Vite production bundle
   // in <project root>/client/vite
   const bundleEntryPath = path.relative(path.dirname(entryModuleFilepath), path.join(viteOutSrcDir, entryAsset.fileName));
   const entryModuleContent = `import ${JSON.stringify(`${posixPath(bundleEntryPath)}`)}`
   fs.writeFileSync(entryModuleFilepath, entryModuleContent, 'utf8')
-
+  
   Compiler.addCleanupHandler(() => {
     if (isSimulatedProduction) return;
     fs.removeSync(viteOutSrcDir);
@@ -103,14 +95,14 @@ ${meteorViteImport}
 function transpileViteBundle({ viteOutSrcDir, payload }) {
   const profile = Logger.startProfiler();
   Logger.info('Transpiling Vite bundle for Meteor...');
-
+  
   fs.ensureDirSync(viteOutSrcDir)
   fs.emptyDirSync(viteOutSrcDir)
   for (const { fileName: file } of payload.output) {
     const from = path.join(payload.outDir, file)
     const to = path.join(viteOutSrcDir, `${file}.${BUNDLE_FILE_EXTENSION}`);
     fs.ensureDirSync(path.dirname(to))
-
+    
     if (path.extname(from) === '.js') {
       // Transpile to Meteor target (Dynamic import support)
       // @TODO don't use Babel
@@ -129,6 +121,6 @@ function transpileViteBundle({ viteOutSrcDir, payload }) {
   }
   // Add .gitignore file to prevent the transpiled bundle from being committed accidentally.
   fs.writeFileSync(path.join(viteOutSrcDir, '.gitignore'), '/**');
-
+  
   profile.complete('Transpile completed');
 }
