@@ -169,7 +169,7 @@ export const RdbSvelteMeteorData = prepareMock({
 
 export const MeteorV3Mocks = {
     Mongo: prepareMock({
-        fileName: 'meteor-v3/mongo.js',
+        fileName: 'mongo.js',
         modules: {
         
         },
