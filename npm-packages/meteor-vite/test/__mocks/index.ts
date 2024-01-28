@@ -3,6 +3,7 @@ import Path from 'path';
 import { ModuleList, PackageScopeExports } from '../../src/meteor/parser/Parser';
 
 export const AllMockPackages: MockModule<ModuleList>[] = [];
+export const AllMockPackages_MeteorV3: MockModule<ModuleList>[] = [];
 
 export const TsModules = prepareMock({
     packageName: 'test:ts-modules',
@@ -176,11 +177,12 @@ export const MeteorV3Mocks = {
         packageScopeExports: {
             'mongo': ['Mongo'],
         },
-        mainModulePath: ''
+        mainModulePath: '',
+        meteorVersion: '3',
     })
 }
 
-function prepareMock<Modules extends ModuleList>({ fileName, ...details }: PrepareMockModule<Modules>): MockModule<Modules> {
+function prepareMock<Modules extends ModuleList>({ fileName, meteorVersion, ...details }: PrepareMockModule<Modules>): MockModule<Modules> {
     const filePath = Path.join(__dirname, `meteor-bundle/${fileName}.bundle`);
     const packageId = `meteor/${details.packageName}`;
     
@@ -192,7 +194,11 @@ function prepareMock<Modules extends ModuleList>({ fileName, ...details }: Prepa
         ...details,
     }
     
-    AllMockPackages.push(mock);
+    if (meteorVersion === '3') {
+        AllMockPackages_MeteorV3.push(mock);
+    } else {
+        AllMockPackages.push(mock);
+    }
     
     return mock;
 }
@@ -258,6 +264,7 @@ interface PrepareMockModule<Modules extends ModuleList> {
     modules: Modules;
     packageScopeExports: PackageScopeExports,
     mainModulePath: string;
+    meteorVersion?: '2' | '3';
 }
 
 interface MockModule<Modules extends ModuleList> extends PrepareMockModule<Modules> {
