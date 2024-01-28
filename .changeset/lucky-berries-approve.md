@@ -3,3 +3,5 @@
 ---
 
 Add support for Meteor v3.0-beta.0
+
+- Fixes #81
