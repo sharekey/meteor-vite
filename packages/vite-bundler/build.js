@@ -2,10 +2,10 @@ import path from 'node:path';
 import fs from 'fs-extra';
 import { execaSync } from 'execa';
 import { createWorkerFork, cwd, getProjectPackageJson } from './workers';
-import os from 'node:os';
 import Logger from './utility/Logger';
 import Compiler, { BUNDLE_FILE_EXTENSION } from './plugin/Compiler';
 import { Meteor } from 'meteor/meteor';
+import { getTempDir, posixPath } from './utility/Helpers';
 
 const pkg = getProjectPackageJson();
 const meteorMainModule = pkg.meteor?.mainModule?.client
@@ -273,19 +273,4 @@ function viteBuild() {
       }],
     })
   });
-}
-
-function posixPath(filePath) {
-  return filePath.split(path.sep).join('/')
-}
-
-function getTempDir() {
-  try {
-    const tempDir = path.resolve(pkg?.meteorVite?.tempDir || os.tmpdir(), 'meteor-vite', pkg.name);
-    fs.mkdirSync(tempDir, { recursive: true });
-    return tempDir;
-  } catch (error) {
-    console.warn(new Error(`⚡  Unable to set up temp directory for meteor-vite bundles. Will use node_modules instead`, { cause: error }));
-    return path.resolve(cwd, 'node_modules', '.vite-meteor-temp');
-  }
 }
