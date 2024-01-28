@@ -3,6 +3,12 @@ declare global {
         await<T>(promise: Promise<T>): T;
     }
     
+    namespace NodeJS {
+        interface ProcessEnv {
+            VITE_METEOR_DISABLED?: string; // Use to disable the build plugin entirely. E.g. for publishing the package.
+        }
+    }
+    
     module Plugin {
         type CompilerPluginConfig = {
             extensions: string[];
