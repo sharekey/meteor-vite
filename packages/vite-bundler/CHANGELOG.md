@@ -1,5 +1,11 @@
 # vite-bundler
 
+## 1.12.3
+
+### Patch Changes
+
+- af8c83a: Publish package using Meteor v3.0-beta.0
+
 ## 1.12.2
 
 ### Patch Changes
