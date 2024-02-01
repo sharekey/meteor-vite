@@ -7,19 +7,19 @@
           "type": "patch"
         }
       ],
-      "summary": "Add Meteor V3 beta build version constraints to package.js",
-      "id": "dry-terms-cough"
+      "summary": "Publish package using Meteor v3.0-beta.0",
+      "id": "empty-snakes-double"
     }
   ],
   "releases": [
     {
       "name": "vite-bundler",
       "type": "patch",
-      "oldVersion": "1.12.1",
+      "oldVersion": "1.12.2",
       "changesets": [
-        "dry-terms-cough"
+        "empty-snakes-double"
       ],
-      "newVersion": "1.12.2"
+      "newVersion": "1.12.3"
     }
   ]
 }
