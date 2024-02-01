@@ -14,7 +14,7 @@
   },
   "scripts": {
     "version:vite-bundler": "meteor node .bin/release-meteor-package.mjs version",
-    "publish:vite-bundler": "meteor node .bin/release-meteor-package.mjs publish",
+    "publish:vite-bundler": "METEOR_RELEASE=3.0-beta.0 meteor node .bin/release-meteor-package.mjs publish",
 
     "example": ".bin/example-app.sh",
     "prepare:example": "npm run example prepare",
