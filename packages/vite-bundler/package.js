@@ -1,18 +1,18 @@
 Package.describe({
-    name: 'jorgenvatle:vite-bundler',
-    version: '1.12.3',
-    summary: 'Integrate the Vite.js bundler with Meteor',
-    git: 'https://github.com/JorgenVatle/meteor-vite',
-    documentation: 'README.md',
+  name: 'jorgenvatle:vite-bundler',
+  version: '1.12.3',
+  summary: 'Integrate the Vite.js bundler with Meteor',
+  git: 'https://github.com/JorgenVatle/meteor-vite',
+  documentation: 'README.md',
 })
 
 Package.registerBuildPlugin({
     name: 'vite',
     use: [
-        'ecmascript@0.16.2 || 1.0.0 || 0.16.8-beta300.0',
+        'ecmascript@0.16.2 || 1.0.0',
         'caching-compiler@1.2.2 || 2.0.0-beta300.0',
-        'babel-compiler@7.9.0 || 7.11.0-beta300.0',
-        'typescript@3.0.0 || 4.0.0 || 5.0.0 || 4.9.5-beta300.0',
+        'babel-compiler@7.9.0',
+        'typescript@3.0.0 || 4.0.0 || 5.0.0',
     ],
     sources: [
         'build.ts',
@@ -40,7 +40,7 @@ Package.onUse(function (api) {
         'fetch',
         'webapp',
         'mongo',
-        'typescript@3.0.0 || 4.0.0 || 5.0.0 || 4.9.5-beta300.0',
+        'typescript@3.0.0 || 4.0.0 || 5.0.0',
         'isobuild:compiler-plugin@1.0.0',
     ]);
     api.use([
