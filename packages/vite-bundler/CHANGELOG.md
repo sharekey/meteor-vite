@@ -1,5 +1,11 @@
 # vite-bundler
 
+## 1.12.2
+
+### Patch Changes
+
+- 61a8c8a: Add Meteor V3 beta build version constraints to package.js
+
 ## 1.12.1
 
 ### Patch Changes
