@@ -8,7 +8,7 @@ on:
       meteorRelease:
         type: string
         default: '2.12'
-      publish:
+      push:
         type: boolean
         default: false
       imageRegistry:
@@ -22,7 +22,7 @@ jobs:
   build-on-ubuntu:
     name: 'Ubuntu'
     runs-on: ubuntu-latest
-    if: inputs.publish != true
+    if: inputs.push != true
     timeout-minutes: 10
     steps:
       - name: 'Checkout'
@@ -92,7 +92,7 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           context: .
-          push: ${{ inputs.publish }}
+          push: ${{ inputs.push }}
           tags: |
             ${{ steps.image.outputs.deploymentImage }}
             ${{ steps.meta.outputs.tags }}
