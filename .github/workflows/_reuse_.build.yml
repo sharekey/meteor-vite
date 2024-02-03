@@ -20,9 +20,13 @@ on:
       meteorBaseImage:
         type: string
         default: geoffreybooth/meteor-base
+    outputs:
+      deploymentImage: ${{ jobs.docker.outputs.deploymentImage }}
+      imageVersion: ${{ jobs.docker.outputs.imageVersion }}
+      meteorRelease: ${{ jobs.docker.outputs.meteorRelease }}
 
 jobs:
-  build-on-ubuntu:
+  ubuntu:
     name: 'Ubuntu'
     runs-on: ubuntu-latest
     if: inputs.push != true
@@ -44,7 +48,7 @@ jobs:
       - name: 'Build for production'
         run: meteor npm run example build ${{ inputs.appBasename }}
 
-  build-with-docker:
+  docker:
     runs-on: ubuntu-latest
     name: Docker 🐋
     outputs:
