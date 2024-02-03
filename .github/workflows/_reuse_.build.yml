@@ -8,6 +8,9 @@ on:
       meteorRelease:
         type: string
         default: '2.12'
+      nodeVersion:
+        type: string
+        default: '14-alpine'
       push:
         type: boolean
         default: false
