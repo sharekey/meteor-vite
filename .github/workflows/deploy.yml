@@ -14,8 +14,8 @@ jobs:
     secrets: inherit
     with:
       appBasename: '${{ matrix.basename }}'
-      nodeVersion: ${{ matrix.nodeVersion }}
-      meteorBaseImage: ${{ matrix.meteorBaseImage }}
+      nodeVersion: ${{ matrix.nodeVersion || '14-alpine' }}
+      meteorBaseImage: ${{ matrix.meteorBaseImage || 'geoffreybooth/meteor-base' }}
     strategy:
       matrix:
         include:
