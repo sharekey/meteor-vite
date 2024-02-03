@@ -13,32 +13,25 @@ on:
       - release
 
 jobs:
-  vue:
-    name: 'Vue'
+  build:
+    name: '${{ matrix.name }}'
     uses: ./.github/workflows/_reuse_.build.yml
     with:
-      name: 'vue'
+      name: '${{ matrix.basename }}'
+    strategy:
+      matrix:
+        include:
+          - name: Vue
+            basename: vue
 
-  svelte:
-    name: 'Svelte'
-    uses: ./.github/workflows/_reuse_.build.yml
-    with:
-      name: 'svelte'
+          - name: Svelte
+            basename: svelte
 
-  react:
-    name: 'React'
-    uses: ./.github/workflows/_reuse_.build.yml
-    with:
-      name: 'react'
+          - name: React
+            basename: react
 
-  solid:
-    name: 'Solid'
-    uses: ./.github/workflows/_reuse_.build.yml
-    with:
-      name: 'solid'
+          - name: Solid.js
+            basename: solid
 
-  vue-meteor-v3:
-    name: 'Meteor v3'
-    uses: ./.github/workflows/_reuse_.build.yml
-    with:
-      name: 'meteor-v3-vue'
+          - name: Meteor V3 + Vue
+            basename: meteor-v3-vue
