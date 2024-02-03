@@ -1,5 +1,13 @@
 # vite-bundler
 
+## 1.12.4
+
+### Patch Changes
+
+- c460b9b: Publish package using Meteor v2
+
+  - Fixes #101
+
 ## 1.12.3
 
 ### Patch Changes
