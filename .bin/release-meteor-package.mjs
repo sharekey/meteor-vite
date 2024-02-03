@@ -81,7 +81,13 @@ async function applyVersion() {
 async function publish() {
     logger.info(`⚡  Publishing ${meteorPackage.releaseName}...`);
 
-    shell(`meteor publish --release ${process.env.METEOR_RELEASE}`, {
+    const flags = [];
+
+    if (process.env.METEOR_RELEASE) {
+        flags.push([`--release ${process.env.METEOR_RELEASE}`]);
+    }
+
+    shell(`meteor publish ${flags.join(' ')}`, {
         async: true,
         cwd: Path.dirname(meteorPackage.packageJsPath),
         env: {
