@@ -26,6 +26,7 @@ Use [Vite](https://vitejs.dev) in your Meteor app! ⚡️
   - [**Meteor v3** (beta)](https://guide.meteor.com/3.0-migration) *Tested only with core packages*
     - [Example Project](/examples/meteor-v3-vue)
     - [Preview](https://meteor-v3-vue--meteor-vite.wcaserver.com)
+    - [Pre-release branch](https://github.com/JorgenVatle/meteor-vite/tree/meteor-v3)
 
 
 ## Installation
