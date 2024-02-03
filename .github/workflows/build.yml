@@ -6,7 +6,7 @@ on:
     branches:
       - main
       - release
-      - github-step-summary
+      - meteor-v3
   pull_request:
     branches:
       - main
