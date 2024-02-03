@@ -21,9 +21,12 @@ on:
         type: string
         default: geoffreybooth/meteor-base
     outputs:
-      deploymentImage: ${{ jobs.docker.outputs.deploymentImage }}
-      imageVersion: ${{ jobs.docker.outputs.imageVersion }}
-      meteorRelease: ${{ jobs.docker.outputs.meteorRelease }}
+      deploymentImage:
+        value: ${{ jobs.docker.outputs.deploymentImage }}
+      imageVersion:
+        value: ${{ jobs.docker.outputs.imageVersion }}
+      meteorRelease:
+        value: ${{ jobs.docker.outputs.meteorRelease }}
 
 jobs:
   ubuntu:
