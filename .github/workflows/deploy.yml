@@ -9,29 +9,38 @@ on:
 
 jobs:
   vue:
-    name: '${{ matrix.name }}'
+    name: 'Vue'
     uses: ./.github/workflows/_reuse_.deploy.yml
     secrets: inherit
     with:
-      appBasename: '${{ matrix.basename }}'
-      nodeVersion: ${{ matrix.nodeVersion || '14-alpine' }}
-      meteorBaseImage: ${{ matrix.meteorBaseImage || 'geoffreybooth/meteor-base' }}
-    strategy:
-      matrix:
-        include:
-          - name: Vue
-            basename: vue
+      appBasename: 'vue'
 
-          - name: Svelte
-            basename: svelte
+  svelte:
+    name: 'Svelte'
+    uses: ./.github/workflows/_reuse_.deploy.yml
+    secrets: inherit
+    with:
+      appBasename: 'svelte'
 
-          - name: React
-            basename: react
+  react:
+    name: 'React'
+    uses: ./.github/workflows/_reuse_.deploy.yml
+    secrets: inherit
+    with:
+      appBasename: 'react'
 
-          - name: Solid.js
-            basename: solid
+  solid:
+    name: 'Solid'
+    uses: ./.github/workflows/_reuse_.deploy.yml
+    secrets: inherit
+    with:
+      appBasename: 'solid'
 
-          - name: Meteor V3 + Vue
-            basename: meteor-v3-vue
-            meteorBaseImage: jorgenvatle/meteor-base
-            nodeVersion: 20-alpine
+  vue-meteor-v3:
+    name: 'Meteor v3'
+    uses: ./.github/workflows/_reuse_.deploy.yml
+    secrets: inherit
+    with:
+      appBasename: 'meteor-v3-vue'
+      meteorBaseImage: 'jorgenvatle/meteor-base'
+      nodeVersion: '20-alpine'
