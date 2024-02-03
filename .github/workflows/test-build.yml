@@ -17,7 +17,9 @@ jobs:
     name: '${{ matrix.name }}'
     uses: ./.github/workflows/_reuse_.build.yml
     with:
-      appBasename: '${{ matrix.basename }}'
+      appBasename: ${{ matrix.basename }}
+      meteorBaseImage: ${{ matrix.meteorBaseImage   || 'geoffreybooth/meteor-base' }}
+      nodeVersion: ${{ matrix.nodeVersion           || '14-alpine' }}
     strategy:
       matrix:
         include:
@@ -35,3 +37,5 @@ jobs:
 
           - name: Meteor V3 + Vue
             basename: meteor-v3-vue
+            meteorBaseImage: jorgenvatle/meteor-base
+            nodeVersion: '20-alpine'
