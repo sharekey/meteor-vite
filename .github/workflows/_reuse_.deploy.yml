@@ -32,7 +32,7 @@ jobs:
       appBasename: ${{ inputs.appBasename }}
       nodeVersion: ${{ inputs.nodeVersion }}
       meteorBaseImage: ${{ inputs.meteorBaseImage }}
-      publish: true
+      push: true
 
 
   deploy:
