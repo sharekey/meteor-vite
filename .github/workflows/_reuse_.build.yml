@@ -2,14 +2,21 @@ name: 'Reusable: Build'
 on:
   workflow_call:
     inputs:
-      name:
+      appBasename:
         required: true
         type: string
+      meteorRelease:
+        type: string
+        default: '2.12'
+      environment:
+        type: string
+        default: 'ubuntu'
 
 jobs:
   build-on-ubuntu:
     name: 'Build on Ubuntu'
     runs-on: ubuntu-latest
+    if: inputs.environment == 'ubuntu'
     timeout-minutes: 10
     steps:
       - name: 'Checkout'
@@ -17,14 +24,14 @@ jobs:
       - name: 'Setup Meteor'
         uses: meteorengineer/setup-meteor@v1
         with:
-          meteor-release: '2.12'
+          meteor-release: ${{ inputs.meteorRelease }}
 
       - name: 'Install dependencies'
-        run: meteor npm run example install ${{ inputs.name }}
+        run: meteor npm run example install ${{ inputs.appBasename }}
 
       - name: 'Link meteor-vite package'
-        run: meteor npm run example link ${{ inputs.name }}
+        run: meteor npm run example link ${{ inputs.appBasename }}
 
       - name: 'Build for production'
-        run: meteor npm run example build ${{ inputs.name }}
+        run: meteor npm run example build ${{ inputs.appBasename }}
 

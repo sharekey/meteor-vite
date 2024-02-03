@@ -17,7 +17,7 @@ jobs:
     name: '${{ matrix.name }}'
     uses: ./.github/workflows/_reuse_.build.yml
     with:
-      name: '${{ matrix.basename }}'
+      appBasename: '${{ matrix.basename }}'
     strategy:
       matrix:
         include:
