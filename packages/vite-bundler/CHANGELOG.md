@@ -1,5 +1,11 @@
 # vite-bundler
 
+## 2.0.0-beta.0
+
+### Major Changes
+
+- da718de: Release package using Meteor v3
+
 ## 1.12.4
 
 ### Patch Changes
