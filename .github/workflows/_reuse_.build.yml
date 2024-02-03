@@ -8,9 +8,6 @@ on:
       meteorRelease:
         type: string
         default: '2.12'
-      environment:
-        type: string
-        default: 'ubuntu'
       publish:
         type: boolean
         default: false
@@ -23,9 +20,9 @@ on:
 
 jobs:
   build-on-ubuntu:
-    name: 'Build'
+    name: 'Ubuntu'
     runs-on: ubuntu-latest
-    if: inputs.environment == 'ubuntu'
+    if: inputs.publish != true
     timeout-minutes: 10
     steps:
       - name: 'Checkout'
@@ -44,9 +41,9 @@ jobs:
       - name: 'Build for production'
         run: meteor npm run example build ${{ inputs.appBasename }}
 
-  build:
+  build-with-docker:
     runs-on: ubuntu-latest
-    name: Build 🐋
+    name: Docker 🐋
     outputs:
       deploymentImage: ${{ steps.image.outputs.deploymentImage }}
       imageVersion: ${{ steps.image.outputs.imageVersion }}
