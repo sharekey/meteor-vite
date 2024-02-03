@@ -4,22 +4,33 @@
       "releases": [
         {
           "name": "vite-bundler",
-          "type": "patch"
+          "type": "major"
         }
       ],
-      "summary": "Publish package using Meteor v2\n\n- Fixes #101",
-      "id": "mean-pigs-confess"
+      "summary": "Release package using Meteor v3",
+      "id": "metal-parrots-fail"
     }
   ],
   "releases": [
     {
       "name": "vite-bundler",
-      "type": "patch",
-      "oldVersion": "1.12.3",
+      "type": "major",
+      "oldVersion": "1.12.4",
       "changesets": [
-        "mean-pigs-confess"
+        "metal-parrots-fail"
       ],
-      "newVersion": "1.12.4"
+      "newVersion": "2.0.0-beta.0"
     }
-  ]
+  ],
+  "preState": {
+    "mode": "pre",
+    "tag": "beta",
+    "initialVersions": {
+      "meteor-vite": "1.9.0",
+      "vite-bundler": "1.12.4"
+    },
+    "changesets": [
+      "metal-parrots-fail"
+    ]
+  }
 }
