@@ -30,7 +30,7 @@ on:
 
 jobs:
   ubuntu:
-    name: 'Ubuntu'
+    name: 'Ubuntu 💻'
     runs-on: ubuntu-latest
     if: inputs.push != true
     timeout-minutes: 10
