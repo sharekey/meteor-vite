@@ -77,10 +77,11 @@ ${meteorViteImport}
   // in node_modules/meteor-vite/temp
   const meteorEntry = path.join(cwd, meteorMainModule)
   const originalEntryContent = fs.readFileSync(meteorEntry, 'utf8');
+  let originalEntryPatched = false;
   const oldEntryImports = [
       'meteor-vite/.build/import-vite-bundle.js',
       'meteor-vite/temp/stubs.js'
-  ]
+  ];
   
   // Patch import strings from older builds of the vite-bundler with an up-to-date import.
   for (const oldImport of oldEntryImports) {
@@ -89,10 +90,11 @@ ${meteorViteImport}
     }
     const newContent = originalEntryContent.replace(oldImport, `${moduleImportPath}`);
     fs.writeFileSync(meteorEntry, newContent, 'utf8');
+    originalEntryPatched = true;
   }
   
   // Import the Vite client bundle in the source project's client main module if it isn't already included.
-  if (!originalEntryContent.includes(moduleImportPath)) {
+  if (!originalEntryContent.includes(moduleImportPath) && !originalEntryPatched) {
     fs.writeFileSync(meteorEntry, `${meteorViteImportTemplate}\n${originalEntryContent}`, 'utf8')
   }
   
