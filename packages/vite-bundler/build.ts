@@ -19,9 +19,6 @@ const {
 if (pluginEnabled) {
   fs.ensureDirSync(path.dirname(entryModuleFilepath));
   fs.writeFileSync(entryModuleFilepath, `// Stub file for Meteor-Vite\n`, 'utf8');
-  
-  // Add .gitignore file to prevent the transpiled bundle from being committed accidentally.
-  fs.writeFileSync(path.join(viteOutSrcDir, '.gitignore'), '/**');
 }
 
 if (!pluginEnabled) {
@@ -117,6 +114,10 @@ function transpileViteBundle({ payload }: Pick<ViteBundleOutput, 'payload'>) {
   
   fs.ensureDirSync(viteOutSrcDir)
   fs.emptyDirSync(viteOutSrcDir)
+  
+  // Add .gitignore file to prevent the transpiled bundle from being committed accidentally.
+  fs.writeFileSync(path.join(viteOutSrcDir, '.gitignore'), '/**');
+  
   for (const { fileName: file } of payload.output) {
     const from = path.join(payload.outDir, file)
     const to = path.join(viteOutSrcDir, `${file}.${BUNDLE_FILE_EXTENSION}`);
