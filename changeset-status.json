@@ -7,19 +7,19 @@
           "type": "patch"
         }
       ],
-      "summary": "Publish package using Meteor v2\n\n- Fixes #101",
-      "id": "mean-pigs-confess"
+      "summary": "Fix inconsistent Vite client entry asset file path and remove unused imports from build module",
+      "id": "metal-guests-peel"
     }
   ],
   "releases": [
     {
       "name": "vite-bundler",
       "type": "patch",
-      "oldVersion": "1.12.3",
+      "oldVersion": "1.12.4",
       "changesets": [
-        "mean-pigs-confess"
+        "metal-guests-peel"
       ],
-      "newVersion": "1.12.4"
+      "newVersion": "1.12.5"
     }
   ]
 }
