@@ -1,5 +1,11 @@
 # vite-bundler
 
+## 2.0.0-beta.5
+
+### Patch Changes
+
+- 4b24731: Use original file path for JavaScript added through the compiler plugin
+
 ## 2.0.0-beta.4
 
 ### Patch Changes
