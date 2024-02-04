@@ -57,7 +57,7 @@ export function getBuildConfig() {
      * Destination directory inside the source Meteor project for the transpiled Vite bundle.
      * This is what is fed into Meteor at the end of the build process.
      */
-    const viteOutSrcDir = Path.join(cwd, 'client', '.vite')
+    const viteOutSrcDir = Path.join(cwd, 'client', '_vite-bundle')
     
     /**
      * Entry module for the final Vite bundle. (Not the entrypoint specified in the Vite plugin config)
