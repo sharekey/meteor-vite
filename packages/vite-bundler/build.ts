@@ -10,15 +10,17 @@ import { prepareViteBundle, ViteBundleOutput } from './plugin/IntermediaryMeteor
 const {
   meteorMainModule,
   isSimulatedProduction,
-  entryModuleFilepath,
   viteOutSrcDir,
   pluginEnabled,
 } = getBuildConfig();
 
 // Empty stubs from any previous builds
 if (pluginEnabled) {
-  fs.ensureDirSync(path.dirname(entryModuleFilepath));
-  fs.writeFileSync(entryModuleFilepath, `// Stub file for Meteor-Vite\n`, 'utf8');
+  fs.ensureDirSync(viteOutSrcDir);
+  fs.writeFileSync(
+      path.join(viteOutSrcDir, `meteor-entry.js.${BUNDLE_FILE_EXTENSION}`),
+      `// Stub file for Meteor-Vite\n`, 'utf8'
+  );
 }
 
 if (!pluginEnabled) {
@@ -57,7 +59,10 @@ async function build() {
   // Transpile and push the Vite bundle into the Meteor project's source directory
   transpileViteBundle({ payload });
   
-  const importPath = path.relative(path.resolve(viteOutSrcDir, '..'), entryModuleFilepath);
+  const importPath = path.relative(
+      path.resolve(viteOutSrcDir, '..'),
+      `${path.join(viteOutSrcDir, entryAsset.fileName)}.${BUNDLE_FILE_EXTENSION}`
+  );
   const moduleImportPath = posixPath(`./${importPath}`);
   const meteorViteImport = `import ${JSON.stringify(moduleImportPath)};`
   const meteorViteImportTemplate = `
@@ -98,12 +103,6 @@ ${meteorViteImport}
   if (!originalEntryContent.includes(moduleImportPath) && !originalEntryPatched) {
     fs.writeFileSync(meteorEntry, `${meteorViteImportTemplate}\n${originalEntryContent}`, 'utf8')
   }
-  
-  // Patch the meteor-vite entry module with an import for the project's Vite production bundle
-  // in <project root>/client/_vite-bundle
-  const bundleEntryPath = path.relative(path.dirname(entryModuleFilepath), path.join(viteOutSrcDir, entryAsset.fileName));
-  const entryModuleContent = `import ${JSON.stringify(`./${posixPath(bundleEntryPath)}.${BUNDLE_FILE_EXTENSION}`)}`
-  fs.writeFileSync(entryModuleFilepath, entryModuleContent, 'utf8')
   
   Compiler.addCleanupHandler(() => {
     if (isSimulatedProduction) return;
