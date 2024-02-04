@@ -6,6 +6,7 @@
     "vite-bundler": "1.12.4"
   },
   "changesets": [
+    "metal-guests-peel",
     "metal-parrots-fail"
   ]
 }

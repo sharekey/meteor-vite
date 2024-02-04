@@ -4,22 +4,22 @@
       "releases": [
         {
           "name": "vite-bundler",
-          "type": "major"
+          "type": "patch"
         }
       ],
-      "summary": "Release package using Meteor v3",
-      "id": "metal-parrots-fail"
+      "summary": "Fix inconsistent Vite client entry asset file path and remove unused imports from build module",
+      "id": "metal-guests-peel"
     }
   ],
   "releases": [
     {
       "name": "vite-bundler",
-      "type": "major",
-      "oldVersion": "1.12.4",
+      "type": "patch",
+      "oldVersion": "2.0.0-beta.0",
       "changesets": [
-        "metal-parrots-fail"
+        "metal-guests-peel"
       ],
-      "newVersion": "2.0.0-beta.0"
+      "newVersion": "2.0.0-beta.1"
     }
   ],
   "preState": {
@@ -30,6 +30,7 @@
       "vite-bundler": "1.12.4"
     },
     "changesets": [
+      "metal-guests-peel",
       "metal-parrots-fail"
     ]
   }
