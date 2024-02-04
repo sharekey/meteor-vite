@@ -1,6 +1,5 @@
 import path from 'node:path';
 import fs from 'fs-extra';
-import * as process from 'process';
 import { cwd } from './workers';
 import Logger from './utility/Logger';
 import Compiler, { BUNDLE_FILE_EXTENSION } from './plugin/Compiler';
@@ -54,7 +53,6 @@ else if (process.env.NODE_ENV === 'production') {
 
 async function build() {
   const { payload, entryAsset } = await prepareViteBundle();
-  const viteOutSrcDir = path.join(cwd, 'client', 'vite')
   
   // Transpile and push the Vite bundle into the Meteor project's source directory
   transpileViteBundle({ payload });

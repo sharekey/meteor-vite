@@ -1,5 +1,5 @@
-name: 'Build'
-run-name: '🗃️ Build: ${{ github.event.head_commit.message || github.event.pull_request.title }}'
+name: 'Test build'
+run-name: '🗃️ Test build: ${{ github.event.head_commit.message || github.event.pull_request.title }}'
 
 on:
   push:
@@ -17,28 +17,30 @@ jobs:
     name: 'Vue'
     uses: ./.github/workflows/_reuse_.build.yml
     with:
-      name: 'vue'
+      appBasename: 'vue'
 
   svelte:
     name: 'Svelte'
     uses: ./.github/workflows/_reuse_.build.yml
     with:
-      name: 'svelte'
+      appBasename: 'svelte'
 
   react:
     name: 'React'
     uses: ./.github/workflows/_reuse_.build.yml
     with:
-      name: 'react'
+      appBasename: 'react'
 
   solid:
     name: 'Solid'
     uses: ./.github/workflows/_reuse_.build.yml
     with:
-      name: 'solid'
+      appBasename: 'solid'
 
   vue-meteor-v3:
     name: 'Meteor v3'
     uses: ./.github/workflows/_reuse_.build.yml
     with:
-      name: 'meteor-v3-vue'
+      appBasename: 'meteor-v3-vue'
+      meteorBaseImage: 'jorgenvatle/meteor-base'
+      nodeVersion: '20-alpine'
