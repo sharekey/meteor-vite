@@ -7,30 +7,19 @@
           "type": "patch"
         }
       ],
-      "summary": "Directly import Vite bundle instead of using a proxy module for importing the bundle. This works around an issue in Meteor v3 where proxy modules wouldn't hit Meteor's build plugin system.",
-      "id": "mighty-planets-do"
-    },
-    {
-      "releases": [
-        {
-          "name": "vite-bundler",
-          "type": "patch"
-        }
-      ],
-      "summary": "Use bundle file extension for entry module",
-      "id": "modern-camels-change"
+      "summary": "Yield a promise for a compiler plugin in Meteor v3 environments",
+      "id": "shaggy-dingos-push"
     }
   ],
   "releases": [
     {
       "name": "vite-bundler",
       "type": "patch",
-      "oldVersion": "2.0.0-beta.5",
+      "oldVersion": "2.0.0-beta.6",
       "changesets": [
-        "mighty-planets-do",
-        "modern-camels-change"
+        "shaggy-dingos-push"
       ],
-      "newVersion": "2.0.0-beta.6"
+      "newVersion": "2.0.0-beta.7"
     }
   ],
   "preState": {
@@ -47,7 +36,8 @@
       "mighty-planets-do",
       "modern-camels-change",
       "modern-swans-burn",
-      "nice-eggs-tell"
+      "nice-eggs-tell",
+      "shaggy-dingos-push"
     ]
   }
 }
