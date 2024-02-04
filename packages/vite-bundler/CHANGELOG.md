@@ -1,5 +1,12 @@
 # vite-bundler
 
+## 2.0.0-beta.6
+
+### Patch Changes
+
+- 869c6912: Directly import Vite bundle instead of using a proxy module for importing the bundle. This works around an issue in Meteor v3 where proxy modules wouldn't hit Meteor's build plugin system.
+- 5b9984fe: Use bundle file extension for entry module
+
 ## 2.0.0-beta.5
 
 ### Patch Changes
