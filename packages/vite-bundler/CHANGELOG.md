@@ -1,5 +1,11 @@
 # vite-bundler
 
+## 2.0.0-beta.7
+
+### Patch Changes
+
+- 9a16a31a: Yield a promise for a compiler plugin in Meteor v3 environments
+
 ## 2.0.0-beta.6
 
 ### Patch Changes
