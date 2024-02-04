@@ -1,5 +1,11 @@
 # vite-bundler
 
+## 2.0.0-beta.4
+
+### Patch Changes
+
+- f84332b: Include bundle file extension in entry module import string
+
 ## 2.0.0-beta.3
 
 ### Patch Changes
