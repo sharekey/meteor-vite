@@ -1,5 +1,11 @@
 # vite-bundler
 
+## 2.0.0-beta.3
+
+### Patch Changes
+
+- 8c3835e: Add option to disable post-build cleanup
+
 ## 2.0.0-beta.2
 
 ### Patch Changes
