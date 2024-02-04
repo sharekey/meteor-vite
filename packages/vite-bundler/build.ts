@@ -30,20 +30,26 @@ if (!pluginEnabled) {
 // In development, clients will connect to the Vite development server directly. So there is no need for Meteor
 // to do any work.
 else if (process.env.NODE_ENV === 'production') {
-  Plugin.registerCompiler({
-    extensions: [BUNDLE_FILE_EXTENSION],
-    filenames: [],
-  }, () => new Compiler());
+  const bundle = build();
   
   try {
     // Meteor v3 build process (Async-await)
     if (Meteor.isFibersDisabled) {
-      await build();
+      Plugin.registerCompiler({
+        extensions: [BUNDLE_FILE_EXTENSION],
+        filenames: [],
+      }, () => bundle.then(() => new Compiler()));
+      
+      await bundle;
     }
     
     // Meteor v2 build process (Fibers)
     else {
-      Promise.await(build());
+      Promise.await(bundle);
+      Plugin.registerCompiler({
+        extensions: [BUNDLE_FILE_EXTENSION],
+        filenames: [],
+      }, () => new Compiler());
     }
     
     Logger.success('Build completed');
