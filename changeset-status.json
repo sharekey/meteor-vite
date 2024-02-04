@@ -7,19 +7,19 @@
           "type": "patch"
         }
       ],
-      "summary": "Move Vite client bundle entry file into client directory instead of relying on augmenting the meteor-vite package \ncontents. This addresses some spotty behaviour where the client bundle would occasionally not load in certain\nenvironments, like projects managed through npm workspaces.",
-      "id": "modern-swans-burn"
+      "summary": "Add option to disable post-build cleanup",
+      "id": "cool-beans-do"
     }
   ],
   "releases": [
     {
       "name": "vite-bundler",
       "type": "patch",
-      "oldVersion": "2.0.0-beta.1",
+      "oldVersion": "2.0.0-beta.2",
       "changesets": [
-        "modern-swans-burn"
+        "cool-beans-do"
       ],
-      "newVersion": "2.0.0-beta.2"
+      "newVersion": "2.0.0-beta.3"
     }
   ],
   "preState": {
@@ -30,6 +30,7 @@
       "vite-bundler": "1.12.4"
     },
     "changesets": [
+      "cool-beans-do",
       "metal-parrots-fail",
       "modern-swans-burn"
     ]

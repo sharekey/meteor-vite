@@ -6,6 +6,7 @@
     "vite-bundler": "1.12.4"
   },
   "changesets": [
+    "cool-beans-do",
     "metal-parrots-fail",
     "modern-swans-burn"
   ]
