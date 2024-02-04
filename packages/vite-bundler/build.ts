@@ -44,6 +44,7 @@ else if (process.env.NODE_ENV === 'production') {
       Promise.await(build());
     }
     
+    Logger.success('Build completed');
   } catch (error) {
     Logger.error(' Failed to complete build process:\n', error);
     throw error;
