@@ -1,16 +1,10 @@
 # vite-bundler
 
-## 2.0.0-beta.1
+## 1.12.5
 
 ### Patch Changes
 
-- 4bd1edc: Fix inconsistent Vite client entry asset file path and remove unused imports from build module
-
-## 2.0.0-beta.0
-
-### Major Changes
-
-- da718de: Release package using Meteor v3
+- 4bd1edcc: Fix inconsistent Vite client entry asset file path and remove unused imports from build module
 
 ## 1.12.4
 
