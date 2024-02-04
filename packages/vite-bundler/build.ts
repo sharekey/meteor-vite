@@ -10,7 +10,6 @@ import { prepareViteBundle, ViteBundleOutput } from './plugin/IntermediaryMeteor
 const {
   meteorMainModule,
   isSimulatedProduction,
-  entryModule,
   entryModuleFilepath,
   viteOutSrcDir,
   pluginEnabled,
@@ -57,7 +56,8 @@ async function build() {
   // Transpile and push the Vite bundle into the Meteor project's source directory
   transpileViteBundle({ payload });
   
-  const moduleImportPath = JSON.stringify(posixPath(entryModule));
+  const importPath = path.relative(path.resolve(viteOutSrcDir, '..'), entryModuleFilepath);
+  const moduleImportPath = JSON.stringify(posixPath(importPath));
   const meteorViteImport = `import ${moduleImportPath};`
   const meteorViteImportTemplate = `
 /**

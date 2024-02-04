@@ -54,11 +54,16 @@ export function getBuildConfig() {
     const meteorMainModule = packageJson.meteor?.mainModule?.client
     
     /**
+     * Destination directory inside the source Meteor project for the transpiled Vite bundle.
+     * This is what is fed into Meteor at the end of the build process.
+     */
+    const viteOutSrcDir = Path.join(cwd, 'client', '.vite')
+    
+    /**
      * Entry module for the final Vite bundle. (Not the entrypoint specified in the Vite plugin config)
      * This is appended to the Meteor client's mainModule to force Meteor into loading files built by Vite.
      */
-    const entryModule = Path.join('meteor-vite', '.build', 'import-vite-bundle.js');
-    const entryModuleFilepath = Path.join(cwd, 'node_modules', entryModule)
+    const entryModuleFilepath = Path.join(viteOutSrcDir, '_entry.js');
     
     /**
      * Check if Meteor is running using the --production flag and not actually bundling for production.
@@ -74,13 +79,6 @@ export function getBuildConfig() {
     const tempMeteorProject = Path.resolve(tempDir, 'meteor') // Temporary Meteor project source
     const tempMeteorOutDir = Path.join(tempDir, 'bundle', 'meteor'); // Temporary Meteor production bundle
     
-    /**
-     * Destination directory inside the source Meteor project for the transpiled Vite bundle.
-     * This is what is fed into Meteor at the end of the build process.
-     */
-    const viteOutSrcDir = Path.join(cwd, 'client', 'vite')
-    
-    
     if (pluginEnabled && !packageJson.meteor.mainModule) {
         throw new MeteorViteError('No meteor main module found, please add meteor.mainModule.client to your package.json')
     }
@@ -90,7 +88,6 @@ export function getBuildConfig() {
         tempMeteorOutDir,
         tempMeteorProject,
         isSimulatedProduction,
-        entryModule,
         entryModuleFilepath,
         meteorMainModule,
         pluginEnabled,
