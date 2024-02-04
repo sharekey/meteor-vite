@@ -16,7 +16,7 @@
     "version:vite-bundler": "meteor node .bin/release-meteor-package.mjs version",
     "publish:vite-bundler": "meteor node .bin/release-meteor-package.mjs publish",
 
-    "example": "bash .bin/example-app.sh",
+    "example": ".bin/example-app.sh",
     "prepare:example": "npm run example prepare",
 
     "version": "(npm run version:vite-bundler || exit 1) && changeset version",
