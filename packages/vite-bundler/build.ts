@@ -57,7 +57,7 @@ async function build() {
   transpileViteBundle({ payload });
   
   const importPath = path.relative(path.resolve(viteOutSrcDir, '..'), entryModuleFilepath);
-  const moduleImportPath = JSON.stringify(posixPath(importPath));
+  const moduleImportPath = JSON.stringify(posixPath(`./${importPath}`));
   const meteorViteImport = `import ${moduleImportPath};`
   const meteorViteImportTemplate = `
 /**
