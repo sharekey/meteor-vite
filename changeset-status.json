@@ -7,19 +7,19 @@
           "type": "patch"
         }
       ],
-      "summary": "Include bundle file extension in entry module import string",
-      "id": "nice-eggs-tell"
+      "summary": "Use original file path for JavaScript added through the compiler plugin",
+      "id": "fair-crabs-sip"
     }
   ],
   "releases": [
     {
       "name": "vite-bundler",
       "type": "patch",
-      "oldVersion": "2.0.0-beta.3",
+      "oldVersion": "2.0.0-beta.4",
       "changesets": [
-        "nice-eggs-tell"
+        "fair-crabs-sip"
       ],
-      "newVersion": "2.0.0-beta.4"
+      "newVersion": "2.0.0-beta.5"
     }
   ],
   "preState": {
@@ -31,6 +31,7 @@
     },
     "changesets": [
       "cool-beans-do",
+      "fair-crabs-sip",
       "metal-parrots-fail",
       "modern-swans-burn",
       "nice-eggs-tell"
