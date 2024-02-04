@@ -1,6 +1,5 @@
 import path from 'node:path';
 import fs from 'fs-extra';
-import * as process from 'process';
 import { cwd } from './workers';
 import Logger from './utility/Logger';
 import Compiler, { BUNDLE_FILE_EXTENSION } from './plugin/Compiler';
