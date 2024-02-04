@@ -1,5 +1,11 @@
 # vite-bundler
 
+## 1.12.5
+
+### Patch Changes
+
+- 4bd1edcc: Fix inconsistent Vite client entry asset file path and remove unused imports from build module
+
 ## 1.12.4
 
 ### Patch Changes
