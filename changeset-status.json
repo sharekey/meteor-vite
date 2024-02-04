@@ -7,19 +7,19 @@
           "type": "patch"
         }
       ],
-      "summary": "Add option to disable post-build cleanup",
-      "id": "cool-beans-do"
+      "summary": "Include bundle file extension in entry module import string",
+      "id": "nice-eggs-tell"
     }
   ],
   "releases": [
     {
       "name": "vite-bundler",
       "type": "patch",
-      "oldVersion": "2.0.0-beta.2",
+      "oldVersion": "2.0.0-beta.3",
       "changesets": [
-        "cool-beans-do"
+        "nice-eggs-tell"
       ],
-      "newVersion": "2.0.0-beta.3"
+      "newVersion": "2.0.0-beta.4"
     }
   ],
   "preState": {
@@ -32,7 +32,8 @@
     "changesets": [
       "cool-beans-do",
       "metal-parrots-fail",
-      "modern-swans-burn"
+      "modern-swans-burn",
+      "nice-eggs-tell"
     ]
   }
 }
