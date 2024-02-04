@@ -1,3 +1,4 @@
+import { BUNDLE_FILE_EXTENSION } from '../plugin/Compiler';
 import { cwd, getProjectPackageJson } from '../workers';
 import Path from 'node:path';
 import OS from 'node:os';
@@ -63,7 +64,7 @@ export function getBuildConfig() {
      * Entry module for the final Vite bundle. (Not the entrypoint specified in the Vite plugin config)
      * This is appended to the Meteor client's mainModule to force Meteor into loading files built by Vite.
      */
-    const entryModuleFilepath = Path.join(viteOutSrcDir, '_entry.js');
+    const entryModuleFilepath = Path.join(viteOutSrcDir, `_entry.js.${BUNDLE_FILE_EXTENSION}`);
     
     /**
      * Check if Meteor is running using the --production flag and not actually bundling for production.
