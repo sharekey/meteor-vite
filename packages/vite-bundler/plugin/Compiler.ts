@@ -40,7 +40,7 @@ export default class Compiler {
             switch (Path.extname(fileMeta.basename)) {
                 case '.js':
                     file.addJavaScript({
-                        path: fileMeta.path,
+                        path: fileMeta._original.path,
                         data: file.getContentsAsString(),
                         sourcePath,
                     })
