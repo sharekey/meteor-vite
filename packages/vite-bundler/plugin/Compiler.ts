@@ -11,6 +11,10 @@ export default class Compiler {
     protected static cleanupHandlers: CleanupHandler[] = [];
     
     public static addCleanupHandler(handler: CleanupHandler) {
+        if (process.env.METEOR_VITE_BUILD_CLEANUP === 'false') {
+            Logger.info('Build cleanup is disabled ⚠️ Recommended use is in CI/CD environments ⚠️ Your project\'s source files might be modified by meteor-vite.');
+            return;
+        }
         this.cleanupHandlers.push(handler);
         Logger.debug(`Added cleanup handler. Pending cleanups: ${this.cleanupHandlers.length}`, this.cleanupHandlers);
     }
