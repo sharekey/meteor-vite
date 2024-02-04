@@ -79,6 +79,7 @@ ${meteorViteImport}
   const originalEntryContent = fs.readFileSync(meteorEntry, 'utf8');
   const oldEntryImports = [
       'meteor-vite/.build/import-vite-bundle.js',
+      'meteor-vite/temp/stubs.js'
   ]
   
   // Patch import strings from older builds of the vite-bundler with an up-to-date import.
