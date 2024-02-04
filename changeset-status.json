@@ -7,19 +7,19 @@
           "type": "patch"
         }
       ],
-      "summary": "Fix inconsistent Vite client entry asset file path and remove unused imports from build module",
-      "id": "metal-guests-peel"
+      "summary": "Move Vite client bundle entry file into client directory instead of relying on augmenting the meteor-vite package \ncontents. This addresses some spotty behaviour where the client bundle would occasionally not load in certain\nenvironments, like projects managed through npm workspaces.",
+      "id": "modern-swans-burn"
     }
   ],
   "releases": [
     {
       "name": "vite-bundler",
       "type": "patch",
-      "oldVersion": "1.12.4",
+      "oldVersion": "1.12.5",
       "changesets": [
-        "metal-guests-peel"
+        "modern-swans-burn"
       ],
-      "newVersion": "1.12.5"
+      "newVersion": "1.12.6"
     }
   ]
 }
