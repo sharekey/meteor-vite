@@ -10,15 +10,17 @@ import { prepareViteBundle, ViteBundleOutput } from './plugin/IntermediaryMeteor
 const {
   meteorMainModule,
   isSimulatedProduction,
-  entryModuleFilepath,
   viteOutSrcDir,
   pluginEnabled,
 } = getBuildConfig();
 
 // Empty stubs from any previous builds
 if (pluginEnabled) {
-  fs.ensureDirSync(path.dirname(entryModuleFilepath));
-  fs.writeFileSync(entryModuleFilepath, `// Stub file for Meteor-Vite\n`, 'utf8');
+  fs.ensureDirSync(viteOutSrcDir);
+  fs.writeFileSync(
+      path.join(viteOutSrcDir, `meteor-entry.js.${BUNDLE_FILE_EXTENSION}`),
+      `// Stub file for Meteor-Vite\n`, 'utf8'
+  );
 }
 
 if (!pluginEnabled) {
@@ -28,22 +30,29 @@ if (!pluginEnabled) {
 // In development, clients will connect to the Vite development server directly. So there is no need for Meteor
 // to do any work.
 else if (process.env.NODE_ENV === 'production') {
-  Plugin.registerCompiler({
-    extensions: [BUNDLE_FILE_EXTENSION],
-    filenames: [],
-  }, () => new Compiler());
+  const bundle = build();
   
   try {
     // Meteor v3 build process (Async-await)
     if (Meteor.isFibersDisabled) {
-      await build();
+      Plugin.registerCompiler({
+        extensions: [BUNDLE_FILE_EXTENSION],
+        filenames: [],
+      }, () => bundle.then(() => new Compiler()));
+      
+      await bundle;
     }
     
     // Meteor v2 build process (Fibers)
     else {
-      Promise.await(build());
+      Promise.await(bundle);
+      Plugin.registerCompiler({
+        extensions: [BUNDLE_FILE_EXTENSION],
+        filenames: [],
+      }, () => new Compiler());
     }
     
+    Logger.success('Build completed');
   } catch (error) {
     Logger.error(' Failed to complete build process:\n', error);
     throw error;
@@ -56,7 +65,11 @@ async function build() {
   // Transpile and push the Vite bundle into the Meteor project's source directory
   transpileViteBundle({ payload });
   
-  const importPath = path.relative(path.resolve(viteOutSrcDir, '..'), entryModuleFilepath);
+  
+  const importPath = path.relative(
+      path.resolve(meteorMainModule, '..'),
+      `${path.join(viteOutSrcDir, entryAsset.fileName)}.${BUNDLE_FILE_EXTENSION}`
+  );
   const moduleImportPath = posixPath(`./${importPath}`);
   const meteorViteImport = `import ${JSON.stringify(moduleImportPath)};`
   const meteorViteImportTemplate = `
@@ -72,6 +85,8 @@ ${meteorViteImport}
 
 
 `.trimLeft();
+  
+  Logger.debug('Injecting import for Vite bundle', { moduleImportPath, meteorMainModule, viteOutSrcDir });
   
   // Patch project's meteor entry with import for meteor-vite's entry module.
   // in node_modules/meteor-vite/temp
@@ -97,12 +112,6 @@ ${meteorViteImport}
   if (!originalEntryContent.includes(moduleImportPath) && !originalEntryPatched) {
     fs.writeFileSync(meteorEntry, `${meteorViteImportTemplate}\n${originalEntryContent}`, 'utf8')
   }
-  
-  // Patch the meteor-vite entry module with an import for the project's Vite production bundle
-  // in <project root>/client/_vite-bundle
-  const bundleEntryPath = path.relative(path.dirname(entryModuleFilepath), path.join(viteOutSrcDir, entryAsset.fileName));
-  const entryModuleContent = `import ${JSON.stringify(`./${posixPath(bundleEntryPath)}`)}`
-  fs.writeFileSync(entryModuleFilepath, entryModuleContent, 'utf8')
   
   Compiler.addCleanupHandler(() => {
     if (isSimulatedProduction) return;

@@ -60,12 +60,6 @@ export function getBuildConfig() {
     const viteOutSrcDir = Path.join(cwd, 'client', '_vite-bundle')
     
     /**
-     * Entry module for the final Vite bundle. (Not the entrypoint specified in the Vite plugin config)
-     * This is appended to the Meteor client's mainModule to force Meteor into loading files built by Vite.
-     */
-    const entryModuleFilepath = Path.join(viteOutSrcDir, '_entry.js');
-    
-    /**
      * Check if Meteor is running using the --production flag and not actually bundling for production.
      * This is important to check for as we normally clean up the files created for production once our compiler
      * plugin finishes.
@@ -88,7 +82,6 @@ export function getBuildConfig() {
         tempMeteorOutDir,
         tempMeteorProject,
         isSimulatedProduction,
-        entryModuleFilepath,
         meteorMainModule,
         pluginEnabled,
         viteOutSrcDir,
