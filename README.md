@@ -261,6 +261,6 @@ The Vite integration comes with two dependencies that work together to enable co
         - [Live demo](https://react--meteor-vite.wcaserver.com/)
     - [x] [SolidJS](/examples/solid)
         - [Live demo](https://solid--meteor-vite.wcaserver.com/)
-    - [x] [Meteor v3 + Vue](/examples/meteor-v3-vue) (Isopack compatability still pending)
+    - [x] [Meteor v3 + Vue](/examples/meteor-v3-vue)
         - [Live demo](https://meteor-v3-vue--meteor-vite.wcaserver.com/)
         - [Pre-release branch](https://github.com/JorgenVatle/meteor-vite/tree/meteor-v3)
