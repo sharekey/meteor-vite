@@ -1,5 +1,17 @@
 # vite-bundler
 
+## 1.12.7
+
+### Patch Changes
+
+- 8c3835e6: Add option to disable post-build cleanup
+- 45d8c1d9: Fix import path resolver for the Vite client bundle entry file. Addresses an incorrect import string with client mainModules outside of the Meteor client root directory.
+- 4b247310: Use original file path for JavaScript added through the compiler plugin
+- 869c6912: Directly import Vite bundle instead of using a proxy module for importing the bundle. This works around an issue in Meteor v3 where proxy modules wouldn't hit Meteor's build plugin system.
+- 5b9984fe: Use bundle file extension for entry module
+- f84332b3: Include bundle file extension in entry module import string
+- 9a16a31a: Yield a promise for a compiler plugin in Meteor v3 environments
+
 ## 1.12.6
 
 ### Patch Changes
