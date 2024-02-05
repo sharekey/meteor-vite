@@ -37,7 +37,7 @@ meteor npm i -D vite@4
 meteor npm i meteor-vite
 
 # Then add the Vite-Bundler package to your Meteor project. 
-meteor add jorgenvatle:vite-bundler@2.0.0-beta.0
+meteor add jorgenvatle:vite-bundler
 ```
 
 You can also install any vite plugin, for example `@vitejs/plugin-vue`:
