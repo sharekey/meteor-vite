@@ -1,5 +1,11 @@
 # vite-bundler
 
+## 2.0.0-beta.8
+
+### Patch Changes
+
+- 45d8c1d9: Fix import path resolver for the Vite client bundle entry file. Addresses an incorrect import string with client mainModules outside of the Meteor client root directory.
+
 ## 2.0.0-beta.7
 
 ### Patch Changes
