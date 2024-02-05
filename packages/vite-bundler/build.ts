@@ -65,8 +65,9 @@ async function build() {
   // Transpile and push the Vite bundle into the Meteor project's source directory
   transpileViteBundle({ payload });
   
+  
   const importPath = path.relative(
-      path.resolve(viteOutSrcDir, '..'),
+      path.resolve(meteorMainModule, '..'),
       `${path.join(viteOutSrcDir, entryAsset.fileName)}.${BUNDLE_FILE_EXTENSION}`
   );
   const moduleImportPath = posixPath(`./${importPath}`);
@@ -84,6 +85,8 @@ ${meteorViteImport}
 
 
 `.trimLeft();
+  
+  Logger.debug('Injecting import for Vite bundle', { moduleImportPath, meteorMainModule, viteOutSrcDir });
   
   // Patch project's meteor entry with import for meteor-vite's entry module.
   // in node_modules/meteor-vite/temp
