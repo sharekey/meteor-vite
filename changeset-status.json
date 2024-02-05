@@ -7,19 +7,19 @@
           "type": "patch"
         }
       ],
-      "summary": "Yield a promise for a compiler plugin in Meteor v3 environments",
-      "id": "shaggy-dingos-push"
+      "summary": "Fix import path resolver for the Vite client bundle entry file. Addresses an incorrect import string with client mainModules outside of the Meteor client root directory.",
+      "id": "dirty-pianos-talk"
     }
   ],
   "releases": [
     {
       "name": "vite-bundler",
       "type": "patch",
-      "oldVersion": "2.0.0-beta.6",
+      "oldVersion": "2.0.0-beta.7",
       "changesets": [
-        "shaggy-dingos-push"
+        "dirty-pianos-talk"
       ],
-      "newVersion": "2.0.0-beta.7"
+      "newVersion": "2.0.0-beta.8"
     }
   ],
   "preState": {
@@ -31,8 +31,8 @@
     },
     "changesets": [
       "cool-beans-do",
+      "dirty-pianos-talk",
       "fair-crabs-sip",
-      "metal-parrots-fail",
       "mighty-planets-do",
       "modern-camels-change",
       "modern-swans-burn",
