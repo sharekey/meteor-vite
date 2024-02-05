@@ -19,6 +19,12 @@ EXAMPLE_DIR="$PWD/examples"
 APP_DIR="$EXAMPLE_DIR/$app"
 BUILD_TARGET="$PWD/examples/output/$app"
 NPM_LINK_TARGET="$PWD/npm-packages/meteor-vite"
+USE_METEOR_BINARIES=${USE_METEOR_BINARIES:1}
+
+if [[ $USE_METEOR_BINARIES == 1 ]]; then
+  alias npm="meteor npm"
+  alias node="meteor node"
+fi
 
 export METEOR_PACKAGE_DIRS="$PWD/packages"
 export METEOR_VITE_TSUP_BUILD_WATCHER="true"
@@ -32,13 +38,13 @@ PROD_MONGO_CONNECTION_URI="mongodb://127.0.0.1:$(($PROD_MONGO_METEOR_PORT + 1))/
 # Start a development server
 start() {
   cd "$APP_DIR" || exit 1
-  meteor npm start -- "$@"
+  npm start -- "$@"
 }
 
 # Install dependencies for dev app
 install() {
   cd "$APP_DIR" || exit 1
-  meteor npm i
+  npm i
 }
 
 # Initial setup for example apps - installs and links our local packages.
@@ -83,12 +89,12 @@ start:production() {
 
 install:mongo() {
   cd "$EXAMPLE_DIR/.mongo" || exit 1
-  meteor npm i
+  npm i
 }
 
 start:mongo() {
   cd "$EXAMPLE_DIR/.mongo" || exit 1
-  meteor npm start -- --port $PROD_MONGO_METEOR_PORT
+  npm start -- --port $PROD_MONGO_METEOR_PORT
 }
 
 cleanOutput() {
@@ -97,13 +103,13 @@ cleanOutput() {
 
 link() {
   cd "$APP_DIR" || exit 1
-  meteor npm link "$NPM_LINK_TARGET"
+  npm link "$NPM_LINK_TARGET"
 }
 
 production:install() {
    cd "$BUILD_TARGET/bundle/programs/server" || exit 1
    chmod +w npm-shrinkwrap.json
-   meteor npm install
+   npm install
 }
 
 production:app() {
@@ -113,7 +119,7 @@ production:app() {
   export ROOT_URL=http://localhost:3000
   export MONGO_URL="$PROD_MONGO_CONNECTION_URI"
 
-  meteor node main.js
+  node main.js
 }
 
 set -x
