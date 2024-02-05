@@ -1,6 +1,6 @@
 Package.describe({
   name: 'jorgenvatle:vite-bundler',
-  version: '2.0.0-beta.7',
+  version: '2.0.0-beta.8',
   summary: 'Integrate the Vite.js bundler with Meteor',
   git: 'https://github.com/JorgenVatle/meteor-vite',
   documentation: 'README.md',
