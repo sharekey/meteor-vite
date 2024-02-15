@@ -1,5 +1,5 @@
 const myStateId = Math.random();
 
-export const printStateId = () => {
-    console.log({ myStateId });
+export const getStateId = () => {
+    return myStateId;
 }
