@@ -38,6 +38,7 @@ export default function meteor(config: PluginOptions) {
  * MeteorStubs plugin.
  */
 export function meteorWorker(config: PartialPluginOptions): PluginOption {
+    const METEOR_LOCAL_DIR = process.env.METEOR_LOCAL_DIR || Path.join('.meteor', 'local');
     return [
         {
             name: 'meteor-vite:config',
@@ -46,11 +47,11 @@ export function meteorWorker(config: PartialPluginOptions): PluginOption {
                     meteorStubs: {
                         packageJsonPath: 'package.json',
                         meteor: {
-                            packagePath: Path.join('.meteor', 'local', 'build', 'programs', 'web.browser', 'packages'),
-                            isopackPath: Path.join('.meteor', 'local', 'isopacks'),
+                            packagePath: Path.join(METEOR_LOCAL_DIR, 'build', 'programs', 'web.browser', 'packages'),
+                            isopackPath: Path.join(METEOR_LOCAL_DIR, 'isopacks'),
                         }
                     },
-                    tempDir: Path.join('.meteor', 'local', 'vite'),
+                    tempDir: Path.join(METEOR_LOCAL_DIR, 'vite'),
                     stubValidation: {
                         warnOnly: process.env.NODE_ENV === 'production',
                         disabled: false,
