@@ -153,6 +153,7 @@ function prepareWorkerEnv() {
     const env: Record<string, string | undefined> = {
         FORCE_COLOR: '3',
         ENABLE_DEBUG_LOGS: process.env.ENABLE_DEBUG_LOGS,
+        METEOR_LOCAL_DIR: process.env.METEOR_LOCAL_DIR,
     }
     Object.entries(process.env).forEach(([key, value]) => {
         if (!key.startsWith(workerEnvPrefix)) {
