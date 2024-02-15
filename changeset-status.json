@@ -5,87 +5,34 @@
         {
           "name": "vite-bundler",
           "type": "patch"
-        }
-      ],
-      "summary": "Add option to disable post-build cleanup",
-      "id": "cool-beans-do"
-    },
-    {
-      "releases": [
+        },
         {
-          "name": "vite-bundler",
+          "name": "meteor-vite",
           "type": "patch"
         }
       ],
-      "summary": "Fix import path resolver for the Vite client bundle entry file. Addresses an incorrect import string with client mainModules outside of the Meteor client root directory.",
-      "id": "dirty-pianos-talk"
-    },
-    {
-      "releases": [
-        {
-          "name": "vite-bundler",
-          "type": "patch"
-        }
-      ],
-      "summary": "Use original file path for JavaScript added through the compiler plugin",
-      "id": "fair-crabs-sip"
-    },
-    {
-      "releases": [
-        {
-          "name": "vite-bundler",
-          "type": "patch"
-        }
-      ],
-      "summary": "Directly import Vite bundle instead of using a proxy module for importing the bundle. This works around an issue in Meteor v3 where proxy modules wouldn't hit Meteor's build plugin system.",
-      "id": "mighty-planets-do"
-    },
-    {
-      "releases": [
-        {
-          "name": "vite-bundler",
-          "type": "patch"
-        }
-      ],
-      "summary": "Use bundle file extension for entry module",
-      "id": "modern-camels-change"
-    },
-    {
-      "releases": [
-        {
-          "name": "vite-bundler",
-          "type": "patch"
-        }
-      ],
-      "summary": "Include bundle file extension in entry module import string",
-      "id": "nice-eggs-tell"
-    },
-    {
-      "releases": [
-        {
-          "name": "vite-bundler",
-          "type": "patch"
-        }
-      ],
-      "summary": "Yield a promise for a compiler plugin in Meteor v3 environments",
-      "id": "shaggy-dingos-push"
+      "summary": "Check for METEOR_LOCAL_DIR environment variable when preparing the default meteor-vite plugin config.\n\n- Fixes #116\n- Fixes https://github.com/Akryum/meteor-vite/issues/46",
+      "id": "six-tomatoes-walk"
     }
   ],
   "releases": [
     {
       "name": "vite-bundler",
       "type": "patch",
-      "oldVersion": "1.12.6",
+      "oldVersion": "1.12.7",
       "changesets": [
-        "cool-beans-do",
-        "dirty-pianos-talk",
-        "fair-crabs-sip",
-        "mighty-planets-do",
-        "modern-camels-change",
-        "nice-eggs-tell",
-        "shaggy-dingos-push"
+        "six-tomatoes-walk"
       ],
-      "newVersion": "1.12.7"
+      "newVersion": "1.12.8"
+    },
+    {
+      "name": "meteor-vite",
+      "type": "patch",
+      "oldVersion": "1.9.0",
+      "changesets": [
+        "six-tomatoes-walk"
+      ],
+      "newVersion": "1.9.1"
     }
   ]
 }
