@@ -23,7 +23,7 @@ APP_DIR="$EXAMPLE_DIR/$app"
 BUILD_TARGET="$PWD/examples/output/$app"
 NPM_LINK_TARGET="$PWD/npm-packages/meteor-vite"
 
-export METEOR_PACKAGE_DIRS="$PWD/packages"
+export METEOR_PACKAGE_DIRS="$PWD/packages:$PWD/test-packages/atmosphere"
 export METEOR_VITE_TSUP_BUILD_WATCHER="true"
 
 if [ "$USE_METEOR_BINARIES" == "0" ]; then
