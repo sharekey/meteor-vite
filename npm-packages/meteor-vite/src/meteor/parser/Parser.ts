@@ -220,7 +220,7 @@ function parsePackageScope(node: Node) {
 }
 
 export const propParser = {
-    getKey(property: ObjectMethod | ObjectProperty) {
+    getKey<TProperty extends ObjectMethod | ObjectProperty>(property: TProperty) {
         if (property.key.type === 'Identifier') {
             return property.key.name;
         }
