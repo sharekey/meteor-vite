@@ -14,10 +14,12 @@ export class MeteorInstall {
     public readonly modules: ModuleList = {};
     public readonly packageId: string;
     public readonly name: string;
+    public readonly type: 'atmosphere' | 'npm';
     
-    constructor({ packageId, name }: Pick<MeteorInstall, 'packageId' | 'name'>) {
+    constructor({ packageId, name, type }: Pick<MeteorInstall, 'packageId' | 'name' | 'type'>) {
         this.packageId = packageId;
         this.name = name;
+        this.type = type;
     }
     
     public static parse(node: Node) {
@@ -67,6 +69,7 @@ export class MeteorInstall {
         const meteorPackage = new this({
             packageId: `${propParser.getKey(meteor)}/${propParser.getKey(packageName)}`,
             name: propParser.getKey(packageName),
+            type: 'atmosphere',
         });
         
         meteorPackage.traverseModules(packageModules, '');
