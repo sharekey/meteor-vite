@@ -112,6 +112,14 @@ function readMainModulePath(node: Node) {
     return node.init.arguments[0].value;
 }
 
+/**
+ * Parse exports at the package namespace. This would be things like global packages (Meteor, Mongo, etc)
+ *
+ * @example bundle export
+ * Package._define("mongo", {
+ *   Mongo: Mongo
+ * });
+ */
 function parsePackageScope(node: Node) {
     function meteorV2(node: Node) {
         if (node.type !== 'CallExpression') return;
