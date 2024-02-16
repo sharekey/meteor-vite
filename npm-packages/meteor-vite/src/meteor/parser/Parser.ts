@@ -242,16 +242,29 @@ class MeteorInstall {
         return npmInstall;
     }
     
+    protected static parseInstall(node: MeteorInstallCallExpression) {
+        const [ modules, fileExtensions ] = node.arguments;
+        const node_modules = modules.properties[0];
+        const meteor = node_modules.value.properties[0];
+        if (isStringLiteral(meteor.key, { value: 'meteor' }) || isIdentifier(meteor.key, { name: 'meteor' })) {
+            return {
+                type: 'atmosphere',
+                meteor,
+            }
+        }
+        return {
+            type: 'npm',
+            node_modules,
+        }
+    }
+    
     protected static parseAtmosphereInstall(node: Node) {
         if (!this.isRequireDeclaration(node)) return;
         if (!this.isMeteorInstall(node.init)) return;
         
         
-        const [ modules, fileExtensions ] = node.init.arguments;
-        const node_modules = modules.properties[0];
-        const meteor = node_modules.value.properties[0];
-        
-        if (!is('StringLiteral', meteor.key, { value: 'meteor' })) {
+        const { meteor, type } = this.parseInstall(node.init);
+        if (type !== 'atmosphere' || !meteor) {
             return;
         }
         
