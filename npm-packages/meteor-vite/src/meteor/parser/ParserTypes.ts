@@ -140,20 +140,27 @@ export type MeteorInstallObject = KnownObjectExpression<{
     properties: [KnownObjectProperty<{
         key: KnownObjectKey<'node_modules'>
         value: KnownObjectExpression<{
-            properties: [KnownObjectProperty<{
-                key: KnownObjectKey<'meteor'>,
-                value: KnownObjectExpression<{
-                    properties: [KnownObjectProperty<{
-                        key: KnownObjectKey<string>, // Package name
-                        value: KnownObjectExpression<{
-                            properties: MeteorPackageProperty[]
-                        }>
-                    }>]
-                }>
-            }>] | ObjectProperty[]
+            properties: [MeteorInstallMeteorProperty] | ObjectProperty[]
         }>
     }>]
 }>;
+
+/**
+ * The contents of a Meteor package as defined in `meteorInstall()`.
+ * It's a utility type to allow for a little better ergonomics when we know we're parsing a Meteor package and not an
+ * unknown module
+ */
+export type MeteorInstallMeteorProperty = KnownObjectProperty<{
+    key: KnownObjectKey<'meteor'>,
+    value: KnownObjectExpression<{
+        properties: [KnownObjectProperty<{
+            key: KnownObjectKey<string>, // Package name
+            value: KnownObjectExpression<{
+                properties: MeteorPackageProperty[]
+            }>
+        }>]
+    }>
+}>
 
 /**
  * A call expression for the `meteorInstall()` function.
