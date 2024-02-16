@@ -2,7 +2,7 @@ import { is, isObjectExpression, isObjectProperty, Node, traverse, VariableDecla
 import Logger from '../../utilities/Logger';
 import { PackageModule } from './PackageModule';
 import { ModuleList, propParser } from './Parser';
-import { MeteorInstallCallExpression, MeteorPackageProperty } from './ParserTypes';
+import { MeteorInstallCallExpression, MeteorInstallMeteorProperty, MeteorPackageProperty } from './ParserTypes';
 
 /**
  * Parser for a build Meteor package's meteorInstall() call.
@@ -42,7 +42,7 @@ export class MeteorInstall {
         if (propParser.getKey(meteor) === 'meteor') {
             return {
                 type: 'atmosphere',
-                meteor,
+                meteor: meteor as MeteorInstallMeteorProperty,
             };
         }
         return {
