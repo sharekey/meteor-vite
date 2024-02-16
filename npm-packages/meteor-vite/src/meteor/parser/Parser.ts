@@ -232,11 +232,11 @@ class MeteorInstall {
         this.name = name;
     }
     
-    public static parse(requireDeclaration: Node) {
-        if (!this.isRequireDeclaration(requireDeclaration)) return;
-        if (!this.isMeteorInstall(requireDeclaration.init)) return;
+    public static parse(node: Node) {
+        if (!this.isRequireDeclaration(node)) return;
+        if (!this.isMeteorInstall(node.init)) return;
         
-        const modules = requireDeclaration.init.arguments[0];
+        const modules = node.init.arguments[0];
         const node_modules = modules.properties[0];
         const meteor = node_modules.value.properties[0];
         const packageName = meteor.value.properties[0];
