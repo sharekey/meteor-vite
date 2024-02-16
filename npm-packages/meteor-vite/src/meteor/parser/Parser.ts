@@ -233,6 +233,16 @@ class MeteorInstall {
     }
     
     public static parse(node: Node) {
+        const atmosphereInstall = this.parseAtmosphereInstall(node);
+        const npmInstall = this.parseNpmInstall(node);
+        
+        if (atmosphereInstall) {
+            return atmosphereInstall;
+        }
+        return npmInstall;
+    }
+    
+    protected static parseAtmosphereInstall(node: Node) {
         if (!this.isRequireDeclaration(node)) return;
         if (!this.isMeteorInstall(node.init)) return;
         
@@ -241,15 +251,19 @@ class MeteorInstall {
         const meteor = node_modules.value.properties[0];
         const packageName = meteor.value.properties[0];
         const packageModules = packageName.value.properties;
-
+        
         const meteorPackage = new this({
             packageId: `${propParser.getKey(meteor)}/${propParser.getKey(packageName)}`,
             name: propParser.getKey(packageName),
         });
-
+        
         meteorPackage.traverseModules(packageModules, '');
-
+        
         return meteorPackage;
+    }
+    
+    protected static parseNpmInstall(node: Node) {
+        // todo
     }
     
     protected static isRequireDeclaration(node: Node): node is VariableDeclarator {
