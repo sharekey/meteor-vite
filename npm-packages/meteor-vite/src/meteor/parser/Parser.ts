@@ -101,6 +101,12 @@ function parseSource(code: string) {
     })
 }
 
+/**
+ * Try to determine a package's mainModule path by reading the root exports declaration.
+ *
+ * @example bundle export
+ * var exports = require("/node_modules/meteor/test:ts-modules/index.ts");
+ */
 function readMainModulePath(node: Node) {
     if (node.type !== 'VariableDeclarator') return;
     if (!is('Identifier', node.id, { name: 'exports' })) return;
