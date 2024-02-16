@@ -1,7 +1,7 @@
 import {
     ArrayExpression,
     AssignmentExpression,
-    CallExpression,
+    CallExpression, Expression,
     FunctionExpression,
     Identifier,
     MemberExpression, NumericLiteral,
@@ -166,4 +166,6 @@ export type MeteorInstallMeteorProperty = KnownObjectProperty<{
  * A call expression for the `meteorInstall()` function.
  * We're using this to nicely cast types for meteorInstall() nodes.
  */
-export type MeteorInstallCallExpression = Omit<CallExpression, 'arguments'> & { arguments: [modules: MeteorInstallObject, fileExtensions?: Node] }
+export type MeteorInstallCallExpression = Omit<CallExpression, 'arguments'> & {
+    arguments: [modules: MeteorInstallObject, fileExtensions: Expression] | [modules: MeteorInstallObject]
+}
