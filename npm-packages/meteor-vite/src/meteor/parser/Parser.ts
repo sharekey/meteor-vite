@@ -246,9 +246,15 @@ class MeteorInstall {
         if (!this.isRequireDeclaration(node)) return;
         if (!this.isMeteorInstall(node.init)) return;
         
-        const modules = node.init.arguments[0];
+        
+        const [ modules, fileExtensions ] = node.init.arguments;
         const node_modules = modules.properties[0];
         const meteor = node_modules.value.properties[0];
+        
+        if (!is('StringLiteral', meteor.key, { value: 'meteor' })) {
+            return;
+        }
+        
         const packageName = meteor.value.properties[0];
         const packageModules = packageName.value.properties;
         
