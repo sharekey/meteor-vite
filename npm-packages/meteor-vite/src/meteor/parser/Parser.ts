@@ -245,8 +245,13 @@ class MeteorInstall {
     protected static parseInstall(node: MeteorInstallCallExpression) {
         const [ modules, fileExtensions ] = node.arguments;
         const node_modules = modules.properties[0];
+        if (propParser.getKey(node_modules) !== 'node_modules') {
+            return {
+                type: 'unknown'
+            }
+        }
         const meteor = node_modules.value.properties[0];
-        if (isStringLiteral(meteor.key, { value: 'meteor' }) || isIdentifier(meteor.key, { name: 'meteor' })) {
+        if (propParser.getKey(meteor) === 'meteor') {
             return {
                 type: 'atmosphere',
                 meteor,
