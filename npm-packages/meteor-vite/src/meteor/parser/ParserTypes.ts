@@ -150,10 +150,10 @@ export type MeteorInstallObject = KnownObjectExpression<{
                         }>
                     }>]
                 }>
-            }>]
+            }>] | ObjectProperty[]
         }>
     }>]
-}>
+}>;
 
 /**
  * A call expression for the `meteorInstall()` function.
