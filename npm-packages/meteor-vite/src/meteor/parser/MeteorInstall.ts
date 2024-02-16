@@ -6,7 +6,7 @@ import {
     isObjectExpression,
     isObjectProperty,
     isStringLiteral,
-    Node,
+    Node, ObjectProperty,
     traverse,
     VariableDeclarator,
 } from '@babel/types';
@@ -99,7 +99,7 @@ export class MeteorInstall {
         const npmPackages = [];
         for (const directory of node_modules.value.properties) {
             if (!isObjectExpression(directory.value)) return; // Not a directory
-            const packageJson = {
+            let packageJson = {
                 name: '',
                 main: '',
                 version: '',
@@ -111,40 +111,7 @@ export class MeteorInstall {
                     return;
                 }
                 if (propParser.getKey(entry) === 'package.json') {
-                    // Parse package.json contents
-                    traverse(entry.value, {
-                        enter(node) {
-                            if (!isAssignmentExpression(node)) return;
-                            if (!isMemberExpression(node.left)) return;
-                            if (!isObjectExpression(node.right)) return;
-                            if (!isIdentifier(node.left.object, { name: 'module' })) {
-                                throw new ModuleExportsError('Unexpected package.json export object', node.left.object);
-                            }
-                            if (!isIdentifier(node.left.property, { name: 'exports' })) {
-                                throw new ModuleExportsError('Unexpected package.json export property', node.left.property)
-                            }
-                            
-                            for (const prop of node.right.properties) {
-                                if (!isObjectProperty(prop)) {
-                                    throw new ModuleExportsError('package.json had an unexpected property export', prop);
-                                }
-                                const key = propParser.getKey(prop);
-                                if (!isStringLiteral(prop.value)) {
-                                    throw new ModuleExportsError(`package.json '${key}' field had an unexpected value`, prop.value);
-                                }
-                                
-                                switch (key) {
-                                    case 'version':
-                                    case 'main':
-                                    case 'name':
-                                        packageJson[key] = prop.value.value;
-                                        break;
-                                    default:
-                                        throw new ModuleExportsError(`Unknown key: ${key}`, prop);
-                                }
-                            }
-                        },
-                    });
+                    packageJson = parsePackageJson(entry);
                 }
                 // Todo: Recurse through all directories
                 // todo: Track exported modules
@@ -190,4 +157,53 @@ export class MeteorInstall {
         });
     }
     
+}
+
+function parsePackageJson(node: ObjectProperty) {
+    const fileName = propParser.getKey(node);
+    if (fileName !== 'package.json') {
+        throw new ModuleExportsError(`Tried to parse package.json for a module with an unexpected name: ${fileName}`, node);
+    }
+    
+    const packageJson = {
+        name: '',
+        main: '',
+        version: '',
+    };
+    
+    traverse(node.value, {
+        enter(node) {
+            if (!isAssignmentExpression(node)) return;
+            if (!isMemberExpression(node.left)) return;
+            if (!isObjectExpression(node.right)) return;
+            if (!isIdentifier(node.left.object, { name: 'module' })) {
+                throw new ModuleExportsError('Unexpected package.json export object', node.left.object);
+            }
+            if (!isIdentifier(node.left.property, { name: 'exports' })) {
+                throw new ModuleExportsError('Unexpected package.json export property', node.left.property)
+            }
+            
+            for (const prop of node.right.properties) {
+                if (!isObjectProperty(prop)) {
+                    throw new ModuleExportsError('package.json had an unexpected property export', prop);
+                }
+                const key = propParser.getKey(prop);
+                if (!isStringLiteral(prop.value)) {
+                    throw new ModuleExportsError(`package.json '${key}' field had an unexpected value`, prop.value);
+                }
+                
+                switch (key) {
+                    case 'version':
+                    case 'main':
+                    case 'name':
+                        packageJson[key] = prop.value.value;
+                        break;
+                    default:
+                        throw new ModuleExportsError(`Unknown key: ${key}`, prop);
+                }
+            }
+        },
+    });
+    
+    return packageJson;
 }
