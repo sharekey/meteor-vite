@@ -247,7 +247,7 @@ class MeteorInstall {
         const node_modules = modules.properties[0];
         if (propParser.getKey(node_modules) !== 'node_modules') {
             return {
-                type: 'unknown'
+                type: 'unknown',
             }
         }
         const meteor = node_modules.value.properties[0];
@@ -287,7 +287,35 @@ class MeteorInstall {
     }
     
     protected static parseNpmInstall(node: Node) {
-        // todo
+        if (!this.isMeteorInstall(node)) return;
+        const { node_modules, type } = this.parseInstall(node);
+        if (type !== 'npm' || !node_modules) {
+            return;
+        }
+        
+        const npmPackages = [];
+        for (const directory of node_modules.value.properties) {
+            if (!isObjectExpression(directory.value)) return; // Not a directory
+            const packageJson = {
+                name: '',
+                main: '',
+                version: '',
+            }
+            
+            for (const entry of directory.value.properties) {
+                if (!isObjectProperty(entry)) {
+                    Logger.warn(`Parsed an unexpected property from meteorInstall node module (${entry.type})`, entry);
+                    return;
+                }
+                if (propParser.getKey(entry) === 'package.json') {
+                    // Todo: fill in package.json
+                }
+                // Todo: Recurse through all directories
+                // todo: Track exported modules
+            }
+            
+            npmPackages.push(packageJson);
+        }
     }
     
     protected static isRequireDeclaration(node: Node): node is VariableDeclarator {
