@@ -88,7 +88,8 @@ export default class MeteorPackage implements Omit<ParsedPackage, 'packageScopeE
         }
         
         const meteorNodePackage = new MeteorPackage({ ...nodePackage, packageScopeExports: {} }, { timeSpent: 'none' });
-        return meteorNodePackage.getModule({ importPath: moduleImport.replace(`${nodePackage.name}/`, '') })
+        const childPackageImportPath = moduleImport.replace(nodePackage.name, '').replace(/^\//, '');
+        return meteorNodePackage.getModule({ importPath: childPackageImportPath });
     }
     
     public get mainModule(): PackageSubmodule | undefined {
