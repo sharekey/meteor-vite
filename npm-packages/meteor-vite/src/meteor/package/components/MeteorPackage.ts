@@ -106,6 +106,14 @@ export default class MeteorPackage implements Omit<ParsedPackage, 'packageScopeE
             return;
         }
         
+        if (this.mainModulePath in this.modules && this.parsedPackage.type === 'npm') {
+            return new PackageSubmodule({
+                meteorPackage: this,
+                modulePath: this.mainModulePath,
+                exports: this.modules[this.mainModulePath]
+            })
+        }
+        
         const [
             node_modules,
             meteor,
