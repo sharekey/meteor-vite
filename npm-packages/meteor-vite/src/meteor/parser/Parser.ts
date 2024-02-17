@@ -307,6 +307,11 @@ export interface ParsedPackage {
     packageScopeExports: PackageScopeExports;
     
     /**
+     * Whether the parsed package is a Meteor-bundled npm package from modules.js or a normal Meteor package.
+     */
+    type?: 'atmosphere' | 'npm';
+    
+    /**
      * Base Atmosphere package import This is usually where we find the full package content, even for packages
      * that have multiple entry points.
      * E.g. `meteor/ostrio:cookies`, `meteor/meteor`, `meteor/vite:bundler`
