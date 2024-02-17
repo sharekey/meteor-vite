@@ -25,13 +25,6 @@ export class MeteorInstall {
         this.packageId = packageId;
         this.name = name;
         this.type = type;
-        if (type === 'npm') {
-            this.packageJson = {
-                name: '',
-                version: '',
-                main: '',
-            }
-        }
     }
     
     public static parse(node: Node) {
