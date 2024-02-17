@@ -71,20 +71,27 @@ export default class MeteorPackage implements Omit<ParsedPackage, 'packageScopeE
             return new PackageSubmodule({ modulePath, exports, meteorPackage: this });
         }
         
-        if (importPath.startsWith('/node_modules/')) {
-            if (!this.parsedPackage.node_modules) {
-                throw new MeteorPackageError(`Unable to retrieve npm packages from Meteor module. (${importPath})`, this);
-            }
-            const moduleImport = importPath.replace('/node_modules/', '');
-            // Todo: This matcher might not be robust enough in the event of similarly named packages
-            const nodePackage = this.parsedPackage.node_modules.find(({ name }) => moduleImport.startsWith(name));
-            if (!nodePackage) {
-                throw new MeteorPackageError(`Could not locate npm package: ${nodePackage} in ${this.name} (${importPath})`, this);
-            }
-            return new PackageSubmodule({ modulePath: moduleImport, exports, meteorPackage: new MeteorPackage({ nodePackage }, { timeSpent: 0 }) })
+        if (!importPath.startsWith('/node_modules/')) {
+            throw new MeteorPackageError(`Could not locate module for path: ${importPath}!`, this);
         }
         
-        throw new MeteorPackageError(`Could not locate module for path: ${importPath}!`, this);
+        if (!this.parsedPackage.node_modules) {
+            throw new MeteorPackageError(`Unable to retrieve npm packages from Meteor module. (${importPath})`, this);
+        }
+        
+        // Todo: The node package matcher might not be robust enough in the event of similarly named packages
+        const moduleImport = importPath.replace('/node_modules/', '');
+        const nodePackage = this.parsedPackage.node_modules.find(({ name }) => moduleImport.startsWith(name));
+        
+        if (!nodePackage) {
+            throw new MeteorPackageError(`Could not locate npm package: ${nodePackage} in ${this.name} (${importPath})`, this);
+        }
+        
+        return new PackageSubmodule({
+            modulePath: moduleImport,
+            exports, meteorPackage: new MeteorPackage({ nodePackage }, { timeSpent: 0 })
+        })
+        
     }
     
     public get mainModule(): PackageSubmodule | undefined {
