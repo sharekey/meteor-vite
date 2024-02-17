@@ -30,7 +30,7 @@ export class PackageModule {
     /**
      * Check if provided node is a valid `module.[method]` call expression.
      */
-    protected shouldParse(node: Node): node is ModuleMethod.MethodMap[ModuleMethodName] {
+    protected isModuleMethodCall(node: Node): node is ModuleMethod.MethodMap[ModuleMethodName] {
         if (node.type !== 'CallExpression') return false;
         
         const callee = node.callee;
@@ -54,7 +54,7 @@ export class PackageModule {
      * Todo: Possibly migrate parsers to their own class to save on memory usage?
      */
     public parse(node: Node) {
-        if (!this.shouldParse(node)) return;
+        if (!this.isModuleMethodCall(node)) return;
         
         if (this.isMethod(node, 'link')) {
             return this.exports.push(...this.parseLink(node));
