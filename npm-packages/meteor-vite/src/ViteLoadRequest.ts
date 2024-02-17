@@ -99,6 +99,7 @@ export default class ViteLoadRequest {
             return importPath;
         }
         
+        // Todo: Try to cache the meteor/modules package - reading from it can be expensive for larger projects
         return importPath.replace('meteor:', 'meteor/modules/node_modules/');
     }
 
