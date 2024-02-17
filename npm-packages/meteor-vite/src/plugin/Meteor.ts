@@ -93,6 +93,11 @@ export interface PluginSettings {
     clientEntry: string;
     
     /**
+     * Skips bundling the provided npm packages if they are already provided by Meteor.
+     */
+    externalizeNpmPackages: string[];
+    
+    /**
      * Override the destination directory for the intermediary Vite bundle - before the bundle is passed through
      * its final stage through the Meteor bundler.
      */
