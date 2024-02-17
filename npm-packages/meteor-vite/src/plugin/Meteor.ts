@@ -39,9 +39,21 @@ export default function meteor(config: PluginOptions) {
  */
 export function meteorWorker(config: PartialPluginOptions): PluginOption {
     const METEOR_LOCAL_DIR = process.env.METEOR_LOCAL_DIR || Path.join('.meteor', 'local');
+    let enforce: 'pre' | undefined;
+    if (config.externalizeNpmPackages) {
+        enforce = 'pre';
+    }
     return [
         {
             name: 'meteor-vite:config',
+            enforce,
+            resolveId(id) {
+                const match = config.externalizeNpmPackages?.find((name) => name && id.startsWith(name));
+                if (!match) {
+                    return;
+                }
+                return `\0meteor:${match}`;
+            },
             config: (userConfig) =>  {
                 mergeMeteorSettings(userConfig, {
                     meteorStubs: {
