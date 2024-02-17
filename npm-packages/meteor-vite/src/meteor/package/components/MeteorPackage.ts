@@ -81,13 +81,15 @@ export default class MeteorPackage implements Omit<ParsedPackage, 'packageScopeE
         
         const moduleImport = importPath.replace('/node_modules/', '');
         const nodePackage = this.parsedPackage.node_modules.find(({ name }) => {
+            if (!name) {
+                return;
+            }
             if (name === moduleImport) {
                 return true;
             }
             if (moduleImport.startsWith(name)) {
                 return true;
             }
-            return false;
         });
         
         if (!nodePackage) {
