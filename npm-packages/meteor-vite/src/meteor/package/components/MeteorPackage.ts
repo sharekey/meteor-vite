@@ -79,9 +79,16 @@ export default class MeteorPackage implements Omit<ParsedPackage, 'packageScopeE
             throw new MeteorPackageError(`Unable to retrieve npm packages from Meteor module. (${importPath})`, this);
         }
         
-        // Todo: The node package matcher might not be robust enough in the event of similarly named packages
         const moduleImport = importPath.replace('/node_modules/', '');
-        const nodePackage = this.parsedPackage.node_modules.find(({ name }) => moduleImport.startsWith(name));
+        const nodePackage = this.parsedPackage.node_modules.find(({ name }) => {
+            if (name === moduleImport) {
+                return true;
+            }
+            if (moduleImport.startsWith(name)) {
+                return true;
+            }
+            return false;
+        });
         
         if (!nodePackage) {
             throw new MeteorPackageError(`Could not locate npm package: ${nodePackage} in ${this.name} (${importPath})`, this);
