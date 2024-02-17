@@ -55,13 +55,13 @@ export default class ViteLoadRequest {
     }
     
     public static resolveId(id: string) {
-        if (id.startsWith('meteor/')) {
+        if (id.startsWith('meteor/') || id.startsWith('meteor:')) {
             return `\0${id}`;
         }
     }
     
     public static isStubRequest(id: string) {
-        return id.startsWith('\0meteor/');
+        return id.startsWith('\0meteor/') || id.startsWith('\0meteor:');
     }
     
     /**
