@@ -91,9 +91,15 @@ export default class ViteLoadRequest {
      *
      * @example
      * '\0meteor/meteor' -> 'meteor/meteor'
+     * '\0meteor:react' -> 'meteor/modules/node_modules/react'
      */
     protected static getStubId(viteId: string) {
-        return viteId.slice(1);
+        const importPath = viteId.slice(1);
+        if (importPath.startsWith('meteor/')) {
+            return importPath;
+        }
+        
+        return importPath.replace('meteor:', 'meteor/modules/node_modules/');
     }
 
     protected static loadFileData({ id, pluginSettings: { meteorStubs } }: PreContextRequest) {
