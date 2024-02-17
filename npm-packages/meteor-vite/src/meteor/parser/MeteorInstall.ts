@@ -27,11 +27,41 @@ export class MeteorInstall {
         this.type = type;
     }
     
-    public static parse(node: Node) {
-        const atmosphere = this.parseAtmosphereInstall(node);
-        const npm = this.parseNpmInstall(node);
+    public static parse(node: Node): { npm?: MeteorInstall[], atmosphere?: MeteorInstall } {
+        if (!this.isMeteorInstall(node)) return {};
+        const { meteor, node_modules } = this.parseInstall(node);
+        const npm = [];
         
-        return { npm, atmosphere };
+        if (meteor) {
+            const packageName = meteor.value.properties[0];
+            const packageModules = packageName.value.properties;
+            
+            const atmosphere = new this({
+                packageId: `${propParser.getKey(meteor)}/${propParser.getKey(packageName)}`,
+                name: propParser.getKey(packageName),
+                type: 'atmosphere',
+            });
+            
+            atmosphere.traverseModules(packageModules, '');
+            return { atmosphere };
+        }
+        
+        if (!node_modules) {
+            return {};
+        }
+        
+        for (const directory of node_modules?.value.properties) {
+            if (!isObjectExpression(directory.value)) return {}; // Not a directory
+            const npmPackage = new this({
+                type: 'npm',
+                packageId: `${propParser.getKey(directory)}`,
+                name: '',
+            });
+            npmPackage.traverseModules(directory.value.properties as MeteorPackageProperty[], '');
+            npm.push(npmPackage);
+        }
+        
+        return { npm };
     }
     
     protected static parseInstall(node: MeteorInstallCallExpression) {
@@ -53,60 +83,6 @@ export class MeteorInstall {
             type: 'npm',
             node_modules,
         };
-    }
-    
-    protected static parseAtmosphereInstall(node: Node) {
-        if (!this.isRequireDeclaration(node)) return;
-        if (!this.isMeteorInstall(node.init)) return;
-        
-        
-        const { meteor, type } = this.parseInstall(node.init);
-        if (type !== 'atmosphere' || !meteor) {
-            return;
-        }
-        
-        const packageName = meteor.value.properties[0];
-        const packageModules = packageName.value.properties;
-        
-        const meteorPackage = new this({
-            packageId: `${propParser.getKey(meteor)}/${propParser.getKey(packageName)}`,
-            name: propParser.getKey(packageName),
-            type: 'atmosphere',
-        });
-        
-        meteorPackage.traverseModules(packageModules, '');
-        
-        return meteorPackage;
-    }
-    
-    protected static parseNpmInstall(node: Node) {
-        if (!this.isMeteorInstall(node)) return;
-        
-        const { node_modules, type } = this.parseInstall(node);
-        const npmPackages = [];
-        
-        if (type !== 'npm' || !node_modules) return;
-        
-        for (const directory of node_modules.value.properties) {
-            if (!isObjectExpression(directory.value)) return; // Not a directory
-            const npmPackage = new this({
-                type: 'npm',
-                packageId: `${propParser.getKey(directory)}`,
-                name: '',
-            });
-            npmPackage.traverseModules(directory.value.properties as MeteorPackageProperty[], '');
-            npmPackages.push(npmPackage);
-        }
-        
-        return npmPackages;
-    }
-    
-    protected static isRequireDeclaration(node: Node): node is VariableDeclarator {
-        if (node.type !== 'VariableDeclarator') return false;
-        if (node.id.type !== 'Identifier') return false;
-        if (node.id.name !== 'require') return false;
-        
-        return true;
     }
     
     protected static isMeteorInstall(expression?: Node | null): expression is MeteorInstallCallExpression {
