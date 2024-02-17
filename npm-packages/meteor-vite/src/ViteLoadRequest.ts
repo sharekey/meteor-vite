@@ -1,35 +1,67 @@
-import { existsSync } from 'fs';
+import NodeFS, { existsSync } from 'fs';
 import FS from 'fs/promises';
-import NodeFS from 'fs';
 import Path from 'path';
 import pc from 'picocolors';
 import { ViteDevServer } from 'vite';
+import { MeteorViteError } from './error/MeteorViteError';
+import AutoImportQueue from './meteor/package/AutoImportQueue';
+import { isSameModulePath } from './meteor/package/components/MeteorPackage';
 import { PluginSettings } from './plugin/Meteor';
 import { createLabelledLogger, LabelLogger } from './utilities/Logger';
-import { isSameModulePath } from './meteor/package/components/MeteorPackage';
-import AutoImportQueue from './meteor/package/AutoImportQueue';
-import { MeteorViteError } from './error/MeteorViteError';
-import type { MeteorStubsSettings } from './plugin/MeteorStubs';
 
 export default class ViteLoadRequest {
     
+    public mainModulePath?: string;
+    public isLazyLoaded: boolean;
+    public log: LabelLogger;
+    
+    constructor(public readonly context: RequestContext) {
+        this.isLazyLoaded = false;
+        this.log = createLabelledLogger(`[${pc.yellow(context.id.replace('meteor/', ''))}]`);
+        
+        context.manifest?.resources.forEach((resource) => {
+            const isMainModule = resource.fileOptions?.mainModule;
+            if (isMainModule) {
+                this.mainModulePath = resource.path;
+            }
+            if (!this.context.file.importPath && isMainModule) {
+                this.isLazyLoaded = resource.fileOptions?.lazy || false;
+            }
+            if (isSameModulePath({
+                filepathA: this.context.file.importPath || '',
+                filepathB: resource.path,
+                compareExtensions: false,
+            })) {
+                this.isLazyLoaded = resource.fileOptions?.lazy || false;
+            }
+        });
+    };
+    
+    /**
+     * Relative path (for the current package) for the module to yield stubs for.
+     *
+     * @example formatting
+     * this.context.id  // meteor/ostrio:cookies -> index.js (tries to detect mainModule)
+     *
+     * this.context.id // meteor/ostorio:cookies/some-file -> some-file.js
+     * this.context.id // meteor/ostorio:cookies/dir/some-other-file -> dir/some-other-file.js
+     */
+    public get requestedModulePath() {
+        if (!this.context.file.importPath) {
+            return this.mainModulePath;
+        }
+        
+        return this.context.file.importPath;
+    }
+    
     public static resolveId(id: string) {
         if (id.startsWith('meteor/')) {
-            return `\0${id}`
+            return `\0${id}`;
         }
     }
     
     public static isStubRequest(id: string) {
-        return id.startsWith('\0meteor/');}
-    
-    /**
-     * Slice off the request raw request identifier we use for determining whether to process the request or not.
-     *
-     * @example
-     * '\0meteor/meteor' -> 'meteor/meteor'
-     */
-    protected static getStubId(viteId: string) {
-        return viteId.slice(1);
+        return id.startsWith('\0meteor/');
     }
     
     /**
@@ -51,8 +83,19 @@ export default class ViteLoadRequest {
             file,
             manifest,
             ...request,
-        })
+        });
     }
+
+    /**
+     * Slice off the request raw request identifier we use for determining whether to process the request or not.
+     *
+     * @example
+     * '\0meteor/meteor' -> 'meteor/meteor'
+     */
+    protected static getStubId(viteId: string) {
+        return viteId.slice(1);
+    }
+
     protected static loadFileData({ id, pluginSettings: { meteorStubs } }: PreContextRequest) {
         let {
             /**
@@ -68,23 +111,26 @@ export default class ViteLoadRequest {
              * E.g. `import { Something } from `meteor/ostrio:cookies/some-module`
              * @type {string | undefined}
              */
-            importPath
+            importPath,
         } = id.match( // todo: maybe use the Node.js Path utility?
-            /(?<packageId>(meteor\/)[\w\-. ]+(:[\w\-. ]+)?)(?<importPath>\/.+)?/
+            /(?<packageId>(meteor\/)[\w\-. ]+(:[\w\-. ]+)?)(?<importPath>\/.+)?/,
         )?.groups || {} as { packageId: string, importPath?: string };
         
         const packageName = packageId.replace(/^meteor\//, '');
         const sourceName = packageName.replace(':', '_');
         const sourceFile = `${sourceName}.js`;
         const sourcePath = Path.join(meteorStubs.meteor.packagePath, sourceFile);
-        const resolverResultCache: ResolverResultCache = JSON.parse(NodeFS.readFileSync(Path.join(meteorStubs.meteor.isopackPath, '../resolver-result-cache.json'), 'utf-8'));
+        const resolverResultCache: ResolverResultCache = JSON.parse(NodeFS.readFileSync(Path.join(
+            meteorStubs.meteor.isopackPath,
+            '../resolver-result-cache.json',
+        ), 'utf-8'));
         const packageVersion = resolverResultCache.lastOutput.answer[packageName];
         const globalMeteorPackagesDir = meteorStubs.meteor.globalMeteorPackagesDir || this.guessMeteorPackagePath();
         
         const manifestPath = {
             local: Path.join(meteorStubs.meteor.isopackPath, sourceName, 'web.browser.json'),
             globalCache: Path.join(globalMeteorPackagesDir, sourceName, packageVersion, 'web.browser.json'),
-        }
+        };
         
         /**
          * Raw file content for the current file request.
@@ -93,7 +139,7 @@ export default class ViteLoadRequest {
          * @type {Promise<string>}
          */
         const content = FS.readFile(sourcePath, 'utf-8').catch((error: Error) => {
-            throw new MeteorViteStubRequestError(`Unable to read file content: ${error.message}`)
+            throw new MeteorViteStubRequestError(`Unable to read file content: ${error.message}`);
         });
         
         return {
@@ -104,7 +150,7 @@ export default class ViteLoadRequest {
             manifestPath: NodeFS.existsSync(manifestPath.local)
                           ? manifestPath.local
                           : manifestPath.globalCache,
-        }
+        };
     }
     
     /**
@@ -144,32 +190,6 @@ export default class ViteLoadRequest {
         return Path.join(packagePath, '../');
     }
     
-    public mainModulePath?: string;
-    public isLazyLoaded: boolean;
-    public log: LabelLogger;
-    
-    constructor(public readonly context: RequestContext ) {
-        this.isLazyLoaded = false;
-        this.log = createLabelledLogger(`[${pc.yellow(context.id.replace('meteor/', ''))}]`);
-        
-        context.manifest?.resources.forEach((resource) => {
-            const isMainModule = resource.fileOptions?.mainModule;
-            if (isMainModule) {
-                this.mainModulePath = resource.path
-            }
-            if (!this.context.file.importPath && isMainModule) {
-                this.isLazyLoaded = resource.fileOptions?.lazy || false;
-            }
-            if (isSameModulePath({
-                filepathA: this.context.file.importPath || '',
-                filepathB: resource.path,
-                compareExtensions: false,
-            })) {
-                this.isLazyLoaded = resource.fileOptions?.lazy || false;
-            }
-        })
-    };
-    
     /**
      * Forces an import statement for the current module into the user's Meteor mainModule.
      * Not to be confused with Vite's entrypoint.
@@ -182,7 +202,7 @@ export default class ViteLoadRequest {
         const meteorClientEntryFile = Path.resolve(process.cwd(), mainModule.client);
         
         if (!existsSync(meteorClientEntryFile)) {
-            throw new MeteorViteError(`meteor.mainModule.client file not found: ${meteorClientEntryFile}`)
+            throw new MeteorViteError(`meteor.mainModule.client file not found: ${meteorClientEntryFile}`);
         }
         
         await AutoImportQueue.write({
@@ -198,23 +218,6 @@ export default class ViteLoadRequest {
             
             this.context.server.restart(true);
         });
-    }
-    
-    /**
-     * Relative path (for the current package) for the module to yield stubs for.
-     *
-     * @example formatting
-     * this.context.id  // meteor/ostrio:cookies -> index.js (tries to detect mainModule)
-     *
-     * this.context.id // meteor/ostorio:cookies/some-file -> some-file.js
-     * this.context.id // meteor/ostorio:cookies/dir/some-other-file -> dir/some-other-file.js
-     */
-    public get requestedModulePath() {
-        if (!this.context.file.importPath) {
-            return this.mainModulePath;
-        }
-        
-        return this.context.file.importPath;
     }
     
 }
@@ -243,7 +246,7 @@ interface ManifestContent {
     format: string;
     declaredExports: [];
     uses: { 'package': string }[];
-    resources: ManifestResource[]
+    resources: ManifestResource[];
 }
 
 interface ManifestResource {
@@ -254,7 +257,7 @@ interface ManifestResource {
     offset: number;
     length: number;
     type: string;
-    hash: string
+    hash: string;
 }
 
 type VersionString = `${string}.${string}.${string}`;
@@ -277,4 +280,6 @@ export class RefreshNeeded extends MeteorViteError {
         super(message);
     }
 }
-class MeteorViteStubRequestError extends MeteorViteError {}
+
+class MeteorViteStubRequestError extends MeteorViteError {
+}
