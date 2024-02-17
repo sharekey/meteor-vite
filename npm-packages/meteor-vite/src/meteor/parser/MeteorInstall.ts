@@ -10,7 +10,6 @@ import {
     traverse,
     VariableDeclarator,
 } from '@babel/types';
-import Logger from '../../utilities/Logger';
 import { PackageModule } from './PackageModule';
 import { ModuleList, propParser } from './Parser';
 import { ModuleExportsError } from './ParserError';
@@ -24,14 +23,26 @@ import { MeteorInstallCallExpression, MeteorInstallMeteorProperty, MeteorPackage
  */
 export class MeteorInstall {
     public readonly modules: ModuleList = {};
-    public readonly packageId: string;
-    public readonly name: string;
     public readonly type: 'atmosphere' | 'npm';
+    public packageId: string;
+    public name: string;
+    public packageJson?: {
+        name: string,
+        version: string,
+        main: string,
+    }
     
     constructor({ packageId, name, type }: Pick<MeteorInstall, 'packageId' | 'name' | 'type'>) {
         this.packageId = packageId;
         this.name = name;
         this.type = type;
+        if (type === 'npm') {
+            this.packageJson = {
+                name: '',
+                version: '',
+                main: '',
+            }
+        }
     }
     
     public static parse(node: Node) {
@@ -99,26 +110,12 @@ export class MeteorInstall {
         const npmPackages = [];
         for (const directory of node_modules.value.properties) {
             if (!isObjectExpression(directory.value)) return; // Not a directory
-            let packageJson = {
-                name: '',
-                main: '',
-                version: '',
-            };
+            const npmPackage = new this({ type: 'npm', packageId: `${propParser.getKey(directory)}`, name: '' });
+            npmPackage.traverseModules(directory.value.properties as MeteorPackageProperty[], '');
             
-            for (const entry of directory.value.properties) {
-                if (!isObjectProperty(entry)) {
-                    Logger.warn(`Parsed an unexpected property from meteorInstall node module (${entry.type})`, entry);
-                    return;
-                }
-                if (propParser.getKey(entry) === 'package.json') {
-                    packageJson = parsePackageJson(entry);
-                }
-                // Todo: Recurse through all directories
-                // todo: Track exported modules
-            }
-            
-            npmPackages.push(packageJson);
+            npmPackages.push(npmPackage);
         }
+        console.log(npmPackages);
     }
     
     protected static isRequireDeclaration(node: Node): node is VariableDeclarator {
@@ -139,12 +136,21 @@ export class MeteorInstall {
     
     public traverseModules(properties: MeteorPackageProperty[], parentPath: string) {
         properties.forEach((property) => {
-            const path = `${parentPath}${property.key.value.toString()}`;
+            const name = propParser.getKey(property);
+            const path = `${parentPath}${name}`;
             const module = new PackageModule();
             
             
             if (property.value.type === 'ObjectExpression') {
                 return this.traverseModules(property.value.properties, `${path}/`);
+            }
+            
+            // todo: refactor into PackageModule
+            if (name === 'package.json') {
+                
+                const json = this.packageJson = parsePackageJson(property);
+                this.name = json.name;
+                this.packageId = json.name;
             }
             
             traverse(property.value.body, {
