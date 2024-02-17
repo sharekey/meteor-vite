@@ -55,6 +55,7 @@ export default class MeteorPackage implements Omit<ParsedPackage, 'packageScopeE
             return this.mainModule;
         }
         
+        
         const entries = Object.entries(this.modules);
         const file = entries.find(
             ([fileName, modules]) => isSameModulePath({
@@ -64,13 +65,20 @@ export default class MeteorPackage implements Omit<ParsedPackage, 'packageScopeE
             }),
         );
         
-        if (!file) {
-            throw new MeteorPackageError(`Could not locate module for path: ${importPath}!`, this);
+        if (file) {
+            const [modulePath, exports] = file;
+            
+            return new PackageSubmodule({ modulePath, exports, meteorPackage: this });
         }
         
-        const [modulePath, exports] = file;
+        if (importPath.startsWith('/node_modules/')) {
+            if (!this.parsedPackage.node_modules) {
+                throw new MeteorPackageError(`Unable to retrieve npm packages from Meteor module. (${importPath})`, this);
+            }
+            // Todo: resolve to exports for matching node module
+        }
         
-        return new PackageSubmodule({ modulePath, exports, meteorPackage: this });
+        throw new MeteorPackageError(`Could not locate module for path: ${importPath}!`, this);
     }
     
     public get mainModule(): PackageSubmodule | undefined {
