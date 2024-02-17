@@ -19,6 +19,7 @@
     "meteor-node-stubs": "^1.2.5",
     "meteor-vite": "1.*",
     "safe-json-stringify": "^1.2.0",
+    "test-externalization": "file:./npm-packages/test-externalization",
     "vue": "^3.2.47",
     "vue-router": "^4.1.6"
   },
