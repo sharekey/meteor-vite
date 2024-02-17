@@ -84,19 +84,23 @@ export class MeteorInstall {
     
     protected static parseNpmInstall(node: Node) {
         if (!this.isMeteorInstall(node)) return;
-        const { node_modules, type } = this.parseInstall(node);
-        if (type !== 'npm' || !node_modules) {
-            return;
-        }
         
+        const { node_modules, type } = this.parseInstall(node);
         const npmPackages = [];
+        
+        if (type !== 'npm' || !node_modules) return;
+        
         for (const directory of node_modules.value.properties) {
             if (!isObjectExpression(directory.value)) return; // Not a directory
-            const npmPackage = new this({ type: 'npm', packageId: `${propParser.getKey(directory)}`, name: '' });
+            const npmPackage = new this({
+                type: 'npm',
+                packageId: `${propParser.getKey(directory)}`,
+                name: '',
+            });
             npmPackage.traverseModules(directory.value.properties as MeteorPackageProperty[], '');
-            
             npmPackages.push(npmPackage);
         }
+        
         console.log(npmPackages);
     }
     
