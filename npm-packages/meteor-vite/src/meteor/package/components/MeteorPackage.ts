@@ -89,7 +89,7 @@ export default class MeteorPackage implements Omit<ParsedPackage, 'packageScopeE
         
         return new PackageSubmodule({
             modulePath: moduleImport,
-            exports, meteorPackage: new MeteorPackage({ nodePackage }, { timeSpent: 0 })
+            exports, meteorPackage: new MeteorPackage({ ...nodePackage, packageScopeExports: {} }, { timeSpent: 0 })
         })
         
     }
