@@ -15,6 +15,7 @@ export class MeteorInstall {
     public readonly type: 'atmosphere' | 'npm';
     public packageId: string;
     public name: string;
+    public mainModulePath?: string;
     public packageJson?: {
         name: string,
         version: string,
@@ -151,6 +152,7 @@ export class MeteorInstall {
             
             this.name = this.packageJson.name;
             this.packageId = this.packageJson.name;
+            this.mainModulePath = this.packageJson.main;
         });
     }
     
