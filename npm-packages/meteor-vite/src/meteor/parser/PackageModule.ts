@@ -14,8 +14,7 @@ import { KnownModuleMethodNames, ModuleMethod, ModuleMethodName } from './Parser
 export class PackageModule {
     public readonly exports: ModuleExportData[] = [];
     
-    // Todo: Accept module metadata from callee to provide more insightful error messages
-    constructor() {
+    constructor(public readonly path: string) {
     }
     
     /**

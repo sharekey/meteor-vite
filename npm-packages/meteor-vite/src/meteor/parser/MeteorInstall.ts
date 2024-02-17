@@ -138,7 +138,7 @@ export class MeteorInstall {
         properties.forEach((property) => {
             const name = propParser.getKey(property);
             const path = `${parentPath}${name}`;
-            const module = new PackageModule();
+            const module = new PackageModule(path);
             
             
             if (property.value.type === 'ObjectExpression') {
