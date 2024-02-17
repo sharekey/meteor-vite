@@ -87,11 +87,8 @@ export default class MeteorPackage implements Omit<ParsedPackage, 'packageScopeE
             throw new MeteorPackageError(`Could not locate npm package: ${nodePackage} in ${this.name} (${importPath})`, this);
         }
         
-        return new PackageSubmodule({
-            modulePath: moduleImport,
-            exports, meteorPackage: new MeteorPackage({ ...nodePackage, packageScopeExports: {} }, { timeSpent: 'none' })
-        })
-        
+        const meteorNodePackage = new MeteorPackage({ ...nodePackage, packageScopeExports: {} }, { timeSpent: 'none' });
+        return meteorNodePackage.getModule({ importPath: moduleImport.replace(`${nodePackage.name}/`, '') })
     }
     
     public get mainModule(): PackageSubmodule | undefined {
