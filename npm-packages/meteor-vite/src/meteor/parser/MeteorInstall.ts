@@ -101,7 +101,7 @@ export class MeteorInstall {
             npmPackages.push(npmPackage);
         }
         
-        console.log(npmPackages);
+        return npmPackages;
     }
     
     protected static isRequireDeclaration(node: Node): node is VariableDeclarator {
