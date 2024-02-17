@@ -37,6 +37,7 @@
     "link:svelte": "npm run example link svelte",
     "link:react": "npm run example link react",
 
+    "start": "npm run example start",
     "start:vue": "npm run example start vue",
     "start:svelte": "npm run example start svelte",
     "start:react": "npm run example start react"
