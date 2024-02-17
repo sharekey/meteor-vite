@@ -78,16 +78,21 @@ function parseSource(code: string) {
             packageScopeExports: {},
             mainModulePath: '',
             packageId: '',
+            node_modules: [],
         }
         
         traverse(source, {
             enter(node) {
                 const packageScope = parsePackageScope(node);
-                const meteorInstall = MeteorInstall.parse(node);
+                const { atmosphere, npm } = MeteorInstall.parse(node);
                 result.mainModulePath = readMainModulePath(node) || result.mainModulePath;
                 
-                if (meteorInstall) {
-                    Object.assign(result, meteorInstall)
+                if (atmosphere) {
+                    Object.assign(result, atmosphere)
+                }
+                
+                if (npm) {
+                    result.node_modules?.push(...npm);
                 }
                 
                 if (packageScope) {
@@ -282,6 +287,12 @@ export interface ParsedPackage {
      * List of ES modules included in this package.
      */
     modules: ModuleList;
+    
+    /**
+     * List of npm packages bundled with this package.
+     * This probably only applies to Meteor's `modules.js` package.
+     */
+    node_modules?: MeteorInstall[];
     
     /**
      * Path to the package's mainModule as defined with `api.mainModule(...)`

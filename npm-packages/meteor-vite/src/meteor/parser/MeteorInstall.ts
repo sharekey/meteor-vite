@@ -28,13 +28,10 @@ export class MeteorInstall {
     }
     
     public static parse(node: Node) {
-        const atmosphereInstall = this.parseAtmosphereInstall(node);
-        const npmInstall = this.parseNpmInstall(node);
+        const atmosphere = this.parseAtmosphereInstall(node);
+        const npm = this.parseNpmInstall(node);
         
-        if (atmosphereInstall) {
-            return atmosphereInstall;
-        }
-        return npmInstall;
+        return { npm, atmosphere };
     }
     
     protected static parseInstall(node: MeteorInstallCallExpression) {
