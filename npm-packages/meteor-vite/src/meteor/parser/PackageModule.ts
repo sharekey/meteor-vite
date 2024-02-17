@@ -1,4 +1,11 @@
-import { Node, NumericLiteral, ObjectExpression, StringLiteral } from '@babel/types';
+import {
+    isAssignmentExpression, isIdentifier,
+    isMemberExpression, isObjectExpression, isObjectProperty, isStringLiteral,
+    Node,
+    NumericLiteral,
+    ObjectExpression,
+    StringLiteral,
+} from '@babel/types';
 import Logger from '../../utilities/Logger';
 import { ModuleExportData, propParser } from './Parser';
 import { ModuleExportsError } from './ParserError';
@@ -13,6 +20,7 @@ import { KnownModuleMethodNames, ModuleMethod, ModuleMethodName } from './Parser
  */
 export class PackageModule {
     public readonly exports: ModuleExportData[] = [];
+    public jsonContent?: Record<string, string>
     
     constructor(public readonly path: string) {
     }
@@ -49,12 +57,26 @@ export class PackageModule {
         return true;
     }
     
+    protected getModuleExportsAssignment(node: Node) {
+        if (!isAssignmentExpression(node)) return;
+        if (!isMemberExpression(node.left)) return;
+        if (!isObjectExpression(node.right)) return;
+        if (!isIdentifier(node.left.object, { name: 'module' })) return;
+        if (!isIdentifier(node.left.property, { name: 'exports' })) return;
+        
+        return node.right;
+    }
+    
     /**
      * Parse everything within the current module and store detected exports.
      * Todo: Possibly migrate parsers to their own class to save on memory usage?
      */
     public parse(node: Node) {
-        if (!this.isModuleMethodCall(node)) return;
+        if (!this.isModuleMethodCall(node) || !this.getModuleExportsAssignment(node)) return;
+        
+        if (this.path.endsWith('package.json')) {
+            this.parseJson(node);
+        }
         
         if (this.isMethod(node, 'link')) {
             return this.exports.push(...this.parseLink(node));
@@ -67,6 +89,24 @@ export class PackageModule {
         if (this.isMethod(node, 'exportDefault')) {
             this.exports.push(...this.parseExportDefault(node));
             return;
+        }
+    }
+    
+    protected parseJson(node: Node) {
+        const moduleExports = this.getModuleExportsAssignment(node);
+        this.jsonContent = {};
+        if (!moduleExports) {
+            throw new ModuleExportsError('Couldn\'t retrieve JSON module exports!', node);
+        }
+        for (const prop of moduleExports.properties) {
+            if (!isObjectProperty(prop)) {
+                throw new ModuleExportsError('JSON module had an unexpected property export', prop);
+            }
+            const key = propParser.getKey(prop);
+            if (!isStringLiteral(prop.value)) {
+                throw new ModuleExportsError(`JSON module key '${key}' field had an unexpected value`, prop.value);
+            }
+            Object.assign(this.jsonContent, { [key]: prop.value.value });
         }
     }
     
