@@ -99,8 +99,11 @@ export class PackageModule {
                 if (!isStringLiteral(moduleExports.arguments[0])) return;
                 
                 // Prevent duplicate default exports - React has a conditional export that can cause some issues
-                if (this.exports.find(({ as, name }) => (as || name) === 'default')) {
-                    return;
+                if (!this.exports.find(({ as, name }) => (as || name) === 'default')) {
+                    this.exports.push({
+                        type: 'export',
+                        name: 'default',
+                    })
                 }
                 this.exports.push({
                     type: 're-export',
