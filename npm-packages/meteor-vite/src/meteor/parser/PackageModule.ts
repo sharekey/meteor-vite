@@ -95,13 +95,18 @@ export class PackageModule {
         
         if (moduleExports) {
             if (isCallExpression(moduleExports)) { // module.exports = require('..')
+                if (!isIdentifier(moduleExports.callee, { name: 'require' })) return;
+                if (!isStringLiteral(moduleExports.arguments[0])) return;
+                
                 // Prevent duplicate default exports - React has a conditional export that can cause some issues
                 if (this.exports.find(({ as, name }) => (as || name) === 'default')) {
                     return;
                 }
                 this.exports.push({
-                    type: 'export',
-                    name: 'default',
+                    type: 're-export',
+                    from: moduleExports.arguments[0].value,
+                    as: 'default',
+                    name: '*'
                 });
                 return;
             }
