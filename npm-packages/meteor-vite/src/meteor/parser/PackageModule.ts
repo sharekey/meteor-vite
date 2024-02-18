@@ -105,7 +105,6 @@ export class PackageModule {
                 this.exports.push({
                     type: 're-export',
                     from: moduleExports.arguments[0].value,
-                    as: 'default',
                     name: '*'
                 });
                 return;
