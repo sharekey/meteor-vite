@@ -72,12 +72,16 @@ export class PackageModule {
      * Todo: Possibly migrate parsers to their own class to save on memory usage?
      */
     public parse(node: Node) {
-        if (this.path.endsWith('package.json')) {
-            const moduleExports = this.getModuleExportsAssignment(node);
-            
-            if (moduleExports) {
+        const moduleExports = this.getModuleExportsAssignment(node);
+        
+        if (moduleExports) {
+            if (this.path.endsWith('map.json')) {
+                return; // Skip parsing source maps
+            }
+            if (this.path.endsWith('package.json')) {
                 this.parseJson(moduleExports);
             }
+            this.exports.push(...formatExports({ expression: moduleExports }));
         }
         
         if (!this.isModuleMethodCall(node)) return;
