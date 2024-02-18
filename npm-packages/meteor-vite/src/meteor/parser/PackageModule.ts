@@ -67,12 +67,30 @@ export class PackageModule {
         return node.right;
     }
     
+    protected getCjsExportAssignment(node: Node) {
+        if (!isAssignmentExpression(node)) return;
+        if (!isMemberExpression(node.left)) return;
+        if (!isIdentifier(node.left.object, { name: 'exports' })) return;
+        if (!isIdentifier(node.left.property)) return;
+        
+        return node.left.property;
+    }
+    
     /**
      * Parse everything within the current module and store detected exports.
      * Todo: Possibly migrate parsers to their own class to save on memory usage?
      */
     public parse(node: Node) {
         const moduleExports = this.getModuleExportsAssignment(node);
+        const cjsExport = this.getCjsExportAssignment(node);
+        
+        if (cjsExport) { // export.<name> = (...)
+            this.exports.push({
+                name: cjsExport.name,
+                type: 'export',
+            });
+            return;
+        }
         
         
         if (moduleExports) {
