@@ -1,5 +1,6 @@
+import generate from '@babel/generator';
 import {
-    isAssignmentExpression, isIdentifier,
+    isAssignmentExpression, isCallExpression, isIdentifier,
     isMemberExpression, isObjectExpression, isObjectProperty, isStringLiteral,
     Node,
     NumericLiteral,
@@ -60,7 +61,6 @@ export class PackageModule {
     protected getModuleExportsAssignment(node: Node) {
         if (!isAssignmentExpression(node)) return;
         if (!isMemberExpression(node.left)) return;
-        if (!isObjectExpression(node.right)) return;
         if (!isIdentifier(node.left.object, { name: 'module' })) return;
         if (!isIdentifier(node.left.property, { name: 'exports' })) return;
         
@@ -74,7 +74,18 @@ export class PackageModule {
     public parse(node: Node) {
         const moduleExports = this.getModuleExportsAssignment(node);
         
+        
         if (moduleExports) {
+            if (isCallExpression(moduleExports)) { // module.exports = require('..')
+                this.exports.push({
+                    type: 'export',
+                    name: 'default',
+                });
+                return;
+            }
+            if (!isObjectExpression(moduleExports)) {
+                return;
+            }
             if (this.path.endsWith('map.json')) {
                 return; // Skip parsing source maps
             }
