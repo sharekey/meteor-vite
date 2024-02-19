@@ -3,6 +3,7 @@ import { execaSync } from 'execa';
 import fs from 'fs-extra';
 import type { WorkerResponseData } from 'meteor-vite';
 import path from 'node:path';
+import pc from 'picocolors';
 import { MeteorViteError } from '../utility/Errors';
 import { getBuildConfig } from '../utility/Helpers';
 import Logger from '../utility/Logger';
@@ -46,6 +47,7 @@ function prepareTemporaryMeteorProject() {
     ]
     
     Logger.info('Building packages to make them available to export analyzer...')
+    Logger.debug(`Intermediary project path: ${pc.yellow(tempMeteorProject)}`);
     
     // Check for project files that may be important if available
     for (const file of optionalFiles) {
