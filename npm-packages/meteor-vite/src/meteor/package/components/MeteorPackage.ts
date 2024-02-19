@@ -16,7 +16,7 @@ export default class MeteorPackage implements Omit<ParsedPackage, 'packageScopeE
     public readonly packageScopeExports: PackageExport[] = [];
     public readonly packageId: string;
     
-    constructor(public readonly parsedPackage: ParsedPackage, public readonly meta: { timeSpent: string; ignoreDuplicateExportsInPackages: string[] }) {
+    constructor(public readonly parsedPackage: ParsedPackage, public readonly meta: { timeSpent: string; ignoreDuplicateExportsInPackages?: string[] }) {
         this.name = parsedPackage.name;
         this.modules = parsedPackage.modules;
         this.mainModulePath = parsedPackage.mainModulePath;
@@ -151,7 +151,7 @@ export default class MeteorPackage implements Omit<ParsedPackage, 'packageScopeE
                 store.addEntry(entry);
             } catch (error) {
                 if (error instanceof ConflictingExportKeys) {
-                    if (this.meta?.ignoreDuplicateExportsInPackages.includes(submodule?.meteorPackage.packageId!)) {
+                    if (this.meta?.ignoreDuplicateExportsInPackages?.includes(submodule?.meteorPackage.packageId!)) {
                         return;
                     }
                 }
