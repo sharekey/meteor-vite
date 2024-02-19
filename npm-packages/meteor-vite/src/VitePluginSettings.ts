@@ -84,7 +84,7 @@ export interface PluginSettings {
         /**
          * Meteor project details. This resolved at runtime by our build plugin and injected into your Vite config.
          */
-        meteor: {
+        meteor?: {
             /**
              * Path to Meteor's internal package cache.
              * This can change independently of the isopack path depending on whether we're building for production or
