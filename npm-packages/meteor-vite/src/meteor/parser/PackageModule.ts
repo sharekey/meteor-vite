@@ -1,7 +1,11 @@
-import generate from '@babel/generator';
 import {
-    isAssignmentExpression, isCallExpression, isIdentifier,
-    isMemberExpression, isObjectExpression, isObjectProperty, isStringLiteral,
+    isAssignmentExpression,
+    isCallExpression,
+    isIdentifier,
+    isMemberExpression,
+    isObjectExpression,
+    isObjectProperty,
+    isStringLiteral,
     Node,
     NumericLiteral,
     ObjectExpression,
@@ -148,7 +152,7 @@ export class PackageModule {
             }
             const key = propParser.getKey(prop);
             if (!isStringLiteral(prop.value)) {
-                throw new ModuleExportsError(`JSON module key '${key}' field had an unexpected value`, prop.value);
+                throw new ModuleExportsError(`Meteor bundle had a package.json key (${key}) with an unexpected value`, prop.value);
             }
             Object.assign(this.jsonContent, { [key]: prop.value.value });
         }
