@@ -6,7 +6,8 @@ import { ViteDevServer } from 'vite';
 import { MeteorViteError } from './error/MeteorViteError';
 import AutoImportQueue from './meteor/package/AutoImportQueue';
 import { isSameModulePath } from './meteor/package/components/MeteorPackage';
-import { PluginSettings } from './plugin/Meteor';
+import type { PluginSettings } from './MeteorViteConfig';
+
 import { createLabelledLogger, LabelLogger } from './utilities/Logger';
 
 export default class ViteLoadRequest {

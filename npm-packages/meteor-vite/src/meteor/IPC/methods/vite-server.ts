@@ -1,9 +1,8 @@
 import FS from 'fs/promises';
 import Path from 'path';
 import { createServer, resolveConfig, ViteDevServer } from 'vite';
-import { MeteorViteConfig } from '../../../MeteorViteConfig';
+import { MeteorViteConfig, type ProjectJson } from '../../../MeteorViteConfig';
 import { meteorWorker } from '../../../plugin/Meteor';
-import { ProjectJson } from '../../../plugin/MeteorStubs';
 import Logger from '../../../utilities/Logger';
 import { RefreshNeeded } from '../../../ViteLoadRequest';
 import CreateIPCInterface, { IPCReply } from '../interface';
