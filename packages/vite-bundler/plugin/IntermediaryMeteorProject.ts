@@ -31,6 +31,9 @@ function prepareTemporaryMeteorProject() {
         'package.json',
         meteorMainModule,
     ]
+    const directoriesToCopy = [
+        'node_modules'
+    ];
     // List of packages to remove for the placeholder project.
     // This comes in handy for some Meteor build plugins that can conflict with Meteor-Vite.
     const replaceMeteorPackages = [
@@ -57,6 +60,14 @@ function prepareTemporaryMeteorProject() {
         const to = path.join(tempMeteorProject, file)
         fs.ensureDirSync(path.dirname(to))
         fs.copyFileSync(from, to)
+    }
+    
+    // Copy node_modules to ensure the package analyzer can read
+    // npm dependencies bundled by Meteor
+    for (const dir of directoriesToCopy) {
+        const from = path.join(cwd, dir);
+        const to = path.join(tempMeteorProject, dir);
+        fs.copySync(from, to);
     }
     
     // Symblink to `packages` folder
