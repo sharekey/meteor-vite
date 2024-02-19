@@ -3,7 +3,7 @@ import { MeteorViteError } from '../../../error/MeteorViteError';
 import Logger from '../../../utilities/Logger';
 import type { ModuleList, ParsedPackage } from '../../parser/Parser';
 import { parseMeteorPackage } from '../../parser/Parser';
-import { SerializationStore } from '../SerializationStore';
+import { ConflictingExportKeys, SerializationStore } from '../SerializationStore';
 import type ModuleExport from './ModuleExport';
 import PackageExport from './PackageExport';
 import { PackageSubmodule } from './PackageSubmodule';
@@ -16,7 +16,7 @@ export default class MeteorPackage implements Omit<ParsedPackage, 'packageScopeE
     public readonly packageScopeExports: PackageExport[] = [];
     public readonly packageId: string;
     
-    constructor(public readonly parsedPackage: ParsedPackage, public readonly meta: { timeSpent: string; }) {
+    constructor(public readonly parsedPackage: ParsedPackage, public readonly meta: { timeSpent: string; ignoreDuplicateExportsInPackages: string[] }) {
         this.name = parsedPackage.name;
         this.modules = parsedPackage.modules;
         this.mainModulePath = parsedPackage.mainModulePath;
@@ -144,16 +144,20 @@ export default class MeteorPackage implements Omit<ParsedPackage, 'packageScopeE
      */
     public serialize({ importPath }: { importPath?: string }) {
         const store = new SerializationStore();
+        const submodule = this.getModule({ importPath });
         
-        function addEntry(entry: ModuleExport | PackageExport) {
+        const addEntry = (entry: ModuleExport | PackageExport) => {
             try {
                 store.addEntry(entry);
             } catch (error) {
+                if (error instanceof ConflictingExportKeys) {
+                    if (this.meta?.ignoreDuplicateExportsInPackages.includes(submodule?.meteorPackage.packageId!)) {
+                        return;
+                    }
+                }
                 Logger.warn(error);
             }
         }
-        
-        const submodule = this.getModule({ importPath });
         
         if (submodule) {
             submodule.exports.forEach((entry) => {
