@@ -1,5 +1,6 @@
 import Path from 'path';
 import { MeteorViteError } from '../../../error/MeteorViteError';
+import Logger from '../../../utilities/Logger';
 import type { ModuleList, ParsedPackage } from '../../parser/Parser';
 import { parseMeteorPackage } from '../../parser/Parser';
 import { SerializationStore } from '../SerializationStore';
@@ -171,9 +172,15 @@ export default class MeteorPackage implements Omit<ParsedPackage, 'packageScopeE
                         // Todo extract path rewrites like this to a reusable method
                         importPath: entry.from?.replace('./', '')
                     });
-                    module!.exports.forEach((entry) => store.addEntry(entry));
+                    module!.exports.forEach((entry) => {
+                        try {
+                            store.addEntry(entry)
+                        } catch (error) {
+                            Logger.warn(error);
+                        }
+                    });
                 } catch (error) {
-                    console.warn(error);
+                    Logger.warn(error);
                     store.addEntry(entry);
                 }
             });
