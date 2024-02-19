@@ -14,13 +14,13 @@ export interface PluginSettings {
     /**
      * Skips bundling the provided npm packages if they are already provided by Meteor.
      */
-    externalizeNpmPackages: string[];
+    externalizeNpmPackages?: string[];
     
     /**
      * Override the destination directory for the intermediary Vite bundle - before the bundle is passed through
      * its final stage through the Meteor bundler.
      */
-    tempDir: string;
+    tempDir?: string;
     
     /**
      * Settings for controlling how stubs created by Meteor-Vite are validated.
