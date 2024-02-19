@@ -72,6 +72,7 @@ function prepareTemporaryMeteorProject() {
         // Todo: a symlink might be better here. (fall back to copy on systems without support)
         // Todo: This also lacks support for locally managed npm packages.
         // Alternatively, build in the context of the current directory.
+        fs.removeSync(to);
         fs.symlinkSync(from, to);
     }
     
@@ -109,7 +110,11 @@ function prepareTemporaryMeteorProject() {
     {
         const file = path.join(tempMeteorProject, meteorMainModule)
         const lines = fs.readFileSync(file, 'utf8').split('\n')
-        const imports = lines.filter(line => line.startsWith('import')) // Todo: omit relative imports
+        const imports = lines.filter(line => {
+            if (!line.startsWith('import')) return false;
+            if (!line.includes('meteor/')) return true; // Meteor package import
+            if (line.match(/["'`]\./)) return false; // relative import
+        })
         fs.writeFileSync(file, imports.join('\n'))
     }
     
