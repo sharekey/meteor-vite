@@ -147,6 +147,7 @@ export type ProjectJson = {
     meteor: {
         mainModule: {
             client: string;
+            server?: string;
         },
         /**
          * @deprecated Use meteor.vite.configFile instead.
