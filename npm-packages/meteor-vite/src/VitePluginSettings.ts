@@ -36,6 +36,13 @@ export interface PluginSettings {
         ignorePackages?: string[];
         
         /**
+         * Suppress warning messages when we resolve a module that has conflicting export keys.
+         * This is generally only an issue for React where as we ignore conditional exports when creating an ESM stub.
+         * These are only ESM export stubs that point to your Meteor bundle, so it's generally safe to ignore.
+         */
+        ignoreDuplicateExportsInPackages?: string[];
+        
+        /**
          * Will only emit warnings in the console instead of throwing an exception that may prevent the client app
          * from loading.
          * @default true
