@@ -1,4 +1,5 @@
 import pc from 'picocolors';
+import { MeteorViteError } from '../error/MeteorViteError';
 
 function createLogger<Params extends DefaultParams>(formatter: (...params: Params) => DefaultParams): LoggerObject<Params> {
     return {
@@ -10,6 +11,10 @@ function createLogger<Params extends DefaultParams>(formatter: (...params: Param
 }
 
 function formatMessage([message, ...params]: Parameters<typeof console.log>): Parameters<typeof console.log> {
+    if (message instanceof MeteorViteError) {
+        message.beautify().then(() => console.warn(message, ...params));
+        return [];
+    }
     if (typeof message === 'string') {
         return [`⚡  ${message}`, ...params];
     }
