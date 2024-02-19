@@ -1,2 +1,2 @@
 export type { WorkerMethod, WorkerResponse } from './src/meteor/IPC/methods';
-export type { MeteorViteConfig } from './src/VitePluginSettings';
+export type { ResolvedMeteorViteConfig } from './src/VitePluginSettings';

@@ -3,7 +3,7 @@ import Path from 'path';
 import { RollupOutput, RollupWatcher } from 'rollup';
 import { build, InlineConfig, resolveConfig } from 'vite';
 import MeteorVitePackage from '../../../../package.json';
-import { type MeteorStubsSettings, MeteorViteConfig, type ProjectJson } from '../../../VitePluginSettings';
+import { type MeteorStubsSettings, ResolvedMeteorViteConfig, type ProjectJson } from '../../../VitePluginSettings';
 import { meteorWorker } from '../../../plugin/Meteor';
 import CreateIPCInterface, { IPCReply } from '../interface';
 
@@ -91,7 +91,7 @@ async function prepareConfig(buildConfig: BuildOptions): Promise<ParsedConfig> {
         }
     })
 
-    const viteConfig: MeteorViteConfig = await resolveConfig({
+    const viteConfig: ResolvedMeteorViteConfig = await resolveConfig({
         configFile,
         plugins: [
             meteorWorker({}) // Fills in defaults for missing fields.
@@ -168,7 +168,7 @@ type Replies = IPCReply<{
 }>
 
 type ParsedConfig = {
-    viteConfig: MeteorViteConfig;
+    viteConfig: ResolvedMeteorViteConfig;
     inlineBuildConfig: InlineConfig;
     outDir: string;
 }

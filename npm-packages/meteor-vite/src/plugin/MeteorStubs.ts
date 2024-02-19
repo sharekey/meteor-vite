@@ -8,7 +8,7 @@ import { createErrorHandler } from '../error/ErrorHandler';
 import { MeteorViteError } from '../error/MeteorViteError';
 import MeteorPackage from '../meteor/package/components/MeteorPackage';
 import { stubTemplate } from '../meteor/package/StubTemplate';
-import { MeteorViteConfig, type PluginSettings } from '../VitePluginSettings';
+import { ResolvedMeteorViteConfig, type PluginSettings } from '../VitePluginSettings';
 import ViteLoadRequest from '../ViteLoadRequest';
 
 export const MeteorStubs = setupPlugin(async () => {
@@ -110,7 +110,7 @@ function setupPlugin<Context extends ViteLoadRequest>(setup: () => Promise<{
             name: plugin.name,
             resolveId: plugin.resolveId,
             async configResolved(resolvedConfig) {
-                const pluginSettings = (resolvedConfig as MeteorViteConfig).meteor;
+                const pluginSettings = (resolvedConfig as ResolvedMeteorViteConfig).meteor;
                 if (!pluginSettings) {
                     throw new MeteorViteError('Unable to get configuration for Meteor-Vite!');
                 }

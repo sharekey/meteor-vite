@@ -182,7 +182,10 @@ export type ProjectJson = {
     }
 }
 
-export declare interface MeteorViteConfig extends ResolvedConfig {
+/**
+ * A resolved Vite config, after our workers has merged it with default settings and overrides from the Meteor instance.
+ */
+export declare interface ResolvedMeteorViteConfig extends ResolvedConfig {
     meteor?: PluginSettings;
 }
 
