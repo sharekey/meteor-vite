@@ -2,10 +2,6 @@ import { OutputOptions } from 'rollup';
 import { ResolvedConfig } from 'vite';
 import { DeepPartial, MakeOptional } from './utilities/GenericTypes';
 
-export type PluginOptions = MakeOptional<PluginSettings, 'stubValidation' | 'meteorStubs' | 'tempDir'>;
-export type PartialPluginOptions = DeepPartial<PluginSettings>;
-export type MeteorStubsSettings = PluginSettings['meteorStubs'];
-
 export interface PluginSettings {
     /**
      * Vite client entry into Meteor.
@@ -31,7 +27,32 @@ export interface PluginSettings {
      * These settings only apply in a development environment. Once the app is bundled for production, runtime
      * stub validation is disabled.
      */
-    stubValidation: StubValidationSettings;
+    stubValidation: {
+        /**
+         * list of packages to ignore export validation for.
+         * @example
+         * { ignorePackages: ['ostrio:cookies', 'test:ts-modules', ...] }
+         */
+        ignorePackages?: string[];
+        
+        /**
+         * Will only emit warnings in the console instead of throwing an exception that may prevent the client app
+         * from loading.
+         * @default true
+         */
+        warnOnly?: boolean;
+        
+        /**
+         * Whether to completely disable stub validation feature for Meteor-Vite.
+         *
+         * Tip:
+         * You can use a conditional Vite configuration to enable/disable this for your production build
+         * {@link https://vitejs.dev/config/#conditional-config}
+         *
+         * @default false
+         */
+        disabled?: boolean;
+    };
     
     /**
      * Internal configuration injected by the vite:bundler Meteor package. Specifies some important source paths
@@ -109,32 +130,7 @@ export interface PluginSettings {
     chunkFileNames?: OutputOptions['chunkFileNames'];
 }
 
-export interface StubValidationSettings {
-    /**
-     * list of packages to ignore export validation for.
-     * @example
-     * { ignorePackages: ['ostrio:cookies', 'test:ts-modules', ...] }
-     */
-    ignorePackages?: string[];
-    
-    /**
-     * Will only emit warnings in the console instead of throwing an exception that may prevent the client app
-     * from loading.
-     * @default true
-     */
-    warnOnly?: boolean;
-    
-    /**
-     * Whether to completely disable stub validation feature for Meteor-Vite.
-     *
-     * Tip:
-     * You can use a conditional Vite configuration to enable/disable this for your production build
-     * {@link https://vitejs.dev/config/#conditional-config}
-     *
-     * @default false
-     */
-    disabled?: boolean;
-}
+export type StubValidationSettings = PluginSettings['stubValidation'];
 
 /**
  * The user's Meteor project package.json content.
@@ -181,6 +177,10 @@ export type ProjectJson = {
         }
     }
 }
+
+export type PluginOptions = MakeOptional<PluginSettings, 'stubValidation' | 'meteorStubs' | 'tempDir'>;
+export type PartialPluginOptions = DeepPartial<PluginSettings>;
+export type MeteorStubsSettings = PluginSettings['meteorStubs'];
 
 /**
  * A resolved Vite config, after our workers has merged it with default settings and overrides from the Meteor instance.
