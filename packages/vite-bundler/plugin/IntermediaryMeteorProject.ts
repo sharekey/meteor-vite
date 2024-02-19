@@ -67,6 +67,7 @@ function prepareTemporaryMeteorProject() {
     for (const dir of directoriesToCopy) {
         const from = path.join(cwd, dir);
         const to = path.join(tempMeteorProject, dir);
+        // Todo: a symlink might be better here. (fall back to copy on systems without support)
         fs.copySync(from, to);
     }
     
