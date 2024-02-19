@@ -1,13 +1,12 @@
+// @ts-ignore
+import { execaSync } from 'execa';
+import fs from 'fs-extra';
+import type { WorkerResponseData } from 'meteor-vite';
 import path from 'node:path';
-import { WorkerResponseData } from '../../../npm-packages/meteor-vite/src/meteor/IPC/methods';
 import { MeteorViteError } from '../utility/Errors';
 import { getBuildConfig } from '../utility/Helpers';
 import Logger from '../utility/Logger';
 import { createWorkerFork, cwd } from '../workers';
-import fs from 'fs-extra';
-
-// @ts-ignore
-import { execaSync } from 'execa';
 
 const {
     meteorMainModule,
