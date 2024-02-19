@@ -42,7 +42,7 @@ export const MeteorStubs = setupPlugin(async () => {
                 filePath: request.context.file.sourcePath,
                 fileContent: request.context.file.content,
             }, {
-                ignoreDuplicateExportsInPackages: ['react']
+                ignoreDuplicateExportsInPackages: request.context.pluginSettings.stubValidation.ignoreDuplicateExportsInPackages
             });
             
             const template = stubTemplate({
