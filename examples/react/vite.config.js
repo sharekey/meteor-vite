@@ -1,6 +1,6 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
-import { meteor } from '../../npm-packages/meteor-vite/src/plugin';
+import { meteor } from 'meteor-vite/plugin';
 
 export default defineConfig({
   plugins: [
