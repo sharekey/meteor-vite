@@ -47,9 +47,9 @@ export default class MeteorPackage implements Omit<ParsedPackage, 'packageScopeE
         }, null, 2);
     }
     
-    public static async parse(...options: Parameters<typeof parseMeteorPackage>) {
-        const { result, timeSpent } = await parseMeteorPackage(...options);
-        return new MeteorPackage(result, { timeSpent });
+    public static async parse(parse: Parameters<typeof parseMeteorPackage>[0], options?: { ignoreDuplicateExportsInPackages?: string[] }) {
+        const { result, timeSpent } = await parseMeteorPackage(parse);
+        return new MeteorPackage(result, { timeSpent, ...options });
     }
     
     public getModule({ importPath }: { importPath?: string }): PackageSubmodule | undefined {

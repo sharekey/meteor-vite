@@ -8,8 +8,8 @@ import { createErrorHandler } from '../error/ErrorHandler';
 import { MeteorViteError } from '../error/MeteorViteError';
 import MeteorPackage from '../meteor/package/components/MeteorPackage';
 import { stubTemplate } from '../meteor/package/StubTemplate';
-import { ResolvedMeteorViteConfig, type PluginSettings } from '../VitePluginSettings';
 import ViteLoadRequest from '../ViteLoadRequest';
+import { type PluginSettings, ResolvedMeteorViteConfig } from '../VitePluginSettings';
 
 export const MeteorStubs = setupPlugin(async () => {
     return {
@@ -41,6 +41,8 @@ export const MeteorStubs = setupPlugin(async () => {
             const meteorPackage = await MeteorPackage.parse({
                 filePath: request.context.file.sourcePath,
                 fileContent: request.context.file.content,
+            }, {
+                ignoreDuplicateExportsInPackages: ['react']
             });
             
             const template = stubTemplate({
