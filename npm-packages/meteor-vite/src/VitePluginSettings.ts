@@ -145,16 +145,27 @@ export type ProjectJson = {
         'meteor-vite'?: string;
     }
     meteor: {
+        /**
+         * Meteor's client and server mainModule entrypoints.
+         * It's important that both of these are configured in your project's package.json and at the very least the
+         * client mainModule.
+         */
         mainModule: {
             client: string;
             server?: string;
         },
+        
         /**
          * @deprecated Use meteor.vite.configFile instead.
          * See {@link https://github.com/JorgenVatle/meteor-vite?tab=readme-ov-file#configuration configuration} for
          * example.
          */
         viteConfig?: string;
+        
+        /**
+         * Additional Meteor-Vite configuration that cannot be inferred through the plugin settings.
+         * These settings are parsed by the `vite-bundler` Meteor build plugin.
+         */
         vite?: {
             /**
              * Specifies an alternative path to the project's Vite config
