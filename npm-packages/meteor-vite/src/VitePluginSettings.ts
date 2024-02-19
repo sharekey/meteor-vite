@@ -4,60 +4,7 @@ import { DeepPartial, MakeOptional } from './utilities/GenericTypes';
 
 export type PluginOptions = MakeOptional<PluginSettings, 'stubValidation' | 'meteorStubs' | 'tempDir'>;
 export type PartialPluginOptions = DeepPartial<PluginSettings>;
-
-export interface MeteorStubsSettings {
-    
-    meteor: {
-        /**
-         * Path to Meteor's internal package cache.
-         * This can change independently of the isopack path depending on whether we're building for production or
-         * serving up the dev server.
-         *
-         * @example {@link /examples/vue/.meteor/local/build/programs/web.browser/packages}
-         */
-        packagePath: string;
-        
-        /**
-         * Path to Meteor's local Isopacks store. Used to determine where a package's mainModule is located and whether
-         * the package has lazy-loaded modules. During production builds this would be pulled from a temporary
-         * Meteor build, so that we have solid metadata to use when creating Meteor package stubs.
-         *
-         * @example {@link /examples/vue/.meteor/local/isopacks/}
-         */
-        isopackPath: string;
-        
-        /**
-         * Path to the current user's Meteor package cache. (e.g. /home/john/.meteor/packages)
-         * This is used to build up a fallback path for isopack manifests.
-         *
-         * Some packages, like `react-meteor-data` do not emit a isopack metadata file within the current project's
-         * .meteor/local directory. So we have to resort to pulling in Isopack metadata from the `meteor-tool` cache.
-         *
-         * @example `react-meteor-data` path
-         * /home/john/.meteor/packages/react-meteor-data/2.7.2/web.browser.json
-         */
-        globalMeteorPackagesDir?: string;
-    };
-    
-    /**
-     * Full content of the user's Meteor project package.json.
-     * Like the one found in {@link /examples/vue/package.json}
-     */
-    packageJson?: ProjectJson;
-    
-    /**
-     * Alternatively, a path to a package.json file can be supplied.
-     */
-    packageJsonPath?: string;
-    
-    /**
-     * Enabling debug mode will write all input and output files to a `.meteor-vite` directory in the Meteor project's
-     * root. Handy for quickly assessing how things are being formatted, or for use in writing up new test cases for
-     * meteor-vite.
-     */
-    debug?: boolean;
-    
-}
+export type MeteorStubsSettings = PluginSettings['meteorStubs'];
 
 export interface PluginSettings {
     /**
@@ -94,7 +41,60 @@ export interface PluginSettings {
      * using Vite independently of Meteor. Or to host the Vite dev server yourself instead of letting the vite:bundler
      * plugin do the work for you.
      */
-    meteorStubs: MeteorStubsSettings;
+    meteorStubs: {
+        /**
+         * Full content of the user's Meteor project package.json.
+         * Like the one found in {@link /examples/vue/package.json}
+         */
+        packageJson?: ProjectJson;
+        
+        /**
+         * Alternatively, a path to a package.json file can be supplied.
+         */
+        packageJsonPath?: string;
+        
+        /**
+         * Enabling debug mode will write all input and output files to a `.meteor-vite` directory in the Meteor project's
+         * root. Handy for quickly assessing how things are being formatted, or for use in writing up new test cases for
+         * meteor-vite.
+         */
+        debug?: boolean;
+        
+        /**
+         * Meteor project details. This resolved at runtime by our build plugin and injected into your Vite config.
+         */
+        meteor: {
+            /**
+             * Path to Meteor's internal package cache.
+             * This can change independently of the isopack path depending on whether we're building for production or
+             * serving up the dev server.
+             *
+             * @example {@link /examples/vue/.meteor/local/build/programs/web.browser/packages}
+             */
+            packagePath: string;
+            
+            /**
+             * Path to Meteor's local Isopacks store. Used to determine where a package's mainModule is located and whether
+             * the package has lazy-loaded modules. During production builds this would be pulled from a temporary
+             * Meteor build, so that we have solid metadata to use when creating Meteor package stubs.
+             *
+             * @example {@link /examples/vue/.meteor/local/isopacks/}
+             */
+            isopackPath: string;
+            
+            /**
+             * Path to the current user's Meteor package cache. (e.g. /home/john/.meteor/packages)
+             * This is used to build up a fallback path for isopack manifests.
+             *
+             * Some packages, like `react-meteor-data` do not emit a isopack metadata file within the current project's
+             * .meteor/local directory. So we have to resort to pulling in Isopack metadata from the `meteor-tool` cache.
+             *
+             * @example `react-meteor-data` path
+             * /home/john/.meteor/packages/react-meteor-data/2.7.2/web.browser.json
+             */
+            globalMeteorPackagesDir?: string;
+        };
+    };
     
     /**
      * Customize the chunk file name format for Rollup builds.
