@@ -6,7 +6,7 @@ import { ViteDevServer } from 'vite';
 import { MeteorViteError } from './error/MeteorViteError';
 import AutoImportQueue from './meteor/package/AutoImportQueue';
 import { isSameModulePath } from './meteor/package/components/MeteorPackage';
-import type { PluginSettings } from './VitePluginSettings';
+import type { ResolvedPluginSettings } from './VitePluginSettings';
 
 import { createLabelledLogger, LabelLogger } from './utilities/Logger';
 
@@ -239,7 +239,7 @@ export type FileRequestData = ReturnType<typeof ViteLoadRequest['loadFileData']>
 
 interface PreContextRequest {
     id: string;
-    pluginSettings: PluginSettings;
+    pluginSettings: ResolvedPluginSettings;
     server: ViteDevServer;
 }
 
