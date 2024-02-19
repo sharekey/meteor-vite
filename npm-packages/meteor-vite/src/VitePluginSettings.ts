@@ -1,6 +1,6 @@
 import { OutputOptions } from 'rollup';
 import { ResolvedConfig } from 'vite';
-import { DeepPartial, MakeOptional } from './utilities/GenericTypes';
+import { DeepPartial, MakeOptional, type MakeRequired } from './utilities/GenericTypes';
 
 export interface PluginSettings {
     /**
@@ -75,9 +75,9 @@ export interface PluginSettings {
         packageJsonPath?: string;
         
         /**
-         * Enabling debug mode will write all input and output files to a `.meteor-vite` directory in the Meteor project's
-         * root. Handy for quickly assessing how things are being formatted, or for use in writing up new test cases for
-         * meteor-vite.
+         * Enabling debug mode will write all input and output files to a `.meteor-vite` directory in the Meteor
+         * project's root. Handy for quickly assessing how things are being formatted, or for use in writing up new
+         * test cases for meteor-vite.
          */
         debug?: boolean;
         
@@ -95,9 +95,9 @@ export interface PluginSettings {
             packagePath: string;
             
             /**
-             * Path to Meteor's local Isopacks store. Used to determine where a package's mainModule is located and whether
-             * the package has lazy-loaded modules. During production builds this would be pulled from a temporary
-             * Meteor build, so that we have solid metadata to use when creating Meteor package stubs.
+             * Path to Meteor's local Isopacks store. Used to determine where a package's mainModule is located and
+             * whether the package has lazy-loaded modules. During production builds this would be pulled from a
+             * temporary Meteor build, so that we have solid metadata to use when creating Meteor package stubs.
              *
              * @example {@link /examples/vue/.meteor/local/isopacks/}
              */
@@ -108,7 +108,8 @@ export interface PluginSettings {
              * This is used to build up a fallback path for isopack manifests.
              *
              * Some packages, like `react-meteor-data` do not emit a isopack metadata file within the current project's
-             * .meteor/local directory. So we have to resort to pulling in Isopack metadata from the `meteor-tool` cache.
+             * .meteor/local directory. So we have to resort to pulling in Isopack metadata from the `meteor-tool`
+             * cache.
              *
              * @example `react-meteor-data` path
              * /home/john/.meteor/packages/react-meteor-data/2.7.2/web.browser.json
@@ -192,12 +193,16 @@ export type ProjectJson = {
 
 export type PluginOptions = MakeOptional<PluginSettings, 'stubValidation' | 'meteorStubs' | 'tempDir'>;
 export type PartialPluginOptions = DeepPartial<PluginSettings>;
-export type MeteorStubsSettings = PluginSettings['meteorStubs'];
+export type MeteorStubsSettings = Required<MakeRequired<PluginSettings['meteorStubs'], 'meteor'>>;
+export type ResolvedPluginSettings = MakeRequired<
+    Omit<PluginSettings, 'meteorStubs'> & { meteorStubs: MeteorStubsSettings },
+    'tempDir'
+>;
 
 /**
  * A resolved Vite config, after our workers has merged it with default settings and overrides from the Meteor instance.
  */
 export declare interface ResolvedMeteorViteConfig extends ResolvedConfig {
-    meteor?: PluginSettings;
+    meteor?: ResolvedPluginSettings;
 }
 
