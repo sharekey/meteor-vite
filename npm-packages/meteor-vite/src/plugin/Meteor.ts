@@ -47,11 +47,16 @@ export function meteorWorker(config: PartialPluginOptions): PluginOption {
             name: 'meteor-vite:config',
             enforce,
             resolveId(id) {
-                const match = config.externalizeNpmPackages?.find((name) => name && id.startsWith(name));
+                const [module, ...path] = id.split('/');
+                const match = config.externalizeNpmPackages?.find((name) => {
+                    if (!name) return false;
+                    if (module !== name) return false;
+                    return true;
+                });
                 if (!match) {
                     return;
                 }
-                return `\0meteor:${match}`;
+                return `\0meteor:${id}`;
             },
             config: (userConfig) =>  {
                 mergeMeteorSettings(userConfig, {
