@@ -9,9 +9,11 @@ import 'meteor/test:lazy';
 import 'meteor/test:ts-modules/re-exports-index';
 import 'meteor/test:ts-modules/export-star-from';
 import 'meteor/test:stub-validation';
+import 'meteor/test:duplicate-npm-dependencies';
 /** End of vite-bundler auto-imports **/
+import 'test-externalization';
 
-import { Cookies } from 'meteor/ostrio:cookies'
+import { Cookies } from 'meteor/ostrio:cookies';
 
 const cookies = new Cookies()
 console.log('(meteor) cookies', cookies.get('meteor_login_token')) 
