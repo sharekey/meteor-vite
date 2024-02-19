@@ -46,10 +46,10 @@ jobs:
         run: meteor npm run example install ${{ inputs.appBasename }}
 
       - name: 'Link meteor-vite package'
-        run: meteor npm run example link ${{ inputs.appBasename }}
+        run: meteor npm run link ${{ inputs.appBasename }}
 
       - name: 'Build for production'
-        run: meteor npm run example build ${{ inputs.appBasename }}
+        run: meteor npm run build ${{ inputs.appBasename }}
 
   docker:
     runs-on: ubuntu-latest
