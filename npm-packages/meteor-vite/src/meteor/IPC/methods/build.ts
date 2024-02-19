@@ -1,11 +1,13 @@
 import { spawn } from 'child_process';
 import Path from 'path';
-import { RollupOutput, RollupWatcher } from 'rollup';
+import { RollupOutput } from 'rollup';
 import { build, InlineConfig, resolveConfig } from 'vite';
 import MeteorVitePackage from '../../../../package.json';
 import { type MeteorStubsSettings, ResolvedMeteorViteConfig, type ProjectJson } from '../../../VitePluginSettings';
 import { meteorWorker } from '../../../plugin/Meteor';
 import CreateIPCInterface, { IPCReply } from '../interface';
+
+type BuildOutput = Awaited<ReturnType<typeof build>>;
 
 export default CreateIPCInterface({
     async 'vite.build'(
@@ -134,7 +136,7 @@ async function prepareConfig(buildConfig: BuildOptions): Promise<ParsedConfig> {
     }
 }
 
-function validateOutput(rollupResult?: RollupOutput | RollupWatcher): asserts rollupResult is RollupOutput {
+function validateOutput(rollupResult?: BuildOutput | RollupOutput): asserts rollupResult is RollupOutput {
     if (!rollupResult) {
         throw new Error('Received no result from Rollup!');
     }
