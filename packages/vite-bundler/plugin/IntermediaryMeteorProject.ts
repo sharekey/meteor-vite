@@ -69,10 +69,6 @@ function prepareTemporaryMeteorProject() {
     for (const dir of directoriesToCopy) {
         const from = path.join(cwd, dir);
         const to = path.join(tempMeteorProject, dir);
-        // Todo: a symlink might be better here. (fall back to copy on systems without support)
-        // Todo: This also lacks support for locally managed npm packages.
-        // Alternatively, build in the context of the current directory.
-        fs.removeSync(to);
         fs.symlinkSync(from, to);
     }
     
