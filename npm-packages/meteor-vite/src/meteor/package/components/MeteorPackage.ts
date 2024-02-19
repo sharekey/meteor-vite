@@ -4,6 +4,7 @@ import Logger from '../../../utilities/Logger';
 import type { ModuleList, ParsedPackage } from '../../parser/Parser';
 import { parseMeteorPackage } from '../../parser/Parser';
 import { SerializationStore } from '../SerializationStore';
+import type ModuleExport from './ModuleExport';
 import PackageExport from './PackageExport';
 import { PackageSubmodule } from './PackageSubmodule';
 
@@ -144,17 +145,25 @@ export default class MeteorPackage implements Omit<ParsedPackage, 'packageScopeE
     public serialize({ importPath }: { importPath?: string }) {
         const store = new SerializationStore();
         
+        function addEntry(entry: ModuleExport | PackageExport) {
+            try {
+                store.addEntry(entry);
+            } catch (error) {
+                Logger.warn(error);
+            }
+        }
+        
         const submodule = this.getModule({ importPath });
         
         if (submodule) {
             submodule.exports.forEach((entry) => {
                 if (!importPath?.includes('node_modules')) {
-                    store.addEntry(entry);
+                    addEntry(entry);
                     return;
                 }
                 
                 if (entry.type !== 're-export' || entry.name !== '*') {
-                    store.addEntry(entry);
+                    addEntry(entry);
                     return;
                 }
                 
@@ -173,13 +182,7 @@ export default class MeteorPackage implements Omit<ParsedPackage, 'packageScopeE
                         importPath: entry.from?.replace('./', '')
                     });
                     module!.exports.forEach((entry) => {
-                        try {
-                            // @ts-expect-error Type assertion error. This is fine.
-                            store.validateNewKey(entry)
-                            store.addEntry(entry)
-                        } catch (error) {
-                            Logger.warn(error);
-                        }
+                        addEntry(entry)
                     });
                 } catch (error) {
                     Logger.warn(error);
@@ -190,7 +193,7 @@ export default class MeteorPackage implements Omit<ParsedPackage, 'packageScopeE
         // Package exports are only available at the package's mainModule, so if an import path is provided,
         // we want to omit any of these exports and only use the module-specific exports
         if (!importPath) {
-            this.packageScopeExports.forEach((entry) => store.addEntry(entry));
+            this.packageScopeExports.forEach((entry) => addEntry(entry));
         }
         
         return store.serialize();
