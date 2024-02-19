@@ -159,7 +159,7 @@ export class PackageModule {
                 if (EmittedJsonKeyWarnings.includes(key)) {
                     return;
                 }
-                Logger.warn(new ModuleExportsError(`Meteor bundle had a package.json key (${key}) with an unexpected value. This might be important to properly parse the module's entrypoint. Do open a new issue if you run into any issues. 🙏`, prop));
+                Logger.warn(new ModuleExportsError(`Meteor bundle had a package.json key (${key}) with an unexpected value.\nThis might be important to properly parse the module's entrypoint. Do open a new issue if you run into any issues. 🙏`, prop));
                 EmittedJsonKeyWarnings.push(key);
                 return;
             }
