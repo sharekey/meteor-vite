@@ -152,7 +152,7 @@ export class PackageModule {
             }
             const key = propParser.getKey(prop);
             if (!isStringLiteral(prop.value)) {
-                Logger.warn(`Meteor bundle had a package.json key (${key}) with an unexpected value. This might be important to properly parse the module's entrypoint. Do open a new issue if you run into any issues. 🙏`, { type: prop.type });
+                Logger.warn(new ModuleExportsError(`Meteor bundle had a package.json key (${key}) with an unexpected value. This might be important to properly parse the module's entrypoint. Do open a new issue if you run into any issues. 🙏`, prop));
                 return;
             }
             Object.assign(this.jsonContent, { [key]: prop.value.value });
