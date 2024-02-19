@@ -174,6 +174,8 @@ export default class MeteorPackage implements Omit<ParsedPackage, 'packageScopeE
                     });
                     module!.exports.forEach((entry) => {
                         try {
+                            // @ts-expect-error Type assertion error. This is fine.
+                            store.validateNewKey(entry)
                             store.addEntry(entry)
                         } catch (error) {
                             Logger.warn(error);
@@ -181,7 +183,6 @@ export default class MeteorPackage implements Omit<ParsedPackage, 'packageScopeE
                     });
                 } catch (error) {
                     Logger.warn(error);
-                    store.addEntry(entry);
                 }
             });
         }
