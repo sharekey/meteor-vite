@@ -1,5 +1,5 @@
 import PackageJson from '../../package.json';
-import type { StubValidationSettings } from '../MeteorViteConfig';
+import type { StubValidationSettings } from '../VitePluginSettings';
 
 
 /**

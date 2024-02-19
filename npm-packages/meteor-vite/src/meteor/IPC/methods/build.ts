@@ -3,7 +3,7 @@ import Path from 'path';
 import { RollupOutput, RollupWatcher } from 'rollup';
 import { build, InlineConfig, resolveConfig } from 'vite';
 import MeteorVitePackage from '../../../../package.json';
-import { type MeteorStubsSettings, MeteorViteConfig, type ProjectJson } from '../../../MeteorViteConfig';
+import { type MeteorStubsSettings, MeteorViteConfig, type ProjectJson } from '../../../VitePluginSettings';
 import { meteorWorker } from '../../../plugin/Meteor';
 import CreateIPCInterface, { IPCReply } from '../interface';
 

@@ -3,7 +3,7 @@ import pc from 'picocolors';
 import { PluginOption, ResolvedConfig, UserConfig } from 'vite';
 import PackageJSON from '../../package.json';
 import { FatalMeteorViteError } from '../error/MeteorViteError';
-import type { PartialPluginOptions, PluginOptions, PluginSettings } from '../MeteorViteConfig';
+import type { PartialPluginOptions, PluginOptions, PluginSettings } from '../VitePluginSettings';
 import { MeteorStubs } from './MeteorStubs';
 import { mergeWithTypes, parseConfig } from './ParseConfig';
 
