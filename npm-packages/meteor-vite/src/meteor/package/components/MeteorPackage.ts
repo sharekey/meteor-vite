@@ -87,9 +87,10 @@ export default class MeteorPackage implements Omit<ParsedPackage, 'packageScopeE
             if (name === moduleImport) {
                 return true;
             }
-            if (moduleImport.startsWith(name)) {
+            if (moduleImport.split('/')[0] === name) {
                 return true;
             }
+            return false;
         });
         
         if (!nodePackage) {
