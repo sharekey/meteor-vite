@@ -159,46 +159,44 @@ export default class MeteorPackage implements Omit<ParsedPackage, 'packageScopeE
             }
         }
         
-        if (submodule) {
-            submodule.exports.forEach((entry) => {
-                if (!importPath?.includes('node_modules')) {
-                    addEntry(entry);
-                    return;
-                }
-                
-                if (entry.type !== 're-export' || entry.name !== '*') {
-                    addEntry(entry);
-                    return;
-                }
-                
-                /** Flatten re-exports for relative modules.
-                 * @example root module
-                 * // index.js
-                 * export * from './cjs/react.production.min.js'
-                 *
-                 * @example stub output
-                 * export const useState = ...
-                 * export const createContext = ...
-                 */
-                try {
-                    const module = submodule.meteorPackage.getModule({
-                        // Todo extract path rewrites like this to a reusable method
-                        importPath: entry.from?.replace('./', '')
-                    });
-                    module!.exports.forEach((entry) => {
-                        addEntry(entry)
-                    });
-                } catch (error) {
-                    Logger.warn(error);
-                }
-            });
-        }
-        
         // Package exports are only available at the package's mainModule, so if an import path is provided,
         // we want to omit any of these exports and only use the module-specific exports
         if (!importPath) {
             this.packageScopeExports.forEach((entry) => addEntry(entry));
         }
+        
+        submodule?.exports.forEach((entry) => {
+            if (!importPath?.includes('node_modules')) {
+                addEntry(entry);
+                return;
+            }
+            
+            if (entry.type !== 're-export' || entry.name !== '*') {
+                addEntry(entry);
+                return;
+            }
+            
+            /** Flatten re-exports for relative modules.
+             * @example root module
+             * // index.js
+             * export * from './cjs/react.production.min.js'
+             *
+             * @example stub output
+             * export const useState = ...
+             * export const createContext = ...
+             */
+            try {
+                const module = submodule.meteorPackage.getModule({
+                    // Todo extract path rewrites like this to a reusable method
+                    importPath: entry.from?.replace('./', '')
+                });
+                module!.exports.forEach((entry) => {
+                    addEntry(entry)
+                });
+            } catch (error) {
+                Logger.warn(error);
+            }
+        });
         
         return store.serialize();
     }
