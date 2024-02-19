@@ -16,6 +16,10 @@ import { ModuleExportData, propParser } from './Parser';
 import { ModuleExportsError } from './ParserError';
 import { KnownModuleMethodNames, ModuleMethod, ModuleMethodName } from './ParserTypes';
 
+// List of package.json key warnings already emitted.
+// Prevents us from emitting a warning for a key more than once.
+const EmittedJsonKeyWarnings: string[] = [];
+
 /**
  * An individual file within a built Meteor package's meteorInstall file tree.
  * It essentially represents a single file and its associated exports within a given Meteor package.
@@ -152,7 +156,11 @@ export class PackageModule {
             }
             const key = propParser.getKey(prop);
             if (!isStringLiteral(prop.value)) {
+                if (EmittedJsonKeyWarnings.includes(key)) {
+                    return;
+                }
                 Logger.warn(new ModuleExportsError(`Meteor bundle had a package.json key (${key}) with an unexpected value. This might be important to properly parse the module's entrypoint. Do open a new issue if you run into any issues. 🙏`, prop));
+                EmittedJsonKeyWarnings.push(key);
                 return;
             }
             Object.assign(this.jsonContent, { [key]: prop.value.value });
