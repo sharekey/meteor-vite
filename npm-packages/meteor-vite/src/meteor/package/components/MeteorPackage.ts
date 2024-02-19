@@ -145,7 +145,37 @@ export default class MeteorPackage implements Omit<ParsedPackage, 'packageScopeE
         const submodule = this.getModule({ importPath });
         
         if (submodule) {
-            submodule.exports.forEach((entry) => store.addEntry(entry));
+            submodule.exports.forEach((entry) => {
+                if (!importPath?.includes('node_modules')) {
+                    store.addEntry(entry);
+                    return;
+                }
+                
+                if (entry.type !== 're-export' || entry.name !== '*') {
+                    store.addEntry(entry);
+                    return;
+                }
+                
+                /** Flatten re-exports for relative modules.
+                 * @example root module
+                 * // index.js
+                 * export * from './cjs/react.production.min.js'
+                 *
+                 * @example stub output
+                 * export const useState = ...
+                 * export const createContext = ...
+                 */
+                try {
+                    const module = submodule.meteorPackage.getModule({
+                        // Todo extract path rewrites like this to a reusable method
+                        importPath: entry.from?.replace('./', '')
+                    });
+                    module!.exports.forEach((entry) => store.addEntry(entry));
+                } catch (error) {
+                    console.warn(error);
+                    store.addEntry(entry);
+                }
+            });
         }
         
         // Package exports are only available at the package's mainModule, so if an import path is provided,
