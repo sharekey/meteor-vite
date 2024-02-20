@@ -75,7 +75,7 @@ above, we can create an empty `imports/entrypoint/meteor.ts` file.
 Create a Vite configuration file (`vite.config.js`) in your project root.
 As we don't use a standard Vite `index.html` file, we need to specify an entry point (different from the Meteor one):
 
-#### Example with Vue
+### Example with Vue
 ```js
 // vite.config.js
 import { defineConfig } from 'vite'
@@ -95,7 +95,7 @@ export default defineConfig({
 
 You can then write your code from the `vite.ts` entry point and it will be handled by Vite! ⚡️
 
-##### Example with React
+### Example with React
 ```js
 // vite.config.js
 import { defineConfig } from 'vite'
@@ -124,7 +124,7 @@ The fork simply publishes the package over npm instead of Atmosphere. This has a
 won't try to bundle React for you, instead leaving it to Vite. This gives you more flexibility in configuring your React
 environment through Vite. And a good boost in build times.
 
-##### React with Atmosphere's `react-meteor-data` package
+#### React with Atmosphere's `react-meteor-data` package
 If you still want to stick with the Atmosphere version, you might need to instruct Vite to externalize React, so it
 isn't included twice in your client bundle.
 ```ts
