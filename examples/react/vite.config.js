@@ -4,7 +4,9 @@ import { meteor } from 'meteor-vite/plugin';
 
 export default defineConfig({
   plugins: [
-      react(),
+      react({
+          jsxRuntime: 'classic'
+      }),
       meteor({
         clientEntry: "imports/vite-entrypoint.jsx",
         stubValidation: {
