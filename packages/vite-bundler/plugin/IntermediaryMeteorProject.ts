@@ -105,15 +105,15 @@ function prepareTemporaryMeteorProject() {
     // Only keep meteor package imports to enable lazy packages
     {
         const file = path.join(tempMeteorProject, meteorMainModule)
-        const lines = fs.readFileSync(file, 'utf8').split('\n')
+        const lines = fs.readFileSync(file, 'utf8').split('\n');
         const imports = lines.filter(line => {
             if (!line.startsWith('import')) return false;
             if (line.includes('meteor/')) {
-               Logger.debug(`Keeping lazy import line: \n L ${pc.yellow(line)}`);
+                debug('Keeping lazy import line:', line);
                return true;
             }
             if (line.match(/["'`]\./)) {
-                Logger.debug(`Stripped relative import from intermediary build: \n L ${pc.yellow(line)}`);
+                debug('Stripped relative import from intermediary build:', line);
                 return false;
             }
         })
@@ -189,6 +189,10 @@ function viteBuild(): Promise<WorkerResponseData<'buildResult'>> {
             }],
         })
     });
+}
+
+function debug(message: string, subtitle: string) {
+    Logger.debug(`${message}\n    ${pc.gray('L')} ${pc.yellow(subtitle)}`);
 }
 
 export type ViteBundleOutput = Awaited<ReturnType<typeof prepareViteBundle>>;
