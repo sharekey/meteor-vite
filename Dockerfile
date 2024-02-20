@@ -56,6 +56,7 @@ FROM meteor-base as meteor-bundler
 
 # Install local and external npm dependencies
 COPY $APP_DIR/package*.json $APP_SOURCE_FOLDER/
+COPY $APP_DIR/npm-packages* $APP_SOURCE_FOLDER/
 RUN bash $SCRIPTS_FOLDER/build-app-npm-dependencies.sh
 RUN meteor npm link meteor-vite
 
