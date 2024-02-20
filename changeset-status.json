@@ -5,34 +5,40 @@
         {
           "name": "vite-bundler",
           "type": "patch"
-        },
-        {
-          "name": "meteor-vite",
-          "type": "patch"
         }
       ],
-      "summary": "Check for METEOR_LOCAL_DIR environment variable when preparing the default meteor-vite plugin config.\n\n- Fixes #116\n- Fixes https://github.com/Akryum/meteor-vite/issues/46",
-      "id": "six-tomatoes-walk"
+      "summary": "Keep npm import references when analyzing Meteor client dependencies",
+      "id": "eleven-parrots-love"
+    },
+    {
+      "releases": [
+        {
+          "name": "meteor-vite",
+          "type": "minor"
+        }
+      ],
+      "summary": "Add support for externalizing imports for npm packages bundled with Meteor\n\n- Allows you to point Vite to the Meteor bundle for some or all imports of an npm package.\nIn most cases, you don't need to use this feature, but if you're using Meteor packages that\nhave peer npm-dependencies, you can avoid the dependency being included twice in your final\nproduction bundle by hinting to Vite that this npm dependency is provided by Meteor.\n```ts\nimport React from 'react' // This will import from your node_modules\n\n// If you have a Meteor package that depends on React, then React will already be\n// in your Meteor client bundle. So you can instruct Vite to not import from node_modules\nimport React from 'meteor:react' // This will import from your Meteor bundle\n```\n\n- Fixes #33",
+      "id": "odd-weeks-talk"
     }
   ],
   "releases": [
     {
       "name": "vite-bundler",
       "type": "patch",
-      "oldVersion": "1.12.7",
+      "oldVersion": "1.12.8",
       "changesets": [
-        "six-tomatoes-walk"
+        "eleven-parrots-love"
       ],
-      "newVersion": "1.12.8"
+      "newVersion": "1.12.9"
     },
     {
       "name": "meteor-vite",
-      "type": "patch",
-      "oldVersion": "1.9.0",
+      "type": "minor",
+      "oldVersion": "1.9.1",
       "changesets": [
-        "six-tomatoes-walk"
+        "odd-weeks-talk"
       ],
-      "newVersion": "1.9.1"
+      "newVersion": "1.10.0"
     }
   ]
 }
