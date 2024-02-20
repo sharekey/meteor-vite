@@ -23,7 +23,7 @@ export const Info = () => {
                 this._setState(this._initialState);
             }
             setData(field) {
-                if (!field in this.data) {
+                if (!(field in this.data)) {
                     throw new Error('Unknown field provided!');
                 }
                 return (event) => { this._setState({...this.data, [field]: event.target.value}) };
