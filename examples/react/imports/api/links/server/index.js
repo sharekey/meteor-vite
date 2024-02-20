@@ -1,9 +1,5 @@
 import { Meteor } from 'meteor/meteor';
-import { LinksCollection } from '../links';
-
-async function insertLink({ title, url }) {
-    await LinksCollection.insertAsync({ title, url, createdAt: new Date() });
-}
+import { insertLink, LinksCollection } from '../links';
 
 Meteor.startup(async () => {
     // If the Links collection is empty, add some data.

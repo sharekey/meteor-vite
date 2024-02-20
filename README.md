@@ -72,14 +72,10 @@ Make sure to have an import client entry (`meteor.mainModule.client`) in your `p
 You can leave your Meteor client entry file empty, but it's necessary to enable Meteor import mode. In the example
 above, we can create an empty `imports/entrypoint/meteor.ts` file.
 
-Create a Vite configuration file (`vite.config.js`) in your project root.
-As we don't use a standard Vite `index.html` file, we need to specify an entry point (different from the Meteor one):
-
-#### Example with Vue
-```js
-// vite.config.js
+Create a Vite configuration file (`vite.config.ts`) in your project root. And load in the `meteor-vite` plugin.
+```ts
+// vite.config.ts
 import { defineConfig } from 'vite'
-import vue from '@vitejs/plugin-vue'
 import { meteor } from 'meteor-vite/plugin';
 
 export default defineConfig({
@@ -87,17 +83,13 @@ export default defineConfig({
         meteor({
           clientEntry: 'imports/entrypoint/vite.ts',
         }),
-        vue(),
+        // Other Vite plugins here. E.g. React or Vue (See examples below)
     ],
-    // Other vite options here...
 })
 ```
-
 You can then write your code from the `vite.ts` entry point and it will be handled by Vite! ⚡️
 
 ## Configuration
-
-### Vite Config
 ```ts
 // vite.config.ts
 import { meteor } from 'meteor-vite/plugin';
@@ -159,6 +151,118 @@ export default defineConfig({
     ],
 });
 ```
+
+### Example with Vue 3
+```js
+// vite.config.ts
+import { defineConfig } from 'vite'
+import { meteor } from 'meteor-vite/plugin';
+import vue from '@vitejs/plugin-vue'
+
+export default defineConfig({
+    plugins: [
+        meteor({
+          clientEntry: 'imports/entrypoint/vite.ts',
+        }),
+        vue(),
+    ],
+    // Other vite options here...
+})
+```
+
+### Example with Vue 2.7
+```js
+// vite.config.ts
+import { defineConfig } from 'vite'
+import { meteor } from 'meteor-vite/plugin';
+import vue from '@vitejs/plugin-vue2'
+
+export default defineConfig({
+    plugins: [
+        meteor({
+          clientEntry: 'imports/entrypoint/vite.ts',
+        }),
+        vue(),
+    ],
+    // Other vite options here...
+})
+```
+
+### Example with React
+```js
+// vite.config.ts
+import { defineConfig } from 'vite'
+import { meteor } from 'meteor-vite/plugin';
+import react from '@vitejs/plugin-react'
+
+export default defineConfig({
+    plugins: [
+        meteor({
+          clientEntry: 'imports/entrypoint/vite.ts',
+        }),
+        react({
+            jsxRuntime: 'classic',
+        }),
+    ],
+    optimizeDeps: {
+        exclude: ['@meteor-vite/react-meteor-data'], 
+    }
+})
+```
+
+If your project depends on [`react-meteor-data`](https://github.com/meteor/react-packages) it might be worthwhile to 
+replace it with our npm-published fork [`@meteor-vite/react-meteor-data`](https://github.com/JorgenVatle/react-packages).
+
+The fork simply publishes the package over npm instead of Atmosphere. This has a few benefits. Primarily, Meteor 
+won't try to bundle React for you, instead leaving it to Vite. This gives you more flexibility in configuring your React
+environment through Vite. And a good boost in build times.
+
+#### React with Atmosphere's `react-meteor-data` package
+If you still want to stick with the Atmosphere version, you might need to instruct Vite to externalize React, so it
+isn't included twice in your client bundle.
+```ts
+// vite.config.ts
+import { defineConfig } from 'vite';
+import react from '@vitejs/plugin-react';
+import { meteor } from 'meteor-vite/plugin';
+
+export default defineConfig({
+    plugins: [
+        react(),
+        meteor({
+            clientEntry: "imports/entrypoint/vite.tsx",
+            // This instructs Vite to not bundle react and react-dom as they will be bundled by Meteor instead.
+            externalizeNpmPackages: ['react', 'react-dom'], 
+            stubValidation: {
+                warnOnly: true,
+                // React uses conditional exports for production and development environments
+                // Meteor-Vite ignores these when preparing a stub file for externalized dependencies
+                // This prevents warning messages from flooding the console when running your app.
+                ignoreDuplicateExportsInPackages: ['react', 'react-dom'],
+            },
+            meteorStubs: {
+                debug: false
+            },
+        })
+    ],
+});
+```
+
+Then in your Meteor client's `mainModule`, we need to explicitly import React to prevent the Meteor bundler from
+omitting unused React components from your bundle.
+
+```ts
+// ./imports/entrypoint/meteor.ts
+import 'react';
+import 'react-dom';
+import 'react-dom/client';
+import 'react/jsx-dev-runtime';
+import 'react-refresh';
+
+import 'meteor/react-meteor-data';
+```
+
+And that should be it. Write your app from your `vite.tsx` entrypoint and enjoy lightning fast HMR ⚡
 
 ### Meteor plugin settings
 There are a couple extra advanced settings you can change through your `package.json` file under `meteor.vite`.
@@ -237,7 +341,7 @@ export default defineConfig({
 })
 ```
 
-## A note about the Meteor `mainModule`
+## Avoid imports in Meteor's client `mainModule`
 Code written to or imported by your Meteor client's [`mainModule.client`](https://docs.meteor.com/packages/modules.html#Modular-application-structure) 
 will not be processed by Vite, however, it will still by loaded by the Meteor client. So if you have a use case where 
 you have some code that you don't want Vite to process, but still want in your client bundle, this would be the place 
@@ -263,7 +367,6 @@ The Vite integration comes with two dependencies that work together to enable co
 - [x] Build
 - [x] Importing non-core Meteor packages
 - [x] Lazy meteor packages
-- [ ] #33
 - [x] Reify support
     - [x] Named exports
     - [x] Default exports
@@ -275,7 +378,7 @@ The Vite integration comes with two dependencies that work together to enable co
 - [x] Code-splitting/Dynamic imports
 - [ ] Migrate intermediary production-build transpile step from Babel to esbuild.
 - [ ] SSR (not tested)
-- [ ] Starter/demo templates
+- [x] Starter/demo templates
     - [x] [Vue 3](/examples/vue)
         - [Live demo](https://vue--meteor-vite.wcaserver.com/)
     - [x] [Svelte](/examples/svelte)

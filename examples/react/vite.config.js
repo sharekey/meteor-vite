@@ -4,17 +4,20 @@ import { meteor } from 'meteor-vite/plugin';
 
 export default defineConfig({
   plugins: [
-      react(),
+      react({
+          jsxRuntime: 'classic'
+      }),
       meteor({
         clientEntry: "imports/vite-entrypoint.jsx",
-        externalizeNpmPackages: ['react', 'react-dom'],
         stubValidation: {
           warnOnly: true,
-          ignoreDuplicateExportsInPackages: ['react', 'react-dom'],
         },
         meteorStubs: {
           debug: false
         },
       })
   ],
+    optimizeDeps: {
+      exclude: ['@meteor-vite/react-meteor-data'],
+    }
 });
