@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useFind, useSubscribe } from '@meteor-vite/react-meteor-data';
 import { LinksCollection } from '../../api/links/links';
 import { Meteor } from 'meteor/meteor';
@@ -8,19 +8,25 @@ export const Info = () => {
         const isLoading = useSubscribe('links');
         const links = useFind(() => LinksCollection.find());
         const form = new class {
-            data = {
+            _initialState = {
                 title: '',
                 url: '',
+            }
+            constructor() {
+                const [data, setState] = useState(this._initialState);
+                this._setState = setState;
+                this.data = data;
             }
             async submit(event) {
                 event.preventDefault();
                 await Meteor.callAsync('links.create', this.data);
+                this._setState(this._initialState);
             }
             setData(field) {
                 if (!field in this.data) {
                     throw new Error('Unknown field provided!');
                 }
-                return (event) => this.data[field] = event.target.value;
+                return (event) => { this._setState({...this.data, [field]: event.target.value}) };
             }
         }
         if (isLoading()) {
@@ -39,11 +45,11 @@ export const Info = () => {
                 <form onSubmit={e => form.submit(e)}>
                     <label>
                         Title
-                        <input name="title" onChange={form.setData('title')} placeholder="My awesome resource.." />
+                        <input name="title" value={form.data.title} onChange={form.setData('title')} placeholder="My awesome resource.." />
                     </label>
                     <label>
                         URL
-                        <input name="url" onChange={form.setData('url')} placeholder="http://examp.." />
+                        <input name="url" value={form.data.url} onChange={form.setData('url')} placeholder="http://examp.." />
                     </label>
                     <button type="submit">Add</button>
                 </form>
