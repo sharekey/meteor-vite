@@ -1,5 +1,8 @@
 {
   "name": "@meteor-vite/test-externalization",
+  "publishConfig": {
+    "access": "public"
+  },
   "version": "1.0.0",
   "description": "Internal test package for npm package externalization pointing Vite to use the Meteor bundle rather than npm",
   "main": "main.js",
