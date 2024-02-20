@@ -340,7 +340,6 @@ The Vite integration comes with two dependencies that work together to enable co
 - [x] Build
 - [x] Importing non-core Meteor packages
 - [x] Lazy meteor packages
-- [ ] #33
 - [x] Reify support
     - [x] Named exports
     - [x] Default exports
@@ -352,7 +351,7 @@ The Vite integration comes with two dependencies that work together to enable co
 - [x] Code-splitting/Dynamic imports
 - [ ] Migrate intermediary production-build transpile step from Babel to esbuild.
 - [ ] SSR (not tested)
-- [ ] Starter/demo templates
+- [x] Starter/demo templates
     - [x] [Vue 3](/examples/vue)
         - [Live demo](https://vue--meteor-vite.wcaserver.com/)
     - [x] [Svelte](/examples/svelte)
