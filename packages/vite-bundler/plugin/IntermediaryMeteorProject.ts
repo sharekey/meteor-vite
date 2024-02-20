@@ -108,7 +108,7 @@ function prepareTemporaryMeteorProject() {
         const lines = fs.readFileSync(file, 'utf8').split('\n')
         const imports = lines.filter(line => {
             if (!line.startsWith('import')) return false;
-            if (!line.includes('meteor/')) return true; // Meteor package import
+            if (line.includes('meteor/')) return true; // Keep Meteor package import
             if (line.match(/["'`]\./)) return false; // relative import
         })
         fs.writeFileSync(file, imports.join('\n'))
