@@ -4,9 +4,9 @@ import { LinksCollection } from '../../api/links/links';
 
 export const Info = () => {
     try {
-      const isLoading = useSubscribe('links');
-      const links = useFind(() => LinksCollection.find());
-        if(isLoading()) {
+        const isLoading = useSubscribe('links');
+        const links = useFind(() => LinksCollection.find());
+        if (isLoading()) {
             return <div>Loading...</div>;
         }
 
@@ -16,7 +16,7 @@ export const Info = () => {
                 <ul>{links.map(
                     link => <li key={link._id}>
                         <a href={link.url} target="_blank">{link.title}</a>
-                    </li>
+                    </li>,
                 )}</ul>
             </div>
         );
@@ -26,11 +26,11 @@ export const Info = () => {
             <div>
                 <h1>Exception while calling React Meteor Data</h1>
                 <p>
-                    Todo: Vite and Meteor's React versions appear to be slightly different.
-                    Importing React with CJS syntax seems to resolve the issue.
+                    Todo: Vite and Meteor's React versions appear to be slightly different. Importing React with CJS
+                    syntax seems to resolve the issue.
                 </p>
-                <pre>{ error.stack }</pre>
+                <pre>{error.stack}</pre>
             </div>
-        )
+        );
     }
 };
