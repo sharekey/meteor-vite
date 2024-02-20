@@ -73,10 +73,22 @@ You can leave your Meteor client entry file empty, but it's necessary to enable 
 above, we can create an empty `imports/entrypoint/meteor.ts` file.
 
 Create a Vite configuration file (`vite.config.ts`) in your project root. And load in the `meteor-vite` plugin.
+```ts
+// vite.config.ts
+import { defineConfig } from 'vite'
+import { meteor } from 'meteor-vite/plugin';
+
+export default defineConfig({
+    plugins: [
+        meteor({
+          clientEntry: 'imports/entrypoint/vite.ts',
+        }),
+        // Other Vite plugins here. E.g. React or Vue (See examples below)
+    ],
+})
+```
 
 ## Configuration
-
-### Vite Config
 ```ts
 // vite.config.ts
 import { meteor } from 'meteor-vite/plugin';
