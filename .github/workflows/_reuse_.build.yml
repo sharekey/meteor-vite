@@ -43,7 +43,7 @@ jobs:
           meteor-release: ${{ inputs.meteorRelease }}
 
       - name: 'Install dependencies'
-        run: meteor npm run example install ${{ inputs.appBasename }}
+        run: meteor npm run install ${{ inputs.appBasename }}
 
       - name: 'Link meteor-vite package'
         run: meteor npm run link ${{ inputs.appBasename }}
