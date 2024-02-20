@@ -15,3 +15,5 @@ import React from 'react' // This will import from your node_modules
 // in your Meteor client bundle. So you can instruct Vite to not import from node_modules
 import React from 'meteor:react' // This will import from your Meteor bundle
 ```
+
+- Fixes #33
