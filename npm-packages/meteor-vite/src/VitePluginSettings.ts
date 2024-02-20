@@ -13,6 +13,7 @@ export interface PluginSettings {
     
     /**
      * Skips bundling the provided npm packages if they are already provided by Meteor.
+     * This assumes you have a Meteor package that depends on the provided npm packages.
      */
     externalizeNpmPackages?: string[];
     
