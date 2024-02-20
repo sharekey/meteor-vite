@@ -3,11 +3,14 @@
   "version": "1.0.0",
   "description": "Internal test package for npm package externalization pointing Vite to use the Meteor bundle rather than npm",
   "main": "main.js",
+  "files": [
+    "main.js"
+  ],
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
     "url": "https://github.com/JorgenVatle/meteor-vite"
-  },
+  }
 }
