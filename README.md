@@ -87,6 +87,7 @@ export default defineConfig({
     ],
 })
 ```
+You can then write your code from the `vite.ts` entry point and it will be handled by Vite! ⚡️
 
 ## Configuration
 ```ts
@@ -151,7 +152,7 @@ export default defineConfig({
 });
 ```
 
-### Example with Vue
+### Example with Vue 3
 ```js
 // vite.config.ts
 import { defineConfig } from 'vite'
@@ -169,7 +170,23 @@ export default defineConfig({
 })
 ```
 
-You can then write your code from the `vite.ts` entry point and it will be handled by Vite! ⚡️
+### Example with Vue 2.7
+```js
+// vite.config.ts
+import { defineConfig } from 'vite'
+import { meteor } from 'meteor-vite/plugin';
+import vue from '@vitejs/plugin-vue2'
+
+export default defineConfig({
+    plugins: [
+        meteor({
+          clientEntry: 'imports/entrypoint/vite.ts',
+        }),
+        vue(),
+    ],
+    // Other vite options here...
+})
+```
 
 ### Example with React
 ```js
