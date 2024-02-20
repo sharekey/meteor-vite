@@ -1,5 +1,11 @@
 # vite-bundler
 
+## 1.12.9
+
+### Patch Changes
+
+- b6871542: Keep npm import references when analyzing Meteor client dependencies
+
 ## 1.12.8
 
 ### Patch Changes
