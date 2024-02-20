@@ -1,4 +1,4 @@
-import { getStateId } from 'test-externalization';
+import { getStateId } from '@meteor-vite/test-externalization';
 import { Meteor } from 'meteor/meteor';
 
 Meteor.startup(() => {
