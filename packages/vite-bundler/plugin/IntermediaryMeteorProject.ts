@@ -102,20 +102,22 @@ function prepareTemporaryMeteorProject() {
         }
         fs.writeFileSync(file, JSON.stringify(data, null, 2))
     }
-    // Only keep meteor package imports to enable lazy packages
+    // Only keep meteor and npm package imports to enable lazy packages
     {
         const file = path.join(tempMeteorProject, meteorMainModule)
         const lines = fs.readFileSync(file, 'utf8').split('\n');
         const imports = lines.filter(line => {
             if (!line.startsWith('import')) return false;
             if (line.includes('meteor/')) {
-                debug('Keeping lazy import line:', line);
+                debug('Keeping meteor import line:', line);
                return true;
             }
-            if (line.match(/["'`]\./)) {
-                debug('Stripped relative import from intermediary build:', line);
-                return false;
+            if (!line.match(/["'`]\./)) {
+                debug('Keeping non-meteor import line', line);
+                return true;
             }
+            debug('Stripped import line from intermediary build:', line);
+            return false;
         })
         fs.writeFileSync(file, imports.join('\n'))
     }
