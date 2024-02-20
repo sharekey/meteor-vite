@@ -7,10 +7,8 @@ export default defineConfig({
       react(),
       meteor({
         clientEntry: "imports/vite-entrypoint.jsx",
-        externalizeNpmPackages: ['react', 'react-dom'],
         stubValidation: {
           warnOnly: true,
-          ignoreDuplicateExportsInPackages: ['react', 'react-dom'],
         },
         meteorStubs: {
           debug: false
