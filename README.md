@@ -166,7 +166,7 @@ In most cases, you won't need to add anything here.
 ```json5
 // package.json
 {
-  "name": "my-app"
+  "name": "my-app",
   // ...
   
   "meteor": {
