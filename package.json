@@ -18,7 +18,6 @@
 
     "example": ".bin/example-app.sh",
     "launch": "npm run example launch",
-    "prepare:example": "npm run example prepare",
 
     "version": "(npm run version:vite-bundler || exit 1) && changeset version",
     "release": "npm run publish:vite-bundler && changeset publish",
