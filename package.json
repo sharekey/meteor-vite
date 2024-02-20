@@ -22,7 +22,6 @@
     "version": "(npm run version:vite-bundler || exit 1) && changeset version",
     "release": "npm run publish:vite-bundler && changeset publish",
 
-    "install": "npm run example install",
     "install:svelte": "cd examples/svelte && meteor npm install",
     "install:vue": "cd examples/vue && meteor npm install",
     "install:react": "cd examples/react && meteor npm install",
