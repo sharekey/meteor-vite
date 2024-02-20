@@ -271,9 +271,6 @@ In most cases, you won't need to add anything here.
 }
 ```
 
-## Usage with React
-
-
 ## Features in-depth
 
 ### Lazy Loaded Meteor Packages
