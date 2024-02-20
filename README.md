@@ -242,6 +242,7 @@ The Vite integration comes with two dependencies that work together to enable co
 - [x] Build
 - [x] Importing non-core Meteor packages
 - [x] Lazy meteor packages
+- [ ] #33
 - [x] Reify support
     - [x] Named exports
     - [x] Default exports

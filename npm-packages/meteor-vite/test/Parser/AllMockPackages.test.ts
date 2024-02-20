@@ -23,6 +23,10 @@ describe('Validate known exports for mock packages', () => {
             })
             
             it('detected the correct main module path', () => {
+                if (!mockPackage.mainModulePath) {
+                    expect(parsedPackage.mainModulePath).toBeFalsy();
+                    return
+                }
                 expect(parsedPackage.mainModulePath).toEqual(mockPackage.mainModulePath);
             });
             

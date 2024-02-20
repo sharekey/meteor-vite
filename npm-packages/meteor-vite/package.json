@@ -79,8 +79,10 @@
     "vite": ">=3.0.0 < 5.0.0"
   },
   "devDependencies": {
+    "@babel/generator": "^7.23.6",
     "@babel/types": "^7.22.5",
     "@sveltejs/vite-plugin-svelte": "^2.4.2",
+    "@types/babel__generator": "^7.6.8",
     "@types/node": "^20.3.3",
     "ts-node-dev": "^2.0.0",
     "tsup": "^7.1.0",

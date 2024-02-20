@@ -24,6 +24,7 @@ Meteor.startup(() => {
     import('./tests/ts-modules.test'),
     import('./tests/meteor.test'),
     import('./tests/stub-validation'),
+    import('./tests/duplicate-npm-dependencies'),
   ]).catch((error) => {
     console.error('Error importing test module!', error);
     return [];

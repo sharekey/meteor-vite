@@ -1,7 +1,7 @@
 import {
     ArrayExpression,
     AssignmentExpression,
-    CallExpression,
+    CallExpression, Expression,
     FunctionExpression,
     Identifier,
     MemberExpression, NumericLiteral,
@@ -140,23 +140,32 @@ export type MeteorInstallObject = KnownObjectExpression<{
     properties: [KnownObjectProperty<{
         key: KnownObjectKey<'node_modules'>
         value: KnownObjectExpression<{
-            properties: [KnownObjectProperty<{
-                key: KnownObjectKey<'meteor'>,
-                value: KnownObjectExpression<{
-                    properties: [KnownObjectProperty<{
-                        key: KnownObjectKey<string>, // Package name
-                        value: KnownObjectExpression<{
-                            properties: MeteorPackageProperty[]
-                        }>
-                    }>]
-                }>
-            }>]
+            properties: [MeteorInstallMeteorProperty] | ObjectProperty[]
         }>
     }>]
+}>;
+
+/**
+ * The contents of a Meteor package as defined in `meteorInstall()`.
+ * It's a utility type to allow for a little better ergonomics when we know we're parsing a Meteor package and not an
+ * unknown module
+ */
+export type MeteorInstallMeteorProperty = KnownObjectProperty<{
+    key: KnownObjectKey<'meteor'>,
+    value: KnownObjectExpression<{
+        properties: [KnownObjectProperty<{
+            key: KnownObjectKey<string>, // Package name
+            value: KnownObjectExpression<{
+                properties: MeteorPackageProperty[]
+            }>
+        }>]
+    }>
 }>
 
 /**
  * A call expression for the `meteorInstall()` function.
  * We're using this to nicely cast types for meteorInstall() nodes.
  */
-export type MeteorInstallCallExpression = Omit<CallExpression, 'arguments'> & { arguments: [MeteorInstallObject] }
+export type MeteorInstallCallExpression = Omit<CallExpression, 'arguments'> & {
+    arguments: [modules: MeteorInstallObject, fileExtensions: Expression] | [modules: MeteorInstallObject]
+}

@@ -1,8 +1,10 @@
 import Path from 'path';
 import { MeteorViteError } from '../../../error/MeteorViteError';
+import Logger from '../../../utilities/Logger';
 import type { ModuleList, ParsedPackage } from '../../parser/Parser';
 import { parseMeteorPackage } from '../../parser/Parser';
-import { SerializationStore } from '../SerializationStore';
+import { ConflictingExportKeys, SerializationStore } from '../SerializationStore';
+import type ModuleExport from './ModuleExport';
 import PackageExport from './PackageExport';
 import { PackageSubmodule } from './PackageSubmodule';
 
@@ -14,7 +16,7 @@ export default class MeteorPackage implements Omit<ParsedPackage, 'packageScopeE
     public readonly packageScopeExports: PackageExport[] = [];
     public readonly packageId: string;
     
-    constructor(public readonly parsedPackage: ParsedPackage, public readonly meta: { timeSpent: string; }) {
+    constructor(public readonly parsedPackage: ParsedPackage, public readonly meta: { timeSpent: string; ignoreDuplicateExportsInPackages?: string[] }) {
         this.name = parsedPackage.name;
         this.modules = parsedPackage.modules;
         this.mainModulePath = parsedPackage.mainModulePath;
@@ -45,15 +47,16 @@ export default class MeteorPackage implements Omit<ParsedPackage, 'packageScopeE
         }, null, 2);
     }
     
-    public static async parse(...options: Parameters<typeof parseMeteorPackage>) {
-        const { result, timeSpent } = await parseMeteorPackage(...options);
-        return new MeteorPackage(result, { timeSpent });
+    public static async parse(parse: Parameters<typeof parseMeteorPackage>[0], options?: { ignoreDuplicateExportsInPackages?: string[] }) {
+        const { result, timeSpent } = await parseMeteorPackage(parse);
+        return new MeteorPackage(result, { timeSpent, ...options });
     }
     
     public getModule({ importPath }: { importPath?: string }): PackageSubmodule | undefined {
         if (!importPath) {
             return this.mainModule;
         }
+        
         
         const entries = Object.entries(this.modules);
         const file = entries.find(
@@ -64,18 +67,54 @@ export default class MeteorPackage implements Omit<ParsedPackage, 'packageScopeE
             }),
         );
         
-        if (!file) {
+        if (file) {
+            const [modulePath, exports] = file;
+            
+            return new PackageSubmodule({ modulePath, exports, meteorPackage: this });
+        }
+        
+        if (!importPath.startsWith('/node_modules/')) {
             throw new MeteorPackageError(`Could not locate module for path: ${importPath}!`, this);
         }
         
-        const [modulePath, exports] = file;
+        if (!this.parsedPackage.node_modules) {
+            throw new MeteorPackageError(`Unable to retrieve npm packages from Meteor module. (${importPath})`, this);
+        }
         
-        return new PackageSubmodule({ modulePath, exports, meteorPackage: this });
+        const moduleImport = importPath.replace('/node_modules/', '');
+        const nodePackage = this.parsedPackage.node_modules.find(({ name }) => {
+            if (!name) {
+                return;
+            }
+            if (name === moduleImport) {
+                return true;
+            }
+            if (moduleImport.split('/')[0] === name) {
+                return true;
+            }
+            return false;
+        });
+        
+        if (!nodePackage) {
+            throw new MeteorPackageError(`Could not locate npm package: ${nodePackage} in ${this.name} (${importPath})`, this);
+        }
+        
+        const meteorNodePackage = new MeteorPackage({ ...nodePackage, packageScopeExports: {} }, { timeSpent: 'none' });
+        const childPackageImportPath = moduleImport.replace(nodePackage.name, '').replace(/^\//, '');
+        return meteorNodePackage.getModule({ importPath: childPackageImportPath });
     }
     
     public get mainModule(): PackageSubmodule | undefined {
         if (!this.mainModulePath) {
             return;
+        }
+        
+        if (this.mainModulePath in this.modules && this.parsedPackage.type === 'npm') {
+            return new PackageSubmodule({
+                meteorPackage: this,
+                modulePath: this.mainModulePath,
+                exports: this.modules[this.mainModulePath]
+            })
         }
         
         const [
@@ -105,18 +144,59 @@ export default class MeteorPackage implements Omit<ParsedPackage, 'packageScopeE
      */
     public serialize({ importPath }: { importPath?: string }) {
         const store = new SerializationStore();
-        
         const submodule = this.getModule({ importPath });
         
-        if (submodule) {
-            submodule.exports.forEach((entry) => store.addEntry(entry));
+        const addEntry = (entry: ModuleExport | PackageExport) => {
+            try {
+                store.addEntry(entry);
+            } catch (error) {
+                if (error instanceof ConflictingExportKeys) {
+                    if (this.meta?.ignoreDuplicateExportsInPackages?.includes(submodule?.meteorPackage.packageId!)) {
+                        return;
+                    }
+                }
+                Logger.warn(error);
+            }
         }
         
         // Package exports are only available at the package's mainModule, so if an import path is provided,
         // we want to omit any of these exports and only use the module-specific exports
         if (!importPath) {
-            this.packageScopeExports.forEach((entry) => store.addEntry(entry));
+            this.packageScopeExports.forEach((entry) => addEntry(entry));
         }
+        
+        submodule?.exports.forEach((entry) => {
+            if (!importPath?.includes('node_modules')) {
+                addEntry(entry);
+                return;
+            }
+            
+            if (entry.type !== 're-export' || entry.name !== '*') {
+                addEntry(entry);
+                return;
+            }
+            
+            /** Flatten re-exports for relative modules.
+             * @example root module
+             * // index.js
+             * export * from './cjs/react.production.min.js'
+             *
+             * @example stub output
+             * export const useState = ...
+             * export const createContext = ...
+             */
+            try {
+                const module = submodule.meteorPackage.getModule({
+                    // Todo extract path rewrites like this to a reusable method
+                    importPath: entry.from?.replace('./', '')
+                });
+                module!.exports.forEach((entry) => {
+                    addEntry(entry)
+                });
+            } catch (error) {
+                Logger.warn(error);
+            }
+        });
         
         return store.serialize();
     }

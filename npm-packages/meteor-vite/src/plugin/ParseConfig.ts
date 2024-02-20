@@ -1,5 +1,5 @@
 import { mergeConfig, ResolvedConfig, UserConfig } from 'vite';
-import { PluginSettings } from './Meteor';
+import type { PluginSettings } from '../VitePluginSettings';
 
 export function mergeWithTypes<
     TDefaults extends Record<string, any>,
@@ -13,3 +13,4 @@ export function parseConfig<TConfig extends ResolvedConfig | UserConfig>(config:
 } {
     return config;
 }
+

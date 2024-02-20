@@ -1,16 +1,15 @@
 import FS from 'fs/promises';
 import Path from 'path';
 import { createServer, resolveConfig, ViteDevServer } from 'vite';
-import { MeteorViteConfig } from '../../../MeteorViteConfig';
+import { ResolvedMeteorViteConfig, type ProjectJson } from '../../../VitePluginSettings';
 import { meteorWorker } from '../../../plugin/Meteor';
-import { ProjectJson } from '../../../plugin/MeteorStubs';
 import Logger from '../../../utilities/Logger';
 import { RefreshNeeded } from '../../../ViteLoadRequest';
 import CreateIPCInterface, { IPCReply } from '../interface';
 import MeteorEvents, { MeteorIPCMessage } from '../MeteorEvents';
 
-let server: ViteDevServer & { config: MeteorViteConfig };
-let viteConfig: MeteorViteConfig;
+let server: ViteDevServer & { config: ResolvedMeteorViteConfig };
+let viteConfig: ResolvedMeteorViteConfig;
 let listening = false;
 
 export type Replies = IPCReply<{
