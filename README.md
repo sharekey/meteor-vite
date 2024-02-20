@@ -108,12 +108,14 @@ export default defineConfig({
             /**
              * Path to the client entrypoint for your app.
              * This becomes your new Vite-powered mainModule for Meteor.
+             * (required)
              */
             clientEntry: 'imports/entrypoint/vite.ts',
             
             /**
              * Skips bundling the provided npm packages if they are already provided by Meteor.
              * This assumes you have a Meteor package that depends on the provided npm packages.
+             * @default []
              */
             externalizeNpmPackages: ['react', 'react-dom'],
             
@@ -125,6 +127,7 @@ export default defineConfig({
             stubValidation: {
                 /**
                  * list of packages to ignore export validation for.
+                 * @default []
                  */
                 ignorePackages: ['ostrio:cookies'],
                 
@@ -133,12 +136,14 @@ export default defineConfig({
                  * This is generally only an issue for React where as we ignore conditional exports when creating an
                  * ESM stub. These are only ESM export stubs that point to your Meteor bundle, so it's generally safe
                  * to ignore.
+                 * @default []
                  */
                 ignoreDuplicateExportsInPackages: ['react', 'react-dom'],
                 
                 /**
                  * Will only emit warnings in the console instead of throwing an exception that may prevent the client
                  * app from loading.
+                 * @default false
                  */
                 warnOnly: true,
                 
@@ -146,6 +151,7 @@ export default defineConfig({
                  * Set to true to completely disable stub validation. Any of the above options will be ignored.
                  * This is discuraged as `warnOnly` should give you an important heads up if something might be wrong
                  * with Meteor-Vite
+                 * @default false
                  */
                 disabled: false,
             },
