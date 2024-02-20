@@ -46,7 +46,7 @@ start() {
 # Install dependencies for dev app
 install() {
   cd "$APP_DIR" || exit 1
-  $npm i
+  $npm i "$@"
 }
 
 # Initial setup for example apps - installs and links our local packages.
