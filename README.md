@@ -202,6 +202,8 @@ import 'meteor/react-meteor-data';
 And that should be it. Write your app from your `vite.tsx` entrypoint and enjoy lightning fast HMR ⚡
 
 ## Configuration
+The only required config field is your Vite `clientEntry` field. The rest is optional and usually doesn't require
+tinkering with.
 ```ts
 // vite.config.ts
 import { meteor } from 'meteor-vite/plugin';
