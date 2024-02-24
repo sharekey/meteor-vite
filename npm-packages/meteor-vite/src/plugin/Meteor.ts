@@ -77,11 +77,14 @@ export function meteorWorker(config: PartialPluginOptions): PluginOption {
                         disabled: false,
                     }
                 }, config);
-                userConfig.optimizeDeps = mergeViteSettings(userConfig, {
+                
+                const mergedUserConfig = mergeViteSettings(userConfig, {
                     optimizeDeps: {
                         entries: [pluginSettings.clientEntry]
                     }
-                }).optimizeDeps;
+                });
+                
+                userConfig.optimizeDeps = mergedUserConfig.optimizeDeps;
             },
             configResolved(resolvedConfig) {
                 const config = parseConfig(resolvedConfig);
