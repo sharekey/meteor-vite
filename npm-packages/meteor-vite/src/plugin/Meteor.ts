@@ -39,7 +39,7 @@ export default function meteor(config: PluginOptions) {
 export function meteorWorker(config: PartialPluginOptions): PluginOption {
     const METEOR_LOCAL_DIR = process.env.METEOR_LOCAL_DIR || Path.join('.meteor', 'local');
     let enforce: 'pre' | undefined;
-    let resolveId: Plugin['resolveId'] | undefined;
+    let resolveId: Plugin['resolveId'];
     
     if (config.externalizeNpmPackages) {
         enforce = 'pre';
