@@ -63,7 +63,7 @@ export function meteorWorker(config: PartialPluginOptions): PluginOption {
             enforce,
             resolveId,
             config: (userConfig) =>  {
-                mergeMeteorSettings(userConfig, {
+                const pluginSettings = mergeMeteorSettings(userConfig, {
                     meteorStubs: {
                         packageJsonPath: 'package.json',
                         meteor: {
@@ -77,6 +77,11 @@ export function meteorWorker(config: PartialPluginOptions): PluginOption {
                         disabled: false,
                     }
                 }, config);
+                mergeViteSettings(userConfig, {
+                    optimizeDeps: {
+                        entries: [pluginSettings.clientEntry]
+                    }
+                });
             },
             configResolved(resolvedConfig) {
                 const config = parseConfig(resolvedConfig);
@@ -111,3 +116,12 @@ function mergeMeteorSettings(
     return viteConfig.meteor = mergeWithTypes(withDefaults, overrides) as PluginSettings;
 }
 
+function mergeViteSettings(
+    userConfig: ResolvedConfig | UserConfig,
+    defaults: UserConfig,
+) {
+    const viteConfig = parseConfig(userConfig);
+    const existingSettings = viteConfig || {};
+    const withDefaults = mergeWithTypes(defaults, existingSettings);
+    return mergeWithTypes(withDefaults, viteConfig);
+}
