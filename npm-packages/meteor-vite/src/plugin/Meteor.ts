@@ -1,6 +1,6 @@
 import Path from 'path';
 import pc from 'picocolors';
-import { PluginOption, ResolvedConfig, UserConfig } from 'vite';
+import { Plugin, PluginOption, ResolvedConfig, UserConfig } from 'vite';
 import PackageJSON from '../../package.json';
 import { FatalMeteorViteError } from '../error/MeteorViteError';
 import type { PartialPluginOptions, PluginOptions, PluginSettings } from '../VitePluginSettings';
@@ -39,25 +39,29 @@ export default function meteor(config: PluginOptions) {
 export function meteorWorker(config: PartialPluginOptions): PluginOption {
     const METEOR_LOCAL_DIR = process.env.METEOR_LOCAL_DIR || Path.join('.meteor', 'local');
     let enforce: 'pre' | undefined;
+    let resolveId: Plugin['resolveId'] | undefined;
+    
     if (config.externalizeNpmPackages) {
         enforce = 'pre';
+        resolveId = function resolveId(id) {
+            const [module, ...path] = id.split('/');
+            const match = config.externalizeNpmPackages?.find((name) => {
+                if (!name) return false;
+                if (module !== name) return false;
+                return true;
+            });
+            if (!match) {
+                return;
+            }
+            return `\0meteor:${id}`;
+        }
     }
+    
     return [
         {
             name: 'meteor-vite:config',
             enforce,
-            resolveId(id) {
-                const [module, ...path] = id.split('/');
-                const match = config.externalizeNpmPackages?.find((name) => {
-                    if (!name) return false;
-                    if (module !== name) return false;
-                    return true;
-                });
-                if (!match) {
-                    return;
-                }
-                return `\0meteor:${id}`;
-            },
+            resolveId,
             config: (userConfig) =>  {
                 mergeMeteorSettings(userConfig, {
                     meteorStubs: {
