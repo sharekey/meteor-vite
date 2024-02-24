@@ -1,5 +1,13 @@
 # meteor-vite
 
+## 1.10.1
+
+### Patch Changes
+
+- 5f19a295: Use the configured Vite client entrypoint as the default entrypoint for Vite dependency optimization.
+
+  - Fixes #128
+
 ## 1.10.0
 
 ### Minor Changes
