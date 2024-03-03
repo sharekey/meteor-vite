@@ -22,14 +22,19 @@ EXAMPLE_DIR="$PWD/examples"
 APP_DIR="$EXAMPLE_DIR/$app"
 BUILD_TARGET="$PWD/examples/output/$app"
 NPM_LINK_TARGET="$PWD/npm-packages/meteor-vite"
+METEOR_LOCAL_DIR_ROOT="/tmp/.meteor-local/meteor-vite/examples"
+METEOR_LOCAL_DIR="$METEOR_LOCAL_DIR_ROOT/$app"
 
 export METEOR_PACKAGE_DIRS="$PWD/packages:$PWD/test-packages/atmosphere"
 export METEOR_VITE_TSUP_BUILD_WATCHER="${METEOR_VITE_TSUP_BUILD_WATCHER:-'true'}"
+export METEOR_LOCAL_DIR
 
 if [ "$USE_METEOR_BINARIES" == "0" ]; then
   npm="npm"
   node="node"
 fi
+
+mkdir -p "$METEOR_LOCAL_DIR"
 
 # Port for the Meteor app in examples/.mongo
 # Used just for the MongoDB server that comes out of the box with Meteor.
@@ -96,6 +101,7 @@ install:mongo() {
 
 start:mongo() {
   cd "$EXAMPLE_DIR/.mongo" || exit 1
+  export METEOR_LOCAL_DIR="$METEOR_LOCAL_DIR_ROOT/.mongo"
   $npm start -- --port $PROD_MONGO_METEOR_PORT
 }
 
