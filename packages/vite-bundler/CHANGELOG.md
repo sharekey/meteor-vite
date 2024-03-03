@@ -1,5 +1,11 @@
 # vite-bundler
 
+## 2.0.0-beta.9
+
+### Patch Changes
+
+- 287b5610: Merge changes from release branch ([`jorgenvatle:vite-bundler@1.12.9`](https://github.com/JorgenVatle/meteor-vite/releases/tag/vite-bundler%401.12.9))
+
 ## 2.0.0-beta.8
 
 ### Patch Changes
