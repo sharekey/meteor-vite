@@ -14,10 +14,10 @@
   },
   "scripts": {
     "version:vite-bundler": "meteor node .bin/release-meteor-package.mjs version",
-    "publish:vite-bundler": "METEOR_RELEASE=3.0-beta.0 node .bin/release-meteor-package.mjs publish",
+    "publish:vite-bundler": "meteor node .bin/release-meteor-package.mjs publish",
 
     "example": ".bin/example-app.sh",
-    "prepare:example": "npm run example prepare",
+    "launch": "npm run example launch",
 
     "version": "(npm run version:vite-bundler || exit 1) && changeset version",
     "release": "npm run publish:vite-bundler && changeset publish",
@@ -27,16 +27,19 @@
     "install:react": "cd examples/react && meteor npm install",
     "install:package": "cd npm-packages/meteor-vite && meteor npm install",
 
+    "build": "npm run example build",
     "build:package": "cd npm-packages/meteor-vite && meteor npm run build",
     "build:vue": "npm run example build vue",
     "build:react": "npm run example build react",
     "build:svelte": "npm run example build svelte",
 
+    "link": "npm run example link",
     "link:package": "meteor npm run link:vue && meteor npm run link:svelte",
     "link:vue": "npm run example link vue",
     "link:svelte": "npm run example link svelte",
     "link:react": "npm run example link react",
 
+    "start": "npm run example start",
     "start:vue": "npm run example start vue",
     "start:svelte": "npm run example start svelte",
     "start:react": "npm run example start react"

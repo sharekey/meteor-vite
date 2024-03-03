@@ -15,6 +15,7 @@
   },
   "dependencies": {
     "@babel/runtime": "^7.20.13",
+    "@meteor-vite/test-externalization": "^1.0.0",
     "chalk": "^4.1.2",
     "meteor-node-stubs": "^1.2.5",
     "meteor-vite": "1.*",

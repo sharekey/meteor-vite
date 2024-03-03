@@ -3,10 +3,7 @@ import { Meteor } from 'meteor/meteor';
 import Path from 'path';
 import FS from 'fs';
 import pc from 'picocolors';
-import type { WorkerMethod, WorkerResponse } from '../../npm-packages/meteor-vite';
-import type { WorkerResponseHooks } from '../../npm-packages/meteor-vite/src/meteor/IPC/methods';
-import type { MeteorIPCMessage } from '../../npm-packages/meteor-vite/src/meteor/IPC/MeteorEvents';
-import type { ProjectJson } from '../../npm-packages/meteor-vite/src/plugin/MeteorStubs';
+import type { WorkerMethod, WorkerResponse, WorkerResponseHooks, MeteorIPCMessage, ProjectJson } from 'meteor-vite';
 
 // Use a worker to skip reify and Fibers
 // Use a child process instead of worker to avoid WASM/archived threads error
@@ -153,6 +150,7 @@ function prepareWorkerEnv() {
     const env: Record<string, string | undefined> = {
         FORCE_COLOR: '3',
         ENABLE_DEBUG_LOGS: process.env.ENABLE_DEBUG_LOGS,
+        METEOR_LOCAL_DIR: process.env.METEOR_LOCAL_DIR,
     }
     Object.entries(process.env).forEach(([key, value]) => {
         if (!key.startsWith(workerEnvPrefix)) {

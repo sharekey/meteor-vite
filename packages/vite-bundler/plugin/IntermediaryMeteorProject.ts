@@ -1,13 +1,13 @@
+// @ts-ignore
+import { execaSync } from 'execa';
+import fs from 'fs-extra';
+import type { WorkerResponseData } from 'meteor-vite';
 import path from 'node:path';
-import { WorkerResponseData } from '../../../npm-packages/meteor-vite/src/meteor/IPC/methods';
+import pc from 'picocolors';
 import { MeteorViteError } from '../utility/Errors';
 import { getBuildConfig } from '../utility/Helpers';
 import Logger from '../utility/Logger';
 import { createWorkerFork, cwd } from '../workers';
-import fs from 'fs-extra';
-
-// @ts-ignore
-import { execaSync } from 'execa';
 
 const {
     meteorMainModule,
@@ -32,6 +32,10 @@ function prepareTemporaryMeteorProject() {
         'package.json',
         meteorMainModule,
     ]
+    const directoriesToCopy = [
+        'node_modules',
+        'packages',
+    ];
     // List of packages to remove for the placeholder project.
     // This comes in handy for some Meteor build plugins that can conflict with Meteor-Vite.
     const replaceMeteorPackages = [
@@ -44,6 +48,7 @@ function prepareTemporaryMeteorProject() {
     ]
     
     Logger.info('Building packages to make them available to export analyzer...')
+    Logger.debug(`Intermediary project path: ${pc.yellow(tempMeteorProject)}`);
     
     // Check for project files that may be important if available
     for (const file of optionalFiles) {
@@ -60,10 +65,17 @@ function prepareTemporaryMeteorProject() {
         fs.copyFileSync(from, to)
     }
     
-    // Symblink to `packages` folder
-    if (fs.existsSync(path.join(cwd, 'packages')) && !fs.existsSync(path.join(tempMeteorProject, 'packages'))) {
-        fs.symlinkSync(path.join(cwd, 'packages'), path.join(tempMeteorProject, 'packages'))
+    // Symlink to source project's `packages` and `node_modules` folders
+    for (const dir of directoriesToCopy) {
+        const from = path.join(cwd, dir);
+        const to = path.join(tempMeteorProject, dir);
+        
+        if (!fs.existsSync(from)) continue;
+        if (fs.existsSync(to)) continue;
+        
+        fs.symlinkSync(from, to);
     }
+    
     // Remove/replace conflicting Atmosphere packages
     {
         const file = path.join(tempMeteorProject, '.meteor', 'packages')
@@ -90,11 +102,23 @@ function prepareTemporaryMeteorProject() {
         }
         fs.writeFileSync(file, JSON.stringify(data, null, 2))
     }
-    // Only keep meteor package imports to enable lazy packages
+    // Only keep meteor and npm package imports to enable lazy packages
     {
         const file = path.join(tempMeteorProject, meteorMainModule)
-        const lines = fs.readFileSync(file, 'utf8').split('\n')
-        const imports = lines.filter(line => line.startsWith('import') && line.includes('meteor/'))
+        const lines = fs.readFileSync(file, 'utf8').split('\n');
+        const imports = lines.filter(line => {
+            if (!line.startsWith('import')) return false;
+            if (line.includes('meteor/')) {
+                debug('Keeping meteor import line:', line);
+               return true;
+            }
+            if (!line.match(/["'`]\./)) {
+                debug('Keeping non-meteor import line', line);
+                return true;
+            }
+            debug('Stripped import line from intermediary build:', line);
+            return false;
+        })
         fs.writeFileSync(file, imports.join('\n'))
     }
     
@@ -167,6 +191,10 @@ function viteBuild(): Promise<WorkerResponseData<'buildResult'>> {
             }],
         })
     });
+}
+
+function debug(message: string, subtitle: string) {
+    Logger.debug(`${message}\n    ${pc.gray('L')} ${pc.yellow(subtitle)}`);
 }
 
 export type ViteBundleOutput = Awaited<ReturnType<typeof prepareViteBundle>>;

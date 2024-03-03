@@ -28,3 +28,4 @@ test:lazy
 test:modules
 test:ts-modules
 test:stub-validation
+test:duplicate-npm-dependencies

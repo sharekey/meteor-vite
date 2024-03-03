@@ -1,12 +1,17 @@
 import { spawn } from 'child_process';
 import Path from 'path';
-import { RollupOutput, RollupWatcher } from 'rollup';
+import { RollupOutput } from 'rollup';
 import { build, InlineConfig, resolveConfig } from 'vite';
 import MeteorVitePackage from '../../../../package.json';
-import { MeteorViteConfig } from '../../../MeteorViteConfig';
+import {
+    type ResolvedMeteorViteConfig,
+    type ProjectJson,
+    type MeteorStubsSettings,
+} from '../../../VitePluginSettings';
 import { meteorWorker } from '../../../plugin/Meteor';
-import { MeteorStubsSettings, ProjectJson } from '../../../plugin/MeteorStubs';
 import CreateIPCInterface, { IPCReply } from '../interface';
+
+type BuildOutput = Awaited<ReturnType<typeof build>>;
 
 export default CreateIPCInterface({
     async 'vite.build'(
@@ -92,7 +97,7 @@ async function prepareConfig(buildConfig: BuildOptions): Promise<ParsedConfig> {
         }
     })
 
-    const viteConfig: MeteorViteConfig = await resolveConfig({
+    const viteConfig: ResolvedMeteorViteConfig = await resolveConfig({
         configFile,
         plugins: [
             meteorWorker({}) // Fills in defaults for missing fields.
@@ -135,7 +140,7 @@ async function prepareConfig(buildConfig: BuildOptions): Promise<ParsedConfig> {
     }
 }
 
-function validateOutput(rollupResult?: RollupOutput | RollupWatcher): asserts rollupResult is RollupOutput {
+function validateOutput(rollupResult?: BuildOutput | RollupOutput): asserts rollupResult is RollupOutput {
     if (!rollupResult) {
         throw new Error('Received no result from Rollup!');
     }
@@ -169,7 +174,7 @@ type Replies = IPCReply<{
 }>
 
 type ParsedConfig = {
-    viteConfig: MeteorViteConfig;
+    viteConfig: ResolvedMeteorViteConfig;
     inlineBuildConfig: InlineConfig;
     outDir: string;
 }

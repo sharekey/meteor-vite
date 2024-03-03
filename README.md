@@ -36,8 +36,9 @@ Use [Vite](https://vitejs.dev) in your Meteor app! ⚡️
 meteor npm i -D vite@4 
 meteor npm i meteor-vite
 
-# Then add the Vite-Bundler package to your Meteor project. 
-meteor add jorgenvatle:vite-bundler@2.0.0-beta.0
+# Then add the Vite-Bundler package to your Meteor project.
+# If you're using the Meteor v3 beta, use `jorgenvatle:vite-bundler@2.0.0-beta.8` 
+meteor add jorgenvatle:vite-bundler
 ```
 
 You can also install any vite plugin, for example `@vitejs/plugin-vue`:
@@ -71,15 +72,29 @@ Make sure to have an import client entry (`meteor.mainModule.client`) in your `p
 You can leave your Meteor client entry file empty, but it's necessary to enable Meteor import mode. In the example
 above, we can create an empty `imports/entrypoint/meteor.ts` file.
 
-Create a Vite configuration file (`vite.config.js`) in your project root.
-As we don't use a standard Vite `index.html` file, we need to specify an entry point (different from the Meteor one):
-
-#### Example with Vue
-```js
-// vite.config.js
+Create a Vite configuration file (`vite.config.ts`) in your project root. And load in the `meteor-vite` plugin.
+```ts
+// vite.config.ts
 import { defineConfig } from 'vite'
-import vue from '@vitejs/plugin-vue'
 import { meteor } from 'meteor-vite/plugin';
+
+export default defineConfig({
+    plugins: [
+        meteor({
+          clientEntry: 'imports/entrypoint/vite.ts',
+        }),
+        // Other Vite plugins here. E.g. React or Vue (See examples below)
+    ],
+})
+```
+You can then write your code from the `vite.ts` entry point and it will be handled by Vite! ⚡️
+
+### Example with Vue 3
+```js
+// vite.config.ts
+import { defineConfig } from 'vite'
+import { meteor } from 'meteor-vite/plugin';
+import vue from '@vitejs/plugin-vue'
 
 export default defineConfig({
     plugins: [
@@ -92,50 +107,163 @@ export default defineConfig({
 })
 ```
 
-You can then write your code from the `vite.ts` entry point and it will be handled by Vite! ⚡️
+### Example with Vue 2.7
+```js
+// vite.config.ts
+import { defineConfig } from 'vite'
+import { meteor } from 'meteor-vite/plugin';
+import vue from '@vitejs/plugin-vue2'
+
+export default defineConfig({
+    plugins: [
+        meteor({
+          clientEntry: 'imports/entrypoint/vite.ts',
+        }),
+        vue(),
+    ],
+    // Other vite options here...
+})
+```
+
+### Example with React
+```js
+// vite.config.ts
+import { defineConfig } from 'vite'
+import { meteor } from 'meteor-vite/plugin';
+import react from '@vitejs/plugin-react'
+
+export default defineConfig({
+    plugins: [
+        meteor({
+          clientEntry: 'imports/entrypoint/vite.ts',
+        }),
+        react({
+            jsxRuntime: 'classic',
+        }),
+    ],
+    optimizeDeps: {
+        exclude: ['@meteor-vite/react-meteor-data'], 
+    }
+})
+```
+
+If your project depends on [`react-meteor-data`](https://github.com/meteor/react-packages) it might be worthwhile to 
+replace it with our npm-published fork [`@meteor-vite/react-meteor-data`](https://github.com/JorgenVatle/react-packages).
+
+The fork simply publishes the package over npm instead of Atmosphere. This has a few benefits. Primarily, Meteor 
+won't try to bundle React for you, instead leaving it to Vite. This gives you more flexibility in configuring your React
+environment through Vite. And a good boost in build times.
+
+#### React with Atmosphere's `react-meteor-data` package
+If you still want to stick with the Atmosphere version, you might need to instruct Vite to externalize React, so it
+isn't included twice in your client bundle.
+```ts
+// vite.config.ts
+import { defineConfig } from 'vite';
+import react from '@vitejs/plugin-react';
+import { meteor } from 'meteor-vite/plugin';
+
+export default defineConfig({
+    plugins: [
+        react(),
+        meteor({
+            clientEntry: "imports/entrypoint/vite.tsx",
+            // This instructs Vite to not bundle react and react-dom as they will be bundled by Meteor instead.
+            externalizeNpmPackages: ['react', 'react-dom'], 
+            stubValidation: {
+                warnOnly: true,
+                // React uses conditional exports for production and development environments
+                // Meteor-Vite ignores these when preparing a stub file for externalized dependencies
+                // This prevents warning messages from flooding the console when running your app.
+                ignoreDuplicateExportsInPackages: ['react', 'react-dom'],
+            },
+            meteorStubs: {
+                debug: false
+            },
+        })
+    ],
+});
+```
+
+Then in your Meteor client's `mainModule`, we need to explicitly import React to prevent the Meteor bundler from
+omitting unused React components from your bundle.
+
+```ts
+// ./imports/entrypoint/meteor.ts
+import 'react';
+import 'react-dom';
+import 'react-dom/client';
+import 'react/jsx-dev-runtime';
+import 'react-refresh';
+
+import 'meteor/react-meteor-data';
+```
+
+And that should be it. Write your app from your `vite.tsx` entrypoint and enjoy lightning fast HMR ⚡
 
 ## Configuration
-
-### Vite Config
+The only required config field is your Vite `clientEntry` field. The rest is optional and usually doesn't require
+tinkering with.
 ```ts
 // vite.config.ts
 import { meteor } from 'meteor-vite/plugin';
 
 export default defineConfig({
-    plugins: [
-        meteor({
-          /**
-           * Path to the client entrypoint for your app.
-           * This becomes your new Vite-powered mainModule for Meteor.
-           */
-          clientEntry: 'imports/entrypoint/vite.ts',
-
-          /**
-           * Configures runtime validation of Meteor package stubs generated by Vite. 
-           * See Features section in readme for more info
-           * (optional)
-           */
-          stubValidation: {
-            /**
-             * list of packages to ignore export validation for.
-             */
-            ignorePackages: ["ostrio:cookies"],
-
-            /**
-             * Will only emit warnings in the console instead of throwing an exception that may prevent the client app
-             * from loading.
-             */
-            warnOnly: true,
-
-            /**
-             * Set to true to completely disable stub validation. Any of the above options will be ignored.
-             * This is discuraged as `warnOnly` should give you an important heads up if something might be wrong with Meteor-Vite
-             */
-            disabled: false,
-          }
-        })
-    ],
-})
+  plugins: [
+    meteor({
+      /**
+       * Path to the client entrypoint for your app.
+       * This becomes your new Vite-powered mainModule for Meteor.
+       * @required
+       */
+      clientEntry: 'imports/entrypoint/vite.ts',
+      
+      /**
+       * Skips bundling the provided npm packages if they are already provided by Meteor.
+       * This assumes you have a Meteor package that depends on the provided npm packages.
+       * @default []
+       */
+      externalizeNpmPackages: ['react', 'react-dom'],
+      
+      /**
+       * Configures runtime validation of Meteor package stubs generated by Vite.
+       * See Features section in readme for more info
+       * @optional
+       */
+      stubValidation: {
+        /**
+         * list of packages to ignore export validation for.
+         * @default []
+         */
+        ignorePackages: ['ostrio:cookies'],
+        
+        /**
+         * Suppress warning messages when we resolve a module that has conflicting export keys.
+         * This is generally only an issue for React where as we ignore conditional exports when creating an
+         * ESM stub. These are only ESM export stubs that point to your Meteor bundle, so it's generally safe
+         * to ignore.
+         * @default []
+         */
+        ignoreDuplicateExportsInPackages: ['react', 'react-dom'],
+        
+        /**
+         * Will only emit warnings in the console instead of throwing an exception that may
+         * prevent the client app from loading.
+         * @default false
+         */
+        warnOnly: true,
+        
+        /**
+         * Set to true to completely disable stub validation. Any of the above options will be ignored.
+         * This is discuraged as `warnOnly` should give you an important heads up if something might be wrong
+         * with Meteor-Vite
+         * @default false
+         */
+        disabled: false,
+      },
+    }),
+  ],
+});
 ```
 
 ### Meteor plugin settings
@@ -144,7 +272,7 @@ In most cases, you won't need to add anything here.
 ```json5
 // package.json
 {
-  "name": "my-app"
+  "name": "my-app",
   // ...
   
   "meteor": {
@@ -215,7 +343,7 @@ export default defineConfig({
 })
 ```
 
-## A note about the Meteor `mainModule`
+## Avoid imports in Meteor's client `mainModule`
 Code written to or imported by your Meteor client's [`mainModule.client`](https://docs.meteor.com/packages/modules.html#Modular-application-structure) 
 will not be processed by Vite, however, it will still by loaded by the Meteor client. So if you have a use case where 
 you have some code that you don't want Vite to process, but still want in your client bundle, this would be the place 
@@ -252,7 +380,7 @@ The Vite integration comes with two dependencies that work together to enable co
 - [x] Code-splitting/Dynamic imports
 - [ ] Migrate intermediary production-build transpile step from Babel to esbuild.
 - [ ] SSR (not tested)
-- [ ] Starter/demo templates
+- [x] Starter/demo templates
     - [x] [Vue 3](/examples/vue)
         - [Live demo](https://vue--meteor-vite.wcaserver.com/)
     - [x] [Svelte](/examples/svelte)
@@ -261,6 +389,6 @@ The Vite integration comes with two dependencies that work together to enable co
         - [Live demo](https://react--meteor-vite.wcaserver.com/)
     - [x] [SolidJS](/examples/solid)
         - [Live demo](https://solid--meteor-vite.wcaserver.com/)
-    - [x] [Meteor v3 + Vue](/examples/meteor-v3-vue) (Isopack compatability still pending)
+    - [x] [Meteor v3 + Vue](/examples/meteor-v3-vue)
         - [Live demo](https://meteor-v3-vue--meteor-vite.wcaserver.com/)
         - [Pre-release branch](https://github.com/JorgenVatle/meteor-vite/tree/meteor-v3)
