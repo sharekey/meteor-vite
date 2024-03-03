@@ -7,19 +7,19 @@
           "type": "patch"
         }
       ],
-      "summary": "Merge changes from release branch ([`jorgenvatle:vite-bundler@1.12.9`](https://github.com/JorgenVatle/meteor-vite/releases/tag/vite-bundler%401.12.9))",
-      "id": "strange-trains-float"
+      "summary": "Hotfix for beta.9 - it was published using the wrong Meteor version (fibers)",
+      "id": "lazy-years-sleep"
     }
   ],
   "releases": [
     {
       "name": "vite-bundler",
       "type": "patch",
-      "oldVersion": "2.0.0-beta.8",
+      "oldVersion": "2.0.0-beta.9",
       "changesets": [
-        "strange-trains-float"
+        "lazy-years-sleep"
       ],
-      "newVersion": "2.0.0-beta.9"
+      "newVersion": "2.0.0-beta.10"
     }
   ],
   "preState": {
@@ -33,6 +33,7 @@
       "cool-beans-do",
       "dirty-pianos-talk",
       "fair-crabs-sip",
+      "lazy-years-sleep",
       "mighty-planets-do",
       "modern-camels-change",
       "modern-swans-burn",
