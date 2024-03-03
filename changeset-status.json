@@ -7,19 +7,19 @@
           "type": "patch"
         }
       ],
-      "summary": "Fix import path resolver for the Vite client bundle entry file. Addresses an incorrect import string with client mainModules outside of the Meteor client root directory.",
-      "id": "dirty-pianos-talk"
+      "summary": "Merge changes from release branch ([`jorgenvatle:vite-bundler@1.12.9`](https://github.com/JorgenVatle/meteor-vite/releases/tag/vite-bundler%401.12.9))",
+      "id": "strange-trains-float"
     }
   ],
   "releases": [
     {
       "name": "vite-bundler",
       "type": "patch",
-      "oldVersion": "2.0.0-beta.7",
+      "oldVersion": "2.0.0-beta.8",
       "changesets": [
-        "dirty-pianos-talk"
+        "strange-trains-float"
       ],
-      "newVersion": "2.0.0-beta.8"
+      "newVersion": "2.0.0-beta.9"
     }
   ],
   "preState": {
@@ -37,7 +37,8 @@
       "modern-camels-change",
       "modern-swans-burn",
       "nice-eggs-tell",
-      "shaggy-dingos-push"
+      "shaggy-dingos-push",
+      "strange-trains-float"
     ]
   }
 }
