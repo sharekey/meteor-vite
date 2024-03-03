@@ -1,5 +1,11 @@
 # vite-bundler
 
+## 2.0.0-beta.10
+
+### Patch Changes
+
+- dc951f49: Hotfix for beta.9 - it was published using the wrong Meteor version (fibers)
+
 ## 2.0.0-beta.9
 
 ### Patch Changes
