@@ -1,4 +1,7 @@
 # Vite plugin Zodern:Relay
+> [!IMPORTANT]
+> This plugin is not yet fully complete. Methods and publications imported by your client will not be omitted from
+> your client bundle like it would when using the `@zodern/babel-plugin-meteor-relay` plugin.
 
 This is a Vite compatability package for
 [`zodern:relay`](https://github.com/zodern/meteor-relay#readme) - type safe
@@ -7,9 +10,6 @@ This is a Vite compatability package for
 This plugin acts as partial replacement for the Babel plugin provided by `zodern:relay`. You still need the Babel
 plugin as it might still be required on the server.
 
-> [!IMPORTANT]
-> This plugin is not yet fully complete. Methods and publications imported by your client will not be omitted from
-> your client bundle like it would when using the `@zodern/babel-plugin-meteor-relay` plugin.
 
 ## Installation
 ```sh
