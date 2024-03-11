@@ -18,7 +18,8 @@
   "scripts": {
     "lint": "tsc --noEmit",
     "test": "npm run lint",
-    "build": "tsup"
+    "build": "tsup",
+    "prepack": "npm run build"
   },
   "keywords": [
     "meteor-vite",
