@@ -1,10 +1,7 @@
 import type { Plugin } from 'vite';
 
 const sourceModule = 'meteor/zodern:relay';
-const virtualModule = `zodern:relay`;
-function stubModule(fileName: string) {
-    return `@meteor-vite/zodern-relay/stubs/${fileName}`
-}
+const stubModule = '@meteor-vite/zodern-relay/stubs/relay-client';
 
 export default async function zodernRelay(): Promise<Plugin> {
     return {
@@ -13,7 +10,15 @@ export default async function zodernRelay(): Promise<Plugin> {
             if (!id.startsWith(sourceModule)) {
                 return;
             }
-            return stubModule('relay-client');
+            return `\0${id}`;
         },
+        load(id) {
+            if (!id.startsWith(`\0${sourceModule}`)) {
+                return;
+            }
+            
+            // language=typescript
+            return `export * from ${JSON.stringify(stubModule)}`;
+        }
     }
 }
