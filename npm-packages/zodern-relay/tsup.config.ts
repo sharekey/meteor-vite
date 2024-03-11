@@ -8,4 +8,5 @@ export default defineConfig({
     dts: true,
     format: ['cjs', 'esm'],
     skipNodeModulesBundle: true,
+    clean: true,
 })
