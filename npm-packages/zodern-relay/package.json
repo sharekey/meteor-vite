@@ -28,6 +28,9 @@
     "vite",
     "typescript"
   ],
+  "publishConfig": {
+    "access": "public"
+  },
   "author": "Jørgen Vatle <jorgen@wcaservices.net>",
   "license": "MIT",
   "repository": {
