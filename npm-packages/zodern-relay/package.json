@@ -16,7 +16,10 @@
     "typescript"
   ],
   "author": "Jørgen Vatle <jorgen@wcaservices.net>",
-  "license": "ISC",
+  "license": "MIT",
+  "repository": {
+    "url": "https://github.com/JorgenVatle/meteor-vite"
+  },
   "devDependencies": {
     "tsup": "^8.0.2",
     "typescript": "^5.4.2",
