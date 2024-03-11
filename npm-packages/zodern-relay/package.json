@@ -1,6 +1,6 @@
 {
   "name": "@meteor-vite/zodern-relay",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Vite compatability plugin for zodern:relay - typed Meteor methods and publications",
   "main": "dist/Plugin.js",
   "exports": {
@@ -9,7 +9,9 @@
       "import": "./dist/Plugin.mjs",
       "types": "./dist/Plugin.d.ts"
     },
-    "./stubs": ["./stubs/*.js"]
+    "./stubs": [
+      "./stubs/*.js"
+    ]
   },
   "files": [
     "dist",
