@@ -28,6 +28,7 @@
       <excludeFolder url="file://$MODULE_DIR$/npm-packages/meteor-vite/test/__mocks/auto-imports/entrypoint/.temp" />
       <excludeFolder url="file://$MODULE_DIR$/npm-packages/meteor-vite/test/__mocks/meteor-bundle" />
       <excludeFolder url="file://$MODULE_DIR$/npm-packages/meteor-vite/test/__mocks/vite-output" />
+      <excludeFolder url="file://$MODULE_DIR$/npm-packages/zodern-relay/dist" />
       <excludePattern pattern=".babel-cache" />
       <excludePattern pattern="local" />
     </content>
