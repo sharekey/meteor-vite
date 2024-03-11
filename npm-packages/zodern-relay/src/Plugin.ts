@@ -1,4 +1,4 @@
-import { Plugin } from 'vite';
+import type { Plugin } from 'vite';
 
 const sourceModule = 'meteor/zodern:relay';
 const virtualModule = `zodern:relay`;
