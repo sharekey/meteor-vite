@@ -1,6 +1,8 @@
-
+/**
+ * Stub module for zodern:relay
+ * Used as a replacement for imports for createMethod() or createPublication() from `meteor/zodern:relay`.
+ */
 let relayClient;
-
 const require = Package.modules.meteorInstall({
     '__stub__zodern-relay_client.js': (require, exports, module) => {
         relayClient = require('meteor/zodern:relay/client.ts')

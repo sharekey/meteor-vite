@@ -2,6 +2,9 @@ import type { Plugin } from 'vite';
 
 const sourceModule = 'meteor/zodern:relay';
 const virtualModule = `zodern:relay`;
+function stubModule(fileName: string) {
+    return `@meteor-vite/zodern-relay/stubs/${fileName}`
+}
 
 export default async function zodernRelay(): Promise<Plugin> {
     return {
@@ -10,14 +13,7 @@ export default async function zodernRelay(): Promise<Plugin> {
             if (!id.startsWith(sourceModule)) {
                 return;
             }
-            return `\0${virtualModule}`;
+            return stubModule('relay-client');
         },
-        load(id) {
-            if (!id.startsWith(`\0${virtualModule}`)) {
-                return;
-            }
-            
-            // todo: load and emit stub file
-        }
     }
 }
