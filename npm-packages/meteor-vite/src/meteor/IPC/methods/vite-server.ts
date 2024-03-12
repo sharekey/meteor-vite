@@ -1,10 +1,10 @@
 import FS from 'fs/promises';
 import Path from 'path';
-import { createServer, resolveConfig, ViteDevServer } from 'vite';
-import { ResolvedMeteorViteConfig, type ProjectJson } from '../../../VitePluginSettings';
+import { createServer, resolveConfig, type ResolvedServerUrls, ViteDevServer } from 'vite';
 import { meteorWorker } from '../../../plugin/Meteor';
 import Logger from '../../../utilities/Logger';
 import { RefreshNeeded } from '../../../ViteLoadRequest';
+import { type ProjectJson, ResolvedMeteorViteConfig } from '../../../VitePluginSettings';
 import CreateIPCInterface, { IPCReply } from '../interface';
 import MeteorEvents, { MeteorIPCMessage } from '../MeteorEvents';
 
@@ -26,6 +26,7 @@ export type Replies = IPCReply<{
 export type ViteRuntimeConfig = {
     host?: string | boolean;
     port?: number;
+    resolvedUrls?: ResolvedServerUrls,
     entryFile?: string
     backgroundWorker?: WorkerRuntimeConfig;
 }
@@ -164,6 +165,7 @@ async function sendViteConfig(reply: Replies) {
         host: config.server?.host,
         port: config.server?.port,
         entryFile: config.meteor?.clientEntry,
+        resolvedUrls: server.resolvedUrls!,
     });
     reply({
         kind: 'viteConfig',
