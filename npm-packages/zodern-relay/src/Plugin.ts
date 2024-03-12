@@ -17,40 +17,25 @@ export default async function zodernRelay({
     publicationDirectories = [...defaultOptions.publicationDirectories],
     methodDirectories = [...defaultOptions.methodDirectories],
 }: Options = defaultOptions): Promise<Plugin> {
-    const directories = {
-        methods: methodDirectories.map((path) => Path.relative(cwd, path)),
-        publications: publicationDirectories.map((path) => Path.relative(cwd, path)),
-    }
-    type RelayInfo = {
-        type: 'methods' | 'publications';
-        id: string;
-        relativePath: string;
-    };
+    
+    const directories = [
+        ...methodDirectories.map((path) => ['methods', Path.relative(cwd, path)]),
+        ...publicationDirectories.map((path) => ['publications', Path.relative(cwd, path)])
+    ] as [RelayInfo['type'], string][];
     
     function resolveRelay(id: string): RelayInfo | undefined {
         const relativePath = Path.relative(cwd, id);
-        for (const dir of directories.methods) {
-            if (!relativePath.startsWith(dir)) {
+        for (const [type, directory] of directories) {
+            if (!relativePath.startsWith(directory)) {
                 continue;
             }
             return {
                 id,
-                type: 'methods',
-                relativePath,
-            }
-        }
-        for (const dir of directories.publications) {
-            if (!relativePath.startsWith(dir)) {
-                continue;
-            }
-            return {
-                id,
-                type: 'publications',
+                type,
                 relativePath,
             }
         }
     }
-    
     
     return {
         name: 'zodern-relay',
@@ -76,8 +61,9 @@ export default async function zodernRelay({
             }
         }
     }
+    
+    
 }
-
 export interface Options {
     /**
      * Path to directories where your zodern:relay methods live
@@ -93,3 +79,9 @@ export interface Options {
      */
     publicationDirectories: string[];
 }
+
+type RelayInfo = {
+    type: 'methods' | 'publications';
+    id: string;
+    relativePath: string;
+};
