@@ -356,7 +356,10 @@ and your Meteor `mainModule.client` may lead to the code being included twice in
 Since `zodern:relay` depends on a Babel plugin for processing your publication and methods on the client, we need some
 extra configuration to make that work with Vite.
 
-We have a compatability plugin available for this - [`@meteor-vite/plugin-zodern-relay`](/npm-packages/zodern-relay#readme.md)
+We have a separate Vite plugin that should take care of this for you:
+- [`@meteor-vite/plugin-zodern-relay`](/npm-packages/zodern-relay#readme.md)
+  - [View documentation](/npm-packages/zodern-relay#readme.md)
+  - [View on npm](https://npmjs.com/@meteor-vite/plugin-zodern-relay)
 
 
 ## Package Details
