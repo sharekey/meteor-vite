@@ -1,4 +1,4 @@
-import Babel from '@babel/core';
+import { transformAsync } from '@babel/core';
 import FS from 'fs';
 import Path from 'path';
 import type { Plugin } from 'vite';
@@ -45,7 +45,7 @@ export default async function zodernRelay({
                 return;
             }
             const code = FS.readFileSync(filename, 'utf-8');
-            const transform = await Babel.transformAsync(code, {
+            const transform = await transformAsync(code, {
                 configFile: false,
                 babelrc: false,
                 filename,
