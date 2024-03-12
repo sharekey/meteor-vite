@@ -15,6 +15,9 @@ export class ViteDevScripts {
             baseUrl = `${process.env.METEOR_VITE_PROTOCOL || 'http'}://${process.env.METEOR_VITE_HOST}:${process.env.METEOR_VITE_PORT || config.port}`
         }
         
+        // Strip any trailing '/' characters
+        baseUrl = baseUrl.replace(/\/+$/g, '');
+        
         this.urls = {
             baseUrl,
             entrypointUrl: `${baseUrl}/${config.entryFile}`,
