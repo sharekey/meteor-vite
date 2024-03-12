@@ -49,7 +49,13 @@ export default async function zodernRelay({
                 configFile: false,
                 babelrc: false,
                 filename,
-                plugins: ['@zodern/babel-plugin-meteor-relay']
+                plugins: ['@zodern/babel-plugin-meteor-relay'],
+                caller: {
+                    name: '@meteor-vite/plugin-zodern-relay',
+                    
+                    // @ts-expect-error No type definition for this, but it's required by the Babel plugin.
+                    arch: 'web.browser.vite',
+                }
             });
             
             if (!transform) {
