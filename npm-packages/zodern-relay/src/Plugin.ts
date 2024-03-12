@@ -69,15 +69,13 @@ export interface Options {
     directories?: {
         /**
          * Path to directories where your zodern:relay methods live
-         * @default
-         * methods: ['./imports/methods']
+         * @default ['./imports/methods']
          */
         methods?: string[],
         
         /**
          * Path to the directories where your zodern:relay publications live.
-         * @default
-         * publications: ['./imports/publications']
+         * @default ['./imports/publications']
          */
         publications?: string[],
     }
