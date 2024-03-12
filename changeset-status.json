@@ -3,23 +3,23 @@
     {
       "releases": [
         {
-          "name": "meteor-vite",
+          "name": "@meteor-vite/plugin-zodern-relay",
           "type": "patch"
         }
       ],
-      "summary": "Use the configured Vite client entrypoint as the default entrypoint for Vite dependency optimization. \n\n- Fixes #128",
-      "id": "great-melons-eat"
+      "summary": "Compile zodern:relay publications/methods with official Babel plugin.\n\n- #132",
+      "id": "tasty-cameras-sparkle"
     }
   ],
   "releases": [
     {
-      "name": "meteor-vite",
+      "name": "@meteor-vite/plugin-zodern-relay",
       "type": "patch",
-      "oldVersion": "1.10.0",
+      "oldVersion": "1.0.1",
       "changesets": [
-        "great-melons-eat"
+        "tasty-cameras-sparkle"
       ],
-      "newVersion": "1.10.1"
+      "newVersion": "1.0.2"
     }
   ]
 }
