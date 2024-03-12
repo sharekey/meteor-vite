@@ -11,6 +11,10 @@ export class ViteDevScripts {
     constructor(public readonly config: RuntimeConfig) {
         let baseUrl = config.resolvedUrls?.network?.[0] || config.resolvedUrls?.local?.[0] || `http://localhost:${config.port}`;
         
+        if (process.env.METEOR_VITE_HOST) {
+            baseUrl = `${process.env.METEOR_VITE_PROTOCOL || 'http'}://${process.env.METEOR_VITE_HOST}:${process.env.METEOR_VITE_PORT || config.port}`
+        }
+        
         this.urls = {
             baseUrl,
             entrypointUrl: `${baseUrl}/${config.entryFile}`,
