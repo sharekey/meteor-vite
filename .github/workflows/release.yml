@@ -53,8 +53,8 @@ jobs:
         id: changesets
         uses: changesets/action@v1
         with:
-          version: meteor npm run version
-          publish: meteor npm run release
+          version: npm run version
+          publish: npm run release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
