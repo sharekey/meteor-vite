@@ -1,5 +1,11 @@
 # meteor-vite
 
+## 1.10.2
+
+### Patch Changes
+
+- 9a770a44: Use ViteDevServer's resolvedUrls as the default for the Meteor client HTTP module entrypoint
+
 ## 1.10.1
 
 ### Patch Changes

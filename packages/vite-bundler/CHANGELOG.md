@@ -1,5 +1,11 @@
 # vite-bundler
 
+## 1.12.10
+
+### Patch Changes
+
+- 9a770a44: Use ViteDevServer's resolvedUrls as the default for the Meteor client HTTP module entrypoint
+
 ## 1.12.9
 
 ### Patch Changes
