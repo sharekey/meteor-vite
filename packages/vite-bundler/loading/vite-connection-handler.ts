@@ -1,6 +1,6 @@
+import { WorkerResponseData } from 'meteor-vite';
 import { Meteor } from 'meteor/meteor';
 import { Mongo } from 'meteor/mongo';
-import { WorkerResponseData } from '../../../npm-packages/meteor-vite/src/meteor/IPC/methods';
 
 export type RuntimeConfig = WorkerResponseData<'viteConfig'> & { ready: boolean, lastUpdate: number };
 export let MeteorViteConfig: Mongo.Collection<RuntimeConfig>;
@@ -9,7 +9,8 @@ export const VITE_CLIENT_SCRIPT_ID = 'meteor-vite-client';
 export class ViteDevScripts {
     public readonly urls;
     constructor(public readonly config: RuntimeConfig) {
-        const baseUrl = `http://${config.host || 'localhost'}:${config.port}`;
+        let baseUrl = config.resolvedUrls?.network?.[0] || config.resolvedUrls?.local?.[0] || `http://localhost:${config.port}`;
+        
         this.urls = {
             baseUrl,
             entrypointUrl: `${baseUrl}/${config.entryFile}`,
