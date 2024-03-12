@@ -4,10 +4,6 @@ This is a Vite compatability package for
 [`zodern:relay`](https://github.com/zodern/meteor-relay#readme) - type safe
 [Meteor](https://meteor.com/) methods and publications.
 
-> [!IMPORTANT]
-> This plugin is not yet fully complete. Methods and publications imported by your client will not be omitted from
-> your client bundle like it would when using the `@zodern/babel-plugin-meteor-relay` plugin.
-
 This plugin acts as partial replacement for the Babel `@zodern/babel-plugin-meteor-relay` plugin required by 
 `zodern:relay`. You still need the Babel plugin as it might still be required on the server.
 
@@ -18,7 +14,7 @@ npm i -D @meteor-vite/plugin-zodern-relay
 ```
 
 ## Configuration
-Add the plugin to your Vite config and you're all set. There are no configuration options.
+Add the plugin to your Vite config and you're all set. If your methods and publications reside outside of `imports/api/<methods|publications>`, specify those paths when calling the plugin.
 ```ts
 // vite.config.ts
 import zodernRelay from '@meteor-vite/plugin-zodern-relay';
@@ -29,7 +25,21 @@ export default defineConfig({
         meteor({
             clientEntry: '...',
         }),
-        zodernRelay(),
+        zodernRelay({
+            directories: {
+                /**
+                 * Path to directories where your zodern:relay methods live
+                 * @default ['./imports/methods']
+                 */
+                methods: ['./imports/methods'],
+                
+                /**
+                 * Path to the directories where your zodern:relay publications live.
+                 * @default ['./imports/publications']
+                 */
+                publications: ['./imports/publications'],
+            }
+        }),
     ]
 })
 ```
