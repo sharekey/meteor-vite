@@ -43,9 +43,11 @@ jobs:
         run: |
           meteor npm i
           meteor npm run install:package
+          npm i -w npm-packages/zodern-relay
 
       - name: 'Build package'
-        run: meteor npm run build:package
+        run: | 
+          meteor npm run build:package
 
       - name: 'Create Release'
         id: changesets
