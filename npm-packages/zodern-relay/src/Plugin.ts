@@ -1,26 +1,21 @@
 import { transformAsync } from '@babel/core';
 import FS from 'fs';
 import Path from 'path';
-import type { Plugin } from 'vite';
+import { type Plugin } from 'vite';
 
 const cwd = process.cwd();
-const defaultOptions: Options = {
-    publicationDirectories: [
-        './imports/publications',
-    ],
-    methodDirectories: [
-        './imports/methods',
-    ],
-}
 
-export default async function zodernRelay({
-    publicationDirectories = [...defaultOptions.publicationDirectories],
-    methodDirectories = [...defaultOptions.methodDirectories],
-}: Options = defaultOptions): Promise<Plugin> {
+export default async function zodernRelay(options?: Options): Promise<Plugin> {
+    const config = {
+        directories: {
+            methods: options?.directories?.methods || ['./imports/methods'],
+            publications: options?.directories?.publications || ['./imports/publications'],
+        }
+    } satisfies Options;
     
     const directories = [
-        ...methodDirectories.map((path) => ['methods', Path.relative(cwd, path)]),
-        ...publicationDirectories.map((path) => ['publications', Path.relative(cwd, path)])
+        ...config.directories.methods.map((path) => ['methods', Path.relative(cwd, path)]),
+        ...config.directories.publications.map((path) => ['publications', Path.relative(cwd, path)])
     ] as [RelayInfo['type'], string][];
     
     function resolveRelay(id: string): RelayInfo | undefined {
@@ -71,19 +66,21 @@ export default async function zodernRelay({
     
 }
 export interface Options {
-    /**
-     * Path to directories where your zodern:relay methods live
-     * @default
-     * publicationDirectories: ['./imports/methods']
-     */
-    methodDirectories: string[];
-    
-    /**
-     * Path to the directories where your zodern:relay publications live.
-     * @default
-     * publicationDirectories: ['./imports/publications']
-     */
-    publicationDirectories: string[];
+    directories?: {
+        /**
+         * Path to directories where your zodern:relay methods live
+         * @default
+         * methods: ['./imports/methods']
+         */
+        methods?: string[],
+        
+        /**
+         * Path to the directories where your zodern:relay publications live.
+         * @default
+         * publications: ['./imports/publications']
+         */
+        publications?: string[],
+    }
 }
 
 type RelayInfo = {
