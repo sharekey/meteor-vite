@@ -54,13 +54,6 @@ export default async function zodernRelay({
     
     return {
         name: 'zodern-relay',
-        resolveId(id) {
-            if (!resolveRelay(id)) {
-                return;
-            }
-            return `\0${id}`;
-        },
-        
         async load(filename) {
             const relay = resolveRelay(filename || '');
             if (!relay) {
