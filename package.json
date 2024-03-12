@@ -4,7 +4,8 @@
   "private": true,
   "workspaces": [
     "packages/vite-bundler",
-    "npm-packages/meteor-vite"
+    "npm-packages/meteor-vite",
+    "npm-packages/zodern-types"
   ],
   "dependencies": {
     "@changesets/cli": "^2.26.2"
