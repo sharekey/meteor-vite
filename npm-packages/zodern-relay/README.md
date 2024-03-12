@@ -14,7 +14,7 @@ npm i -D @meteor-vite/plugin-zodern-relay
 ```
 
 ## Configuration
-Add the plugin to your Vite config and you're all set. There are no configuration options.
+Add the plugin to your Vite config and you're all set. If your methods and publications reside outside of `imports/api/<methods|publications>`, specify those paths when calling the plugin.
 ```ts
 // vite.config.ts
 import zodernRelay from '@meteor-vite/plugin-zodern-relay';
@@ -25,7 +25,21 @@ export default defineConfig({
         meteor({
             clientEntry: '...',
         }),
-        zodernRelay(),
+        zodernRelay({
+            directories: {
+                /**
+                 * Path to directories where your zodern:relay methods live
+                 * @default ['./imports/methods']
+                 */
+                methods: ['./imports/methods'],
+                
+                /**
+                 * Path to the directories where your zodern:relay publications live.
+                 * @default ['./imports/publications']
+                 */
+                publications: ['./imports/publications'],
+            }
+        }),
     ]
 })
 ```
