@@ -352,6 +352,16 @@ to put that.
 But do be careful with this - any code that's imported by both your Vite config's [`clientEntry`](#example-with-vue)
 and your Meteor `mainModule.client` may lead to the code being included twice in your final production bundle.
 
+## Compatability with [`zodern:relay`](https://github.com/zodern/meteor-relay#readme)
+Since `zodern:relay` depends on a Babel plugin for processing your publication and methods on the client, we need some
+extra configuration to make that work with Vite.
+
+We have a separate Vite plugin that should take care of this for you:
+- [`@meteor-vite/plugin-zodern-relay`](/npm-packages/zodern-relay#readme)
+  - [View documentation](/npm-packages/zodern-relay#readme)
+  - [View on npm](https://npmjs.com/@meteor-vite/plugin-zodern-relay)
+
+
 ## Package Details
 The Vite integration comes with two dependencies that work together to enable compatibility between Meteor and Vite.
 

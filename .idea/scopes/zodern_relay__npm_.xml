@@ -1,0 +1,3 @@
+<component name="DependencyValidationManager">
+  <scope name="zodern-relay (npm)" pattern="file[meteor-vite]:npm-packages/zodern-relay//*" />
+</component>

@@ -21,9 +21,9 @@ jobs:
         uses: actions/checkout@v3
 
       - name: 'Setup Node.js'
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
-          node-version: 16
+          node-version: 20
 
       - name: 'Prepare Meteor Session'
         run: |
@@ -44,16 +44,18 @@ jobs:
         run: |
           meteor npm i
           meteor npm run install:package
+          npm i -w npm-packages/zodern-relay
 
       - name: 'Build package'
-        run: meteor npm run build:package
+        run: | 
+          meteor npm run build:package
 
       - name: 'Create Release'
         id: changesets
         uses: changesets/action@v1
         with:
-          version: meteor npm run version
-          publish: meteor npm run release
+          version: npm run version
+          publish: npm run release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
