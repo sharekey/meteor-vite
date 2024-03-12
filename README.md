@@ -89,7 +89,7 @@ export default defineConfig({
 ```
 You can then write your code from the `vite.ts` entry point and it will be handled by Vite! ⚡️
 
-### Example with Vue 3
+## Example with Vue 3
 ```js
 // vite.config.ts
 import { defineConfig } from 'vite'
@@ -107,7 +107,7 @@ export default defineConfig({
 })
 ```
 
-### Example with Vue 2.7
+## Example with Vue 2.7
 ```js
 // vite.config.ts
 import { defineConfig } from 'vite'
@@ -125,7 +125,7 @@ export default defineConfig({
 })
 ```
 
-### Example with React
+## Example with React
 ```js
 // vite.config.ts
 import { defineConfig } from 'vite'
