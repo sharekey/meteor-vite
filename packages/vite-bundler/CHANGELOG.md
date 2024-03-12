@@ -1,5 +1,11 @@
 # vite-bundler
 
+## 2.0.0-beta.11
+
+### Patch Changes
+
+- 1e23d769: Use ViteDevServer's resolved URLs as the default for the Vite entry in the browser
+
 ## 2.0.0-beta.10
 
 ### Patch Changes
