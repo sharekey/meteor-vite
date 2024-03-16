@@ -3,7 +3,8 @@
   "tag": "beta",
   "initialVersions": {
     "meteor-vite": "1.9.0",
-    "vite-bundler": "1.12.4"
+    "vite-bundler": "1.12.4",
+    "@meteor-vite/plugin-zodern-relay": "1.0.2"
   },
   "changesets": [
     "cool-beans-do",
@@ -15,6 +16,7 @@
     "modern-swans-burn",
     "nice-eggs-tell",
     "shaggy-dingos-push",
-    "strange-trains-float"
+    "strange-trains-float",
+    "tender-mails-fold"
   ]
 }

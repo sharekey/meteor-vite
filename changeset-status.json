@@ -7,19 +7,19 @@
           "type": "patch"
         }
       ],
-      "summary": "Hotfix for beta.9 - it was published using the wrong Meteor version (fibers)",
-      "id": "lazy-years-sleep"
+      "summary": "Use ViteDevServer's resolved URLs as the default for the Vite entry in the browser",
+      "id": "tender-mails-fold"
     }
   ],
   "releases": [
     {
       "name": "vite-bundler",
       "type": "patch",
-      "oldVersion": "2.0.0-beta.9",
+      "oldVersion": "2.0.0-beta.10",
       "changesets": [
-        "lazy-years-sleep"
+        "tender-mails-fold"
       ],
-      "newVersion": "2.0.0-beta.10"
+      "newVersion": "2.0.0-beta.11"
     }
   ],
   "preState": {
@@ -27,7 +27,8 @@
     "tag": "beta",
     "initialVersions": {
       "meteor-vite": "1.9.0",
-      "vite-bundler": "1.12.4"
+      "vite-bundler": "1.12.4",
+      "@meteor-vite/plugin-zodern-relay": "1.0.2"
     },
     "changesets": [
       "cool-beans-do",
@@ -39,7 +40,8 @@
       "modern-swans-burn",
       "nice-eggs-tell",
       "shaggy-dingos-push",
-      "strange-trains-float"
+      "strange-trains-float",
+      "tender-mails-fold"
     ]
   }
 }
