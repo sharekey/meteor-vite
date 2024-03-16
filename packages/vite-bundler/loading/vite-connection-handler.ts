@@ -25,7 +25,7 @@ export class ViteDevScripts {
         }
     }
     
-    public stringTemplate() {
+    public stringTemplate(): string | Promise<string> {
         const { viteClientUrl, entrypointUrl } = this.urls;
         const viteClient = `<script src="${viteClientUrl}" type="module" id="${VITE_CLIENT_SCRIPT_ID}"></script>`;
         const viteEntrypoint = `<script src="${entrypointUrl}" type="module" id="${VITE_ENTRYPOINT_SCRIPT_ID}"></script>`;

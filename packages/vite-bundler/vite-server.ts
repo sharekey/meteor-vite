@@ -1,12 +1,14 @@
-import { Meteor } from 'meteor/meteor'
-import { WebAppInternals } from 'meteor/webapp'
-import type HTTP from 'http'
+import type HTTP from 'http';
 import { fetch } from 'meteor/fetch';
+import { Meteor } from 'meteor/meteor';
+import { WebAppInternals } from 'meteor/webapp';
 import {
-    getConfig, DevConnectionLog,
+    DevConnectionLog,
+    getConfig,
     MeteorViteConfig,
     setConfig,
-    ViteConnection, ViteDevScripts,
+    ViteConnection,
+    ViteDevScripts,
 } from './loading/vite-connection-handler';
 import { createWorkerFork, getProjectPackageJson, isMeteorIPCMessage } from './workers';
 
@@ -16,7 +18,7 @@ if (Meteor.isDevelopment) {
     
     WebAppInternals.registerBoilerplateDataCallback('meteor-vite', async (request: HTTP.IncomingMessage, data: BoilerplateData) => {
         const scripts = new ViteDevScripts(await getConfig());
-        data.dynamicBody = `${data.dynamicBody || ''}\n${scripts.stringTemplate()}`;
+        data.dynamicBody = `${data.dynamicBody || ''}\n${await scripts.stringTemplate()}`;
     });
     
     const viteServer = createWorkerFork({
