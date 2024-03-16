@@ -1,5 +1,11 @@
 # vite-bundler
 
+## 2.0.0-beta.12
+
+### Patch Changes
+
+- f50f46cf: Handle new Meteor v3 promise return type for Assets utility
+
 ## 2.0.0-beta.11
 
 ### Patch Changes
