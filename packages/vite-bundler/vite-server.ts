@@ -64,7 +64,7 @@ if (Meteor.isDevelopment) {
         const { baseUrl, ready } = await getConfig();
         if (!ready) return;
         
-        await fetch(`http://${baseUrl}/__meteor__/ipc-message`, {
+        await fetch(`${baseUrl}/__meteor__/ipc-message`, {
             method: 'POST',
             body: JSON.stringify(message),
         }).catch((error) => {
