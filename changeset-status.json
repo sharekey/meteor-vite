@@ -7,19 +7,19 @@
           "type": "patch"
         }
       ],
-      "summary": "Handle new Meteor v3 promise return type for Assets utility",
-      "id": "two-days-beam"
+      "summary": "Fix destination URI for Vite worker IPC messages",
+      "id": "healthy-planes-explain"
     }
   ],
   "releases": [
     {
       "name": "vite-bundler",
       "type": "patch",
-      "oldVersion": "2.0.0-beta.11",
+      "oldVersion": "2.0.0-beta.12",
       "changesets": [
-        "two-days-beam"
+        "healthy-planes-explain"
       ],
-      "newVersion": "2.0.0-beta.12"
+      "newVersion": "2.0.0-beta.13"
     }
   ],
   "preState": {
@@ -34,6 +34,7 @@
       "cool-beans-do",
       "dirty-pianos-talk",
       "fair-crabs-sip",
+      "healthy-planes-explain",
       "lazy-years-sleep",
       "mighty-planets-do",
       "modern-camels-change",

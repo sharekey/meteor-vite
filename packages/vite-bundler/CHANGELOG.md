@@ -1,5 +1,11 @@
 # vite-bundler
 
+## 2.0.0-beta.13
+
+### Patch Changes
+
+- 58d9d7d6: Fix destination URI for Vite worker IPC messages
+
 ## 2.0.0-beta.12
 
 ### Patch Changes
