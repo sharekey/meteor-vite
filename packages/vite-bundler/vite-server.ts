@@ -61,10 +61,10 @@ if (Meteor.isDevelopment) {
     // Used to notify our Vite build plugin of things like the client bundle or Atmosphere packages being rebuilt.
     process.on('message', async (message) => {
         if (!isMeteorIPCMessage(message)) return;
-        const { host, port, ready } = await getConfig();
+        const { baseUrl, ready } = await getConfig();
         if (!ready) return;
         
-        await fetch(`http://${host}:${port}/__meteor__/ipc-message`, {
+        await fetch(`http://${baseUrl}/__meteor__/ipc-message`, {
             method: 'POST',
             body: JSON.stringify(message),
         }).catch((error) => {
