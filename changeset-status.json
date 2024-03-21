@@ -3,36 +3,34 @@
     {
       "releases": [
         {
-          "name": "meteor-vite",
+          "name": "vite-bundler",
           "type": "patch"
-        },
+        }
+      ],
+      "summary": "Fix destination URI for Vite worker IPC messages",
+      "id": "healthy-planes-explain"
+    },
+    {
+      "releases": [
         {
           "name": "vite-bundler",
           "type": "patch"
         }
       ],
-      "summary": "Use ViteDevServer's resolvedUrls as the default for the Meteor client HTTP module entrypoint",
-      "id": "afraid-radios-sip"
+      "summary": "Handle new Meteor v3 promise return type for Assets utility",
+      "id": "two-days-beam"
     }
   ],
   "releases": [
     {
-      "name": "meteor-vite",
-      "type": "patch",
-      "oldVersion": "1.10.1",
-      "changesets": [
-        "afraid-radios-sip"
-      ],
-      "newVersion": "1.10.2"
-    },
-    {
       "name": "vite-bundler",
       "type": "patch",
-      "oldVersion": "1.12.9",
+      "oldVersion": "1.12.10",
       "changesets": [
-        "afraid-radios-sip"
+        "healthy-planes-explain",
+        "two-days-beam"
       ],
-      "newVersion": "1.12.10"
+      "newVersion": "1.12.11"
     }
   ]
 }
