@@ -2,21 +2,14 @@ import { WorkerResponseData } from 'meteor-vite';
 import { Meteor } from 'meteor/meteor';
 import { Mongo } from 'meteor/mongo';
 
-export type RuntimeConfig = WorkerResponseData<'viteConfig'> & { ready: boolean, lastUpdate: number };
+export type RuntimeConfig = WorkerResponseData<'viteConfig'> & { ready: boolean, lastUpdate: number, baseUrl: string };
 export let MeteorViteConfig: Mongo.Collection<RuntimeConfig>;
 export const VITE_ENTRYPOINT_SCRIPT_ID = 'meteor-vite-entrypoint-script';
 export const VITE_CLIENT_SCRIPT_ID = 'meteor-vite-client';
 export class ViteDevScripts {
     public readonly urls;
     constructor(public readonly config: RuntimeConfig) {
-        let baseUrl = config.resolvedUrls?.network?.[0] || config.resolvedUrls?.local?.[0] || `http://localhost:${config.port}`;
-        
-        if (process.env.METEOR_VITE_HOST) {
-            baseUrl = `${process.env.METEOR_VITE_PROTOCOL || 'http'}://${process.env.METEOR_VITE_HOST}:${process.env.METEOR_VITE_PORT || config.port}`
-        }
-        
-        // Strip any trailing '/' characters
-        baseUrl = baseUrl.replace(/\/+$/g, '');
+        const { baseUrl } = config;
         
         this.urls = {
             baseUrl,
@@ -85,6 +78,7 @@ export class ViteDevScripts {
 const runtimeConfig: RuntimeConfig = {
     ready: false,
     host: 'localhost',
+    baseUrl: 'http://localhost:0',
     port: 0,
     entryFile: '',
     lastUpdate: Date.now(),
@@ -101,8 +95,18 @@ export const ViteConnection = {
 export async function getConfig() {
     const viteConfig = await MeteorViteConfig.findOneAsync(ViteConnection.configSelector);
     const config = viteConfig || runtimeConfig;
+    let baseUrl = config.resolvedUrls?.network?.[0] || config.resolvedUrls?.local?.[0] || `http://localhost:${config.port}`;
+    
+    if (process.env.METEOR_VITE_HOST) {
+        baseUrl = `${process.env.METEOR_VITE_PROTOCOL || 'http'}://${process.env.METEOR_VITE_HOST}:${process.env.METEOR_VITE_PORT || config.port}`
+    }
+    
+    // Strip any trailing '/' characters
+    baseUrl = baseUrl.replace(/\/+$/g, '');
+    
     return {
         ...config,
+        baseUrl,
         age: Date.now() - config.lastUpdate,
     }
 }
