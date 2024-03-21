@@ -1,5 +1,12 @@
 # vite-bundler
 
+## 1.12.11
+
+### Patch Changes
+
+- 58d9d7d6: Fix destination URI for Vite worker IPC messages
+- 93af413a: Handle new Meteor v3 promise return type for Assets utility
+
 ## 1.12.10
 
 ### Patch Changes
