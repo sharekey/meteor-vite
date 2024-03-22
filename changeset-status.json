@@ -7,19 +7,19 @@
           "type": "patch"
         }
       ],
-      "summary": "Fix destination URI for Vite worker IPC messages",
-      "id": "healthy-planes-explain"
+      "summary": "Fix base URL for Meteor IPC listener",
+      "id": "swift-bottles-live"
     }
   ],
   "releases": [
     {
       "name": "vite-bundler",
       "type": "patch",
-      "oldVersion": "2.0.0-beta.12",
+      "oldVersion": "2.0.0-beta.13",
       "changesets": [
-        "healthy-planes-explain"
+        "swift-bottles-live"
       ],
-      "newVersion": "2.0.0-beta.13"
+      "newVersion": "2.0.0-beta.14"
     }
   ],
   "preState": {
@@ -34,7 +34,6 @@
       "cool-beans-do",
       "dirty-pianos-talk",
       "fair-crabs-sip",
-      "healthy-planes-explain",
       "lazy-years-sleep",
       "mighty-planets-do",
       "modern-camels-change",
@@ -42,8 +41,8 @@
       "nice-eggs-tell",
       "shaggy-dingos-push",
       "strange-trains-float",
-      "tender-mails-fold",
-      "two-days-beam"
+      "swift-bottles-live",
+      "tender-mails-fold"
     ]
   }
 }
