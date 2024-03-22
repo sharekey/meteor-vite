@@ -1,5 +1,11 @@
 # vite-bundler
 
+## 1.12.12
+
+### Patch Changes
+
+- 11cd39ec: Fix base URL for Meteor IPC listener
+
 ## 1.12.11
 
 ### Patch Changes
