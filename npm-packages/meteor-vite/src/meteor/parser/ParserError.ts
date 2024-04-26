@@ -18,10 +18,9 @@ export class ParserError extends MeteorViteError {
         const { parseOptions, node } = await this.metadata || {};
         if (parseOptions?.fileContent) {
             this.addLine([
-                `// File content for: ${this.metadata?.parseOptions?.filePath}`,
-                '',
-                ...(await parseOptions.fileContent).split(/[\r\n]+/),
+                `// File content for: ${this.metadata?.parseOptions?.filePath}`, '',
             ]);
+            (await parseOptions.fileContent).split(/[\r\n]+/).forEach((line) => this.addLine(line));
         }
         if (node) {
             this.addLine([inspect(node)]);
