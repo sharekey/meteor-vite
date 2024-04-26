@@ -1,5 +1,6 @@
 import { parse } from '@babel/parser';
 import {
+    type FunctionExpression,
     is,
     isCallExpression,
     isFunctionExpression,
@@ -192,12 +193,26 @@ function parsePackageScope(node: Node) {
         if (!isMemberExpression(node.callee)) return;
         if (!isIdentifier(node.callee.property, { name: 'queue' })) return;
         if (!isStringLiteral(node.arguments[0])) return;
-        if (!isFunctionExpression(node.arguments[2])) return;
+        
         const packageName = node.arguments[0].value;
+        let packageClosure: FunctionExpression | null = null;
         const exports: string[] = [];
         
-        const packageFunction = node.arguments[2];
-        for (const node of packageFunction.body.body) {
+        // Meteor V3 (Release Candidate)
+        if (isFunctionExpression(node.arguments[1])) {
+            packageClosure = node.arguments[1];
+        }
+        
+        // Meteor V3 (Beta)
+        if (isFunctionExpression(node.arguments[2])) {
+            packageClosure = node.arguments[2];
+        }
+        
+        if (!packageClosure) {
+            return;
+        }
+        
+        for (const node of packageClosure.body.body) {
             if (!isReturnStatement(node)) continue;
             if (!isObjectExpression(node.argument)) continue;
             for (const property of node.argument.properties) {
