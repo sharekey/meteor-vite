@@ -78,6 +78,11 @@ build() {
     meteor build "$BUILD_TARGET" --directory "$@"
 }
 
+update() {
+  cd "$APP_DIR" || exit 1
+  meteor update --release "$@"
+}
+
 # Build then start a production app
 launch() {
   (build) || exit 1
