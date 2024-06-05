@@ -3,23 +3,23 @@
     {
       "releases": [
         {
-          "name": "meteor-vite",
-          "type": "patch"
+          "name": "vite-bundler",
+          "type": "major"
         }
       ],
-      "summary": "Update to handle the new parameter format for Meteor V3 release candidate's package registration queue. Should addess the issue mentioned on the Meteor forums: https://forums.meteor.com/t/meteor-3-0-rc-0-is-out/61515/9",
-      "id": "yellow-tables-fetch"
+      "summary": "Vite Bundler v2.0 (Meteor v3). \n\n- For Meteor v2, you can safely stick with [`jorgenvatle:vite-bundler@v1`](https://github.com/JorgenVatle/meteor-vite/tree/meteor-v2). We'll keep shipping the same updates to v1 for the foreseeable future 👍",
+      "id": "bright-falcons-help"
     }
   ],
   "releases": [
     {
-      "name": "meteor-vite",
-      "type": "patch",
-      "oldVersion": "1.10.2",
+      "name": "vite-bundler",
+      "type": "major",
+      "oldVersion": "1.12.12",
       "changesets": [
-        "yellow-tables-fetch"
+        "bright-falcons-help"
       ],
-      "newVersion": "1.10.3"
+      "newVersion": "2.0.0"
     }
   ]
 }
