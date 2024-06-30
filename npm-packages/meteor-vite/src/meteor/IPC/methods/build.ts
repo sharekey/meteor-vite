@@ -169,7 +169,7 @@ export interface BuildOptions {
     meteor: MeteorStubsSettings['meteor'];
     packageJson: ProjectJson;
     base?: string;
-    isopack?: boolean;
+    isopack: boolean;
 }
 
 type Replies = IPCReply<{
