@@ -47,12 +47,12 @@ export const {
     VITE_ASSETS_BASE_URL,
     /**
      * Base public path for JS, CSS and other assets when served in production.
-     * {@link https://vitejs.dev/config/shared-options.html#base}
+     * {@link https://vitejs.dev/config/build-options.html#build-assetsdir}
      */
-    VITE_BASE,
+    VITE_ASSETS_DIR,
     ROOT_URL,
 } = Object.assign({
-    VITE_BASE: 'vite-assets',
+    VITE_ASSETS_DIR: 'vite-assets',
 }, process.env);
 
 export function getBuildConfig() {

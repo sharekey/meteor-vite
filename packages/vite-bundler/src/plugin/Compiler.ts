@@ -1,4 +1,4 @@
-import { getBuildConfig, VITE_BASE } from '../utility/Helpers';
+import { getBuildConfig, VITE_ASSETS_DIR } from '../utility/Helpers';
 import Logger from '../utility/Logger';
 import Path from 'node:path';
 
@@ -43,7 +43,7 @@ export default class Compiler {
             
             if (!useIsopack) {
                 file.addAsset({
-                    path: Path.join(VITE_BASE, fileMeta.relativePath),
+                    path: Path.join(VITE_ASSETS_DIR, fileMeta.relativePath),
                     data: file.getContentsAsBuffer(),
                     sourcePath,
                 });

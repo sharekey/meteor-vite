@@ -1,6 +1,6 @@
 import HTTP from 'http';
 import { WebApp, WebAppInternals } from 'meteor/webapp';
-import { VITE_BASE } from './utility/Helpers';
+import { VITE_ASSETS_DIR } from './utility/Helpers';
 import Logger from './utility/Logger';
 import type { BoilerplateData } from './vite-boilerplate/common';
 import { ViteDevServerWorker } from './vite-boilerplate/development';
@@ -29,11 +29,11 @@ WebAppInternals.registerBoilerplateDataCallback('meteor-vite', async (request: H
 
 Meteor.startup(() => {
     if (worker instanceof ViteProductionBoilerplate) {
-        Logger.debug(`Vite asset base URL: /${VITE_BASE}`);
+        Logger.debug(`Vite asset base URL: /${VITE_ASSETS_DIR}`);
         
         // Prevent Meteor from sending a 200 OK HTML file when the request is clearly not valid.
         // If an asset is found by Meteor, this hook will not be called.
-        WebApp.connectHandlers.use(`/${VITE_BASE}`, (req, res, next) => {
+        WebApp.connectHandlers.use(`/${VITE_ASSETS_DIR}`, (req, res, next) => {
             res.writeHead(404, 'Not found');
             res.write('Vite asset could not be found.')
             Logger.warn(`Served 404 for Vite asset request: ${req.originalUrl}`);
