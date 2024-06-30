@@ -13,22 +13,40 @@ import {
     ViteDevScripts,
 } from './loading/vite-connection-handler';
 import { createWorkerFork, cwd, getProjectPackageJson, isMeteorIPCMessage } from './workers';
-
 interface MeteorProgramManifest {
     path: string;
 }
 
+type ViteManifest = Record<string, ViteChunk>;
+interface ViteChunk {
+    file: string;
+    src: string;
+    name?: string;
+    isDynamicEntry?: boolean;
+    isEntry?: boolean;
+    css?: string[];
+    imports?: string[];
+    dynamicImports?: string[];
+}
+
+function parseViteClientManifest(): ViteManifest {
+    if (Meteor.settings.vite?.manifest) {
+        return Meteor.settings.vite.manifest;
+    }
+    const viteManifestInfo = WebApp.clientPrograms['web.browser'].manifest.find(({ path }: MeteorProgramManifest) => path.endsWith('manifest.json'));
+    if (!viteManifestInfo) {
+        throw new Error('Could not find Vite manifest in Meteor client program manifest');
+    }
+    const viteManifestPath = Path.join(cwd, 'programs', 'web.browser', viteManifestInfo.path);
+    const manifest = JSON.parse(FS.readFileSync(viteManifestPath, 'utf8'));
+    return Meteor.settings.vite = { manifest };
+
+}
+
 if (Meteor.isProduction) {
     Meteor.startup(() => {
-        const viteManifestInfo = WebApp.clientPrograms['web.browser'].manifest.find(({ path }: MeteorProgramManifest) => path.endsWith('manifest.json'));
-        if (!viteManifestInfo) {
-            DevConnectionLog.error('Could not find Vite manifest in Meteor client program manifest');
-            return;
-        }
-        const viteManifestPath = Path.join(cwd, 'programs', 'web.browser', viteManifestInfo.path);
-        const manifest = JSON.parse(FS.readFileSync(viteManifestPath, 'utf8'));
-        Meteor.settings.vite = { manifest };
-    })
+        const manifest = parseViteClientManifest();
+    });
 }
 
 if (Meteor.isDevelopment) {
