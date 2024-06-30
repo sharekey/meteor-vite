@@ -113,6 +113,7 @@ async function prepareConfig(buildConfig: BuildOptions): Promise<ParsedConfig> {
         viteConfig,
         outDir,
         inlineBuildConfig: {
+            base: '/vite-assets',
             configFile,
             build: {
                 manifest: true,
