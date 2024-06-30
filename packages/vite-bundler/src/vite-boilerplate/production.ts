@@ -10,6 +10,8 @@ import { type Boilerplate, ViteBoilerplate } from './common';
 
 export class ViteProductionBoilerplate extends ViteBoilerplate {
     
+    
+    
     constructor() {
         super();
     }
@@ -101,22 +103,20 @@ export class ViteProductionBoilerplate extends ViteBoilerplate {
             stylesheets.push(...chunk.css || []);
         }
         
+        const imports = {
+            stylesheets,
+            modules,
+            modulePreload,
+        }
+        
         DevConnectionLog.debug('Parsed Vite manifest imports', Util.inspect({
-            imports: {
-                stylesheets,
-                modules,
-                modulePreload,
-            },
+            imports,
             manifest,
         }, { depth: 4, colors: true }));
         
-        return Object.assign(Meteor.settings.vite, {
-            imports: {
-                stylesheets,
-                modules,
-                modulePreload,
-            }
-        });
+        Object.assign(Meteor.settings.vite, { imports });
+        
+        return imports;
     }
 }
 
