@@ -8,12 +8,14 @@ import {
     ViteConnection, ViteDevScripts,
 } from '../loading/vite-connection-handler';
 import { createWorkerFork, getProjectPackageJson, isMeteorIPCMessage, type WorkerInstance } from '../workers';
+import { BoilerplateWorker } from './server';
 
 
-export class ViteDevServerWorker {
+export class ViteDevServerWorker extends BoilerplateWorker {
     protected readonly viteServer: WorkerInstance;
     protected tsupWatcherRunning = false;
     constructor() {
+        super();
         const viteServer = this.viteServer = createWorkerFork({
             async viteConfig(config) {
                 const { ready } = await setConfig(config);
@@ -90,7 +92,7 @@ export class ViteDevServerWorker {
         const scripts = new ViteDevScripts(await getConfig());
         
         return {
-            body: await scripts.stringTemplate(),
+            dynamicBody: await scripts.stringTemplate(),
         }
     }
 }
