@@ -29,7 +29,7 @@ interface ViteChunk {
     dynamicImports?: string[];
 }
 
-function parseViteClientManifest(): ViteManifest {
+function getViteManifest(): ViteManifest {
     if (Meteor.settings.vite?.manifest) {
         return Meteor.settings.vite.manifest;
     }
@@ -40,12 +40,53 @@ function parseViteClientManifest(): ViteManifest {
     const viteManifestPath = Path.join(cwd, 'programs', 'web.browser', viteManifestInfo.path);
     const manifest = JSON.parse(FS.readFileSync(viteManifestPath, 'utf8'));
     return Meteor.settings.vite = { manifest };
+}
 
+function parseManifestImports(manifest: ViteManifest) {
+    const stylesheets: string[] = [];
+    const modules: string[] = [];
+    const modulePreload: string[] = [];
+    
+    function preloadImports(imports: string[]) {
+        for (const path of imports) {
+            const chunk = manifest[path];
+            if (!chunk) {
+                continue;
+            }
+            modulePreload.push(chunk.file);
+            stylesheets.push(...chunk.css || []);
+            preloadImports(chunk.imports || []);
+        }
+        
+    }
+    
+    for (const [name, chunk] of Object.entries(manifest)) {
+        if (!chunk.isEntry) {
+            continue;
+        }
+        
+        if (chunk.file.endsWith('.js')) {
+            modules.push(chunk.file);
+        }
+        
+        if (chunk.file.endsWith('.css')) {
+            stylesheets.push(chunk.file);
+        }
+        
+        preloadImports(chunk.imports || []);
+    }
+    
+    return {
+        stylesheets,
+        modules,
+        modulePreload,
+    }
 }
 
 if (Meteor.isProduction) {
     Meteor.startup(() => {
-        const manifest = parseViteClientManifest();
+        const manifest = getViteManifest();
+        const imports = parseManifestImports(manifest);
     });
 }
 
