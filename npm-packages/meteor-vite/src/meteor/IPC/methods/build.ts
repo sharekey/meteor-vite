@@ -1,7 +1,7 @@
 import { spawn } from 'child_process';
 import Path from 'path';
 import { RollupOutput } from 'rollup';
-import { build, InlineConfig, resolveConfig } from 'vite';
+import { build, InlineConfig, resolveConfig, BuildOptions as ViteBuildOptions } from 'vite';
 import MeteorVitePackage from '../../../../package.json';
 import {
     type ResolvedMeteorViteConfig,
@@ -109,24 +109,36 @@ async function prepareConfig(buildConfig: BuildOptions): Promise<ParsedConfig> {
     }
 
     const outDir = Path.join(viteConfig.meteor.tempDir, 'bundle');
+    
+    const build: ViteBuildOptions = {
+        manifest: true,
+        minify: true,
+        outDir,
+        rollupOptions: {
+            input: viteConfig.meteor.clientEntry,
+        },
+    }
+    
+    if (buildConfig.isopack) {
+        Object.assign(build, {
+            manifest: false,
+            minify: false,
+            rollupOptions: {
+                output: {
+                    entryFileNames: 'meteor-entry.js',
+                    chunkFileNames: viteConfig.meteor.chunkFileNames ?? '[name]-[hash:12].js',
+                },
+            }
+        } satisfies ViteBuildOptions);
+    }
+    
     return {
         viteConfig,
         outDir,
         inlineBuildConfig: {
             base: buildConfig.base,
             configFile,
-            build: {
-                manifest: true,
-                rollupOptions: {
-                    input: viteConfig.meteor.clientEntry,
-                    output: {
-                        entryFileNames: 'meteor-entry.js',
-                        chunkFileNames: viteConfig.meteor.chunkFileNames ?? '[name]-[hash:12].js',
-                    },
-                },
-                outDir,
-                minify: false,
-            },
+            build,
             plugins: [
                 meteorWorker({
                     meteorStubs: {
@@ -157,6 +169,7 @@ export interface BuildOptions {
     meteor: MeteorStubsSettings['meteor'];
     packageJson: ProjectJson;
     base?: string;
+    isopack?: boolean;
 }
 
 type Replies = IPCReply<{
