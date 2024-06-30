@@ -390,6 +390,7 @@ The Vite integration comes with two dependencies that work together to enable co
 - [ ] Migrate intermediary production-build transpile step from Babel to esbuild.
 - [ ] SSR (not tested)
 - [ ] Automatically detect and inject React preamble into app markup.
+- [ ] Add support for Vite v5
 - [ ] Serve Vite bundle directly from Meteor, bypassing Meteor's build process.
   - [ ] Inject Vite module preload polyfill into the Vite client entrypoint.
   - [ ] Improve hashes for Vite chunks.
