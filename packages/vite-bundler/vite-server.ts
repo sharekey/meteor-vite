@@ -213,7 +213,23 @@ if (Meteor.isDevelopment) {
 }
 
 interface BoilerplateData {
-    dynamicBody?: string;
-    additionalStaticJs: [contents: string, pathname: string][];
-    inline?: string;
+    css: string[];
+    js: {
+        url: string;
+        sri: string;
+    }[];
+    head: string;
+    body: string;
+    meteorManifest: string;
+    additionalStaticJs: string[];
+    meteorRuntimeConfig: string;
+    meteorRuntimeHash: string;
+    rootUrlPathPrefix: string;
+    bundledJsCssUrlRewriteHook: Function;
+    sriMode: undefined;
+    inlineScriptsAllowed: boolean;
+    inline: undefined;
+    htmlAttributes: Record<string, unknown>;
+    dynamicHead: string | undefined;
+    dynamicBody: string | undefined;
 }
