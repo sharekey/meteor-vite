@@ -45,7 +45,7 @@ export class ViteProductionBoilerplate extends ViteBoilerplate {
         return lines.join('\n');
     }
     
-    protected get viteManifest(): ViteManifest {
+    public get viteManifest(): ViteManifest {
         if (Meteor.settings.vite?.manifest) {
             return Meteor.settings.vite.manifest;
         }
