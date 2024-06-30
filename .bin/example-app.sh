@@ -28,7 +28,6 @@ METEOR_LOCAL_DIR="$METEOR_LOCAL_DIR_ROOT/$app"
 
 export METEOR_PACKAGE_DIRS="$PWD/packages:$PWD/test-packages/atmosphere"
 export METEOR_VITE_TSUP_BUILD_WATCHER="${METEOR_VITE_TSUP_BUILD_WATCHER:-'true'}"
-export METEOR_LOCAL_DIR
 
 if [ "$USE_METEOR_BINARIES" == "0" ]; then
   npm="npm"
@@ -37,6 +36,7 @@ fi
 
 # Add symlink to original local directory to work around warnings from zodern:types
 mkdir -p "$METEOR_LOCAL_DIR"
+rm -rf "$METEOR_LOCAL_DIR_ORIGINAL"
 ln -s "$METEOR_LOCAL_DIR" "$METEOR_LOCAL_DIR_ORIGINAL"
 
 # Port for the Meteor app in examples/.mongo
