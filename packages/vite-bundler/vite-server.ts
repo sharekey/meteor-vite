@@ -112,6 +112,10 @@ if (Meteor.isProduction) {
         const manifest = getViteManifest();
         const imports = parseManifestImports(manifest);
         const html = importsToHtml(imports);
+        
+        WebAppInternals.registerBoilerplateDataCallback('meteor-vite', async (request: HTTP.IncomingMessage, data: BoilerplateData) => {
+            data.dynamicBody = `${data.dynamicBody || ''}\n${html}`;
+        });
     });
 }
 
