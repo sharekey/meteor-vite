@@ -1,6 +1,7 @@
 import type { BuildResultChunk } from 'meteor-vite/meteor/IPC/methods/build';
 import path from 'node:path';
 import fs from 'fs-extra';
+import { MeteorViteError } from './utility/Errors';
 import { cwd } from './workers';
 import Logger from './utility/Logger';
 import Compiler, { BUNDLE_FILE_EXTENSION } from './plugin/Compiler';
@@ -68,6 +69,11 @@ async function build() {
   transpileViteBundle({ payload });
   
   if (useIsopack) {
+    if (!entryAsset) {
+      Logger.warn('Failed to locate entry asset in Vite chunks!', payload.output);
+      throw new MeteorViteError('No meteor-entry chunk found')
+    }
+    
     injectViteBundleImport(entryAsset);
   }
   

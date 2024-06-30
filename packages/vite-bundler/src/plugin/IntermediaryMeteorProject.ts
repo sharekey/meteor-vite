@@ -163,11 +163,6 @@ export async function prepareViteBundle() {
     
     const entryAsset = payload.output?.find(o => o.fileName === 'meteor-entry.js' && o.type === 'chunk')
     
-    if (!entryAsset) {
-        Logger.warn('Failed to locate entry asset in Vite chunks!', payload.output);
-        throw new MeteorViteError('No meteor-entry chunk found')
-    }
-    
     return { payload, entryAsset }
 }
 
