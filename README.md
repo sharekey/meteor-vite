@@ -387,3 +387,4 @@ The Vite integration comes with two dependencies that work together to enable co
   - [ ] Improve hashes for Vite chunks.
   - [ ] Server-side multi-page/multi-entrypoint support.
   - [ ] Requires opt-in until the feature is stable.
+  - [ ] Prevent Meteor from serving 200 OK with HTML when accessing vite asset routes
