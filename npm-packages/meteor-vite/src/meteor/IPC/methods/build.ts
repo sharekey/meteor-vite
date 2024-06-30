@@ -111,6 +111,7 @@ async function prepareConfig(buildConfig: BuildOptions): Promise<ParsedConfig> {
     const outDir = Path.join(viteConfig.meteor.tempDir, 'bundle');
     
     const build: ViteBuildOptions = {
+        assetsDir: buildConfig.assetsDir,
         manifest: true,
         minify: true,
         outDir,
@@ -136,7 +137,6 @@ async function prepareConfig(buildConfig: BuildOptions): Promise<ParsedConfig> {
         viteConfig,
         outDir,
         inlineBuildConfig: {
-            base: buildConfig.base,
             configFile,
             build,
             plugins: [
@@ -168,7 +168,7 @@ function validateOutput(rollupResult?: BuildOutput | RollupOutput): asserts roll
 export interface BuildOptions {
     meteor: MeteorStubsSettings['meteor'];
     packageJson: ProjectJson;
-    base?: string;
+    assetsDir?: string;
     isopack: boolean;
 }
 
