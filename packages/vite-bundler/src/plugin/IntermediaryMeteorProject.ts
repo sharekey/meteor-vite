@@ -14,6 +14,7 @@ const {
     packageJson: pkg,
     tempMeteorOutDir,
     tempMeteorProject,
+    useIsopack,
 } = getBuildConfig();
 
 /**
@@ -189,6 +190,7 @@ function viteBuild(): Promise<WorkerResponseData<'buildResult'>> {
                     isopackPath: path.join(tempMeteorProject, '.meteor', 'local', 'isopacks'),
                 },
                 base: VITE_BASE,
+                isopack: useIsopack,
             }],
         })
     });
