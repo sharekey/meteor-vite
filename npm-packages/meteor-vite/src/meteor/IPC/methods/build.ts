@@ -124,6 +124,10 @@ async function prepareConfig(buildConfig: BuildOptions): Promise<ParsedConfig> {
         Object.assign(build, {
             manifest: false,
             minify: false,
+            lib: {
+                entry: viteConfig.meteor.clientEntry,
+                formats: ['es'],
+            },
             rollupOptions: {
                 output: {
                     entryFileNames: 'meteor-entry.js',
