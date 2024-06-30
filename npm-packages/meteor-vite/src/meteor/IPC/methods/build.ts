@@ -92,7 +92,7 @@ async function prepareConfig(buildConfig: BuildOptions): Promise<ParsedConfig> {
         ?? buildConfig.packageJson?.meteor?.viteConfig;
 
     Object.entries(buildConfig).forEach(([key, value]) => {
-        if (!value) {
+        if (typeof value === 'undefined') {
             throw new Error(`Vite: Worker missing required build argument "${key}"!`)
         }
     })
