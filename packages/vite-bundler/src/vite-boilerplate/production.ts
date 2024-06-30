@@ -94,14 +94,14 @@ export class ViteProductionBoilerplate extends ViteBoilerplate {
             stylesheets.push(...chunk.css || []);
         }
         
-        DevConnectionLog.debug('Parsed Vite manifest imports', {
+        DevConnectionLog.debug('Parsed Vite manifest imports', Util.inspect({
             imports: {
                 stylesheets,
                 modules,
                 modulePreload,
             },
-            manifest: Util.inspect(manifest, { depth: 4, colors: true })
-        })
+            manifest,
+        }, { depth: 4, colors: true }));
         
         return {
             stylesheets,
