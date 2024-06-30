@@ -1,3 +1,4 @@
+import type { BuildResultChunk } from 'meteor-vite/meteor/IPC/methods/build';
 import path from 'node:path';
 import fs from 'fs-extra';
 import { cwd } from './workers';
@@ -66,7 +67,17 @@ async function build() {
   // Transpile and push the Vite bundle into the Meteor project's source directory
   transpileViteBundle({ payload });
   
+  if (useIsopack) {
+    injectViteBundleImport(entryAsset);
+  }
   
+  Compiler.addCleanupHandler(() => {
+    if (isSimulatedProduction) return;
+    fs.removeSync(viteOutSrcDir);
+  });
+}
+
+function injectViteBundleImport(entryAsset: BuildResultChunk) {
   const importPath = path.relative(
       path.resolve(meteorMainModule, '..'),
       `${path.join(viteOutSrcDir, entryAsset.fileName)}.${BUNDLE_FILE_EXTENSION}`
@@ -95,8 +106,8 @@ ${meteorViteImport}
   const originalEntryContent = fs.readFileSync(meteorEntry, 'utf8');
   let originalEntryPatched = false;
   const oldEntryImports = [
-      'meteor-vite/.build/import-vite-bundle.js',
-      'meteor-vite/temp/stubs.js'
+    'meteor-vite/.build/import-vite-bundle.js',
+    'meteor-vite/temp/stubs.js'
   ];
   
   // Patch import strings from older builds of the vite-bundler with an up-to-date import.
@@ -116,7 +127,6 @@ ${meteorViteImport}
   
   Compiler.addCleanupHandler(() => {
     if (isSimulatedProduction) return;
-    fs.removeSync(viteOutSrcDir);
     fs.writeFileSync(meteorEntry, originalEntryContent, 'utf8');
   });
 }

@@ -164,12 +164,14 @@ type Replies = IPCReply<{
                      success: true;
                      outDir: string;
                      meteorViteConfig: any,
-                     output?: {name?: string, type: string, fileName: string}[]
+                     output?: BuildResultChunk[]
                  } | {
                      success: false;
                  };
     }
 }>
+
+export type BuildResultChunk = {name?: string, type: string, fileName: string};
 
 type ParsedConfig = {
     viteConfig: ResolvedMeteorViteConfig;
