@@ -1,8 +1,8 @@
 import HTTP from 'http';
 import { WebAppInternals } from 'meteor/webapp';
-import type { BoilerplateData } from './vite-server/common';
-import { ViteDevServerWorker } from './vite-server/development';
-import { ProductionViteBoilerplateWorker } from './vite-server/production';
+import type { BoilerplateData } from './vite-boilerplate/common';
+import { ViteDevServerWorker } from './vite-boilerplate/development';
+import { ProductionViteBoilerplateWorker } from './vite-boilerplate/production';
 
 const worker = Meteor.isProduction ? new ProductionViteBoilerplateWorker()
                                    : new ViteDevServerWorker();
