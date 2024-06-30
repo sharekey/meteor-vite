@@ -1,3 +1,4 @@
+import * as process from 'process';
 import { cwd, getProjectPackageJson } from '../workers';
 import Path from 'node:path';
 import OS from 'node:os';
@@ -45,6 +46,14 @@ export function getBuildConfig() {
     const packageJson = getProjectPackageJson();
     const tempDir = getTempDir();
     
+    // Whether the Vite bundle should be included as source files in your final Meteor bundle
+    // This is how Vite bundles would be processed prior to v2.1.0
+    //
+    // Leaving this option off should result in significantly faster build times. Your Vite bundle
+    // will be served as static JS/CSS files by Meteor instead of being loaded at run-time from your
+    // client bundle. Which should again lead to some nice performance improvements in production.
+    const useIsopack = process.env.VITE_ISOPACK === 'true';
+    
     // Not in a project (publishing the package or in temporary Meteor build)
     const pluginEnabled = !process.env.VITE_METEOR_DISABLED;
     
@@ -85,5 +94,6 @@ export function getBuildConfig() {
         meteorMainModule,
         pluginEnabled,
         viteOutSrcDir,
+        useIsopack,
     }
 }
