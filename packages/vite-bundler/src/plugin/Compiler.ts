@@ -44,26 +44,26 @@ export default class Compiler {
             });
             
             switch (Path.extname(fileMeta.basename)) {
-                // case '.js':
-                //     file.addJavaScript({
-                //         path: fileMeta.path,
-                //         data: file.getContentsAsString(),
-                //         sourcePath,
-                //     })
-                //     break
-                // case '.css':
-                //     file.addStylesheet({
-                //         path: fileMeta.path,
-                //         data: file.getContentsAsString(),
-                //         sourcePath,
-                //     })
-                //     break
-                // default:
-                //     file.addAsset({
-                //         path: fileMeta.path,
-                //         data: file.getContentsAsBuffer(),
-                //         sourcePath,
-                //     })
+                case '.js':
+                    file.addJavaScript({
+                        path: fileMeta.path,
+                        data: file.getContentsAsString(),
+                        sourcePath,
+                    })
+                    break
+                case '.css':
+                    file.addStylesheet({
+                        path: fileMeta.path,
+                        data: file.getContentsAsString(),
+                        sourcePath,
+                    })
+                    break
+                default:
+                    file.addAsset({
+                        path: fileMeta.path,
+                        data: file.getContentsAsBuffer(),
+                        sourcePath,
+                    })
             }
         })
     }
