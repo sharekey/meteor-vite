@@ -41,6 +41,13 @@ export function getTempDir() {
     }
 }
 
+export const {
+    // Base URL to use when serving static Vite asset files in production.
+    // Falls back to Meteor's ROOT_URL
+    VITE_ASSETS_BASE_URL,
+    ROOT_URL,
+} = process.env;
+
 export function getBuildConfig() {
     const packageJson = getProjectPackageJson();
     const tempDir = getTempDir();

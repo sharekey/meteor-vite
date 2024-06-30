@@ -4,6 +4,7 @@ import { WebApp } from 'meteor/webapp';
 import Path from 'path';
 import Util from 'util';
 import { DevConnectionLog } from '../loading/vite-connection-handler';
+import { ROOT_URL, VITE_ASSETS_BASE_URL } from '../utility/Helpers';
 import { cwd } from '../workers';
 import { type Boilerplate, ViteBoilerplate } from './common';
 
@@ -24,7 +25,9 @@ export class ViteProductionBoilerplate extends ViteBoilerplate {
         const imports = this.imports;
         const lines = [];
         function filePath(file: string) {
-            return `/vite-assets/${file}`;
+            return Meteor.absoluteUrl(file, {
+                rootUrl: VITE_ASSETS_BASE_URL || `${ROOT_URL}/vite-assets`,
+            });
         }
         
         for (const file of imports.stylesheets) {
