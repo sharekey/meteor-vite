@@ -5,9 +5,9 @@ import Path from 'path';
 import Util from 'util';
 import { DevConnectionLog } from '../loading/vite-connection-handler';
 import { cwd } from '../workers';
-import { type Boilerplate, BoilerplateWorker } from './common';
+import { type Boilerplate, ViteBoilerplate } from './common';
 
-export class ProductionViteBoilerplateWorker extends BoilerplateWorker {
+export class ViteProductionBoilerplate extends ViteBoilerplate {
     
     constructor() {
         super();

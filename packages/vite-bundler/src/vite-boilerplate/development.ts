@@ -8,10 +8,10 @@ import {
     ViteConnection, ViteDevScripts,
 } from '../loading/vite-connection-handler';
 import { createWorkerFork, getProjectPackageJson, isMeteorIPCMessage, type WorkerInstance } from '../workers';
-import { type Boilerplate, BoilerplateWorker } from './common';
+import { type Boilerplate, ViteBoilerplate } from './common';
 
 
-export class ViteDevServerWorker extends BoilerplateWorker {
+export class ViteDevServerWorker extends ViteBoilerplate {
     protected readonly viteServer: WorkerInstance;
     protected tsupWatcherRunning = false;
     constructor() {

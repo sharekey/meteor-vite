@@ -25,6 +25,6 @@ export type Boilerplate = {
     dynamicBody?: string;
 }
 
-export abstract class BoilerplateWorker {
+export abstract class ViteBoilerplate {
     public abstract getBoilerplate(): Promise<Boilerplate> | Boilerplate;
 }
