@@ -92,17 +92,20 @@ function parseManifestImports(manifest: ViteManifest): ManifestImports {
 
 function importsToHtml(imports: ManifestImports) {
     const lines = [];
+    function filePath(file: string) {
+        return `/vite-assets/${file}`;
+    }
     
     for (const file of imports.stylesheets) {
-        lines.push(`<link rel="stylesheet" href="${file}">`);
+        lines.push(`<link rel="stylesheet" href="${filePath(file)}">`);
     }
     
     for (const file of imports.modules) {
-        lines.push(`<script type="module" src="${file}"></script>`);
+        lines.push(`<script type="module" src="${filePath(file)}"></script>`);
     }
     
     for (const file of imports.modulePreload) {
-        lines.push(`<link rel="modulepreload" href="${file}">`);
+        lines.push(`<link rel="modulepreload" href="${filePath(file)}">`);
     }
     
     return lines.join('\n');
