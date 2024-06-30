@@ -115,11 +115,9 @@ async function prepareConfig(buildConfig: BuildOptions): Promise<ParsedConfig> {
         inlineBuildConfig: {
             configFile,
             build: {
-                lib: {
-                    entry: viteConfig.meteor.clientEntry,
-                    formats: ['es'],
-                },
+                manifest: true,
                 rollupOptions: {
+                    input: viteConfig.meteor.clientEntry,
                     output: {
                         entryFileNames: 'meteor-entry.js',
                         chunkFileNames: viteConfig.meteor.chunkFileNames ?? '[name]-[hash:12].js',
