@@ -1,4 +1,3 @@
-import * as process from 'process';
 import { cwd, getProjectPackageJson } from '../workers';
 import Path from 'node:path';
 import OS from 'node:os';
