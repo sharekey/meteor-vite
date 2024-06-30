@@ -132,7 +132,7 @@ function getViteAssetsHtml(): string {
 
 if (Meteor.isProduction) {
     WebAppInternals.registerBoilerplateDataCallback('meteor-vite', async (request: HTTP.IncomingMessage, data: BoilerplateData) => {
-        data.dynamicBody = `${data.dynamicBody || ''}\n${getViteAssetsHtml()}`;
+        data.dynamicHead = `${data.dynamicHead || ''}\n${getViteAssetsHtml()}`;
     });
 }
 
