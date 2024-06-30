@@ -110,39 +110,21 @@ async function prepareConfig(buildConfig: BuildOptions): Promise<ParsedConfig> {
 
     const outDir = Path.join(viteConfig.meteor.tempDir, 'bundle');
     
-    const build: ViteBuildOptions = {
-        assetsDir: buildConfig.assetsDir,
-        manifest: true,
-        minify: true,
-        outDir,
-        rollupOptions: {
-            input: viteConfig.meteor.clientEntry,
-        },
-    }
-    
-    if (buildConfig.isopack) {
-        Object.assign(build, {
-            manifest: false,
-            minify: false,
-            lib: {
-                entry: viteConfig.meteor.clientEntry,
-                formats: ['es'],
-            },
-            rollupOptions: {
-                output: {
-                    entryFileNames: 'meteor-entry.js',
-                    chunkFileNames: viteConfig.meteor.chunkFileNames ?? '[name]-[hash:12].js',
-                },
-            }
-        } satisfies ViteBuildOptions);
-    }
     
     return {
         viteConfig,
         outDir,
         inlineBuildConfig: {
             configFile,
-            build,
+            build: {
+                assetsDir: buildConfig.assetsDir,
+                manifest: true,
+                minify: true,
+                outDir,
+                rollupOptions: {
+                    input: viteConfig.meteor.clientEntry,
+                },
+            },
             plugins: [
                 meteorWorker({
                     meteorStubs: {
@@ -173,7 +155,6 @@ export interface BuildOptions {
     meteor: MeteorStubsSettings['meteor'];
     packageJson: ProjectJson;
     assetsDir?: string;
-    isopack: boolean;
 }
 
 type Replies = IPCReply<{

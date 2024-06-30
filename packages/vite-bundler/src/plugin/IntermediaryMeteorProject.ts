@@ -186,7 +186,6 @@ function viteBuild(): Promise<WorkerResponseData<'buildResult'>> {
                     isopackPath: path.join(tempMeteorProject, '.meteor', 'local', 'isopacks'),
                 },
                 assetsDir: VITE_ASSETS_DIR,
-                isopack: useIsopack,
             }],
         })
     });
