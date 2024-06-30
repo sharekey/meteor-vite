@@ -1,5 +1,11 @@
 # vite-bundler
 
+## 2.0.1
+
+### Patch Changes
+
+- a9db1b30: Correct misleading minimum version requirement warning for `meteor-vite`
+
 ## 2.0.0
 
 ### Major Changes
