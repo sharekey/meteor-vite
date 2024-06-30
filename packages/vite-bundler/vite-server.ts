@@ -1,7 +1,9 @@
+import FS from 'fs';
 import type HTTP from 'http';
 import { fetch } from 'meteor/fetch';
 import { Meteor } from 'meteor/meteor';
-import { WebAppInternals } from 'meteor/webapp';
+import { WebAppInternals, WebApp } from 'meteor/webapp';
+import Path from 'path';
 import {
     DevConnectionLog,
     getConfig,
@@ -10,7 +12,24 @@ import {
     ViteConnection,
     ViteDevScripts,
 } from './loading/vite-connection-handler';
-import { createWorkerFork, getProjectPackageJson, isMeteorIPCMessage } from './workers';
+import { createWorkerFork, cwd, getProjectPackageJson, isMeteorIPCMessage } from './workers';
+
+interface MeteorProgramManifest {
+    path: string;
+}
+
+if (Meteor.isProduction) {
+    Meteor.startup(() => {
+        const viteManifestInfo = WebApp.clientPrograms['web.browser'].manifest.find(({ path }: MeteorProgramManifest) => path.endsWith('manifest.json'));
+        if (!viteManifestInfo) {
+            DevConnectionLog.error('Could not find Vite manifest in Meteor client program manifest');
+            return;
+        }
+        const viteManifestPath = Path.join(cwd, 'programs', 'web.browser', viteManifestInfo.path);
+        const manifest = JSON.parse(FS.readFileSync(viteManifestPath, 'utf8'));
+        Meteor.settings.vite = { manifest };
+    })
+}
 
 if (Meteor.isDevelopment) {
     let tsupWatcherRunning = false;
