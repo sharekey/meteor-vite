@@ -45,8 +45,15 @@ export const {
     // Base URL to use when serving static Vite asset files in production.
     // Falls back to Meteor's ROOT_URL
     VITE_ASSETS_BASE_URL,
+    /**
+     * Base public path for JS, CSS and other assets when served in production.
+     * {@link https://vitejs.dev/config/shared-options.html#base}
+     */
+    VITE_BASE,
     ROOT_URL,
-} = process.env;
+} = Object.assign({
+    VITE_BASE: 'vite-assets',
+}, process.env);
 
 export function getBuildConfig() {
     const packageJson = getProjectPackageJson();

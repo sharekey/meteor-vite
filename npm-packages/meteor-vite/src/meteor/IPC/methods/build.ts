@@ -113,7 +113,7 @@ async function prepareConfig(buildConfig: BuildOptions): Promise<ParsedConfig> {
         viteConfig,
         outDir,
         inlineBuildConfig: {
-            base: '/vite-assets',
+            base: buildConfig.base,
             configFile,
             build: {
                 manifest: true,
@@ -156,6 +156,7 @@ function validateOutput(rollupResult?: BuildOutput | RollupOutput): asserts roll
 export interface BuildOptions {
     meteor: MeteorStubsSettings['meteor'];
     packageJson: ProjectJson;
+    base?: string;
 }
 
 type Replies = IPCReply<{

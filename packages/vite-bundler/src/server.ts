@@ -23,4 +23,4 @@ WebAppInternals.registerBoilerplateDataCallback('meteor-vite', async (request: H
     if (dynamicBody) {
         data.dynamicBody = `${data.dynamicBody || ''}\n${dynamicBody}`;
     }
-})
+});
