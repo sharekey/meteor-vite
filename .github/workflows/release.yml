@@ -6,6 +6,7 @@ on:
       - main
       - release
       - meteor-v3
+      - v3
 
 env:
   METEOR_SESSION_FILE_PATH: /opt/meteor/.meteor_session.json
