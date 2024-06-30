@@ -39,7 +39,6 @@ function getViteManifest(): ViteManifest {
     }
     const viteManifestPath = Path.join(cwd, 'programs', 'web.browser', viteManifestInfo.path);
     const manifest = JSON.parse(FS.readFileSync(viteManifestPath, 'utf8'));
-    DevConnectionLog.debug('Vite manifest loaded', { manifest });
     Meteor.settings.vite = { manifest };
     return manifest;
 }
@@ -69,6 +68,8 @@ function parseManifestImports(manifest: ViteManifest): ManifestImports {
     }
     
     for (const [name, chunk] of Object.entries(manifest)) {
+        DevConnectionLog.debug('Parsing chunk', { [name]: chunk });
+        
         if (!chunk.isEntry) {
             continue;
         }
