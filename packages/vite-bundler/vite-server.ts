@@ -111,15 +111,24 @@ function importsToHtml(imports: ManifestImports) {
     return lines.join('\n');
 }
 
+function getViteAssetsHtml(): string {
+    if (Meteor.settings?.vite?.html) {
+        return Meteor.settings.vite.html;
+    }
+    
+    const manifest = getViteManifest();
+    const imports = parseManifestImports(manifest);
+    const html = importsToHtml(imports);
+    
+    DevConnectionLog.debug('Vite assets HTML generated', { html });
+    Object.assign(Meteor.settings.vite, { html })
+    return html;
+}
+
+
 if (Meteor.isProduction) {
-    Meteor.startup(() => {
-        const manifest = getViteManifest();
-        const imports = parseManifestImports(manifest);
-        const html = importsToHtml(imports);
-        
-        WebAppInternals.registerBoilerplateDataCallback('meteor-vite', async (request: HTTP.IncomingMessage, data: BoilerplateData) => {
-            data.dynamicBody = `${data.dynamicBody || ''}\n${html}`;
-        });
+    WebAppInternals.registerBoilerplateDataCallback('meteor-vite', async (request: HTTP.IncomingMessage, data: BoilerplateData) => {
+        data.dynamicBody = `${data.dynamicBody || ''}\n${getViteAssetsHtml()}`;
     });
 }
 
