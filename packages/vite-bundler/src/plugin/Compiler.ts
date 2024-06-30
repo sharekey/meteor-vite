@@ -8,7 +8,7 @@ import Path from 'node:path';
  */
 export const BUNDLE_FILE_EXTENSION = '_vite-bundle.tmp'
 
-const { useIsopack } = getBuildConfig();
+const { useIsopack, viteOutSrcDir } = getBuildConfig();
 
 export default class Compiler {
     protected static cleanupHandlers: CleanupHandler[] = [];
@@ -35,6 +35,7 @@ export default class Compiler {
                 },
                 basename: this._formatFilename(file.getBasename()),
                 path: this._formatFilename(file.getPathInPackage()),
+                relativePath: Path.relative(viteOutSrcDir, this._formatFilename(file.getPathInPackage())),
             }
             const sourcePath = file.getPathInPackage();
             
@@ -42,7 +43,7 @@ export default class Compiler {
             
             if (!useIsopack) {
                 file.addAsset({
-                    path: Path.join(VITE_BASE, fileMeta.basename),
+                    path: Path.join(VITE_BASE, fileMeta.relativePath),
                     data: file.getContentsAsBuffer(),
                     sourcePath,
                 });
