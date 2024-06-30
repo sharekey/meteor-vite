@@ -63,7 +63,7 @@ async function build() {
   const { payload } = await prepareViteBundle();
   
   // Transpile and push the Vite bundle into the Meteor project's source directory
-  transpileViteBundle({ payload });
+  copyViteBundle({ payload });
   
   Compiler.addCleanupHandler(() => {
     if (isSimulatedProduction) return;
@@ -72,9 +72,9 @@ async function build() {
 }
 
 
-function transpileViteBundle({ payload }: Pick<ViteBundleOutput, 'payload'>) {
+function copyViteBundle({ payload }: Pick<ViteBundleOutput, 'payload'>) {
   const profile = Logger.startProfiler();
-  Logger.info('Transpiling Vite bundle for Meteor...');
+  Logger.info('Copying Vite bundle into Meteor assets...');
   
   fs.ensureDirSync(viteOutSrcDir)
   fs.emptyDirSync(viteOutSrcDir)
@@ -89,5 +89,5 @@ function transpileViteBundle({ payload }: Pick<ViteBundleOutput, 'payload'>) {
     fs.copyFileSync(from, to)
   }
   
-  profile.complete('Transpile completed');
+  profile.complete('Assets copied successfully');
 }
