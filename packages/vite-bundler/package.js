@@ -15,13 +15,13 @@ Package.registerBuildPlugin({
         'typescript@3.0.0 || 4.0.0 || 5.0.0',
     ],
     sources: [
-        'build.ts',
-        'workers.ts',
-        'plugin/Compiler.ts',
-        'plugin/IntermediaryMeteorProject.ts',
-        'utility/Logger.ts',
-        'utility/Helpers.ts',
-        'utility/Errors.ts'
+        'src/build.ts',
+        'src/workers.ts',
+        'src/plugin/Compiler.ts',
+        'src/plugin/IntermediaryMeteorProject.ts',
+        'src/utility/Logger.ts',
+        'src/utility/Helpers.ts',
+        'src/utility/Errors.ts'
     ],
     npmDependencies: {
         execa: '6.1.0',
@@ -48,8 +48,8 @@ Package.onUse(function (api) {
     ], {
         weak: true,
     });
-    api.addAssets(['loading/dev-server-splash.html'], 'server');
-    api.mainModule('client.ts', 'client');
-    api.mainModule('vite-server.ts', 'server');
+    api.addAssets(['src/loading/dev-server-splash.html'], 'server');
+    api.mainModule('src/client.ts', 'client');
+    api.mainModule('src/vite-server.ts', 'server');
 });
 
