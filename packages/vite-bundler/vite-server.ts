@@ -4,6 +4,7 @@ import { fetch } from 'meteor/fetch';
 import { Meteor } from 'meteor/meteor';
 import { WebAppInternals, WebApp } from 'meteor/webapp';
 import Path from 'path';
+import * as Util from 'util';
 import {
     DevConnectionLog,
     getConfig,
@@ -68,8 +69,6 @@ function parseManifestImports(manifest: ViteManifest): ManifestImports {
     }
     
     for (const [name, chunk] of Object.entries(manifest)) {
-        DevConnectionLog.debug('Parsing chunk', { [name]: chunk });
-        
         if (!chunk.isEntry) {
             continue;
         }
@@ -86,6 +85,15 @@ function parseManifestImports(manifest: ViteManifest): ManifestImports {
         
         stylesheets.push(...chunk.css || []);
     }
+    
+    DevConnectionLog.debug('Parsed Vite manifest imports', {
+        imports: {
+            stylesheets,
+            modules,
+            modulePreload,
+        },
+        manifest: Util.inspect(manifest, { depth: 4, colors: true })
+    })
     
     return {
         stylesheets,
