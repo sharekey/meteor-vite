@@ -37,6 +37,12 @@ export default class Compiler {
             
             Logger.debug(`[${file.getArch()}] Processing: ${fileMeta.basename}`, { fileMeta });
             
+            file.addAsset({
+                path: Path.join('vite-assets', fileMeta.path),
+                data: file.getContentsAsBuffer(),
+                sourcePath,
+            });
+            
             switch (Path.extname(fileMeta.basename)) {
                 case '.js':
                     file.addJavaScript({
