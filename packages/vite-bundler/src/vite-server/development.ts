@@ -5,12 +5,12 @@ import {
     getConfig,
     MeteorViteConfig,
     setConfig,
-    ViteConnection,
+    ViteConnection, ViteDevScripts,
 } from '../loading/vite-connection-handler';
 import { createWorkerFork, getProjectPackageJson, isMeteorIPCMessage, type WorkerInstance } from '../workers';
 
 
-export class ViteDevelopmentBoilerplate {
+export class ViteDevServerWorker {
     protected readonly viteServer: WorkerInstance;
     protected tsupWatcherRunning = false;
     constructor() {
@@ -84,5 +84,13 @@ export class ViteDevelopmentBoilerplate {
                 console.error(error);
             })
         })
+    }
+    
+    public async getBoilerplate() {
+        const scripts = new ViteDevScripts(await getConfig());
+        
+        return {
+            body: await scripts.stringTemplate(),
+        }
     }
 }
