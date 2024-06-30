@@ -1,3 +1,4 @@
+import type { ChildProcess } from 'concurrently/dist/src/command';
 import { fork } from 'node:child_process';
 import { Meteor } from 'meteor/meteor';
 import Path from 'path';
@@ -7,7 +8,7 @@ import type { WorkerMethod, WorkerResponse, WorkerResponseHooks, MeteorIPCMessag
 
 // Use a worker to skip reify and Fibers
 // Use a child process instead of worker to avoid WASM/archived threads error
-export function createWorkerFork(hooks: Partial<WorkerResponseHooks>, options?: { detached: boolean }) {
+export function createWorkerFork(hooks: Partial<WorkerResponseHooks>, options?: { detached: boolean }): WorkerInstance {
     if (!FS.existsSync(workerPath)) {
         throw new MeteorViteError([
             `Unable to locate Meteor-Vite workers! Make sure you've installed the 'meteor-vite' npm package.`,
@@ -89,6 +90,11 @@ export function createWorkerFork(hooks: Partial<WorkerResponseHooks>, options?: 
         },
         child,
     }
+}
+
+export type WorkerInstance = {
+    call(method: Omit<WorkerMethod, 'replies'>): void;
+    child: ChildProcess;
 }
 
 export function isMeteorIPCMessage<
