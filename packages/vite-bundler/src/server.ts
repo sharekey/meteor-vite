@@ -36,7 +36,7 @@ Meteor.startup(() => {
         WebApp.connectHandlers.use(`/${VITE_BASE}`, (req, res, next) => {
             res.writeHead(404, 'Not found');
             res.write('Vite asset could not be found.')
-            Logger.warn('Served 404 for Vite asset request: ', req.url);
+            Logger.warn(`Served 404 for Vite asset request: ${req.originalUrl}`);
             res.end();
         })
     }
