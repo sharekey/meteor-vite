@@ -5,7 +5,7 @@ import Path from 'path';
 import Util from 'util';
 import { DevConnectionLog } from '../loading/vite-connection-handler';
 import { cwd } from '../workers';
-import { BoilerplateWorker } from './server';
+import { BoilerplateWorker } from './common';
 
 export class ProductionViteBoilerplateWorker extends BoilerplateWorker {
     
