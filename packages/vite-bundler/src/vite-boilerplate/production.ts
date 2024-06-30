@@ -61,6 +61,10 @@ export class ViteProductionBoilerplate extends ViteBoilerplate {
     
     
     protected get imports(): ManifestImports {
+        if (Meteor.settings.vite?.imports) {
+            return Meteor.settings.vite.imports;
+        }
+        
         const manifest = this.viteManifest;
         const stylesheets: string[] = [];
         const modules: string[] = [];
@@ -106,11 +110,13 @@ export class ViteProductionBoilerplate extends ViteBoilerplate {
             manifest,
         }, { depth: 4, colors: true }));
         
-        return {
-            stylesheets,
-            modules,
-            modulePreload,
-        }
+        return Object.assign(Meteor.settings.vite, {
+            imports: {
+                stylesheets,
+                modules,
+                modulePreload,
+            }
+        });
     }
 }
 
