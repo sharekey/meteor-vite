@@ -42,7 +42,13 @@ function getViteManifest(): ViteManifest {
     return Meteor.settings.vite = { manifest };
 }
 
-function parseManifestImports(manifest: ViteManifest) {
+interface ManifestImports {
+    stylesheets: string[];
+    modules: string[];
+    modulePreload: string[];
+}
+
+function parseManifestImports(manifest: ViteManifest): ManifestImports {
     const stylesheets: string[] = [];
     const modules: string[] = [];
     const modulePreload: string[] = [];
@@ -83,10 +89,29 @@ function parseManifestImports(manifest: ViteManifest) {
     }
 }
 
+function importsToHtml(imports: ManifestImports) {
+    const lines = [];
+    
+    for (const file of imports.stylesheets) {
+        lines.push(`<link rel="stylesheet" href="${file}">`);
+    }
+    
+    for (const file of imports.modules) {
+        lines.push(`<script type="module" src="${file}"></script>`);
+    }
+    
+    for (const file of imports.modulePreload) {
+        lines.push(`<link rel="modulepreload" href="${file}">`);
+    }
+    
+    return lines.join('\n');
+}
+
 if (Meteor.isProduction) {
     Meteor.startup(() => {
         const manifest = getViteManifest();
         const imports = parseManifestImports(manifest);
+        const html = importsToHtml(imports);
     });
 }
 
