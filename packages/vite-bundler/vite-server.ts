@@ -83,6 +83,8 @@ function parseManifestImports(manifest: ViteManifest): ManifestImports {
         }
         
         preloadImports(chunk.imports || []);
+        
+        stylesheets.push(...chunk.css || []);
     }
     
     return {
