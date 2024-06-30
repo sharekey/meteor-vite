@@ -389,6 +389,11 @@ The Vite integration comes with two dependencies that work together to enable co
 - [x] Code-splitting/Dynamic imports
 - [ ] Migrate intermediary production-build transpile step from Babel to esbuild.
 - [ ] SSR (not tested)
+- [ ] Automatically detect and inject React preamble into app markup.
+- [ ] Serve Vite bundle directly from Meteor, bypassing Meteor's build process.
+  - [ ] Inject Vite module preload polyfill into the Vite client entrypoint.
+  - [ ] Improve hashes for Vite chunks.
+  - [ ] Server-side multi-page/multi-entrypoint support.
 - [x] Starter/demo templates
     - [x] [Vue 3](/examples/vue)
         - [Live demo](https://vue--meteor-vite.wcaserver.com/)
