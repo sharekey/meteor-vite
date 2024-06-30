@@ -40,7 +40,8 @@ function getViteManifest(): ViteManifest {
     const viteManifestPath = Path.join(cwd, 'programs', 'web.browser', viteManifestInfo.path);
     const manifest = JSON.parse(FS.readFileSync(viteManifestPath, 'utf8'));
     DevConnectionLog.debug('Vite manifest loaded', { manifest });
-    return Meteor.settings.vite = { manifest };
+    Meteor.settings.vite = { manifest };
+    return manifest;
 }
 
 interface ManifestImports {
