@@ -12,6 +12,7 @@ const {
   isSimulatedProduction,
   viteOutSrcDir,
   pluginEnabled,
+  useIsopack,
 } = getBuildConfig();
 
 // Empty stubs from any previous builds
@@ -135,9 +136,8 @@ function transpileViteBundle({ payload }: Pick<ViteBundleOutput, 'payload'>) {
     const to = path.join(viteOutSrcDir, `${file}.${BUNDLE_FILE_EXTENSION}`);
     fs.ensureDirSync(path.dirname(to))
     
-    if (path.extname(from) === '.js') {
+    if (path.extname(from) === '.js' && useIsopack) {
       // Transpile to Meteor target (Dynamic import support)
-      // @TODO don't use Babel
       const source = fs.readFileSync(from, 'utf8')
       const babelOptions = Babel.getDefaultOptions()
       babelOptions.babelrc = true
