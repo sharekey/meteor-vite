@@ -50,6 +50,6 @@ Package.onUse(function (api) {
     });
     api.addAssets(['src/loading/dev-server-splash.html'], 'server');
     api.mainModule('src/client.ts', 'client');
-    api.mainModule('src/vite-server.ts', 'server');
+    api.mainModule('src/server.ts', 'server');
 });
 
