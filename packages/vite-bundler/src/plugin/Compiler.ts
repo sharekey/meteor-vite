@@ -1,3 +1,4 @@
+import { getBuildConfig } from '../utility/Helpers';
 import Logger from '../utility/Logger';
 import Path from 'node:path';
 
@@ -6,6 +7,8 @@ import Path from 'node:path';
  * This makes it easier to filter out any files that shouldn't be processed by our Meteor compiler plugin.
  */
 export const BUNDLE_FILE_EXTENSION = '_vite-bundle.tmp'
+
+const { useIsopack } = getBuildConfig();
 
 export default class Compiler {
     protected static cleanupHandlers: CleanupHandler[] = [];
@@ -37,11 +40,15 @@ export default class Compiler {
             
             Logger.debug(`[${file.getArch()}] Processing: ${fileMeta.basename}`, { fileMeta });
             
-            file.addAsset({
-                path: Path.join('vite-assets', fileMeta.basename),
-                data: file.getContentsAsBuffer(),
-                sourcePath,
-            });
+            if (!useIsopack) {
+                file.addAsset({
+                    path: Path.join('vite-assets', fileMeta.basename),
+                    data: file.getContentsAsBuffer(),
+                    sourcePath,
+                });
+                
+                return;
+            }
             
             switch (Path.extname(fileMeta.basename)) {
                 case '.js':
