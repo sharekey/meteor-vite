@@ -7,11 +7,9 @@ import { getBuildConfig } from './utility/Helpers';
 import Logger from './utility/Logger';
 
 const {
-  meteorMainModule,
   isSimulatedProduction,
   viteOutSrcDir,
   pluginEnabled,
-  useIsopack,
 } = getBuildConfig();
 
 // Empty stubs from any previous builds
