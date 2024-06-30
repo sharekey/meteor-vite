@@ -394,6 +394,7 @@ The Vite integration comes with two dependencies that work together to enable co
   - [ ] Inject Vite module preload polyfill into the Vite client entrypoint.
   - [ ] Improve hashes for Vite chunks.
   - [ ] Server-side multi-page/multi-entrypoint support.
+  - [ ] Requires opt-in until the feature is stable.
 - [x] Starter/demo templates
     - [x] [Vue 3](/examples/vue)
         - [Live demo](https://vue--meteor-vite.wcaserver.com/)
