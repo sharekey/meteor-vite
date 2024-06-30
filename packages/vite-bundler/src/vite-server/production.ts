@@ -5,7 +5,7 @@ import Path from 'path';
 import Util from 'util';
 import { DevConnectionLog } from '../loading/vite-connection-handler';
 import { cwd } from '../workers';
-import { BoilerplateWorker } from './common';
+import { type Boilerplate, BoilerplateWorker } from './common';
 
 export class ProductionViteBoilerplateWorker extends BoilerplateWorker {
     
@@ -13,7 +13,7 @@ export class ProductionViteBoilerplateWorker extends BoilerplateWorker {
         super();
     }
     
-    public async getBoilerplate() {
+    public getBoilerplate(): Boilerplate {
         return {
             dynamicHead: this.dynamicHead,
             dynamicBody: ''

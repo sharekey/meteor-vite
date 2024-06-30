@@ -8,7 +8,7 @@ import {
     ViteConnection, ViteDevScripts,
 } from '../loading/vite-connection-handler';
 import { createWorkerFork, getProjectPackageJson, isMeteorIPCMessage, type WorkerInstance } from '../workers';
-import { BoilerplateWorker } from './common';
+import { type Boilerplate, BoilerplateWorker } from './common';
 
 
 export class ViteDevServerWorker extends BoilerplateWorker {
@@ -88,7 +88,7 @@ export class ViteDevServerWorker extends BoilerplateWorker {
         })
     }
     
-    public async getBoilerplate() {
+    public async getBoilerplate(): Promise<Boilerplate> {
         const scripts = new ViteDevScripts(await getConfig());
         
         return {

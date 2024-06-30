@@ -1,4 +1,4 @@
-interface BoilerplateData {
+export interface BoilerplateData {
     css: string[];
     js: {
         url: string;
@@ -20,9 +20,11 @@ interface BoilerplateData {
     dynamicBody: string | undefined;
 }
 
+export type Boilerplate = {
+    dynamicHead?: string;
+    dynamicBody?: string;
+}
+
 export abstract class BoilerplateWorker {
-    public abstract getBoilerplate(): Promise<{
-        dynamicHead?: string;
-        dynamicBody?: string;
-    }>
+    public abstract getBoilerplate(): Promise<Boilerplate> | Boilerplate;
 }
