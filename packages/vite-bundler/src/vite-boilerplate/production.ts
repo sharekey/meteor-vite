@@ -27,9 +27,7 @@ export class ViteProductionBoilerplate extends ViteBoilerplate {
         const imports = this.imports;
         const lines = [];
         function filePath(file: string) {
-            return Meteor.absoluteUrl(file, {
-                rootUrl: VITE_ASSETS_BASE_URL
-            });
+            return `${VITE_ASSETS_BASE_URL || ROOT_URL || ''}/${file}`
         }
         
         for (const file of imports.stylesheets) {
