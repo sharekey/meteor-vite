@@ -43,7 +43,7 @@ export default class Compiler {
             
             if (!useIsopack) {
                 file.addAsset({
-                    path: Path.join(VITE_ASSETS_DIR, fileMeta.relativePath),
+                    path: fileMeta.relativePath,
                     data: file.getContentsAsBuffer(),
                     sourcePath,
                 });
