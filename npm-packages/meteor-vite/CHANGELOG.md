@@ -1,5 +1,12 @@
 # meteor-vite
 
+## 2.0.0-next.0
+
+### Major Changes
+
+- 8010d5c1: Serve Vite bundle directly as static assets in production.
+  Skipping the Meteor bundling/transpilation steps for significantly faster build and client load times. ⚡
+
 ## 1.10.3
 
 ### Patch Changes
