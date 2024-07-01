@@ -51,7 +51,7 @@ export class ViteProductionBoilerplate extends ViteBoilerplate {
         if (Meteor.settings.vite?.manifest) {
             return Meteor.settings.vite.manifest;
         }
-        const viteManifestInfo = WebApp.clientPrograms['web.browser'].manifest.find(({ path }: MeteorProgramManifest) => path.endsWith('manifest.json'));
+        const viteManifestInfo = WebApp.clientPrograms['web.browser'].manifest.find(({ path }: MeteorProgramManifest) => path.endsWith('vite-manifest.json'));
         if (!viteManifestInfo) {
             throw new Error('Could not find Vite manifest in Meteor client program manifest');
         }

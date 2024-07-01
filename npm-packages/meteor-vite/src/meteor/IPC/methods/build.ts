@@ -118,7 +118,7 @@ async function prepareConfig(buildConfig: BuildOptions): Promise<ParsedConfig> {
             configFile,
             build: {
                 assetsDir: buildConfig.assetsDir,
-                manifest: true,
+                manifest: 'vite-manifest.json',
                 minify: true,
                 outDir,
                 rollupOptions: {
