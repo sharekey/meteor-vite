@@ -384,7 +384,6 @@ The Vite integration comes with two dependencies that work together to enable co
 - [ ] Add support for Vite v5
 - [ ] Serve Vite bundle directly from Meteor, bypassing Meteor's build process.
   - [ ] Inject Vite module preload polyfill into the Vite client entrypoint.
-  - [ ] Improve hashes for Vite chunks.
   - [ ] Server-side multi-page/multi-entrypoint support.
   - [ ] Requires opt-in until the feature is stable.
   - [ ] Handle parsing bundle manifest when using the `--production` flag.
