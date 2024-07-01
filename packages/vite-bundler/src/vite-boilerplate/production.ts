@@ -27,7 +27,9 @@ export class ViteProductionBoilerplate extends ViteBoilerplate {
         const imports = this.imports;
         const lines = [];
         function filePath(file: string) {
-            return `${VITE_ASSETS_BASE_URL || ROOT_URL || ''}/${file}`
+            const baseUrl = VITE_ASSETS_BASE_URL || ROOT_URL || '';
+            
+            return `${baseUrl.replace(/\/?$/, '')}/${file}`
         }
         
         for (const file of imports.stylesheets) {
