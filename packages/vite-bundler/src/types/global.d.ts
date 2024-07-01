@@ -30,6 +30,17 @@ declare global {
         }
         function getDefaultOptions(): CompileOptions;
     }
+    
+    const __meteor_bootstrap__: {
+        startupHooks: unknown;
+        serverDir: string;
+        configJson: {
+            meteorRelease: string;
+            appId: string;
+            clientArchs: string[]
+        }
+        isFibersDisabled: boolean;
+    }
 }
 
 export {}
