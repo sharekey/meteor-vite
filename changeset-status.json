@@ -3,23 +3,48 @@
     {
       "releases": [
         {
+          "name": "meteor-vite",
+          "type": "major"
+        },
+        {
           "name": "vite-bundler",
-          "type": "patch"
+          "type": "major"
         }
       ],
-      "summary": "Correct misleading minimum version requirement warning for `meteor-vite`",
-      "id": "poor-crews-beg"
+      "summary": "Serve Vite bundle directly as static assets in production.\nSkipping the Meteor bundling/transpilation steps for significantly faster build and client load times. ⚡",
+      "id": "two-dolphins-sing"
     }
   ],
   "releases": [
     {
-      "name": "vite-bundler",
-      "type": "patch",
-      "oldVersion": "2.0.0",
+      "name": "meteor-vite",
+      "type": "major",
+      "oldVersion": "1.10.3",
       "changesets": [
-        "poor-crews-beg"
+        "two-dolphins-sing"
       ],
-      "newVersion": "2.0.1"
+      "newVersion": "2.0.0-next.0"
+    },
+    {
+      "name": "vite-bundler",
+      "type": "major",
+      "oldVersion": "2.0.1",
+      "changesets": [
+        "two-dolphins-sing"
+      ],
+      "newVersion": "3.0.0-next.0"
     }
-  ]
+  ],
+  "preState": {
+    "mode": "pre",
+    "tag": "next",
+    "initialVersions": {
+      "meteor-vite": "1.10.3",
+      "@meteor-vite/plugin-zodern-relay": "1.0.2",
+      "vite-bundler": "2.0.1"
+    },
+    "changesets": [
+      "two-dolphins-sing"
+    ]
+  }
 }

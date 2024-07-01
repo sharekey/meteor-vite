@@ -6,5 +6,7 @@
     "@meteor-vite/plugin-zodern-relay": "1.0.2",
     "vite-bundler": "2.0.1"
   },
-  "changesets": []
+  "changesets": [
+    "two-dolphins-sing"
+  ]
 }
