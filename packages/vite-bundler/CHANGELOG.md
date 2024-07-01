@@ -1,5 +1,11 @@
 # vite-bundler
 
+## 3.0.0-next.1
+
+### Patch Changes
+
+- bcc58aee: Use Meteor's runtime config to resolve the path to Vite's bundle manifest
+
 ## 3.0.0-next.0
 
 ### Major Changes
