@@ -8,7 +8,7 @@ import Path from 'node:path';
  */
 export const BUNDLE_FILE_EXTENSION = '_vite-bundle.tmp'
 
-const { useIsopack, viteOutSrcDir } = getBuildConfig();
+const { viteOutSrcDir } = getBuildConfig();
 
 export default class Compiler {
     protected static cleanupHandlers: CleanupHandler[] = [];
@@ -41,38 +41,11 @@ export default class Compiler {
             
             Logger.debug(`[${file.getArch()}] Processing: ${fileMeta.basename}`, { fileMeta });
             
-            if (!useIsopack) {
-                file.addAsset({
-                    path: fileMeta.relativePath,
-                    data: file.getContentsAsBuffer(),
-                    sourcePath,
-                });
-                
-                return;
-            }
-            
-            switch (Path.extname(fileMeta.basename)) {
-                case '.js':
-                    file.addJavaScript({
-                        path: fileMeta.path,
-                        data: file.getContentsAsString(),
-                        sourcePath,
-                    })
-                    break
-                case '.css':
-                    file.addStylesheet({
-                        path: fileMeta.path,
-                        data: file.getContentsAsString(),
-                        sourcePath,
-                    })
-                    break
-                default:
-                    file.addAsset({
-                        path: fileMeta.path,
-                        data: file.getContentsAsBuffer(),
-                        sourcePath,
-                    })
-            }
+            file.addAsset({
+                path: fileMeta.relativePath,
+                data: file.getContentsAsBuffer(),
+                sourcePath,
+            });
         })
     }
     
