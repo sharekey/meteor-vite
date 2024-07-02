@@ -1,5 +1,11 @@
 # vite-bundler
 
+## 3.0.0-next.5
+
+### Patch Changes
+
+- 46b3682d: Fix release process
+
 ## 3.0.0-next.3
 
 ### Patch Changes
