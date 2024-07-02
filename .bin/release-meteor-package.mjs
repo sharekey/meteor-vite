@@ -50,7 +50,7 @@ async function parsePackageJs(packageJsPath) {
     }
 }
 
-async function applyVersion(buildMetadata = '') {
+async function applyVersion() {
     shell(`changeset status --output ${CHANGESET_STATUS_FILE}`);
 
     const { releases } = await FS.readFile(`${CHANGESET_STATUS_FILE}`, 'utf-8')
@@ -85,21 +85,23 @@ async function setVersion(newVersion) {
 async function publish() {
     logger.info(`⚡  Publishing ${meteorPackage.releaseName}...`);
 
-    let command = `meteor publish`;
+    const meteorReleases = ['3.0-rc.2', '2.16'];
 
-    if (process.env.METEOR_RELEASE) {
-        command += ` --release ${process.env.METEOR_RELEASE}`
+    for (const release of meteorReleases) {
+        const command = `meteor publish --release ${release}`;
+        await setVersion(release.replace('next.', `meteor-v${release}.next.`));
+
+        shell(command, {
+            async: true,
+            cwd: Path.dirname(meteorPackage.packageJsPath),
+            env: {
+                METEOR_SESSION_FILE: process.env.METEOR_SESSION_FILE, // Authenticate using auth token stored as file.
+                VITE_METEOR_DISABLED: 'true', // Prevents vite:bundler from trying to compile itself on publish
+                ...process.env,
+            },
+        });
     }
 
-    shell(command, {
-        async: true,
-        cwd: Path.dirname(meteorPackage.packageJsPath),
-        env: {
-            METEOR_SESSION_FILE: process.env.METEOR_SESSION_FILE, // Authenticate using auth token stored as file.
-            VITE_METEOR_DISABLED: 'true', // Prevents vite:bundler from trying to compile itself on publish
-            ...process.env,
-        },
-    });
 }
 
 function shell(command, options) {
