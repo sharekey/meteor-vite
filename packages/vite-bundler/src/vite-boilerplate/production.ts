@@ -5,7 +5,6 @@ import Path from 'path';
 import Util from 'util';
 import { DevConnectionLog } from '../loading/vite-connection-handler';
 import { ROOT_URL, VITE_ASSETS_BASE_URL } from '../utility/Helpers';
-import { cwd } from '../workers';
 import { type Boilerplate, ViteBoilerplate } from './common';
 
 export class ViteProductionBoilerplate extends ViteBoilerplate {
@@ -68,9 +67,9 @@ export class ViteProductionBoilerplate extends ViteBoilerplate {
         }
         
         const manifest = this.viteManifest;
-        const stylesheets: string[] = [];
-        const modules: string[] = [];
-        const modulePreload: string[] = [];
+        const stylesheets = new Set<string>()
+        const modules = new Set<string>()
+        const modulePreload = new Set<string>();
         
         function preloadImports(imports: string[]) {
             for (const path of imports) {
@@ -78,8 +77,11 @@ export class ViteProductionBoilerplate extends ViteBoilerplate {
                 if (!chunk) {
                     continue;
                 }
-                modulePreload.push(chunk.file);
-                stylesheets.push(...chunk.css || []);
+                if (modulePreload.has(chunk.file)) {
+                    continue;
+                }
+                modulePreload.add(chunk.file);
+                chunk.css?.forEach(css => stylesheets.add(css));
                 preloadImports(chunk.imports || []);
             }
             
@@ -91,16 +93,16 @@ export class ViteProductionBoilerplate extends ViteBoilerplate {
             }
             
             if (chunk.file.endsWith('.js')) {
-                modules.push(chunk.file);
+                modules.add(chunk.file);
             }
             
             if (chunk.file.endsWith('.css')) {
-                stylesheets.push(chunk.file);
+                stylesheets.add(chunk.file);
             }
             
             preloadImports(chunk.imports || []);
             
-            stylesheets.push(...chunk.css || []);
+            chunk.css?.forEach(css => stylesheets.add(css));
         }
         
         const imports = {
@@ -137,7 +139,7 @@ interface ViteChunk {
 }
 
 interface ManifestImports {
-    stylesheets: string[];
-    modules: string[];
-    modulePreload: string[];
+    stylesheets: Set<string>;
+    modules: Set<string>;
+    modulePreload: Set<string>;
 }
