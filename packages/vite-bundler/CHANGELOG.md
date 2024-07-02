@@ -1,5 +1,11 @@
 # vite-bundler
 
+## 3.0.0-next.6
+
+### Patch Changes
+
+- 84c10268: Reformat next versioning tags
+
 ## 3.0.0-next.5
 
 ### Patch Changes
