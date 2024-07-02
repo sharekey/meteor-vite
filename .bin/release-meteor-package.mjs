@@ -52,7 +52,7 @@ async function parsePackageJs(packageJsPath) {
 }
 
 function parsePackageJson() {
-    return require(meteorPackage.packageJsonPath);
+    return JSON.parse(FS.readFileSync(meteorPackage.packageJsonPath, 'utf-8'));
 }
 
 async function applyVersion() {
