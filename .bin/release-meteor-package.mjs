@@ -10,6 +10,7 @@ const CHANGESET_STATUS_FILE = 'changeset-status.json';
 const meteorPackage = {
     releaseName: 'vite-bundler',
     packageJsPath: Path.join(repoPath, './packages/vite-bundler/package.js'),
+    packageJsonPath: Path.join(repoPath, './packages/vite-bundler/package.json'),
 };
 const logger = {
     _history: [],
@@ -50,6 +51,10 @@ async function parsePackageJs(packageJsPath) {
     }
 }
 
+function parsePackageJson() {
+    return require(meteorPackage.packageJsonPath);
+}
+
 async function applyVersion() {
     shell(`changeset status --output ${CHANGESET_STATUS_FILE}`);
 
@@ -86,7 +91,7 @@ async function publish() {
     logger.info(`⚡  Publishing ${meteorPackage.releaseName}...`);
 
     const meteorReleases = ['3.0-rc.2', '2.16'];
-    const currentVersion = await parsePackageJs(meteorPackage.packageJsPath).then(({ version }) => version);
+    const currentVersion = parsePackageJson().version;
 
     for (const release of meteorReleases) {
         const command = `meteor publish --release ${release}`;
