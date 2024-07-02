@@ -1,5 +1,11 @@
 # vite-bundler
 
+## 3.0.0-next.2
+
+### Patch Changes
+
+- 350718cd: Use sets instead of arrays for manifest imports cache to address duplicate imports.
+
 ## 3.0.0-next.1
 
 ### Patch Changes
