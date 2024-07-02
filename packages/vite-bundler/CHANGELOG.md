@@ -1,5 +1,11 @@
 # vite-bundler
 
+## 3.0.0-next.3
+
+### Patch Changes
+
+- f3a2546b: Include build metadata in version tag
+
 ## 3.0.0-next.2
 
 ### Patch Changes
