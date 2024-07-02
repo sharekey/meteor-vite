@@ -121,7 +121,7 @@ function shell(command, options) {
     }
 
     if (action === 'version') {
-        await applyVersion(meteorVersion && `+meteor-v${meteorVersion}`);
+        await applyVersion(meteorVersion && `-meteor-v${meteorVersion}`);
         return;
     }
 
