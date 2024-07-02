@@ -86,10 +86,11 @@ async function publish() {
     logger.info(`⚡  Publishing ${meteorPackage.releaseName}...`);
 
     const meteorReleases = ['3.0-rc.2', '2.16'];
+    const currentVersion = await parsePackageJs(meteorPackage.packageJsPath).then(({ version }) => version);
 
     for (const release of meteorReleases) {
         const command = `meteor publish --release ${release}`;
-        await setVersion(release.replace('next.', `meteor-v${release}.next.`));
+        await setVersion(currentVersion.replace('next.', `meteor-v${release}.next.`));
 
         shell(command, {
             async: true,
