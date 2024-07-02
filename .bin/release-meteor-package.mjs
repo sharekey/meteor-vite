@@ -65,17 +65,21 @@ async function applyVersion(buildMetadata = '') {
 
     logger.info(`ℹ️  New version ${release.newVersion} for ${meteorPackage.releaseName} detected`);
 
+    await setVersion(release.newVersion);
+
+    shell(`git add ${meteorPackage.packageJsPath}`);
+    shell(`git commit -m 'Bump ${meteorPackage.releaseName} version to ${release.newVersion}'`);
+}
+
+async function setVersion(newVersion) {
     const { rawContent, version, name } = await parsePackageJs(meteorPackage.packageJsPath);
     if (!version) {
         throw new Error(`Unable to read version from ${meteorPackage.releaseName} package.js`);
     }
-    const patchedPackageJs = rawContent.replace(PACKAGE_VERSION_REGEX, `version: '${release.newVersion}${buildMetadata}',`);
+    const patchedPackageJs = rawContent.replace(PACKAGE_VERSION_REGEX, `version: '${newVersion}',`);
     await FS.writeFile(meteorPackage.packageJsPath, patchedPackageJs);
 
-    logger.info(`✅  Changed ${meteorPackage.releaseName} (${name}) version from v${version} to v${release.newVersion}\n`);
-
-    shell(`git add ${meteorPackage.packageJsPath}`);
-    shell(`git commit -m 'Bump ${meteorPackage.releaseName} version to ${release.newVersion}'`);
+    logger.info(`✅  Changed ${meteorPackage.releaseName} (${name}) version from v${version} to v${newVersion}\n`);
 }
 
 async function publish() {
