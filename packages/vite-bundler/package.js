@@ -35,7 +35,11 @@ Npm.depends({
 });
 
 Package.onUse(function (api) {
-    api.versionsFrom(['3.0-beta.0', '3.0-rc.0', '3.0-rc.2']);
+    if (Meteor.isFibersDisabled) {
+        api.versionsFrom(['3.0-beta.0', '3.0-rc.0', '3.0-rc.2']);
+    } else {
+        api.versionsFrom(['2.14', '2.15', '2.16']);
+    }
     api.use([
         'fetch',
         'webapp',
