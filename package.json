@@ -14,12 +14,8 @@
     "concurrently": "^8.2.2"
   },
   "scripts": {
-    "version:vite-bundler": "npm run version:vite-bundler:meteorv2 && npm run version:vite-bundler:meteorv3",
-    "publish:vite-bundler": "npm run publish:vite-bundler:meteorv2 && npm run publish:vite-bundler:meteorv3",
-    "version:vite-bundler:meteorv2": "METEOR_RELEASE=2.16 meteor node .bin/release-meteor-package.mjs version",
-    "publish:vite-bundler:meteorv2": "METEOR_RELEASE=2.16 meteor node .bin/release-meteor-package.mjs publish",
-    "version:vite-bundler:meteorv3": "METEOR_RELEASE=3.0-rc.2 meteor node .bin/release-meteor-package.mjs version",
-    "publish:vite-bundler:meteorv3": "METEOR_RELEASE=3.0-rc.2 meteor node .bin/release-meteor-package.mjs publish",
+    "version:vite-bundler": "meteor node .bin/release-meteor-package.mjs version",
+    "publish:vite-bundler": "meteor node .bin/release-meteor-package.mjs version",
 
     "example": ".bin/example-app.sh",
     "launch": "npm run example launch",
