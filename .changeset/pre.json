@@ -7,6 +7,7 @@
     "vite-bundler": "2.0.1"
   },
   "changesets": [
+    "friendly-years-type",
     "purple-carrots-drum",
     "two-dolphins-sing"
   ]
