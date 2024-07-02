@@ -7,19 +7,19 @@
           "type": "patch"
         }
       ],
-      "summary": "Use Meteor's runtime config to resolve the path to Vite's bundle manifest",
-      "id": "purple-carrots-drum"
+      "summary": "Use sets instead of arrays for manifest imports cache to address duplicate imports.",
+      "id": "friendly-years-type"
     }
   ],
   "releases": [
     {
       "name": "vite-bundler",
       "type": "patch",
-      "oldVersion": "3.0.0-next.0",
+      "oldVersion": "3.0.0-next.1",
       "changesets": [
-        "purple-carrots-drum"
+        "friendly-years-type"
       ],
-      "newVersion": "3.0.0-next.1"
+      "newVersion": "3.0.0-next.2"
     }
   ],
   "preState": {
@@ -31,6 +31,7 @@
       "vite-bundler": "2.0.1"
     },
     "changesets": [
+      "friendly-years-type",
       "purple-carrots-drum",
       "two-dolphins-sing"
     ]
