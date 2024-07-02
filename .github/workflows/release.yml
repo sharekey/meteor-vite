@@ -17,13 +17,6 @@ jobs:
   release:
     name: Release
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        include:
-          - node-version: 14
-            meteor-version: 2.16
-          - node-version: 20
-            meteor-version: 3.0-rc.2
     steps:
       - name: 'Checkout Repo'
         uses: actions/checkout@v3
@@ -31,7 +24,7 @@ jobs:
       - name: 'Setup Node.js'
         uses: actions/setup-node@v4
         with:
-          node-version: ${{ matrix.node-version }}
+          node-version: 20
 
       - name: 'Prepare Meteor Session'
         run: |
@@ -46,7 +39,7 @@ jobs:
       - name: 'Setup Meteor'
         uses: meteorengineer/setup-meteor@v1
         with:
-          meteor-release: ${{ matrix.meteor-version }}
+          meteor-release: 3.0-rc.2
 
       - name: 'Install Dependencies'
         run: |
