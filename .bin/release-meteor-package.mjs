@@ -50,7 +50,7 @@ async function parsePackageJs(packageJsPath) {
     }
 }
 
-async function applyVersion() {
+async function applyVersion(buildMetadata = '') {
     shell(`changeset status --output ${CHANGESET_STATUS_FILE}`);
 
     const { releases } = await FS.readFile(`${CHANGESET_STATUS_FILE}`, 'utf-8')
@@ -69,7 +69,7 @@ async function applyVersion() {
     if (!version) {
         throw new Error(`Unable to read version from ${meteorPackage.releaseName} package.js`);
     }
-    const patchedPackageJs = rawContent.replace(PACKAGE_VERSION_REGEX, `version: '${release.newVersion}',`);
+    const patchedPackageJs = rawContent.replace(PACKAGE_VERSION_REGEX, `version: '${release.newVersion}${buildMetadata}',`);
     await FS.writeFile(meteorPackage.packageJsPath, patchedPackageJs);
 
     logger.info(`✅  Changed ${meteorPackage.releaseName} (${name}) version from v${version} to v${release.newVersion}\n`);
@@ -112,7 +112,7 @@ function shell(command, options) {
 }
 
 (async () => {
-    const [binPath, modulePath, action] = process.argv;
+    const [binPath, modulePath, action, meteorVersion] = process.argv;
 
     if (action === 'publish') {
         await publish();
@@ -120,7 +120,7 @@ function shell(command, options) {
     }
 
     if (action === 'version') {
-        await applyVersion();
+        await applyVersion(meteorVersion && `+meteor-v${meteorVersion}`);
         return;
     }
 
