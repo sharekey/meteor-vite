@@ -112,7 +112,8 @@ function shell(command, options) {
 }
 
 (async () => {
-    const [binPath, modulePath, action, meteorVersion] = process.argv;
+    const [binPath, modulePath, action] = process.argv;
+    const meteorVersion = process.env.METEOR_VERSION;
 
     if (action === 'publish') {
         await publish();
