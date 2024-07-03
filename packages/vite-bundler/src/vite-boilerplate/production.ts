@@ -4,7 +4,7 @@ import { Meteor } from 'meteor/meteor';
 import { WebApp, WebAppInternals } from 'meteor/webapp';
 import Path from 'path';
 import Util from 'util';
-import { DevConnectionLog } from '../loading/vite-connection-handler';
+import Logger from '../utility/Logger';
 import { type Boilerplate, ViteBoilerplate } from './common';
 
 export class ViteProductionBoilerplate extends ViteBoilerplate {
@@ -152,7 +152,7 @@ export class ViteProductionBoilerplate extends ViteBoilerplate {
             modulePreload,
         }
         
-        DevConnectionLog.debug('Parsed Vite manifest imports', Util.inspect({
+        Logger.debug('Parsed Vite manifest imports', Util.inspect({
             imports,
             manifest,
         }, { depth: 4, colors: true }));
