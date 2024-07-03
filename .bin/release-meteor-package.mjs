@@ -141,6 +141,7 @@ function shell(command, options) {
 
 })().catch((error) => {
     const { stdout, stderr } = error;
+    logger.error(error);
 
     if (stdout) {
         logger.info(stdout.toString());
