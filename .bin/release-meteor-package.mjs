@@ -105,6 +105,7 @@ async function publish() {
             env: {
                 METEOR_SESSION_FILE: process.env.METEOR_SESSION_FILE, // Authenticate using auth token stored as file.
                 VITE_METEOR_DISABLED: 'true', // Prevents vite:bundler from trying to compile itself on publish
+                METEOR_RELEASE: release,
                 ...process.env,
             },
         });
