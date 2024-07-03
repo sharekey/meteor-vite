@@ -14,6 +14,14 @@ export class ViteProductionBoilerplate extends ViteBoilerplate {
         super();
     }
     
+    public get assetDir() {
+        return '/' + this.viteManifest.assetsDir.replace(/^\/+/, '');
+    }
+    
+    public get baseUrl() {
+        return this.viteManifest.base + this.assetDir;
+    }
+    
     public getBoilerplate(): Boilerplate {
         return {
             dynamicHead: this.dynamicHead,

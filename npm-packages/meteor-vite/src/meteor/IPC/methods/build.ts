@@ -32,7 +32,7 @@ export default CreateIPCInterface({
                     const path = Path.join(outDir, chunk.fileName);
                     const files = JSON.parse(FS.readFileSync(path, 'utf-8'));
                     FS.writeFileSync(path, JSON.stringify({
-                        base: inlineBuildConfig.base,
+                        base: inlineBuildConfig.base || '',
                         assetsDir: inlineBuildConfig.build?.assetsDir!,
                         files,
                     } satisfies TransformedViteManifest))
@@ -196,7 +196,7 @@ type ParsedConfig = {
 }
 
 export type TransformedViteManifest = {
-    base?: string;
+    base: string;
     assetsDir: string;
     files: Record<string, ViteManifestFile>;
 }
