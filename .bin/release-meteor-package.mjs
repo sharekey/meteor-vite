@@ -57,7 +57,7 @@ async function parsePackageJson() {
 }
 
 async function applyVersion() {
-    shell(`changeset status --output ${CHANGESET_STATUS_FILE}`);
+    await shell(`changeset status --output ${CHANGESET_STATUS_FILE}`);
 
     const { releases } = await FS.readFile(`${CHANGESET_STATUS_FILE}`, 'utf-8')
                                  .then((content) => JSON.parse(content));
@@ -73,8 +73,8 @@ async function applyVersion() {
 
     await setVersion(release.newVersion);
 
-    shell(`git add ${meteorPackage.packageJsPath}`);
-    shell(`git commit -m 'Bump ${meteorPackage.releaseName} version to ${release.newVersion}'`);
+    await shell(`git add ${meteorPackage.packageJsPath}`);
+    await shell(`git commit -m 'Bump ${meteorPackage.releaseName} version to ${release.newVersion}'`);
 }
 
 async function setVersion(newVersion) {
@@ -99,7 +99,7 @@ async function publish() {
         const newVersion = currentVersion.replace('next.', `meteor-v${release}.next.`);
         await setVersion(newVersion);
 
-        shell(command, {
+        await shell(command, {
             async: true,
             cwd: Path.dirname(meteorPackage.packageJsPath),
             env: {
@@ -122,10 +122,20 @@ function shell(command, options) {
         return;
     }
     const [bin, ...args] = command.split(' ');
-    spawn(bin, args, {
+    const childProcess = spawn(bin, args, {
         ...options,
         stdio: 'inherit',
     });
+
+    return new Promise((resolve, reject) => {
+        childProcess.on('close', (code) => {
+            if (code === 0) {
+                resolve();
+            } else {
+                reject(new Error(`Command "${command}" exited with code ${code}`));
+            }
+        });
+    })
 }
 
 (async () => {
