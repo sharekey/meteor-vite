@@ -1,6 +1,6 @@
 import FS from 'fs';
 import { Meteor } from 'meteor/meteor';
-import { WebApp } from 'meteor/webapp';
+import { WebApp, WebAppInternals } from 'meteor/webapp';
 import Path from 'path';
 import Util from 'util';
 import { DevConnectionLog } from '../loading/vite-connection-handler';
@@ -8,8 +8,6 @@ import { ROOT_URL, VITE_ASSETS_BASE_URL } from '../utility/Helpers';
 import { type Boilerplate, ViteBoilerplate } from './common';
 
 export class ViteProductionBoilerplate extends ViteBoilerplate {
-    
-    
     
     constructor() {
         super();
@@ -58,6 +56,29 @@ export class ViteProductionBoilerplate extends ViteBoilerplate {
         const manifest = JSON.parse(FS.readFileSync(viteManifestPath, 'utf8'));
         Meteor.settings.vite = { manifest };
         return manifest;
+    }
+    
+    public makeViteAssetsCacheable() {
+        const archs = ['web.browser', 'web.browser.legacy'];
+        
+        for (const arch of archs) {
+            const clientDir = Path.join(
+                __meteor_bootstrap__.serverDir,
+                '..',
+                arch
+            );
+            
+            const manifestPath = Path.join(clientDir, 'program.json');
+            const program = JSON.parse(FS.readFileSync(manifestPath, 'utf8'));
+            program.manifest.forEach((file: MeteorProgramManifest) => {
+                if (file.path.includes('vite-assets/')) {
+                    file.cacheable = true;
+                }
+            });
+            FS.writeFileSync(manifestPath, JSON.stringify(program, null, 2));
+        }
+        
+        WebAppInternals.reloadClientPrograms();
     }
     
     
@@ -124,6 +145,7 @@ export class ViteProductionBoilerplate extends ViteBoilerplate {
 
 interface MeteorProgramManifest {
     path: string;
+    cacheable: boolean;
 }
 
 type ViteManifest = Record<string, ViteChunk>;
