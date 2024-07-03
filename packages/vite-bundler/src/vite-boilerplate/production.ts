@@ -37,15 +37,15 @@ export class ViteProductionBoilerplate extends ViteBoilerplate {
         const lines = [];
         
         for (const file of imports.stylesheets) {
-            lines.push(`<link rel="stylesheet" href="${this.filePath(file)}">`);
+            lines.push(`<link rel="stylesheet" crossorigin href="${this.filePath(file)}">`);
         }
         
         for (const file of imports.modules) {
-            lines.push(`<script type="module" src="${this.filePath(file)}"></script>`);
+            lines.push(`<script type="module" crossorigin src="${this.filePath(file)}"></script>`);
         }
         
         for (const file of imports.modulePreload) {
-            lines.push(`<link rel="modulepreload" href="${this.filePath(file)}">`);
+            lines.push(`<link rel="modulepreload" crossorigin href="${this.filePath(file)}">`);
         }
         
         return lines.join('\n');
