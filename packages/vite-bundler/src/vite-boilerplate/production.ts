@@ -5,7 +5,6 @@ import { WebApp, WebAppInternals } from 'meteor/webapp';
 import Path from 'path';
 import Util from 'util';
 import { DevConnectionLog } from '../loading/vite-connection-handler';
-import { ROOT_URL, VITE_ASSETS_BASE_URL } from '../utility/Helpers';
 import { type Boilerplate, ViteBoilerplate } from './common';
 
 export class ViteProductionBoilerplate extends ViteBoilerplate {
@@ -22,6 +21,10 @@ export class ViteProductionBoilerplate extends ViteBoilerplate {
         return this.viteManifest.base + this.assetDir;
     }
     
+    protected filePath(file: string) {
+        return `${this.baseUrl.replace(/\/?$/, '')}/${file}`;
+    }
+    
     public getBoilerplate(): Boilerplate {
         return {
             dynamicHead: this.dynamicHead,
@@ -32,22 +35,17 @@ export class ViteProductionBoilerplate extends ViteBoilerplate {
     protected get dynamicHead() {
         const imports = this.imports;
         const lines = [];
-        function filePath(file: string) {
-            const baseUrl = VITE_ASSETS_BASE_URL || ROOT_URL || '';
-            
-            return `${baseUrl.replace(/\/?$/, '')}/${file}`
-        }
         
         for (const file of imports.stylesheets) {
-            lines.push(`<link rel="stylesheet" href="${filePath(file)}">`);
+            lines.push(`<link rel="stylesheet" href="${this.filePath(file)}">`);
         }
         
         for (const file of imports.modules) {
-            lines.push(`<script type="module" src="${filePath(file)}"></script>`);
+            lines.push(`<script type="module" src="${this.filePath(file)}"></script>`);
         }
         
         for (const file of imports.modulePreload) {
-            lines.push(`<link rel="modulepreload" href="${filePath(file)}">`);
+            lines.push(`<link rel="modulepreload" href="${this.filePath(file)}">`);
         }
         
         return lines.join('\n');
