@@ -32,8 +32,8 @@ export default CreateIPCInterface({
                     const path = Path.join(outDir, chunk.fileName);
                     const files = JSON.parse(FS.readFileSync(path, 'utf-8'));
                     FS.writeFileSync(path, JSON.stringify({
-                        base: inlineBuildConfig.base || '',
-                        assetsDir: inlineBuildConfig.build?.assetsDir!,
+                        base: inlineBuildConfig.base,
+                        assetsDir: inlineBuildConfig.build?.assetsDir,
                         files,
                     } satisfies TransformedViteManifest))
                 }
@@ -102,7 +102,7 @@ export default CreateIPCInterface({
     }
 })
 
-async function prepareConfig(buildConfig: BuildOptions): Promise<ParsedConfig> {
+async function prepareConfig(buildConfig: BuildOptions) {
     const { meteor, packageJson } = buildConfig;
     const configFile = buildConfig.packageJson?.meteor?.vite?.configFile
         // Fallback for deprecated config file format
@@ -132,9 +132,10 @@ async function prepareConfig(buildConfig: BuildOptions): Promise<ParsedConfig> {
         viteConfig,
         outDir,
         inlineBuildConfig: {
+            base: viteConfig.meteor.assetsBaseUrl || '',
             configFile,
             build: {
-                assetsDir: viteConfig.build.assetsDir || 'vite-assets',
+                assetsDir: viteConfig.meteor.assetsDir || 'vite-assets',
                 manifest: 'vite-manifest.json',
                 minify: true,
                 outDir,
@@ -151,7 +152,7 @@ async function prepareConfig(buildConfig: BuildOptions): Promise<ParsedConfig> {
                 }),
             ],
         }
-    }
+    } satisfies ParsedConfig;
 }
 
 function validateOutput(rollupResult?: BuildOutput | RollupOutput): asserts rollupResult is RollupOutput {
