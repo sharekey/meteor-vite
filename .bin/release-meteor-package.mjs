@@ -1,4 +1,4 @@
-import { execSync, spawn } from 'child_process';
+import { execSync, spawn, execFileSync } from 'child_process';
 import Path from 'path';
 import FS from 'fs/promises';
 
@@ -97,6 +97,12 @@ async function publish() {
     for (const release of meteorReleases) {
         const command = `meteor publish --release ${release}`;
         const newVersion = currentVersion.replace('next.', `meteor-v${release}.next.`);
+
+        if (await isPublished(newVersion)) {
+            logger.info(`⚠️  Version ${newVersion} is already published to Atmosphere. Skipping...`);
+            continue;
+        }
+
         await setVersion(newVersion);
 
         await shell(command, {
@@ -137,6 +143,41 @@ function shell(command, options) {
             }
         });
     })
+}
+
+/**
+ * Retrieve all published versions of the package from Atmosphere.
+ * @returns {Promise<{
+ *  versions: {
+ *   exports: unknown[];
+ *   implies: unknown[];
+ *   name: string;
+ *   version: string;
+ *   description: string;
+ *   summary: string;
+ *   git: string;
+ *   publishedBy: string;
+ *   publishedOn: {
+ *     $date: number;
+ *   };
+ *   installed: boolean;
+ *   architecturesOS: string[];
+ *   deprecated: boolean;
+ *  }[]
+ *  name: string;
+ *  maintainers: string[];
+ *  totalVersions: number;
+ * }>}
+ */
+async function getPublishedVersions() {
+    const json = execFileSync('meteor', ['show', `${meteorPackage.username}:${meteorPackage.releaseName}`, '--show-all', '--ejson']).toString();
+    console.log(json);
+    return JSON.parse(json);
+}
+
+async function isPublished(version) {
+    const { versions } = await getPublishedVersions();
+    return versions.some((release) => release.version === version);
 }
 
 (async () => {
