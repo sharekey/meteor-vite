@@ -51,8 +51,8 @@ async function parsePackageJs(packageJsPath) {
     }
 }
 
-function parsePackageJson() {
-    return JSON.parse(FS.readFileSync(meteorPackage.packageJsonPath, 'utf-8'));
+async function parsePackageJson() {
+    return JSON.parse(await FS.readFile(meteorPackage.packageJsonPath, 'utf-8'));
 }
 
 async function applyVersion() {
@@ -91,7 +91,7 @@ async function publish() {
     logger.info(`⚡  Publishing ${meteorPackage.releaseName}...`);
 
     const meteorReleases = ['3.0-rc.2', '2.16'];
-    const currentVersion = parsePackageJson().version;
+    const { version: currentVersion } = await parsePackageJson();
 
     for (const release of meteorReleases) {
         const command = `meteor publish --release ${release}`;
