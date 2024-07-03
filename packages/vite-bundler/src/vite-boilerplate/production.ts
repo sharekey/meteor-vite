@@ -18,7 +18,7 @@ export class ViteProductionBoilerplate extends ViteBoilerplate {
     }
     
     public get baseUrl() {
-        return this.viteManifest.base + this.assetDir;
+        return this.viteManifest.base;
     }
     
     protected filePath(file: string) {
