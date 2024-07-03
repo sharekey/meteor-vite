@@ -1,5 +1,11 @@
 # vite-bundler
 
+## 3.0.0-next.9
+
+### Patch Changes
+
+- 98ca33a0: Patch cacheable files in memory instead of trying to write to the target arch's program.json file which could be marked as read-only.
+
 ## 3.0.0-next.8
 
 ### Patch Changes
