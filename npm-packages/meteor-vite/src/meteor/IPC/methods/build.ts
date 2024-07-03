@@ -115,6 +115,9 @@ async function prepareConfig(buildConfig: BuildOptions): Promise<ParsedConfig> {
         viteConfig,
         outDir,
         inlineBuildConfig: {
+            server: {
+                origin: buildConfig.assetsBaseUrl,
+            },
             configFile,
             build: {
                 assetsDir: buildConfig.assetsDir,
@@ -155,6 +158,7 @@ export interface BuildOptions {
     meteor: MeteorStubsSettings['meteor'];
     packageJson: ProjectJson;
     assetsDir?: string;
+    assetsBaseUrl: string | undefined;
 }
 
 type Replies = IPCReply<{

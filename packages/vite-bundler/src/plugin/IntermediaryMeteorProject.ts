@@ -5,7 +5,7 @@ import type { WorkerResponseData } from 'meteor-vite';
 import path from 'node:path';
 import pc from 'picocolors';
 import { MeteorViteError } from '../utility/Errors';
-import { getBuildConfig, VITE_ASSETS_DIR } from '../utility/Helpers';
+import { getBuildConfig, VITE_ASSETS_BASE_URL, VITE_ASSETS_DIR } from '../utility/Helpers';
 import Logger from '../utility/Logger';
 import { createWorkerFork, cwd } from '../workers';
 
@@ -186,6 +186,7 @@ function viteBuild(): Promise<WorkerResponseData<'buildResult'>> {
                     isopackPath: path.join(tempMeteorProject, '.meteor', 'local', 'isopacks'),
                 },
                 assetsDir: VITE_ASSETS_DIR,
+                assetsBaseUrl: VITE_ASSETS_BASE_URL,
             }],
         })
     });
