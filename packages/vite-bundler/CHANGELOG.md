@@ -1,5 +1,11 @@
 # vite-bundler
 
+## 3.0.0-next.8
+
+### Patch Changes
+
+- 05d7c1e4: Use Vite plugin configuration instead of build-time environment variables for setting the base path and URL for assets
+
 ## 3.0.0-next.7
 
 ### Patch Changes
