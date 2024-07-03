@@ -1,6 +1,5 @@
 import HTTP from 'http';
 import { WebApp, WebAppInternals } from 'meteor/webapp';
-import { VITE_ASSETS_DIR } from './utility/Helpers';
 import Logger from './utility/Logger';
 import type { BoilerplateData } from './vite-boilerplate/common';
 import { ViteDevServerWorker } from './vite-boilerplate/development';

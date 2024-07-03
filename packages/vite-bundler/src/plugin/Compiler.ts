@@ -1,6 +1,6 @@
-import { getBuildConfig, VITE_ASSETS_DIR } from '../utility/Helpers';
-import Logger from '../utility/Logger';
 import Path from 'node:path';
+import { getBuildConfig } from '../utility/Helpers';
+import Logger from '../utility/Logger';
 
 /**
  * Temporary file extension to apply to all files bundled by Vite.
