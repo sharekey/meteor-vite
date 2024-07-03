@@ -95,7 +95,7 @@ export class ViteProductionBoilerplate extends ViteBoilerplate {
                 if (file.url.endsWith('.js')) {
                     file.cacheable = true;
                 }
-                if (file.path.endsWith('.css')) {
+                if (file.url.endsWith('.css')) {
                     file.cacheable = true;
                 }
             });
