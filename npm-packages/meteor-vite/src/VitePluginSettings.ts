@@ -12,6 +12,13 @@ export interface PluginSettings {
     clientEntry: string;
     
     /**
+     * When building for production, Vite will normally serve static assets from the root of the current domain.
+     * If you have a CDN or use different subdomains for your app, it can be a good idea to set a base URL for
+     * your assets so that your assets are fetched from one consistent URL.
+     */
+    assetsBaseUrl?: string;
+    
+    /**
      * Skips bundling the provided npm packages if they are already provided by Meteor.
      * This assumes you have a Meteor package that depends on the provided npm packages.
      */
