@@ -89,7 +89,7 @@ export class ViteProductionBoilerplate extends ViteBoilerplate {
             // Override cacheable flag for any assets built by Vite.
             // Meteor will by default set this to false for asset files.
             program.manifest.forEach((file: MeteorProgramManifest) => {
-                if (!file.url.startsWith(`/${VITE_ASSETS_DIR}/`)) {
+                if (!file.url?.startsWith(`/${VITE_ASSETS_DIR}/`)) {
                     return;
                 }
                 if (file.url.endsWith('.js')) {
@@ -171,7 +171,7 @@ export class ViteProductionBoilerplate extends ViteBoilerplate {
 
 interface MeteorProgramManifest {
     path: string;
-    url: string;
+    url?: string;
     cacheable: boolean;
 }
 
