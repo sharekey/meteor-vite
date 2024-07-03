@@ -45,7 +45,9 @@ export default class Compiler {
                 path: fileMeta.relativePath,
                 data: file.getContentsAsBuffer(),
                 sourcePath,
+                cacheable: true,
             });
+            file.cacheable = true;
         })
     }
     

@@ -80,38 +80,25 @@ export class ViteProductionBoilerplate extends ViteBoilerplate {
      * load being put on both your clients and your server.
      */
     public makeViteAssetsCacheable() {
-        const archs = ['web.browser', 'web.browser.legacy'];
+        const archs = ['web.browser', 'web.browser.legacy'] as const;
         
         for (const arch of archs) {
-            const clientDir = Path.join(
-                __meteor_bootstrap__.serverDir,
-                '..',
-                arch
-            );
-            
-            // Parse the Meteor program.json file for the current arch.
-            const manifestPath = Path.join(clientDir, 'program.json');
-            const program = JSON.parse(FS.readFileSync(manifestPath, 'utf8'));
+            const files = WebAppInternals.staticFilesByArch[arch] || {};
             
             // Override cacheable flag for any assets built by Vite.
             // Meteor will by default set this to false for asset files.
-            program.manifest.forEach((file: MeteorProgramManifest) => {
-                if (!file.url?.startsWith(`${this.assetDir}/`)) {
+            Object.entries(files).forEach(([path, file]) => {
+                if (!path.startsWith(`${this.assetDir}/`)) {
                     return;
                 }
-                if (file.url.endsWith('.js')) {
+                if (path.endsWith('.js')) {
                     file.cacheable = true;
                 }
-                if (file.url.endsWith('.css')) {
+                if (path.endsWith('.css')) {
                     file.cacheable = true;
                 }
-            });
-            
-            // Write changes to client program.
-            FS.writeFileSync(manifestPath, JSON.stringify(program, null, 2));
+            })
         }
-        
-        WebAppInternals.reloadClientPrograms();
     }
     
     
