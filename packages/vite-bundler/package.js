@@ -35,7 +35,7 @@ Npm.depends({
 });
 
 Package.onUse(function (api) {
-    if (process.env.METEOR_VERSION?.startsWith('3')) {
+    if (process.env.METEOR_RELEASE?.startsWith('3')) {
         api.versionsFrom(['3.0-beta.0', '3.0-rc.0', '3.0-rc.2']);
     } else {
         api.versionsFrom(['2.14', '2.15', '2.16']);
