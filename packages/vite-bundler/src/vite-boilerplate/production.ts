@@ -48,16 +48,30 @@ export class ViteProductionBoilerplate extends ViteBoilerplate {
         if (Meteor.settings.vite?.manifest) {
             return Meteor.settings.vite.manifest;
         }
+        
+        // Search Meteor's program.json file for Vite's manifest.json file
         const viteManifestInfo = WebApp.clientPrograms['web.browser'].manifest.find(({ path }: MeteorProgramManifest) => path.endsWith('vite-manifest.json'));
         if (!viteManifestInfo) {
             throw new Error('Could not find Vite manifest in Meteor client program manifest');
         }
+        
+        // Read and cache the contents of the vite manifest.json file.
         const viteManifestPath = Path.join(__meteor_bootstrap__.serverDir, '..', 'web.browser', viteManifestInfo.path);
         const manifest = JSON.parse(FS.readFileSync(viteManifestPath, 'utf8'));
         Meteor.settings.vite = { manifest };
+        
         return manifest;
     }
     
+    /**
+     * Mark assets built by Vite as cacheable in Meteor's program.json file for both legacy and modern browsers.
+     * Because of the way Meteor handles non-cacheable assets, headers are added that make it tricky to cache with
+     * a standard reverse proxy config. You would have to explicitly override the caching headers for all files served
+     * by meteor at /vite-assets.
+     *
+     * The default behavior of Meteor would be to set a max-age header of 0. Which would of course result in a lot of
+     * load being put on both your clients and your server.
+     */
     public makeViteAssetsCacheable() {
         const archs = ['web.browser', 'web.browser.legacy'];
         
@@ -68,13 +82,19 @@ export class ViteProductionBoilerplate extends ViteBoilerplate {
                 arch
             );
             
+            // Parse the Meteor program.json file for the current arch.
             const manifestPath = Path.join(clientDir, 'program.json');
             const program = JSON.parse(FS.readFileSync(manifestPath, 'utf8'));
+            
+            // Override cacheable flag for any assets built by Vite.
+            // Meteor will by default set this to false for asset files.
             program.manifest.forEach((file: MeteorProgramManifest) => {
                 if (file.path.includes('vite-assets/')) {
                     file.cacheable = true;
                 }
             });
+            
+            // Write changes to client program.
             FS.writeFileSync(manifestPath, JSON.stringify(program, null, 2));
         }
         
