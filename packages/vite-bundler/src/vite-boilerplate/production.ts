@@ -120,7 +120,7 @@ export class ViteProductionBoilerplate extends ViteBoilerplate {
         
         function preloadImports(imports: string[]) {
             for (const path of imports) {
-                const chunk = manifest[path];
+                const chunk = manifest.files[path];
                 if (!chunk) {
                     continue;
                 }
@@ -134,7 +134,7 @@ export class ViteProductionBoilerplate extends ViteBoilerplate {
             
         }
         
-        for (const [name, chunk] of Object.entries(manifest)) {
+        for (const [name, chunk] of Object.entries(manifest.files)) {
             if (!chunk.isEntry) {
                 continue;
             }
@@ -175,7 +175,11 @@ interface MeteorProgramManifest {
     cacheable: boolean;
 }
 
-type ViteManifest = Record<string, ViteChunk>;
+type ViteManifest = {
+    base?: string;
+    assetsDir: string;
+    files: Record<string, ViteChunk>;
+};
 interface ViteChunk {
     file: string;
     src: string;
