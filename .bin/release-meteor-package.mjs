@@ -96,7 +96,8 @@ async function publish() {
 
     for (const release of meteorReleases) {
         const command = `meteor publish --release ${release}`;
-        const newVersion = currentVersion.replace('next.', `meteor-v${release}.next.`);
+        const meteorVersion = release.split('.')[0];
+        const newVersion = currentVersion.replace('next.', `meteor${meteorVersion}.next.`);
 
         if (await isPublished(newVersion)) {
             logger.info(`⚠️  Version ${newVersion} is already published to Atmosphere. Skipping...`);
