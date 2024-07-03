@@ -1,4 +1,5 @@
 import FS from 'fs';
+import type { TransformedViteManifest } from 'meteor-vite/meteor/IPC/methods/build';
 import { Meteor } from 'meteor/meteor';
 import { WebApp, WebAppInternals } from 'meteor/webapp';
 import Path from 'path';
@@ -44,7 +45,7 @@ export class ViteProductionBoilerplate extends ViteBoilerplate {
         return lines.join('\n');
     }
     
-    public get viteManifest(): ViteManifest {
+    public get viteManifest(): TransformedViteManifest {
         if (Meteor.settings.vite?.manifest) {
             return Meteor.settings.vite.manifest;
         }
@@ -173,22 +174,6 @@ interface MeteorProgramManifest {
     path: string;
     url?: string;
     cacheable: boolean;
-}
-
-type ViteManifest = {
-    base?: string;
-    assetsDir: string;
-    files: Record<string, ViteChunk>;
-};
-interface ViteChunk {
-    file: string;
-    src: string;
-    name?: string;
-    isDynamicEntry?: boolean;
-    isEntry?: boolean;
-    css?: string[];
-    imports?: string[];
-    dynamicImports?: string[];
 }
 
 interface ManifestImports {

@@ -200,4 +200,20 @@ type ParsedConfig = {
     outDir: string;
 }
 
+export type TransformedViteManifest = {
+    base: string;
+    assetsDir: string;
+    files: Record<string, ViteManifestFile>;
+}
+
+export type ViteManifestFile = {
+    file: string;
+    src: string;
+    name?: string;
+    isDynamicEntry?: boolean;
+    isEntry?: boolean;
+    css?: string[];
+    imports?: string[];
+    dynamicImports?: string[];
+}
 
