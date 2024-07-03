@@ -4,7 +4,7 @@ import { WebApp, WebAppInternals } from 'meteor/webapp';
 import Path from 'path';
 import Util from 'util';
 import { DevConnectionLog } from '../loading/vite-connection-handler';
-import { ROOT_URL, VITE_ASSETS_BASE_URL } from '../utility/Helpers';
+import { ROOT_URL, VITE_ASSETS_BASE_URL, VITE_ASSETS_DIR } from '../utility/Helpers';
 import { type Boilerplate, ViteBoilerplate } from './common';
 
 export class ViteProductionBoilerplate extends ViteBoilerplate {
@@ -89,7 +89,13 @@ export class ViteProductionBoilerplate extends ViteBoilerplate {
             // Override cacheable flag for any assets built by Vite.
             // Meteor will by default set this to false for asset files.
             program.manifest.forEach((file: MeteorProgramManifest) => {
-                if (file.path.includes('vite-assets/')) {
+                if (!file.url.startsWith(`/${VITE_ASSETS_DIR}/`)) {
+                    return;
+                }
+                if (file.url.endsWith('.js')) {
+                    file.cacheable = true;
+                }
+                if (file.path.endsWith('.css')) {
                     file.cacheable = true;
                 }
             });
@@ -165,6 +171,7 @@ export class ViteProductionBoilerplate extends ViteBoilerplate {
 
 interface MeteorProgramManifest {
     path: string;
+    url: string;
     cacheable: boolean;
 }
 
