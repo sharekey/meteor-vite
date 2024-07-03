@@ -116,7 +116,7 @@ async function prepareConfig(buildConfig: BuildOptions): Promise<ParsedConfig> {
         outDir,
         inlineBuildConfig: {
             server: {
-                origin: buildConfig.assetsBaseUrl,
+                origin: buildConfig.assetsBaseUrl || viteConfig.meteor?.assetsBaseUrl,
             },
             configFile,
             build: {
