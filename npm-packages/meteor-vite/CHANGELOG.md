@@ -1,5 +1,11 @@
 # meteor-vite
 
+## 2.0.0-next.1
+
+### Patch Changes
+
+- 079d1d7c: Use Vite plugin configuration instead of build-time environment variables for setting the base path and URL for assets
+
 ## 2.0.0-next.0
 
 ### Major Changes
