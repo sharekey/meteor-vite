@@ -172,7 +172,6 @@ function shell(command, options) {
  */
 async function getPublishedVersions() {
     const json = execFileSync('meteor', ['show', `${meteorPackage.username}:${meteorPackage.releaseName}`, '--show-all', '--ejson']).toString();
-    console.log(json);
     return JSON.parse(json);
 }
 
