@@ -9,6 +9,7 @@ const PACKAGE_VERSION_REGEX = /version:\s*'(?<version>[\d\w.+-]+)'\s*,/;
 const CHANGESET_STATUS_FILE = 'changeset-status.json';
 const meteorPackage = {
     releaseName: 'vite-bundler',
+    username: 'jorgenvatle',
     packageJsPath: Path.join(repoPath, './packages/vite-bundler/package.js'),
     packageJsonPath: Path.join(repoPath, './packages/vite-bundler/package.json'),
 };
@@ -95,7 +96,8 @@ async function publish() {
 
     for (const release of meteorReleases) {
         const command = `meteor publish --release ${release}`;
-        await setVersion(currentVersion.replace('next.', `meteor-v${release}.next.`));
+        const newVersion = currentVersion.replace('next.', `meteor-v${release}.next.`);
+        await setVersion(newVersion);
 
         shell(command, {
             async: true,
@@ -106,6 +108,9 @@ async function publish() {
                 ...process.env,
             },
         });
+
+        logger.info(`📦  Published to Atmosphere: `)
+        logger.info(` L ${meteorPackage.username}:${meteorPackage.releaseName}@${newVersion}`)
     }
 
 }
