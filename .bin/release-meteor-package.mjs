@@ -104,6 +104,7 @@ async function publish() {
             continue;
         }
 
+        logger.info('✨  Publishing to Atmosphere with Meteor %s release...', release);
         await setVersion(newVersion);
 
         await shell(command, {
@@ -117,7 +118,7 @@ async function publish() {
             },
         });
 
-        logger.info(`📦  Published to Atmosphere: `)
+        logger.info(`🚀  Published to Atmosphere: `)
         logger.info(` L ${meteorPackage.username}:${meteorPackage.releaseName}@${newVersion}`)
     }
 
