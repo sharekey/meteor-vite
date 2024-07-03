@@ -33,9 +33,9 @@ export default CreateIPCInterface({
                     const files = JSON.parse(FS.readFileSync(path, 'utf-8'));
                     FS.writeFileSync(path, JSON.stringify({
                         base: inlineBuildConfig.base,
-                        assetsDir: buildConfig.assetsDir,
+                        assetsDir: inlineBuildConfig.build?.assetsDir!,
                         files,
-                    }))
+                    } satisfies TransformedViteManifest))
                 }
                 
                 return {
@@ -132,12 +132,9 @@ async function prepareConfig(buildConfig: BuildOptions): Promise<ParsedConfig> {
         viteConfig,
         outDir,
         inlineBuildConfig: {
-            server: {
-                origin: buildConfig.assetsBaseUrl || viteConfig.meteor?.assetsBaseUrl,
-            },
             configFile,
             build: {
-                assetsDir: buildConfig.assetsDir,
+                assetsDir: viteConfig.build.assetsDir || 'vite-assets',
                 manifest: 'vite-manifest.json',
                 minify: true,
                 outDir,
@@ -174,8 +171,6 @@ function validateOutput(rollupResult?: BuildOutput | RollupOutput): asserts roll
 export interface BuildOptions {
     meteor: MeteorStubsSettings['meteor'];
     packageJson: ProjectJson;
-    assetsDir?: string;
-    assetsBaseUrl: string | undefined;
 }
 
 type Replies = IPCReply<{
@@ -201,7 +196,7 @@ type ParsedConfig = {
 }
 
 export type TransformedViteManifest = {
-    base: string;
+    base?: string;
     assetsDir: string;
     files: Record<string, ViteManifestFile>;
 }
