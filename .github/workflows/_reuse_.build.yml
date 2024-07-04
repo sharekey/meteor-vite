@@ -7,10 +7,10 @@ on:
         type: string
       meteorRelease:
         type: string
-        default: '3.0-rc.2'
+        default: '2.12'
       nodeVersion:
         type: string
-        default: '20-alpine'
+        default: '14-alpine'
       push:
         type: boolean
         default: false
@@ -19,7 +19,7 @@ on:
         default: ghcr.io
       meteorBaseImage:
         type: string
-        default: jorgenvatle/meteor-base
+        required: false
     outputs:
       deploymentImage:
         value: ${{ jobs.docker.outputs.deploymentImage }}
