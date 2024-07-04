@@ -15,7 +15,7 @@ ARG APP_BASENAME
 
 # Node.js production runtime
 # This is the smallest possible image we can use to run the pre-built Meteor bundle.
-FROM node:$NODE_VERSION as nodejs-runtime
+FROM node:$NODE_VERSION AS nodejs-runtime
 ENV APP_BUNDLE_FOLDER /opt/bundle
 ENV SCRIPTS_FOLDER /docker
 ARG APP_BASENAME
@@ -33,7 +33,7 @@ RUN apk --no-cache add \
 # Meteor.js Base Image
 # Has `meteor` installed for building the production server as well as running any
 # development/testing environments if that's more convenient to use.
-FROM $METEOR_BASE_IMAGE:$METEOR_RELEASE as meteor-base
+FROM $METEOR_BASE_IMAGE:$METEOR_RELEASE AS meteor-base
 ARG APP_BASENAME
 RUN test -n "$APP_BASENAME"
 
@@ -53,7 +53,7 @@ RUN cd $NPM_PACKAGES_FOLDER/meteor-vite && meteor npm ci && meteor npm link
 WORKDIR $APP_SOURCE_FOLDER
 
 # Meteor.js base image with pre-built npm and atmosphere dependencies
-FROM meteor-base as meteor-bundler
+FROM meteor-base AS meteor-bundler
 
 # Install local and external npm dependencies
 COPY $APP_DIR/package*.json $APP_SOURCE_FOLDER/
@@ -66,7 +66,7 @@ RUN bash $SCRIPTS_FOLDER/build-meteor-bundle.sh
 
 # Meteor Production Server
 # This is what we ship to production.
-FROM nodejs-runtime as production-server
+FROM nodejs-runtime AS production-server
 
 # Import entrypoint script and production bundle
 COPY --from=meteor-bundler $SCRIPTS_FOLDER $SCRIPTS_FOLDER/
