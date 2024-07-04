@@ -4,10 +4,10 @@
 ARG NODE_VERSION="14-alpine"
 
 # Meteor release (Needs to match the release in .meteor/release)
-ARG METEOR_RELEASE="2.12"
+ARG METEOR_RELEASE="3.0-rc.2"
 
 # Meteor base image name
-ARG METEOR_BASE_IMAGE="geoffreybooth/meteor-base"
+ARG METEOR_BASE_IMAGE="jorgenvatle/meteor-base"
 
 # Path relative to the repository root to the Meteor app to build
 # Ex: ./examples/vue
