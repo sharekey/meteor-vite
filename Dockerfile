@@ -16,10 +16,10 @@ ARG APP_BASENAME
 # Node.js production runtime
 # This is the smallest possible image we can use to run the pre-built Meteor bundle.
 FROM node:$NODE_VERSION AS nodejs-runtime
-ENV APP_BUNDLE_FOLDER /opt/bundle
-ENV SCRIPTS_FOLDER /docker
+ENV APP_BUNDLE_FOLDER=/opt/bundle
+ENV SCRIPTS_FOLDER=/docker
 ARG APP_BASENAME
-ENV APP_BASENAME $APP_BASENAME
+ENV APP_BASENAME=$APP_BASENAME
 
 # Runtime dependencies; (For node-sass, bcrypt etc.)
 RUN apk --no-cache add \
@@ -37,11 +37,11 @@ FROM $METEOR_BASE_IMAGE:$METEOR_RELEASE AS meteor-base
 ARG APP_BASENAME
 RUN test -n "$APP_BASENAME"
 
-ENV APP_BASENAME $APP_BASENAME
-ENV APP_DIR ./examples/$APP_BASENAME
-ENV METEOR_PACKAGES_FOLDER /root/packages
-ENV NPM_PACKAGES_FOLDER /root/npm-packages
-ENV METEOR_PACKAGE_DIRS $METEOR_PACKAGES_FOLDER
+ENV APP_BASENAME=$APP_BASENAME
+ENV APP_DIR=./examples/$APP_BASENAME
+ENV METEOR_PACKAGES_FOLDER=/root/packages
+ENV NPM_PACKAGES_FOLDER=/root/npm-packages
+ENV METEOR_PACKAGE_DIRS=$METEOR_PACKAGES_FOLDER
 
 COPY ./packages $METEOR_PACKAGES_FOLDER
 COPY ./npm-packages $NPM_PACKAGES_FOLDER
