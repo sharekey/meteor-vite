@@ -26,18 +26,18 @@ WebAppInternals.registerBoilerplateDataCallback('meteor-vite', async (request: H
     }
 });
 
-Meteor.startup(() => {
-    if (worker instanceof ViteProductionBoilerplate) {
+if (worker instanceof ViteProductionBoilerplate) {
+    Meteor.startup(() => {
         Logger.debug(`Vite asset base URL: ${worker.baseUrl}`);
         worker.makeViteAssetsCacheable();
-        
-        // Prevent Meteor from sending a 200 OK HTML file when the request is clearly not valid.
-        // If an asset is found by Meteor, this hook will not be called.
-        WebApp.connectHandlers.use(worker.assetDir, (req, res, next) => {
-            res.writeHead(404, 'Not found');
-            res.write('Vite asset could not be found.')
-            Logger.warn(`Served 404 for Vite asset request: ${req.originalUrl}`);
-            res.end();
-        })
-    }
-})
+    })
+    
+    // Prevent Meteor from sending a 200 OK HTML file when the request is clearly not valid.
+    // If an asset is found by Meteor, this hook will not be called.
+    WebApp.connectHandlers.use(worker.assetDir, (req, res, next) => {
+        res.writeHead(404, 'Not found');
+        res.write('Vite asset could not be found.')
+        Logger.warn(`Served 404 for Vite asset request: ${req.originalUrl}`);
+        res.end();
+    })
+}
