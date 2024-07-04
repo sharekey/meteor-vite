@@ -25,18 +25,21 @@ if (Meteor.isServer) {
         process.stdout.write(message + '\n');
     }
     
-    LogsCollection.allow({
-        insert(userId, entry: LogEntry) {
-            const logFunction = console[entry.level];
-            
-            if (!isLogMethod(entry.level, logFunction)) {
-                console.warn('Unknown "%s" log level from client', entry.level, entry.args)
-                return false;
-            }
-            
-            printEntry(entry);
-            return true;
+    const insertHook = (userId: string | null, entry: LogEntry) => {
+        const logFunction = console[entry.level];
+        
+        if (!isLogMethod(entry.level, logFunction)) {
+            console.warn('Unknown "%s" log level from client', entry.level, entry.args)
+            return false;
         }
+        
+        printEntry(entry);
+        return true;
+    }
+    
+    LogsCollection.allow({
+        insert: insertHook,
+        insertAsync: insertHook,
     })
 }
 
