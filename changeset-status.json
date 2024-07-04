@@ -3,23 +3,23 @@
     {
       "releases": [
         {
-          "name": "vite-bundler",
+          "name": "meteor-vite",
           "type": "patch"
         }
       ],
-      "summary": "Correct misleading minimum version requirement warning for `meteor-vite`",
-      "id": "poor-crews-beg"
+      "summary": "Prevent Atmosphere packages' node dependencies from affecting the parent package's name and entry module",
+      "id": "nine-singers-hope"
     }
   ],
   "releases": [
     {
-      "name": "vite-bundler",
+      "name": "meteor-vite",
       "type": "patch",
-      "oldVersion": "2.0.0",
+      "oldVersion": "1.10.3",
       "changesets": [
-        "poor-crews-beg"
+        "nine-singers-hope"
       ],
-      "newVersion": "2.0.1"
+      "newVersion": "1.10.4"
     }
   ]
 }

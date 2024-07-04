@@ -1,5 +1,11 @@
 # meteor-vite
 
+## 1.10.4
+
+### Patch Changes
+
+- 0fbb978b: Prevent Atmosphere packages' node dependencies from affecting the parent package's name and entry module
+
 ## 1.10.3
 
 ### Patch Changes
