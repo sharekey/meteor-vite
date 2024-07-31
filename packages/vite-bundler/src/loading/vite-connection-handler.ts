@@ -27,7 +27,7 @@ export class ViteDevScripts {
             return `${viteClient}\n${viteEntrypoint}`;
         }
         
-        return await Assets.getTextAsync('loading/dev-server-splash.html') as string;
+        return await Assets.getTextAsync('loading/dev-server-splash.html');
     }
     
     public injectScriptsInDOM() {
