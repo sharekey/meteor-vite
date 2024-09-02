@@ -10,7 +10,7 @@ Package.registerBuildPlugin({
     name: 'vite',
     use: [
         'ecmascript@0.16.2 || 1.0.0',
-        'caching-compiler@1.2.2 || 2.0.0-beta300.0',
+        'caching-compiler@1.2.2 || 2.0.0',
         'babel-compiler@7.9.0',
         'typescript@3.0.0 || 4.0.0 || 5.0.0',
     ],
@@ -35,7 +35,7 @@ Npm.depends({
 });
 
 Package.onUse(function (api) {
-    api.versionsFrom(['3.0-beta.0', '3.0-rc.0', '3.0-rc.2']);
+    api.versionsFrom(['3.0']);
     api.use([
         'fetch',
         'webapp',
@@ -44,7 +44,7 @@ Package.onUse(function (api) {
         'isobuild:compiler-plugin@1.0.0',
     ]);
     api.use([
-        'zodern:types@1.0.9',
+        'zodern:types@1.0.13',
     ], {
         weak: true,
     });
