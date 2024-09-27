@@ -62,6 +62,11 @@ install() {
   $npm i "$@"
 }
 
+exec:meteor() {
+  cd "$APP_DIR" || exit 1
+  meteor "$@"
+}
+
 # Initial setup for example apps - installs and links our local packages.
 prepare() {
   $npm run install:package
@@ -152,6 +157,11 @@ production:app() {
 
   $node main.js
 }
+
+# Alias for exec:meteor
+if [ "$action" == "meteor" ]; then
+  action="exec:meteor"
+fi
 
 set -x
 "$action" "${@:3}" || exit 1
