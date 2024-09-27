@@ -52,8 +52,9 @@
 
 <script lang="ts" setup>
 import { reactive, ref } from 'vue';
-import type { ChatDocument } from '../api/chat/collection';
+import { ChatCollection, type ChatDocument } from '../api/chat/collection';
 import { sendMessage } from '../api/chat/methods';
+import { subscribeToChat } from '../api/chat/publications';
 import LinksCollection, { LinkDocument } from '../api/links/links.collection';
 import { Tracker } from 'meteor/tracker';
 import { Meteor } from 'meteor/meteor';
@@ -82,8 +83,14 @@ const chat = reactive({
 });
 
 Tracker.autorun(() => {
-    const subscription = Meteor.subscribe('links');
-    links.ready = subscription.ready();
+    const linksSubscription = Meteor.subscribe('links');
+    links.ready = linksSubscription.ready();
     links.data = LinksCollection.find({}).fetch();
 });
+
+Tracker.autorun(() => {
+    const subscription = subscribeToChat();
+    chat.ready = subscription.ready();
+    chat.data = ChatCollection.find({}).fetch();
+})
 </script>
