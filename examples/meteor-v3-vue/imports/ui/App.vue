@@ -36,10 +36,12 @@
       <p>
         Uses <code>zodern:relay</code> to load and send messages.
       </p>
-      <div class="my-7 p-6 rounded-lg bg-gray-100 min-h-64 max-h-96 overflow-y-auto">
-        <div v-for="message in chat.data">
-          <div>{{ message.content || '(no content)' }}</div>
-          <div class="text-sm text-gray-500">{{ formatRelativeTime(message.createdAt) }}</div>
+      <div class="my-7 p-6 rounded-lg bg-gray-100 min-h-64 max-h-96 overflow-y-auto grid gap-3">
+        <div v-for="message in chat.data" class="bg-emerald-500 rounded-md p-4">
+          <div class="text-white font-medium">{{ message.content || '(no content)' }}</div>
+          <div class="flex justify-end">
+            <div class="text-sm text-white/80">{{ formatRelativeTime(message.createdAt) }}</div>
+          </div>
         </div>
       </div>
       <form class="flex gap-2" @submit.prevent="chat.send()">
