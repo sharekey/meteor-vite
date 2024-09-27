@@ -15,13 +15,13 @@ export default defineConfig({
                  * Path to directories where your zodern:relay methods live
                  * @default ['./imports/methods']
                  */
-                methods: ['./imports/api'],
+                methods: ['./imports/api/relay/methods'],
                 
                 /**
                  * Path to the directories where your zodern:relay publications live.
                  * @default ['./imports/publications']
                  */
-                publications: ['./imports/api'],
+                publications: ['./imports/api/relay/publications'],
             }
         }),
     ],
