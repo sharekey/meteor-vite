@@ -1,6 +1,6 @@
 import { Mongo } from 'meteor/mongo';
 
-export const ChatCollection = new Mongo.Collection<ChatDocument>('chat');
+export const ChatCollection = new Mongo.Collection<ChatDocument, ChatDocument>('chat');
 
 export interface ChatDocument {
     _id: string;
