@@ -4,7 +4,9 @@
     <p>
       The following content is rendered entirely by Vite's <b>Vue</b> plugin.
     </p>
-    <div class="pb-8">
+  </div>
+  <div class="divide-y-2 flex flex-col gap-12">
+    <section>
       <h3>Vue links</h3>
       <p>
         Uses <code>meteor-type-validation</code> for schema validation and method/publication type inference.
@@ -27,8 +29,9 @@
           Submit
         </button>
       </form>
-    </div>
-    <div>
+    </section>
+
+    <section>
       <h3>Vue Chat</h3>
       <p>
         Uses <code>zodern:relay</code> to load and send messages.
@@ -40,7 +43,7 @@
         <input class="w-full" type="text" placeholder="Type your message here">
         <button>Send</button>
       </form>
-    </div>
+    </section>
   </div>
 </template>
 
