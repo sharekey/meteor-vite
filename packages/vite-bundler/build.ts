@@ -143,6 +143,10 @@ function transpileViteBundle({ payload }: Pick<ViteBundleOutput, 'payload'>) {
       babelOptions.babelrc = true
       babelOptions.sourceMaps = true
       babelOptions.filename = babelOptions.sourceFileName = from
+      babelOptions.caller = babelOptions.caller || {
+        name: 'meteor-vite',
+        arch: 'web.browser.vite',
+      }
       const transpiled = Babel.compile(source, babelOptions, {
         cacheDirectory: path.join(cwd, 'node_modules', '.babel-cache'),
       })
