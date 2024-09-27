@@ -24,6 +24,7 @@
     "testModule": "tests/main.js"
   },
   "devDependencies": {
+    "@types/meteor": "^2.9.8",
     "@vitejs/plugin-vue": "^4.6.2",
     "typescript": "^5.3.3",
     "vite": "^4.5.2",
