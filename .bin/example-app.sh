@@ -128,12 +128,11 @@ cleanOutput() {
 }
 
 linkNpmPackage() {
-  set -e
   local packageDir="$PWD/npm-packages/$1"
   local packageName="${2:-$1}"
 
-  cd "$packageDir" && $npm link
-  cd "$APP_DIR" && $npm link "$packageName"
+  (cd "$packageDir" && $npm link) || exit 1
+  (cd "$APP_DIR" && $npm link "$packageName") || exit 1
 }
 
 link() {
