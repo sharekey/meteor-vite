@@ -133,6 +133,8 @@ linkNpmPackage() {
 
   (cd "$packageDir" && $npm link) || exit 1
   (cd "$APP_DIR" && $npm link "$packageName") || exit 1
+
+  log:success "Linked $packageName"
 }
 
 link() {
@@ -155,6 +157,22 @@ production:app() {
   export MONGO_URL="$PROD_MONGO_CONNECTION_URI"
 
   $node main.js
+}
+
+log() {
+  set +x
+  local title="$1"
+  local content="${@:2}"
+  echo "
+
+  [--  $title  --]
+  L $content
+  "
+  set -x
+}
+
+log:success() {
+  log Success "$@"
 }
 
 # Alias for exec:meteor
