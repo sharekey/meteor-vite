@@ -67,6 +67,11 @@ exec:meteor() {
   meteor "$@"
 }
 
+exec:npm() {
+  cd "$APP_DIR" || exit 1
+  $npm "$@"
+}
+
 # Initial setup for example apps - installs and links our local packages.
 prepare() {
   $npm run install:package
@@ -175,10 +180,12 @@ log:success() {
   log Success "$@"
 }
 
-# Alias for exec:meteor
-if [ "$action" == "meteor" ]; then
-  action="exec:meteor"
-fi
+# Alias commands to their respective functions
+for command in "meteor" "npm"; do
+    if [ "$action" == "$command" ]; then
+        action="exec"
+    fi
+done
 
 set -x
 "$action" "${@:3}" || exit 1
