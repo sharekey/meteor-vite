@@ -9,7 +9,7 @@
     <section>
       <h3>Vue links</h3>
       <p>
-        Uses <code>meteor-type-validation</code> for schema validation and method/publication type inference.
+        Uses your standard Meteor methods and publications to render content.
       </p>
       <ul>
         <li v-for="{ title, url } in links.data">
