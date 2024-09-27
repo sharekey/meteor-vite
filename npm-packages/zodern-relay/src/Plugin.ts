@@ -44,6 +44,7 @@ export default async function zodernRelay(options?: Options): Promise<Plugin> {
                 configFile: false,
                 babelrc: false,
                 filename,
+                presets: ['@babel/preset-typescript'], // Add TypeScript preset
                 plugins: ['@zodern/babel-plugin-meteor-relay'],
                 caller: {
                     name: '@meteor-vite/plugin-zodern-relay',
