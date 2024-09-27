@@ -371,6 +371,7 @@ The Vite integration comes with two dependencies that work together to enable co
 - [`jorgenvatle:vite-bundler`](/packages/vite-bundler/) - Meteor build plugin for launching Vite workers and compiling production bundles from Vite and Meteor.
     - [View changelog](/packages/vite-bundler/CHANGELOG.md)
     - [View on Atmosphere](https://atmospherejs.com/jorgenvatle/vite-bundler)
+    - [View on Packosphere](https://packosphere.com/jorgenvatle/vite-bundler)
 
 
 ## Roadmap
