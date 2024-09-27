@@ -72,6 +72,11 @@ exec:npm() {
   $npm "$@"
 }
 
+exec:npx() {
+  cd "$APP_DIR" || exit 1
+  npx "$@"
+}
+
 # Initial setup for example apps - installs and links our local packages.
 prepare() {
   $npm run install:package
@@ -181,9 +186,9 @@ log:success() {
 }
 
 # Alias commands to their respective functions
-for command in "meteor" "npm"; do
+for command in "meteor" "npm" "npx"; do
     if [ "$action" == "$command" ]; then
-        action="exec"
+        action="exec:$command"
     fi
 done
 
