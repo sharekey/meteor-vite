@@ -1,3 +1,21 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+    body {
+        @apply container
+    }
+
+    input {
+        @apply border p-2 rounded;
+    }
+
+    button {
+        @apply bg-emerald-400 inline-flex items-center justify-center text-white p-2 rounded outline-none border-none text-sm font-bold px-5 text-center;
+    }
+
+    label {
+        @apply font-medium;
+    }
+}
