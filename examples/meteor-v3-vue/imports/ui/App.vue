@@ -42,9 +42,9 @@
           <div class="text-sm text-gray-500">{{ message.createdAt }}</div>
         </div>
       </div>
-      <form class="flex gap-2">
-        <input class="w-full" type="text" placeholder="Type your message here">
-        <button>Send</button>
+      <form class="flex gap-2" @submit.prevent="chat.send()">
+        <input class="w-full" type="text" v-model="chat.form.content" placeholder="Type your message here">
+        <button type="submit">Send</button>
       </form>
     </section>
   </div>
