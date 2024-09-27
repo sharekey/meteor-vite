@@ -1,7 +1,7 @@
 import { differenceInMinutes, differenceInSeconds, formatDistance, formatDuration } from 'date-fns';
 import { GlobalState } from '../GlobalState';
 
-export function formatRelativeTime(date: Date, { suffix = true }): string {
+export function formatRelativeTime(date: Date, { suffix = true } = {}): string {
     const minutes = differenceInMinutes(date, GlobalState.currentTime);
     
     if (minutes < 1) {
