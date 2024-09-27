@@ -79,6 +79,7 @@ const chat = reactive({
     },
     async send() {
         await sendMessage(chat.form);
+        chat.form.content = '';
     },
 });
 
