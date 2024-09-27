@@ -30,13 +30,13 @@
       <p>
         Uses <code>zodern:relay</code> to load and send messages.
       </p>
-      <div>
+      <div class="my-7 p-6 rounded-lg bg-gray-100 min-h-64">
 
       </div>
-      <div class="flex gap-2">
+      <form class="flex gap-2">
         <input class="w-full" type="text" placeholder="Type your message here">
         <button>Send</button>
-      </div>
+      </form>
     </div>
   </div>
 </template>
