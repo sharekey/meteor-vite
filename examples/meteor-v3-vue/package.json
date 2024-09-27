@@ -12,6 +12,7 @@
     "@babel/runtime": "^7.23.5",
     "@meteor-vite/plugin-zodern-relay": "^1.0.2",
     "@zodern/babel-plugin-meteor-relay": "^1.1.4",
+    "date-fns": "^4.1.0",
     "meteor-node-stubs": "^1.2.7",
     "meteor-vite": "^1.10.3",
     "valibot": "^0.26.0",
