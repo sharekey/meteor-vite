@@ -61,6 +61,7 @@ import { Meteor } from 'meteor/meteor';
 import { sendMessage } from '../api/relay/methods/chat';
 import { subscribeToChat } from '../api/relay/publications/chat';
 import { formatRelativeTime } from './composition/Helpers';
+import { CurrentUser } from './GlobalState';
 
 const links = reactive({
     data: [] as LinkDocument[],
@@ -79,6 +80,7 @@ const chat = reactive({
     ready: false,
     form: {
         content: '',
+        user: CurrentUser,
     },
     async send() {
         await sendMessage(chat.form);
