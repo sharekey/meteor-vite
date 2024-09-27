@@ -89,7 +89,9 @@ Tracker.autorun(() => {
 });
 
 Tracker.autorun(() => {
-    const subscription = subscribeToChat();
+    const subscription = subscribeToChat({
+        query: {},
+    });
     chat.ready = subscription.ready();
     chat.data = ChatCollection.find({}).fetch();
 })
