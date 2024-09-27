@@ -1,20 +1,9 @@
-import { differenceInMinutes, differenceInSeconds, formatDistance, formatDuration } from 'date-fns';
+import { formatDistance } from 'date-fns';
+import type { FormatDistanceOptions } from 'date-fns/formatDistance';
 import { GlobalState } from '../GlobalState';
 
-export function formatRelativeTime(date: Date, { suffix = true } = {}): string {
-    const minutes = differenceInMinutes(date, GlobalState.currentTime);
-    
-    if (minutes < 1) {
-        return 'just now';
-    }
-    
-    const distance = formatDuration({
-        minutes,
-    });
-    
-    if (!suffix) {
-        return distance;
-    }
-    
-    return `${distance} ago`;
+export function formatRelativeTime(date: Date, options: FormatDistanceOptions = {}): string {
+    return formatDistance(date, GlobalState.currentTime, Object.assign({
+        addSuffix: true,
+    }, options));
 }
