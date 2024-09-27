@@ -8,19 +8,29 @@
           <a :href="url">{{ title }}</a>
         </li>
       </ul>
-      <form @submit.prevent="linkForm.create()">
-        <label>
-          Link Title
+      <form @submit.prevent="linkForm.create()" class="flex gap-6">
+        <label class="w-1/3">
+          <span class="block">Title</span>
           <input v-model="linkForm.data.title" placeholder="Something important">
         </label>
-        <label>
-          URL
+        <label class="w-1/3">
+          <span class="block">URL</span>
           <input v-model="linkForm.data.url" placeholder="https://example.com/...">
         </label>
-        <button type="submit">
+        <button type="submit" class="place-self-end">
           Submit
         </button>
       </form>
+    </div>
+    <div>
+      <h3>Vue Chat</h3>
+      <div>
+
+      </div>
+      <div>
+        <input type="text" placeholder="Type your message here">
+        <button>Send</button>
+      </div>
     </div>
   </div>
 </template>
