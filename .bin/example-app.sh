@@ -122,10 +122,19 @@ cleanOutput() {
   rm -rf "$BUILD_TARGET"
 }
 
+linkNpmPackage() {
+  set -e
+  local packageDir="$PWD/npm-packages/$1"
+  local packageName="${2:-$1}"
+
+  cd "$packageDir" && $npm link
+  cd "$APP_DIR" && $npm link "$packageName"
+}
+
 link() {
-  cd "$APP_DIR" || exit 1
-  $npm link "$PWD/npm-packages/meteor-vite"
-  $npm link "$PWD/npm-packages/zodern-relay"
+  set -e
+  linkNpmPackage meteor-vite
+  linkNpmPackage zodern-relay '@meteor-vite/plugin-zodern-relay'
 }
 
 production:install() {
