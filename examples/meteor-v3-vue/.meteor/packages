@@ -10,11 +10,11 @@ standard-minifier-css@1.9.3   # CSS minifier run for production mode
 standard-minifier-js@3.0.0    # JS minifier run for production mode
 es5-shim@4.8.1                # ECMAScript 5 compatibility for older browsers
 ecmascript@0.16.9              # Enable ECMAScript2015+ syntax in app code
-typescript@5.4.3              # Enable TypeScript syntax in .ts and .tsx modules
 shell-server@0.6.0            # Server-side component of the `meteor shell` command
 webapp@2.0.0                  # Serves a Meteor app over HTTP
 server-render@0.4.2           # Support for server-side rendering
 hot-module-replacement@0.5.4  # Rebuilds the client if there is a change on the client without restarting the server
 mongo@2.0.0
 
-jorgenvatle:vite-bundler@2.0.1
+jorgenvatle:vite-bundler
+zodern:relay
