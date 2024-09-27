@@ -17,8 +17,8 @@ export class ViteDevScripts {
             viteClientUrl: `${baseUrl}/@vite/client`,
         }
     }
-    
-    public stringTemplate(): string | Promise<string> {
+
+    public async stringTemplate(): Promise<string> {
         const { viteClientUrl, entrypointUrl } = this.urls;
         const viteClient = `<script src="${viteClientUrl}" type="module" id="${VITE_CLIENT_SCRIPT_ID}"></script>`;
         const viteEntrypoint = `<script src="${entrypointUrl}" type="module" id="${VITE_ENTRYPOINT_SCRIPT_ID}"></script>`;
@@ -27,7 +27,11 @@ export class ViteDevScripts {
             return `${viteClient}\n${viteEntrypoint}`;
         }
         
-        return Assets.getText('loading/dev-server-splash.html') as string;
+        if ('getTextAsync' in Assets) {
+            return Assets.getTextAsync('loading/dev-server-splash.html');
+        }
+        
+        return Assets.getText('loading/dev-server-splash.html')!;
     }
     
     public injectScriptsInDOM() {

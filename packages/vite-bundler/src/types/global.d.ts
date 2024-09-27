@@ -41,6 +41,10 @@ declare global {
         }
         isFibersDisabled: boolean;
     }
+    
+    module Assets {
+        function getTextAsync(path: string): Promise<string>;
+    }
 }
 
 export {}
