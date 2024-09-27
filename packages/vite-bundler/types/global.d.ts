@@ -30,6 +30,10 @@ declare global {
         }
         function getDefaultOptions(): CompileOptions;
     }
+    
+    module Assets {
+        function getTextAsync(path: string): Promise<string>;
+    }
 }
 
 export {}
