@@ -38,7 +38,7 @@
       </p>
       <div class="my-7 p-6 rounded-lg bg-gray-100 min-h-64">
         <div v-for="message in chat.data">
-          <div>{{ message.content }}</div>
+          <div>{{ message.content || '(no content)' }}</div>
           <div class="text-sm text-gray-500">{{ message.createdAt }}</div>
         </div>
       </div>
