@@ -1,6 +1,9 @@
 <template>
   <div>
-    <h2>Hello from Vue!</h2>
+    <h2>Vue App</h2>
+    <p>
+      The following content is rendered entirely by Vite's <b>Vue</b> plugin.
+    </p>
     <div class="pb-8">
       <h3>Vue links</h3>
       <p>
