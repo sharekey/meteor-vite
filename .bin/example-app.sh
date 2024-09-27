@@ -21,7 +21,6 @@ node="meteor node"
 EXAMPLE_DIR="$PWD/examples"
 APP_DIR="$EXAMPLE_DIR/$app"
 BUILD_TARGET="$PWD/examples/output/$app"
-NPM_LINK_TARGET="$PWD/npm-packages/meteor-vite"
 METEOR_LOCAL_DIR_ORIGINAL="$APP_DIR/.meteor/local"
 METEOR_LOCAL_DIR_ROOT="/tmp/.meteor-local/meteor-vite/examples"
 METEOR_LOCAL_DIR="$METEOR_LOCAL_DIR_ROOT/$app"
@@ -61,6 +60,21 @@ run() {
 install() {
   cd "$APP_DIR" || exit 1
   $npm i "$@"
+}
+
+exec:meteor() {
+  cd "$APP_DIR" || exit 1
+  meteor "$@"
+}
+
+exec:npm() {
+  cd "$APP_DIR" || exit 1
+  $npm "$@"
+}
+
+exec:npx() {
+  cd "$APP_DIR" || exit 1
+  npx "$@"
 }
 
 # Initial setup for example apps - installs and links our local packages.
@@ -129,9 +143,20 @@ cleanOutput() {
   rm -rf "$BUILD_TARGET"
 }
 
+linkNpmPackage() {
+  local packageDir="$PWD/npm-packages/$1"
+  local packageName="${2:-$1}"
+
+  (cd "$packageDir" && $npm link) || exit 1
+  (cd "$APP_DIR" && $npm link "$packageName") || exit 1
+
+  log:success "Linked $packageName"
+}
+
 link() {
-  cd "$APP_DIR" || exit 1
-  $npm link "$NPM_LINK_TARGET"
+  set -e
+  linkNpmPackage meteor-vite
+  linkNpmPackage zodern-relay '@meteor-vite/plugin-zodern-relay'
 }
 
 production:install() {
@@ -149,6 +174,29 @@ production:app() {
 
   $node main.js
 }
+
+log() {
+  set +x
+  local title="$1"
+  local content="${@:2}"
+  echo "
+
+  [--  $title  --]
+  L $content
+  "
+  set -x
+}
+
+log:success() {
+  log Success "$@"
+}
+
+# Alias commands to their respective functions
+for command in "meteor" "npm" "npx"; do
+    if [ "$action" == "$command" ]; then
+        action="exec:$command"
+    fi
+done
 
 set -x
 "$action" "${@:3}" || exit 1

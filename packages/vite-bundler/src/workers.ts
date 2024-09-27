@@ -172,7 +172,7 @@ function prepareWorkerEnv() {
 function validateNpmVersion() {
     const packageJson = getProjectPackageJson();
     const version = packageJson.dependencies['meteor-vite'] || packageJson.devDependencies['meteor-vite'];
-    const SEMVER_PARSE_REGEX = /(?<major>\d)+\.(?<minor>\d)+\.(?<patch>\d)+/;
+    const SEMVER_PARSE_REGEX = /(?<major>\d+)\.(?<minor>\d+)\.(?<patch>\d+)/;
     
     if (!version) {
         console.error([
