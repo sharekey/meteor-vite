@@ -1,16 +1,14 @@
 import { faker } from '@faker-js/faker';
 import { createMethod } from 'meteor/zodern:relay';
 import { z } from 'zod';
-import { ChatCollection } from '../../chat/collection';
+import { ChatCollection, ChatSchema } from '../../chat/collection';
 
 export const sendMessage = createMethod({
     name: 'sendMessage',
-    schema: z.object({
-        content: z.string(),
-    }),
-    run({ content }) {
+    schema: ChatSchema.pick({ content: true, user: true }),
+    run(message) {
         return ChatCollection.insertAsync({
-            content,
+            ...message,
             createdAt: new Date(),
         });
     }
