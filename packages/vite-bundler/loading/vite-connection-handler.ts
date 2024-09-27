@@ -127,7 +127,7 @@ export async function setConfig<TConfig extends Partial<RuntimeConfig>>(config: 
 }
 
 if (Meteor.isDevelopment) {
-    MeteorViteConfig = new Mongo.Collection(ViteConnection.publication);
+    MeteorViteConfig = new Mongo.Collection(ViteConnection.publication, { connection: null });
 }
 const logLabel = Meteor.isClient ? `[Meteor-Vite] ⚡ ` : '⚡  ';
 
