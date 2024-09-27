@@ -37,7 +37,7 @@
         Uses <code>zodern:relay</code> to load and send messages.
       </p>
       <div class="my-7 p-6 rounded-lg bg-gray-100 min-h-64">
-
+        <div v-for="message in chat.data"></div>
       </div>
       <form class="flex gap-2">
         <input class="w-full" type="text" placeholder="Type your message here">
@@ -49,6 +49,7 @@
 
 <script lang="ts" setup>
 import { reactive, ref } from 'vue';
+import type { ChatDocument } from '../api/chat/collection';
 import LinksCollection, { LinkDocument } from '../api/links/links.collection';
 import { Tracker } from 'meteor/tracker';
 import { Meteor } from 'meteor/meteor';
@@ -62,6 +63,17 @@ const links = reactive({
     },
     async create() {
         await Meteor.callAsync('links.create', links.form);
+    },
+});
+
+const chat = reactive({
+    data: [] as ChatDocument[],
+    ready: false,
+    form: {
+        message: '',
+    },
+    async send() {
+        await Meteor.callAsync('chat.send', chat.form);
     },
 });
 
