@@ -21,7 +21,6 @@ node="meteor node"
 EXAMPLE_DIR="$PWD/examples"
 APP_DIR="$EXAMPLE_DIR/$app"
 BUILD_TARGET="$PWD/examples/output/$app"
-NPM_LINK_TARGET="$PWD/npm-packages/meteor-vite"
 METEOR_LOCAL_DIR_ORIGINAL="$APP_DIR/.meteor/local"
 METEOR_LOCAL_DIR_ROOT="/tmp/.meteor-local/meteor-vite/examples"
 METEOR_LOCAL_DIR="$METEOR_LOCAL_DIR_ROOT/$app"
@@ -125,7 +124,8 @@ cleanOutput() {
 
 link() {
   cd "$APP_DIR" || exit 1
-  $npm link "$NPM_LINK_TARGET"
+  $npm link "$PWD/npm-packages/meteor-vite"
+  $npm link "$PWD/npm-packages/zodern-relay"
 }
 
 production:install() {
