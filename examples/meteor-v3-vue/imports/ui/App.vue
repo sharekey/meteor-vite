@@ -3,6 +3,9 @@
     <h2>Hello from Vue!</h2>
     <div class="pb-8">
       <h3>Vue links</h3>
+      <p>
+        Uses <code>meteor-type-validation</code> for schema validation and method/publication type inference.
+      </p>
       <ul>
         <li v-for="{ title, url } in links">
           <a :href="url">{{ title }}</a>
@@ -24,6 +27,9 @@
     </div>
     <div>
       <h3>Vue Chat</h3>
+      <p>
+        Uses <code>zodern:relay</code> to load and send messages.
+      </p>
       <div>
 
       </div>
