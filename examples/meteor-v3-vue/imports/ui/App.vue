@@ -53,6 +53,7 @@
 <script lang="ts" setup>
 import { reactive, ref } from 'vue';
 import type { ChatDocument } from '../api/chat/collection';
+import { sendMessage } from '../api/chat/methods';
 import LinksCollection, { LinkDocument } from '../api/links/links.collection';
 import { Tracker } from 'meteor/tracker';
 import { Meteor } from 'meteor/meteor';
@@ -73,10 +74,10 @@ const chat = reactive({
     data: [] as ChatDocument[],
     ready: false,
     form: {
-        message: '',
+        content: '',
     },
     async send() {
-        await Meteor.callAsync('chat.send', chat.form);
+        await sendMessage(chat.form);
     },
 });
 
