@@ -1,5 +1,11 @@
 # vite-bundler
 
+## 2.0.2
+
+### Patch Changes
+
+- fbcc86b9: Fix issue in Meteor v3 where Assets.getText() is no longer available.
+
 ## 2.0.1
 
 ### Patch Changes

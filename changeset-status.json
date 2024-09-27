@@ -3,23 +3,23 @@
     {
       "releases": [
         {
-          "name": "meteor-vite",
+          "name": "vite-bundler",
           "type": "patch"
         }
       ],
-      "summary": "Prevent Atmosphere packages' node dependencies from affecting the parent package's name and entry module",
-      "id": "nine-singers-hope"
+      "summary": "Fix issue in Meteor v3 where Assets.getText() is no longer available.",
+      "id": "slow-buses-invent"
     }
   ],
   "releases": [
     {
-      "name": "meteor-vite",
+      "name": "vite-bundler",
       "type": "patch",
-      "oldVersion": "1.10.3",
+      "oldVersion": "2.0.1",
       "changesets": [
-        "nine-singers-hope"
+        "slow-buses-invent"
       ],
-      "newVersion": "1.10.4"
+      "newVersion": "2.0.2"
     }
   ]
 }
