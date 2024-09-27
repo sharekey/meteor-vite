@@ -3,23 +3,42 @@
     {
       "releases": [
         {
+          "name": "@meteor-vite/plugin-zodern-relay",
+          "type": "patch"
+        }
+      ],
+      "summary": "Include Babel Typescript preset in transformer plugin.",
+      "id": "early-fans-play"
+    },
+    {
+      "releases": [
+        {
           "name": "vite-bundler",
           "type": "patch"
         }
       ],
-      "summary": "Fix issue in Meteor v3 where Assets.getText() is no longer available.",
-      "id": "slow-buses-invent"
+      "summary": "- Use in-memory collection for MeteorVite connection info\n\n- Supply default caller arguments when transpiling Vite bundle with Babel for production.\n\n\n#### Fixes\n- https://github.com/JorgenVatle/meteor-vite/issues/187\n- https://github.com/JorgenVatle/meteor-vite/issues/186\n- https://github.com/JorgenVatle/meteor-vite/issues/182",
+      "id": "heavy-comics-raise"
     }
   ],
   "releases": [
     {
+      "name": "@meteor-vite/plugin-zodern-relay",
+      "type": "patch",
+      "oldVersion": "1.0.2",
+      "changesets": [
+        "early-fans-play"
+      ],
+      "newVersion": "1.0.3"
+    },
+    {
       "name": "vite-bundler",
       "type": "patch",
-      "oldVersion": "2.0.1",
+      "oldVersion": "2.0.2",
       "changesets": [
-        "slow-buses-invent"
+        "heavy-comics-raise"
       ],
-      "newVersion": "2.0.2"
+      "newVersion": "2.0.3"
     }
   ]
 }
