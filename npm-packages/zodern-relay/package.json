@@ -22,7 +22,8 @@
     "lint": "tsc --noEmit",
     "test": "npm run lint",
     "build": "tsup",
-    "prepack": "npm run build"
+    "prepack": "npm run build",
+    "prepare": "npm run build || echo 'Warning: Failed to prepare package!' && exit 0"
   },
   "keywords": [
     "meteor-vite",
