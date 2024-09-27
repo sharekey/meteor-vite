@@ -1,21 +1,21 @@
 <template>
   <div>
     <h2>Hello from Vue!</h2>
-    <div>
+    <div class="pb-8">
       <h3>Vue links</h3>
       <ul>
         <li v-for="{ title, url } in links">
           <a :href="url">{{ title }}</a>
         </li>
       </ul>
-      <form @submit.prevent="linkForm.create()" class="flex gap-6">
-        <label class="w-1/3">
+      <form @submit.prevent="linkForm.create()" class="flex gap-2">
+        <label class="flex-grow">
           <span class="block">Title</span>
-          <input v-model="linkForm.data.title" placeholder="Something important">
+          <input class="w-full" v-model="linkForm.data.title" placeholder="Something important">
         </label>
-        <label class="w-1/3">
+        <label class="flex-grow">
           <span class="block">URL</span>
-          <input v-model="linkForm.data.url" placeholder="https://example.com/...">
+          <input class="w-full" v-model="linkForm.data.url" placeholder="https://example.com/...">
         </label>
         <button type="submit" class="place-self-end">
           Submit
@@ -27,8 +27,8 @@
       <div>
 
       </div>
-      <div>
-        <input type="text" placeholder="Type your message here">
+      <div class="flex gap-2">
+        <input class="w-full" type="text" placeholder="Type your message here">
         <button>Send</button>
       </div>
     </div>
