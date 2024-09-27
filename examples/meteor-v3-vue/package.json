@@ -25,6 +25,7 @@
     "testModule": "tests/main.js"
   },
   "devDependencies": {
+    "@tailwindcss/typography": "^0.5.15",
     "@types/meteor": "^2.9.8",
     "@vitejs/plugin-vue": "^4.6.2",
     "autoprefixer": "^10.4.20",
