@@ -12,18 +12,18 @@
         Uses <code>meteor-type-validation</code> for schema validation and method/publication type inference.
       </p>
       <ul>
-        <li v-for="{ title, url } in links">
+        <li v-for="{ title, url } in links.data">
           <a :href="url">{{ title }}</a>
         </li>
       </ul>
-      <form @submit.prevent="linkForm.create()" class="flex gap-2">
+      <form @submit.prevent="links.create()" class="flex gap-2">
         <label class="flex-grow">
           <span class="block">Title</span>
-          <input class="w-full" v-model="linkForm.data.title" placeholder="Something important">
+          <input class="w-full" v-model="links.form.title" placeholder="Something important">
         </label>
         <label class="flex-grow">
           <span class="block">URL</span>
-          <input class="w-full" v-model="linkForm.data.url" placeholder="https://example.com/...">
+          <input class="w-full" v-model="links.form.url" placeholder="https://example.com/...">
         </label>
         <button type="submit" class="place-self-end">
           Submit
@@ -53,20 +53,21 @@ import LinksCollection, { LinkDocument } from '../api/links/links.collection';
 import { Tracker } from 'meteor/tracker';
 import { Meteor } from 'meteor/meteor';
 
-const links = ref<LinkDocument[]>([]);
-const ready = ref(false);
-const linkForm = reactive({
-    data: {
-      title: '',
-      url: '',
+const links = reactive({
+    data: [] as LinkDocument[],
+    ready: false,
+    form: {
+        title: '',
+        url: '',
     },
     async create() {
-        await Meteor.callAsync('links.create', linkForm.data);
-    }
-})
+        await Meteor.callAsync('links.create', links.form);
+    },
+});
+
 Tracker.autorun(() => {
     const subscription = Meteor.subscribe('links');
-    ready.value = subscription.ready();
-    links.value = LinksCollection.find({}).fetch();
+    links.ready = subscription.ready();
+    links.data = LinksCollection.find({}).fetch();
 });
 </script>
