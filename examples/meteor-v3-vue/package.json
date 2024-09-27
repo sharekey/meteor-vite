@@ -10,6 +10,7 @@
   "dependencies": {
     "@babel/preset-typescript": "^7.24.7",
     "@babel/runtime": "^7.23.5",
+    "@faker-js/faker": "^9.0.3",
     "@meteor-vite/plugin-zodern-relay": "^1.0.2",
     "@zodern/babel-plugin-meteor-relay": "^1.1.4",
     "date-fns": "^4.1.0",
