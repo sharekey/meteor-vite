@@ -1,6 +1,6 @@
 import { createPublication } from 'meteor/zodern:relay';
 import * as z from 'zod';
-import { ChatCollection } from './collection';
+import { ChatCollection } from '../../chat/collection';
 
 export const subscribeToChat = createPublication({
     name: 'chat',

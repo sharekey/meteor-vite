@@ -1,6 +1,6 @@
 import { createMethod } from 'meteor/zodern:relay';
 import { z } from 'zod';
-import { ChatCollection } from './collection';
+import { ChatCollection } from '../../chat/collection';
 
 export const sendMessage = createMethod({
     name: 'sendMessage',
