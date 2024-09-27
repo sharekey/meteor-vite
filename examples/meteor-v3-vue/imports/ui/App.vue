@@ -53,11 +53,11 @@
 <script lang="ts" setup>
 import { reactive, ref } from 'vue';
 import { ChatCollection, type ChatDocument } from '../api/chat/collection';
-import { sendMessage } from '../api/chat/methods';
-import { subscribeToChat } from '../api/chat/publications';
 import LinksCollection, { LinkDocument } from '../api/links/links.collection';
 import { Tracker } from 'meteor/tracker';
 import { Meteor } from 'meteor/meteor';
+import { sendMessage } from '../api/relay/methods/chat';
+import { subscribeToChat } from '../api/relay/publications/chat';
 
 const links = reactive({
     data: [] as LinkDocument[],
