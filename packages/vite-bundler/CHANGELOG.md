@@ -1,5 +1,25 @@
 # vite-bundler
 
+## 2.0.3
+
+### Patch Changes
+
+- a8946a15: - Use in-memory collection for MeteorVite connection info
+
+  - Supply default caller arguments when transpiling Vite bundle with Babel for production.
+
+  #### Fixes
+
+  - https://github.com/JorgenVatle/meteor-vite/issues/187
+  - https://github.com/JorgenVatle/meteor-vite/issues/186
+  - https://github.com/JorgenVatle/meteor-vite/issues/182
+
+## 2.0.2
+
+### Patch Changes
+
+- fbcc86b9: Fix issue in Meteor v3 where Assets.getText() is no longer available.
+
 ## 3.0.0-next.9
 
 ### Patch Changes

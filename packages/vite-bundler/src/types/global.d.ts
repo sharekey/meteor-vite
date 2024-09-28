@@ -24,6 +24,7 @@ declare global {
             sourceMaps: boolean;
             filename: string;
             sourceFileName: string;
+            caller?: Record<string, unknown>;
         };
         function compile(source: string, compileOptions: CompileOptions, babelOptions: object): {
             code: string;

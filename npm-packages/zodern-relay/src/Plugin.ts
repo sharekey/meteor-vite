@@ -36,14 +36,23 @@ export default async function zodernRelay(options?: Options): Promise<Plugin> {
         name: 'zodern-relay',
         async load(filename) {
             const relay = resolveRelay(filename || '');
+            
             if (!relay) {
                 return;
             }
+            
             const code = FS.readFileSync(filename, 'utf-8');
+            
+            // Prevent transforming files that don't use zodern:relay
+            if (!code.includes('meteor/zodern:relay')) {
+                return;
+            }
+            
             const transform = await transformAsync(code, {
                 configFile: false,
                 babelrc: false,
                 filename,
+                presets: ['@babel/preset-typescript'], // Add TypeScript preset
                 plugins: ['@zodern/babel-plugin-meteor-relay'],
                 caller: {
                     name: '@meteor-vite/plugin-zodern-relay',

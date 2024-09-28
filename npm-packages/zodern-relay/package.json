@@ -1,6 +1,6 @@
 {
   "name": "@meteor-vite/plugin-zodern-relay",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Vite compatability plugin for zodern:relay - typed Meteor methods and publications",
   "main": "dist/Plugin.js",
   "exports": {
@@ -22,7 +22,8 @@
     "lint": "tsc --noEmit",
     "test": "npm run lint",
     "build": "tsup",
-    "prepack": "npm run build"
+    "prepack": "npm run build",
+    "prepare": "npm run build || echo 'Warning: Failed to prepare package!' && exit 0"
   },
   "keywords": [
     "meteor-vite",
@@ -40,6 +41,7 @@
     "url": "https://github.com/JorgenVatle/meteor-vite"
   },
   "devDependencies": {
+    "@babel/preset-typescript": "^7.24.7",
     "@types/babel__core": "^7.20.5",
     "tsup": "^8.0.2",
     "typescript": "^5.4.2",
