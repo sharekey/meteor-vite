@@ -10,7 +10,7 @@ Package.onUse(function(api) {
   api.versionsFrom(['1.8', '3.0-rc.2']);
   api.use('ecmascript');
   api.use('tracker');
-  api.use('tmeasday:check-npm-versions@1.0.2', {weak:true});
+  api.use('tmeasday:check-npm-versions@2.0.0', {weak:true});
   api.use('svelte:compiler@3.31.2 || 3.25.0', {weak: true});
   api.use('reactive-var', {weak: true});
   api.use('session', 'client', {weak: true});
