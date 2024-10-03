@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 # shellcheck disable=SC2120
 
+source ".bin/shell-utils.sh"
+
 # Simple utility script for managing the example apps.
 # Usage: ./examples.sh <app> <action>
 # e.g. ./examples.sh vue start      # (Start the Vue example in development mode)
@@ -188,22 +190,6 @@ production:app() {
   export MONGO_URL="$PROD_MONGO_CONNECTION_URI"
 
   $node main.js
-}
-
-log() {
-  set +x
-  local title="$1"
-  local content="${@:2}"
-  echo "
-
-  [--  $title  --]
-  L $content
-  "
-  set -x
-}
-
-log:success() {
-  log Success "$@"
 }
 
 # Alias commands to their respective functions
