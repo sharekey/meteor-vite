@@ -80,12 +80,12 @@ exec:npx() {
 # Initial setup for example apps - installs and links our local packages.
 prepare() {
   # Install npm packages
-  npmPackage meteor-vite install
-  npmPackage zodern-relay install
+  npmPackage meteor-vite install || exit 1
+  npmPackage zodern-relay install || exit 1
 
   # Build npm packages
-  npmPackage meteor-vite run build
-  npmPackage zodern-relay run build
+  npmPackage meteor-vite run build || exit 1
+  npmPackage zodern-relay run build || exit 1
 
   (install) || exit 1
   (link) || exit 1
