@@ -153,9 +153,17 @@ The fork simply publishes the package over npm instead of Atmosphere. This has a
 won't try to bundle React for you, instead leaving it to Vite. This gives you more flexibility in configuring your React
 environment through Vite. And a good boost in build times.
 
-#### React with Atmosphere's `react-meteor-data` package
-If you still want to stick with the Atmosphere version, you might need to instruct Vite to externalize React, so it
+<details>
+  <summary>
+    Using the official `react-meteor-data` package without npm (advanced)
+  </summary>
+  
+### React with Atmosphere's `react-meteor-data` package
+> This approach is generally not the recommended as it introduces a lot of complexity in dependency tracking for code that depends on React.
+
+If you need to use the official `react-meteor-data` package or you still want to stick with the Atmosphere version you will need to instruct Vite to externalize React, so it
 isn't included twice in your client bundle.
+
 ```ts
 // vite.config.ts
 import { defineConfig } from 'vite';
@@ -197,6 +205,10 @@ import 'react-refresh';
 
 import 'meteor/react-meteor-data';
 ```
+
+</details>
+
+
 
 And that should be it. Write your app from your `vite.tsx` entrypoint and enjoy lightning fast HMR ⚡
 
