@@ -92,7 +92,7 @@ prepare:npm-packages() {
     npm i
     npm run build
 
-    log:success "Built $(basename "$package")"
+    log:success "Built $package"
   done
 }
 
