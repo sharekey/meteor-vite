@@ -22,4 +22,3 @@ zodern:types                  # Enable types from meteor/atmosphere packages
 jorgenvatle:vite-bundler      # ⚡ Replaces Meteor's client bundler with Vite
 rdb:svelte-meteor-data
 session@1.2.2
-tmeasday:check-npm-versions
