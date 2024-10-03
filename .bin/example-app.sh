@@ -170,7 +170,7 @@ link() {
     (linkNpmPackage "$packageDir") || exit 1
   done
 
-  (cd "$APP_DIR" && npm link "${npmPackages[@*]}") || exit 1
+  (cd "$APP_DIR" && npm link "${npmPackages[@]}") || exit 1
 
   log:success "Linked ${npmPackages[*]} to $app"
 }
