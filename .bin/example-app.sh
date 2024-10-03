@@ -157,11 +157,8 @@ cleanOutput() {
 }
 
 link() {
-  local packageDir
-
   for package in "${npmPackages[@]}"; do
-    packageDir="$PWD/npm-packages/$package"
-    (npmPackage link) || exit 1
+    (npmPackage "$package" link) || exit 1
     log:success "Added npm link for $package"
   done
 
