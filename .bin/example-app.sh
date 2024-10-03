@@ -79,16 +79,19 @@ exec:npx() {
 
 # Initial setup for example apps - installs and links our local packages.
 prepare() {
-  # Install npm packages
-  npmPackage meteor-vite install || exit 1
-  npmPackage zodern-relay install || exit 1
-
-  # Build npm packages
-  npmPackage meteor-vite run build || exit 1
-  npmPackage zodern-relay run build || exit 1
-
+  (prepare:npm-packages) || exit 1
   (install) || exit 1
   (link) || exit 1
+}
+
+prepare:npm-packages() {
+  for package in "$PWD/npm-packages"/*; do
+    cd "$package" || exit 1
+    npm i
+    npm run build
+
+    log:success "Built npm-packages/$(basename "$package")"
+  done
 }
 
 # Build an example app for production
