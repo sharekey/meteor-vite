@@ -28,6 +28,8 @@ METEOR_LOCAL_DIR="$METEOR_LOCAL_DIR_ROOT/$app"
 export METEOR_PACKAGE_DIRS="$PWD/packages:$PWD/test-packages/atmosphere"
 export METEOR_VITE_TSUP_BUILD_WATCHER="${METEOR_VITE_TSUP_BUILD_WATCHER:-'true'}"
 
+npmPackages=("meteor-vite" "@meteor-vite/plugin-zodern-relay")
+
 if [ "$USE_METEOR_BINARIES" == "0" ]; then
   npm="npm"
   node="node"
@@ -85,12 +87,12 @@ prepare() {
 }
 
 prepare:npm-packages() {
-  for package in "$PWD/npm-packages"/*; do
-    cd "$package" || exit 1
+  for package in "${npmPackages[@]}"; do
+    cd "$PWD/npm-packages/$package" || exit 1
     npm i
     npm run build
 
-    log:success "Built npm-packages/$(basename "$package")"
+    log:success "Built $(basename "$package")"
   done
 }
 
@@ -151,21 +153,26 @@ cleanOutput() {
   rm -rf "$BUILD_TARGET"
 }
 
-linkNpmPackage() {
-  local packageDir="$PWD/npm-packages/$1"
-  local packageName="${2:-$1}"
-
-  (cd "$packageDir" && $npm link) || exit 1
-  (cd "$APP_DIR" && $npm link "$packageName") || exit 1
-
-  log:success "Linked $packageName"
-}
-
 link() {
-  set -e
-  linkNpmPackage meteor-vite
-  linkNpmPackage zodern-relay '@meteor-vite/plugin-zodern-relay'
+  local packageDir
+
+  linkNpmPackage() {
+    local path="$1"
+    cd "$packageDir" || exit 1
+    npm link || exit 1
+    log:success "Added link for $package"
+  }
+
+  for package in "${npmPackages[@]}"; do
+    packageDir="$PWD/npm-packages/$package"
+    (linkNpmPackage "$packageDir") || exit 1
+  done
+
+  (cd "$APP_DIR" && npm link "${npmPackages[@*]}") || exit 1
+
+  log:success "Linked ${npmPackages[*]} to $app"
 }
+
 
 production:install() {
    cd "$BUILD_TARGET/bundle/programs/server" || exit 1
