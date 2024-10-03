@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 # shellcheck disable=SC2120
 
+source ".bin/shell-utils.sh"
+
 # Simple utility script for managing the example apps.
 # Usage: ./examples.sh <app> <action>
 # e.g. ./examples.sh vue start      # (Start the Vue example in development mode)
@@ -27,6 +29,9 @@ METEOR_LOCAL_DIR="$METEOR_LOCAL_DIR_ROOT/$app"
 
 export METEOR_PACKAGE_DIRS="$PWD/packages:$PWD/test-packages/atmosphere"
 export METEOR_VITE_TSUP_BUILD_WATCHER="${METEOR_VITE_TSUP_BUILD_WATCHER:-'true'}"
+
+npmPackages=("meteor-vite" "@meteor-vite/plugin-zodern-relay")
+npmPackagesDir="$PWD/npm-packages"
 
 if [ "$USE_METEOR_BINARIES" == "0" ]; then
   npm="npm"
@@ -79,16 +84,19 @@ exec:npx() {
 
 # Initial setup for example apps - installs and links our local packages.
 prepare() {
-  # Install npm packages
-  npmPackage meteor-vite install
-  npmPackage zodern-relay install
-
-  # Build npm packages
-  npmPackage meteor-vite run build
-  npmPackage zodern-relay run build
-
+  (prepare:npm-packages) || exit 1
   (install) || exit 1
   (link) || exit 1
+}
+
+prepare:npm-packages() {
+  for package in "${npmPackages[@]}"; do
+    (npmPackage "$package" install) || exit 1
+    log:success "Installed dependencies for $package"
+
+    (npmPackage "$package" run build) || exit 1
+    log:success "Built $package"
+  done
 }
 
 # Build an example app for production
@@ -111,7 +119,7 @@ build() {
 
 npmPackage() {
   local name="$1"
-  cd "$PWD/npm-packages/$name" || exit 1
+  cd "$npmPackagesDir/$name" || exit 1
   $npm "${@:2}"
 }
 
@@ -154,21 +162,17 @@ cleanOutput() {
   rm -rf "$BUILD_TARGET"
 }
 
-linkNpmPackage() {
-  local packageDir="$PWD/npm-packages/$1"
-  local packageName="${2:-$1}"
-
-  (cd "$packageDir" && $npm link) || exit 1
-  (cd "$APP_DIR" && $npm link "$packageName") || exit 1
-
-  log:success "Linked $packageName"
-}
-
 link() {
-  set -e
-  linkNpmPackage meteor-vite
-  linkNpmPackage zodern-relay '@meteor-vite/plugin-zodern-relay'
+  for package in "${npmPackages[@]}"; do
+    (npmPackage "$package" link) || exit 1
+    log:success "Added npm link for $package"
+  done
+
+  (cd "$APP_DIR" && npm link "${npmPackages[@]}") || exit 1
+
+  log:success "Linked ${npmPackages[*]} to $app"
 }
+
 
 production:install() {
    cd "$BUILD_TARGET/bundle/programs/server" || exit 1
@@ -184,22 +188,6 @@ production:app() {
   export MONGO_URL="$PROD_MONGO_CONNECTION_URI"
 
   $node main.js
-}
-
-log() {
-  set +x
-  local title="$1"
-  local content="${@:2}"
-  echo "
-
-  [--  $title  --]
-  L $content
-  "
-  set -x
-}
-
-log:success() {
-  log Success "$@"
 }
 
 # Alias commands to their respective functions

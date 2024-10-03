@@ -368,8 +368,8 @@ Since `zodern:relay` depends on a Babel plugin for processing your publication a
 extra configuration to make that work with Vite.
 
 We have a separate Vite plugin that should take care of this for you:
-- [`@meteor-vite/plugin-zodern-relay`](/npm-packages/zodern-relay#readme)
-  - [View documentation](/npm-packages/zodern-relay#readme)
+- [`@meteor-vite/plugin-zodern-relay`](/npm-packages/@meteor-vite/plugin-zodern-relay#readme)
+  - [View documentation](/npm-packages/@meteor-vite/plugin-zodern-relay#readme)
   - [View on npm](https://npmjs.com/@meteor-vite/plugin-zodern-relay)
 
 

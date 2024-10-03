@@ -45,7 +45,7 @@ jobs:
         run: |
           meteor npm i
           meteor npm run install:package
-          npm i -w npm-packages/zodern-relay
+          npm i -w npm-packages/@meteor-vite/plugin-zodern-relay
 
       - name: 'Build package'
         run: | 
