@@ -32,5 +32,5 @@ Meteor.startup(() => {
     
     Meteor.setInterval(async () => {
         await RuntimeCollection.upsertAsync('time', { $set: { value: new Date() } })
-    }, 2500);
+    }, 1000);
 })
