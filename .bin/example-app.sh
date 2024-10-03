@@ -79,8 +79,13 @@ exec:npx() {
 
 # Initial setup for example apps - installs and links our local packages.
 prepare() {
-  $npm run install:package
-  $npm run build:package
+  # Install npm packages
+  npmPackage meteor-vite install
+  npmPackage zodern-relay install
+
+  # Build npm packages
+  npmPackage meteor-vite run build
+  npmPackage zodern-relay run build
 
   (install) || exit 1
   (link) || exit 1
@@ -96,6 +101,12 @@ build() {
 
     cd "$APP_DIR" || exit 1
     meteor build "$BUILD_TARGET" --directory "$@"
+}
+
+npmPackage() {
+  local name="$1"
+  cd "$PWD/npm-packages/$name" || exit 1
+  $npm "${@:2}"
 }
 
 update() {
