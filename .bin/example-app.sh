@@ -159,16 +159,10 @@ cleanOutput() {
 link() {
   local packageDir
 
-  linkNpmPackage() {
-    local path="$1"
-    cd "$packageDir" || exit 1
-    npm link || exit 1
-    log:success "Added link for $package"
-  }
-
   for package in "${npmPackages[@]}"; do
     packageDir="$PWD/npm-packages/$package"
-    (linkNpmPackage "$packageDir") || exit 1
+    (npmPackage link) || exit 1
+    log:success "Added npm link for $package"
   done
 
   (cd "$APP_DIR" && npm link "${npmPackages[@]}") || exit 1
