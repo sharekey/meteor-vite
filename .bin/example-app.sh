@@ -91,10 +91,10 @@ prepare() {
 
 prepare:npm-packages() {
   for package in "${npmPackages[@]}"; do
-    cd "$npmPackagesDir/$package" || exit 1
-    npm i
-    npm run build
+    (npmPackage "$package" install) || exit 1
+    log:success "Installed dependencies for $package"
 
+    (npmPackage "$package" run build) || exit 1
     log:success "Built $package"
   done
 }
@@ -113,7 +113,7 @@ build() {
 
 npmPackage() {
   local name="$1"
-  cd "$PWD/npm-packages/$name" || exit 1
+  cd "$npmPackagesDir/$name" || exit 1
   $npm "${@:2}"
 }
 
