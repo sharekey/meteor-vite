@@ -31,6 +31,7 @@ export METEOR_PACKAGE_DIRS="$PWD/packages:$PWD/test-packages/atmosphere"
 export METEOR_VITE_TSUP_BUILD_WATCHER="${METEOR_VITE_TSUP_BUILD_WATCHER:-'true'}"
 
 npmPackages=("meteor-vite" "@meteor-vite/plugin-zodern-relay")
+npmPackagesDir="$PWD/npm-packages"
 
 if [ "$USE_METEOR_BINARIES" == "0" ]; then
   npm="npm"
@@ -90,7 +91,7 @@ prepare() {
 
 prepare:npm-packages() {
   for package in "${npmPackages[@]}"; do
-    cd "$PWD/npm-packages/$package" || exit 1
+    cd "$npmPackagesDir/$package" || exit 1
     npm i
     npm run build
 
