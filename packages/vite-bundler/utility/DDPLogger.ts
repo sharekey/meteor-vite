@@ -13,11 +13,10 @@ class DDPLogger {
     }
     
     protected send(log: Omit<DataStreamDocument, 'type' | keyof BaseDocument> & { args: unknown[] }) {
-        const document: Omit<DataStreamDocument, keyof BaseDocument> = {
+        const document: Omit<DataStreamDocument, keyof BaseDocument> = Object.assign({}, log, {
             type: this.type,
-            level: log.level,
             message: [log.message, ...this.serializeArgs(log.args)].join(' '),
-        };
+        });
         
         if (!Meteor.isServer) {
             Meteor.callAsync('meteor-vite:log', document).catch((error) => {
