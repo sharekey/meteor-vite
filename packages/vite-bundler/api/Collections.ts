@@ -27,5 +27,6 @@ interface MeteorViteStatus {
 
 export interface DataStreamDocument extends BaseDocument {
     type: 'log:server' | 'log:client' | 'log:shared'
+    level: 'info' | 'debug' | 'error';
     message: string;
 }
