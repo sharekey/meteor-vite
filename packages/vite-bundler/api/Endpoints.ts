@@ -7,31 +7,33 @@ import {
     type StatusDocument,
 } from './Collections';
 
+export const Methods = {
+    async 'meteor-vite:status/update'(status: Omit<StatusDocument, keyof BaseDocument>) {
+        await StatusCollection.upsertAsync(
+            { type: status.type },
+            {
+                $set: {
+                    data: Object.assign(status.data, { updatedAt: new Date() }),
+                },
+                $setOnInsert: {
+                    createdAt: new Date(),
+                }
+            },
+        );
+    },
+    async 'meteor-vite:log'(log: Omit<DataStreamDocument, keyof BaseDocument>) {
+        await DataStreamCollection.insertAsync(Object.assign(log, {
+            createdAt: new Date(),
+        }));
+    },
+}
+
 Meteor.startup(() => {
     if (Meteor.isProduction) {
         return;
     }
     
-    Meteor.methods({
-        async 'meteor-vite:status/update'(status: Omit<StatusDocument, keyof BaseDocument>) {
-            await StatusCollection.upsertAsync(
-                { type: status.type },
-                {
-                    $set: {
-                        data: Object.assign(status.data, { updatedAt: new Date() }),
-                    },
-                    $setOnInsert: {
-                        createdAt: new Date(),
-                    }
-                },
-            );
-        },
-        async 'meteor-vite:log'(log: Omit<DataStreamDocument, keyof BaseDocument>) {
-            await DataStreamCollection.insertAsync(Object.assign(log, {
-                createdAt: new Date(),
-            }));
-        },
-    });
+    Meteor.methods(Methods);
     
     if (Meteor.isClient) {
         return;
@@ -45,4 +47,6 @@ Meteor.startup(() => {
             sort: { createdAt: -1 },
         });
     });
+    
+    // Todo: clean up old logs regularly
 });
