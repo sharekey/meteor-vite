@@ -49,7 +49,7 @@ export default CreateIPCInterface({
     },
     
     // todo: Add reply for triggering a server restart
-    async 'vite.server.start'(replyInterface: Replies, { packageJson, meteorParentPid }: DevServerOptions) {
+    async 'vite.server.start'(replyInterface: Replies, { packageJson, meteorParentPid, meteorConfig }: DevServerOptions) {
         const backgroundWorker = await BackgroundWorker.init(meteorParentPid);
         
         if (backgroundWorker.isRunning) {
@@ -63,6 +63,7 @@ export default CreateIPCInterface({
         
         const server = await createViteServer({
             packageJson,
+            meteorConfig,
             refreshNeeded: () => {
                 replyInterface({
                     kind: 'refreshNeeded',
