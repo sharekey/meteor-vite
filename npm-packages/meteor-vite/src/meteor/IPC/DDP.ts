@@ -21,13 +21,13 @@ export class DDPConnection {
         
         // @ts-expect-error Bad typings
         this.client.on('error', (error: unknown) => {
-            this._logger.error('DDP Error', error);
+            this._logger.error('DDP Error', { error: String(error) });
         });
         this.client.on('connected', () => {
-            this._logger.info(`Connected to DDP server: %s`, config.endpoint);
+            this._logger.info(`Connected to DDP server`, config);
         });
         this.client.on('disconnected', () => {
-            this._logger.info(`Disconnected from DDP server: %s`,  config.endpoint);
+            this._logger.info(`Disconnected from DDP server`,  config);
         });
     }
     
