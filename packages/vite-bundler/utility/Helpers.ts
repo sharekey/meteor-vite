@@ -120,3 +120,5 @@ export function getBuildConfig() {
         viteOutSrcDir,
     }
 }
+
+export type MeteorRuntimeConfig = ReturnType<typeof getMeteorRuntimeConfig>;
