@@ -33,4 +33,5 @@ export interface DataStreamDocument extends BaseDocument {
     type: DataStreamLogType;
     level: DataStreamLogLevels;
     message: string;
+    sender?: string;
 }
