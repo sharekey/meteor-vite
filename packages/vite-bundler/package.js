@@ -26,12 +26,12 @@ Package.registerBuildPlugin({
     npmDependencies: {
         execa: '6.1.0',
         'fs-extra': '10.1.0',
-        'picocolors': '1.0.0',
+        'picocolors': '1.1.0',
     },
 });
 
 Npm.depends({
-    'picocolors': '1.0.0',
+    'picocolors': '1.1.0',
 });
 
 Package.onUse(function (api) {
