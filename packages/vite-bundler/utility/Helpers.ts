@@ -53,6 +53,19 @@ export function getMeteorDevServerPort(): number {
     return port;
 }
 
+export function getMeteorRuntimeConfig() {
+    const appId = __meteor_bootstrap__?.configJson?.appId;
+    
+    if (!appId) {
+        console.warn(new MeteorViteError('Unable to retrieve your Meteor App ID. (`./.meteor/.id`) This is probably fine in most cases, but can lead to issues when running multiple concurrent instances. Please do report this issue on GitHub 🙏 https://github.com/JorgenVatle/meteor-vite/issues'));
+    }
+    
+    return {
+        port: getMeteorDevServerPort(),
+        appId,
+    }
+}
+
 export function getBuildConfig() {
     const packageJson = getProjectPackageJson();
     const tempDir = getTempDir();
