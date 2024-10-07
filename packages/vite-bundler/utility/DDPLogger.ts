@@ -12,7 +12,7 @@ class DDPLogger {
         }
     }
     
-    protected log(log: LogData) {
+    protected send(log: LogData) {
         const document: Omit<DataStreamDocument, keyof BaseDocument> = {
             type: this.type,
             level: log.level,
@@ -50,17 +50,32 @@ class DDPLogger {
         });
     }
     
+    public print(log: DataStreamDocument) {
+        const levels: Record<DataStreamDocument['level'], (...args: LogMethodArgs) => void> = {
+            info: console.info,
+            error: console.error,
+            success: console.log,
+            debug: console.debug,
+        }
+        
+        if (log.level in levels) {
+            return levels[log.level](log.message);
+        }
+        
+        console.error('Unknown log level', log);
+    }
+    
     public info(message: string, ...args: LogMethodArgs) {
-        this.log({ message, args, level: 'info' });
+        this.send({ message, args, level: 'info' });
     }
     public error(message: string, ...args: LogMethodArgs) {
-        this.log({ message, args, level: 'error' });
+        this.send({ message, args, level: 'error' });
     }
     public success(message: string, ...args: LogMethodArgs) {
-        this.log({ message, args, level: 'success' });
+        this.send({ message, args, level: 'success' });
     }
     public debug(message: string, ...args: LogMethodArgs) {
-        this.log({ message, args, level: 'debug' });
+        this.send({ message, args, level: 'debug' });
     }
 }
 
