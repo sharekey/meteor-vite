@@ -27,7 +27,7 @@ class DDPConnection {
         });
     }
     
-    protected async call<TMethod extends keyof MeteorViteMethods>(method: TMethod, ...params: Parameters<MeteorViteMethods[TMethod]>) {
+    public async call<TMethod extends keyof MeteorViteMethods>(method: TMethod, ...params: Parameters<MeteorViteMethods[TMethod]>) {
         return this.client.call(method, ...params);
     }
     
