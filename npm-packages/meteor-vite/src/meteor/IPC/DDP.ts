@@ -1,4 +1,5 @@
 import type { DataStreamDocument, DataStreamLogLevels } from 'meteor/jorgenvatle:vite-bundler/api/Collections';
+import { inspect } from 'util';
 import WS from 'ws';
 import SimpleDDP from 'simpleddp';
 import { createLabelledLogger } from '../../utilities/Logger';
@@ -52,19 +53,25 @@ class DDPLogger {
         });
     }
     
-    public info(message: string) {
-        this.log({ level: 'info', message });
+    protected formatMessage(message: string, args: unknown[]) {
+        return [message, ...args.map((data) => {
+            return inspect(data, { depth: 2, colors: true });
+        })].join(' ');
     }
     
-    public error(message: string) {
-        this.log({ level: 'error', message });
+    public info(message: string, ...args: unknown[]) {
+        this.log({ level: 'info', message: this.formatMessage(message, args) });
     }
     
-    public success(message: string) {
-        this.log({ level: 'success', message });
+    public error(message: string, ...args: unknown[]) {
+        this.log({ level: 'error', message: this.formatMessage(message, args) });
     }
     
-    public debug(message: string) {
-        this.log({ level: 'debug', message });
+    public success(message: string, ...args: unknown[]) {
+        this.log({ level: 'success', message: this.formatMessage(message, args) });
+    }
+    
+    public debug(message: string, ...args: unknown[]) {
+        this.log({ level: 'debug', message: this.formatMessage(message, args) });
     }
 }
