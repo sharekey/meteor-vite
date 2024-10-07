@@ -2,7 +2,7 @@ import { Mongo } from 'meteor/mongo';
 import type { RuntimeConfig } from '../loading/vite-connection-handler';
 
 export const StatusCollection = new Mongo.Collection<StatusDocument>('_meteor-vite.status', { connection: null });
-export const DataStreamCollection = new Mongo.Collection<DataStreamDocument>('_meteor-vite.data-stream', { connection: null });
+export const DataStreamCollection = new Mongo.Collection<DataStreamDocument>('_meteor-vite.data-stream');
 
 export interface BaseDocument {
     createdAt: Date;
