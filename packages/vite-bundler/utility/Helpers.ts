@@ -63,7 +63,6 @@ export function getMeteorRuntimeConfig() {
     return {
         port: getMeteorDevServerPort(),
         appId,
-        meteorParentPid: process.ppid,
     }
 }
 
