@@ -30,9 +30,13 @@ export type ViteRuntimeConfig = {
     entryFile?: string
     backgroundWorker?: WorkerRuntimeConfig;
 }
+export type MeteorRuntimeConfig = {
+    port: number;
+}
 export interface DevServerOptions {
     packageJson: ProjectJson,
     meteorParentPid: number;
+    meteorConfig: MeteorRuntimeConfig;
 }
 
 export default CreateIPCInterface({
