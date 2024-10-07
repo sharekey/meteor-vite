@@ -32,15 +32,16 @@ class DDPLogger {
     }
     
     protected styleMessage(data: Pick<DataStreamDocument, 'message' | 'level' | 'sender'>) {
+        const prefix = data.sender ? pc.dim(`[⚡ ${data.sender}]`) : '⚡ ';
         switch (data.level) {
             case 'info':
-                return pc.blue(`⚡  ${data.message}`);
+                return pc.blue(`${prefix} ${data.message}`);
             case 'error':
-                return pc.red(`⚡  ${data.message}`);
+                return pc.red(`${prefix} ${data.message}`);
             case 'success':
-                return pc.green(`⚡  ${data.message}`);
+                return pc.green(`${prefix} ${data.message}`);
             case 'debug':
-                return pc.dim(pc.blue(`⚡  ${data.message}`));
+                return pc.dim(pc.blue(`${prefix} ${data.message}`));
         }
     }
     
