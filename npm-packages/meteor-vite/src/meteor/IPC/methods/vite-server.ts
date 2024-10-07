@@ -1,10 +1,12 @@
 import FS from 'fs/promises';
+import type { MeteorRuntimeConfig } from 'meteor/jorgenvatle:vite-bundler/utility/Helpers';
 import Path from 'path';
 import { createServer, resolveConfig, type ResolvedServerUrls, ViteDevServer } from 'vite';
 import { meteorWorker } from '../../../plugin/Meteor';
 import Logger from '../../../utilities/Logger';
 import { RefreshNeeded } from '../../../ViteLoadRequest';
 import { type ProjectJson, ResolvedMeteorViteConfig } from '../../../VitePluginSettings';
+import { DDPConnection } from '../DDP';
 import CreateIPCInterface, { IPCReply } from '../interface';
 import MeteorEvents, { MeteorIPCMessage } from '../MeteorEvents';
 
@@ -29,9 +31,6 @@ export type ViteRuntimeConfig = {
     resolvedUrls?: ResolvedServerUrls,
     entryFile?: string
     backgroundWorker?: WorkerRuntimeConfig;
-}
-export type MeteorRuntimeConfig = {
-    port: number;
 }
 export interface DevServerOptions {
     packageJson: ProjectJson,
@@ -78,7 +77,12 @@ export default CreateIPCInterface({
             },
         });
         
-        await server.listen()
+        const ddpClient = new DDPConnection({
+            endpoint: `ws://${meteorConfig.host}:${meteorConfig.port}/websocket`,
+        });
+        
+        await server.listen();
+        ddpClient.logger.info('Vite server started');
         listening = true
         server.printUrls();
         await sendViteConfig(replyInterface);
