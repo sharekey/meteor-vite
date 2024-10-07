@@ -46,6 +46,7 @@ class DDPLogger {
         this.ddp.call('meteor-vite:log', {
             type: 'log:server',
             ...log,
+            sender: 'vite-dev-server',
         }).catch((error) => {
             this._logger.error('Failed to log message through DDP', error);
         });
