@@ -6,6 +6,7 @@ import {
     StatusCollection,
     type StatusDocument,
 } from './Collections';
+import { watchDataStreamLogs } from './Watchers';
 
 export const Methods = {
     async 'meteor-vite:status/update'(status: Omit<StatusDocument, keyof BaseDocument>) {
@@ -34,6 +35,7 @@ Meteor.startup(() => {
     }
     
     Meteor.methods(Methods);
+    watchDataStreamLogs();
     
     if (Meteor.isClient) {
         return;
