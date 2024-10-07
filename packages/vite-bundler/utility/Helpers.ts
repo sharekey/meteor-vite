@@ -41,27 +41,35 @@ export function getTempDir() {
     }
 }
 
-export function getMeteorDevServerPort(): number {
-    const portString = process.argv.join(' ').match(/--port[\s=](?<port>[\d]+)/)?.groups?.port || '3000';
+export function getDevServerHost(): { host: string, port: number } {
+    const { portString, hostname } = process.argv.join(' ').match(/--port[\s=](?<hostname>[\d\w.]+:)(?<portString>[\d]+)/)?.groups || { portString: '3000', hostname: 'localhost' };
     const port = parseInt(portString);
     
     if (Number.isNaN(port)) {
-        console.warn(new MeteorViteError(`Unable to determine the port for your Meteor development server. We're going to assume it's 3000. Please do report this issue on GitHub 🙏 https://github.com/JorgenVatle/meteor-vite/issues`));
-        return 3000;
+        console.warn(new MeteorViteError(`Unable to determine the port for your Meteor development server. We're going to assume it's localhost:3000. Please do report this issue on GitHub 🙏 https://github.com/JorgenVatle/meteor-vite/issues`));
+        return {
+            host: 'localhost',
+            port: 3000,
+        };
     }
     
-    return port;
+    return {
+        host: hostname || 'localhost',
+        port,
+    };
 }
 
 export function getMeteorRuntimeConfig() {
     const appId = __meteor_bootstrap__?.configJson?.appId;
+    const { port, host } = getDevServerHost();
     
     if (!appId) {
         console.warn(new MeteorViteError('Unable to retrieve your Meteor App ID. (`./.meteor/.id`) This is probably fine in most cases, but can lead to issues when running multiple concurrent instances. Please do report this issue on GitHub 🙏 https://github.com/JorgenVatle/meteor-vite/issues'));
     }
     
     return {
-        port: getMeteorDevServerPort(),
+        host,
+        port,
         appId,
     }
 }
