@@ -52,10 +52,10 @@ class DDPLogger {
     
     public print(log: DataStreamDocument) {
         const levels: Record<DataStreamDocument['level'], (...args: LogMethodArgs) => void> = {
-            info: (message: unknown, ...args: unknown[]) => console.info(this.styleMessage({ message: String(message), level: 'info' }), ...args),
-            error: (message: unknown, ...args: unknown[]) => console.error(this.styleMessage({ message: String(message), level: 'error' }), ...args),
-            success: (message: unknown, ...args: unknown[]) => console.log(this.styleMessage({ message: String(message), level: 'success' }), ...args),
-            debug: (message: unknown, ...args: unknown[]) => console.debug(this.styleMessage({ message: String(message), level: 'debug' }), ...args),
+            info: (message: unknown, ...args: unknown[]) => console.info(this.styleMessage({ message: String(message), level: 'info', sender: log.sender }), ...args),
+            error: (message: unknown, ...args: unknown[]) => console.error(this.styleMessage({ message: String(message), level: 'error', sender: log.sender }), ...args),
+            success: (message: unknown, ...args: unknown[]) => console.log(this.styleMessage({ message: String(message), level: 'success', sender: log.sender }), ...args),
+            debug: (message: unknown, ...args: unknown[]) => console.debug(this.styleMessage({ message: String(message), level: 'debug', sender: log.sender }), ...args),
         }
         
         if (log.level in levels) {
