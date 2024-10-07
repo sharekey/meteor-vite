@@ -42,7 +42,15 @@ export function getTempDir() {
 }
 
 export function getMeteorDevServerPort() {
-    return process.argv.join(' ').match(/--port[\s=](?<port>[\d]+)/)?.groups || { port: '3000' };
+    const portString = process.argv.join(' ').match(/--port[\s=](?<port>[\d]+)/)?.groups?.port || '3000';
+    const port = parseInt(portString);
+    
+    if (Number.isNaN(port)) {
+        console.warn(new MeteorViteError(`Unable to determine the port for your Meteor development server. We're going to assume it's 3000. Please do report this issue on GitHub 🙏 https://github.com/JorgenVatle/meteor-vite/issues`));
+        return 3000;
+    }
+    
+    return port;
 }
 
 export function getBuildConfig() {
