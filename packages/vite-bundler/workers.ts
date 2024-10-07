@@ -78,6 +78,18 @@ export function createWorkerFork(hooks: Partial<WorkerResponseHooks>, options?: 
         })
     });
     
+    child.on('exit', (code) => {
+        console.log('Child exited with code:', code);
+    })
+    
+    child.on('error', (error) => {
+        console.error('Meteor: Worker process error:', error);
+    });
+    
+    child.on('disconnect', () => {
+        console.log('Meteor: Worker process disconnected');
+    })
+    
     return {
         call(method: Omit<WorkerMethod, 'replies'>) {
             if (!child.connected) {
