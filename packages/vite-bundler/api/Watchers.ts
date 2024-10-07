@@ -1,7 +1,10 @@
 import { Meteor } from 'meteor/meteor';
+import DDPLogger from '../utility/DDPLogger';
 import { DataStreamCollection } from './Collections';
 
 export function watchDataStreamLogs() {
+    const startupTime = new Date();
+    
     if (Meteor.isProduction) {
         throw new Error('meteor-vite data logs are only available in development mode');
     }
@@ -20,9 +23,9 @@ export function watchDataStreamLogs() {
         });
     }
     
-    DataStreamCollection.find({}).observe({
+    DataStreamCollection.find({ createdAt: { $gt: startupTime } }).observe({
         added(document) {
-            console.log('New log:', document);
+            DDPLogger.print(document);
         },
     })
 }
