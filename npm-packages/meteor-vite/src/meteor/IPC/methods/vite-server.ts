@@ -50,6 +50,10 @@ export default CreateIPCInterface({
     // todo: Add reply for triggering a server restart
     async 'vite.server.start'(replyInterface: Replies, { packageJson, meteorParentPid, meteorConfig }: DevServerOptions) {
         const backgroundWorker = await BackgroundWorker.init(meteorParentPid);
+        const ddpClient = new DDPConnection({
+            endpoint: `ws://${meteorConfig.host}:${meteorConfig.port}/websocket`,
+        });
+        const Logger = ddpClient.logger;
         
         if (backgroundWorker.isRunning) {
             replyInterface({
@@ -58,6 +62,7 @@ export default CreateIPCInterface({
             })
             Logger.info(`Vite server running as background process. (pid ${backgroundWorker.config.pid})`);
             return process.exit(0);
+        
         }
         
         const server = await createViteServer({
@@ -77,12 +82,8 @@ export default CreateIPCInterface({
             },
         });
         
-        const ddpClient = new DDPConnection({
-            endpoint: `ws://${meteorConfig.host}:${meteorConfig.port}/websocket`,
-        });
-        
         await server.listen();
-        ddpClient.logger.info('Vite server started');
+        Logger.info('Vite server started');
         listening = true
         server.printUrls();
         await sendViteConfig(replyInterface);
