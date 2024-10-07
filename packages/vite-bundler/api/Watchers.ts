@@ -1,13 +1,20 @@
 import { Meteor } from 'meteor/meteor';
 import DDPLogger from '../utility/DDPLogger';
 import { DataStreamCollection } from './Collections';
+let watcherActive = false;
 
 export function watchDataStreamLogs() {
     const startupTime = new Date();
     
+    if (watcherActive) {
+        return console.warn(new Error('⚡ Data stream logs are already being watched'));
+    }
+    
     if (Meteor.isProduction) {
         throw new Error('meteor-vite data logs are only available in development mode');
     }
+    
+    watcherActive = true;
     
     if (Meteor.isClient) {
         Meteor.subscribe('meteor-vite:log', {
