@@ -68,16 +68,6 @@ export function createWorkerFork(hooks: Partial<WorkerResponseHooks>, options?: 
         return hook(message.data);
     });
     
-    ['exit', 'SIGINT', 'SIGHUP', 'SIGTERM'].forEach(event => {
-        process.once(event, () => {
-            if (!shouldKill) {
-                return;
-            }
-            
-            child.kill();
-        })
-    });
-    
     child.on('exit', (code) => {
         console.log('Child exited with code:', code);
     })
