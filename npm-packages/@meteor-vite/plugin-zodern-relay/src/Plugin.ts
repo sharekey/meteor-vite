@@ -10,7 +10,8 @@ export default async function zodernRelay(options?: Options): Promise<Plugin> {
         directories: {
             methods: options?.directories?.methods || ['./imports/methods'],
             publications: options?.directories?.publications || ['./imports/publications'],
-        }
+        },
+        shouldTransform: options?.shouldTransform || (({ content }) => content.includes('meteor/zodern:relay')),
     } satisfies Options;
     
     const directories = [
@@ -44,7 +45,7 @@ export default async function zodernRelay(options?: Options): Promise<Plugin> {
             const code = FS.readFileSync(filename, 'utf-8');
             
             // Prevent transforming files that don't use zodern:relay
-            if (!code.includes('meteor/zodern:relay')) {
+            if (!config.shouldTransform({ content: code, id: filename })) {
                 return;
             }
             
@@ -88,6 +89,13 @@ export interface Options {
          */
         publications?: string[],
     }
+    /**
+     * Specify a custom filter to determine whether a module should be transformed with zodern:relay.
+     * Used to prevent unnecessary Babel transformations.
+     * @default ({ content }) => content.includes('meteor/zodern:relay')
+     * @param id
+     */
+    shouldTransform?: (file: { content: string, id: string }) => boolean;
 }
 
 type RelayInfo = {
