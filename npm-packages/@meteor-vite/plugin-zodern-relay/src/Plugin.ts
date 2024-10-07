@@ -11,7 +11,7 @@ export default async function zodernRelay(options?: Options): Promise<Plugin> {
             methods: options?.directories?.methods || ['./imports/methods'],
             publications: options?.directories?.publications || ['./imports/publications'],
         },
-        shouldTransform: options?.shouldTransform || (({ content }) => content.includes('meteor/zodern:relay')),
+        shouldTransform: options?.shouldTransform || (({ content }) => content.includes(options?.relayPackageId || 'meteor/zodern:relay')),
     } satisfies Options;
     
     const directories = [
@@ -67,8 +67,16 @@ export default async function zodernRelay(options?: Options): Promise<Plugin> {
                 return;
             }
             
+            let newCode = transform.code ?? '';
+            
+            // Rewrite any newly added imports to use the correct package ID.
+            // Only applicable when using a fork of zodern:relay.
+            if (options?.relayPackageId) {
+                newCode = newCode.replace('meteor/zodern:relay', options.relayPackageId);
+            }
+            
             return {
-                code: transform.code ?? '',
+                code: newCode,
             }
         }
     }
@@ -96,6 +104,14 @@ export interface Options {
      * @param id
      */
     shouldTransform?: (file: { content: string, id: string }) => boolean;
+    
+    /**
+     * If you're using a fork of zodern:relay, you should specify its Meteor import string here so imports
+     * can be substituted with your fork. The Babel plugin currently injects a hardcoded import string for
+     * client-code `zodern:relay/client`, so it's important we correct that before finishing the transform process.
+     * @default 'meteor/zodern:relay'
+     */
+    relayPackageId?: string;
 }
 
 type RelayInfo = {
