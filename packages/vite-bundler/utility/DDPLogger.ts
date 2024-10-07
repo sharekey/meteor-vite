@@ -31,7 +31,7 @@ class DDPLogger {
     }
     
     protected styleMessage(data: Pick<DataStreamDocument, 'message' | 'level' | 'sender'>) {
-        const prefix = data.sender ? pc.dim(`[⚡ ${data.sender}]`) : '⚡ ';
+        const prefix = data.sender ? pc.dim(`[⚡  ${data.sender}]`) : '⚡ ';
         switch (data.level) {
             case 'info':
                 return pc.blue(`${prefix} ${data.message}`);
