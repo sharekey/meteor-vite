@@ -41,7 +41,7 @@ export function getTempDir() {
     }
 }
 
-export function getMeteorDevServerPort() {
+export function getMeteorDevServerPort(): number {
     const portString = process.argv.join(' ').match(/--port[\s=](?<port>[\d]+)/)?.groups?.port || '3000';
     const port = parseInt(portString);
     
