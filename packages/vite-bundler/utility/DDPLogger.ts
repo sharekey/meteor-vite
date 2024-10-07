@@ -12,11 +12,11 @@ class DDPLogger {
         }
     }
     
-    protected send(log: LogData) {
+    protected send(log: Omit<DataStreamDocument, 'type' | keyof BaseDocument> & { args: unknown[] }) {
         const document: Omit<DataStreamDocument, keyof BaseDocument> = {
             type: this.type,
             level: log.level,
-            message: [this.styleMessage(log), ...this.serializeArgs(log.args)].join(' '),
+            message: [log.message, ...this.serializeArgs(log.args)].join(' '),
         };
         
         if (!Meteor.isServer) {
@@ -31,7 +31,7 @@ class DDPLogger {
         });
     }
     
-    protected styleMessage(data: Pick<LogData, 'message' | 'level'>) {
+    protected styleMessage(data: Pick<DataStreamDocument, 'message' | 'level' | 'sender'>) {
         switch (data.level) {
             case 'info':
                 return pc.blue(`⚡  ${data.message}`);
@@ -52,10 +52,10 @@ class DDPLogger {
     
     public print(log: DataStreamDocument) {
         const levels: Record<DataStreamDocument['level'], (...args: LogMethodArgs) => void> = {
-            info: console.info,
-            error: console.error,
-            success: console.log,
-            debug: console.debug,
+            info: (message: unknown, ...args: unknown[]) => console.info(this.styleMessage({ message: String(message), level: 'info' }), ...args),
+            error: (message: unknown, ...args: unknown[]) => console.error(this.styleMessage({ message: String(message), level: 'error' }), ...args),
+            success: (message: unknown, ...args: unknown[]) => console.log(this.styleMessage({ message: String(message), level: 'success' }), ...args),
+            debug: (message: unknown, ...args: unknown[]) => console.debug(this.styleMessage({ message: String(message), level: 'debug' }), ...args),
         }
         
         if (log.level in levels) {
@@ -80,10 +80,5 @@ class DDPLogger {
 }
 
 type LogMethodArgs = unknown[];
-type LogData = {
-    message: string;
-    args: LogMethodArgs;
-    level: DataStreamDocument['level'];
-}
 
 export default new DDPLogger();
