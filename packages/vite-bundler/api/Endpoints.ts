@@ -33,6 +33,10 @@ Meteor.startup(() => {
         },
     });
     
+    if (Meteor.isClient) {
+        return;
+    }
+    
     Meteor.publish('meteor-vite:log', () => {
         return DataStreamCollection.find({
             type: { $in: ['log:client', 'log:shared'] },
