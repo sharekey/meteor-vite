@@ -10,6 +10,7 @@ import {
     ViteConnection,
     ViteDevScripts,
 } from './loading/vite-connection-handler';
+import { getMeteorRuntimeConfig } from './utility/Helpers';
 import { createWorkerFork, getProjectPackageJson, isMeteorIPCMessage } from './workers';
 
 if (Meteor.isDevelopment) {
@@ -54,6 +55,7 @@ if (Meteor.isDevelopment) {
         params: [{
             packageJson: getProjectPackageJson(),
             meteorParentPid: process.ppid,
+            meteorConfig: getMeteorRuntimeConfig(),
         }]
     });
     
