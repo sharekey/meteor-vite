@@ -19,7 +19,7 @@ Package.registerBuildPlugin({
         'workers.ts',
         'plugin/Compiler.ts',
         'plugin/IntermediaryMeteorProject.ts',
-        'utility/Logger.ts',
+        'utility/BuildLogger.ts',
         'utility/Helpers.ts',
         'utility/Errors.ts'
     ],
