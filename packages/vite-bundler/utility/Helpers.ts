@@ -41,6 +41,10 @@ export function getTempDir() {
     }
 }
 
+export function getMeteorDevServerPort() {
+    return process.argv.join(' ').match(/--port[\s=](?<port>[\d]+)/)?.groups || { port: '3000' };
+}
+
 export function getBuildConfig() {
     const packageJson = getProjectPackageJson();
     const tempDir = getTempDir();
