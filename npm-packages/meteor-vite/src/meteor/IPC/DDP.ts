@@ -6,7 +6,8 @@ import { MeteorViteMethods } from 'meteor/jorgenvatle:vite-bundler/api/Endpoints
 
 export class DDPConnection {
     protected readonly client: SimpleDDP;
-    protected localLogger = createLabelledLogger('DDPConnection');
+    protected _logger = createLabelledLogger('DDPConnection');
+    public logger: DDPLogger;
     constructor(config: {
         endpoint: string;
     }) {
@@ -16,15 +17,17 @@ export class DDPConnection {
             reconnectInterval: 1000,
         });
         
+        this.logger = new DDPLogger(this);
+        
         // @ts-expect-error Bad typings
         this.client.on('error', (error: unknown) => {
-            this.localLogger.error('DDP Error', error);
+            this._logger.error('DDP Error', error);
         });
         this.client.on('connected', () => {
-            this.localLogger.info(`Connected to DDP server: %s`, config.endpoint);
+            this._logger.info(`Connected to DDP server: %s`, config.endpoint);
         });
         this.client.on('disconnected', () => {
-            this.localLogger.info(`Disconnected from DDP server: %s`,  config.endpoint);
+            this._logger.info(`Disconnected from DDP server: %s`,  config.endpoint);
         });
     }
     
