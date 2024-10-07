@@ -32,4 +32,13 @@ Meteor.startup(() => {
             }));
         },
     });
+    
+    Meteor.publish('meteor-vite:log', () => {
+        return DataStreamCollection.find({
+            type: { $in: ['log:client', 'log:shared'] },
+        }, {
+            limit: 50,
+            sort: { createdAt: -1 },
+        });
+    })
 });
