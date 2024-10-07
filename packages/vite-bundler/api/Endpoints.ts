@@ -9,6 +9,8 @@ import {
 } from './Collections';
 import { watchDataStreamLogs } from './Watchers';
 
+export type MeteorViteMethods = typeof Methods;
+
 export const Methods = {
     async 'meteor-vite:status/update'(status: Omit<StatusDocument, keyof BaseDocument>) {
         const { appId } = getMeteorRuntimeConfig();
