@@ -1,5 +1,11 @@
 # meteor-vite
 
+## 2.0.0-next.2
+
+### Patch Changes
+
+- 8499c6a6: Loosen peer dependency requirement for Vite to allow for use with Vite v5
+
 ## 2.0.0-next.1
 
 ### Patch Changes
