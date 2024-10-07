@@ -2,6 +2,7 @@ import pc from 'picocolors';
 import type { BaseDocument, DataStreamDocument, DataStreamLogType } from '../api/Collections';
 import { Methods } from '../api/Endpoints';
 import { inspect } from 'node:util';
+import { AnsiColor } from './AnsiColor';
 
 class DDPLogger {
     protected readonly type: DataStreamLogType = 'log:shared';
@@ -31,16 +32,17 @@ class DDPLogger {
     }
     
     protected styleMessage(data: Pick<DataStreamDocument, 'message' | 'level' | 'sender'>) {
-        const prefix = data.sender ? pc.dim(`[⚡  ${data.sender}]`) : '⚡ ';
+        const prefix = data.sender ? AnsiColor.dim(`[${data.sender}]`) : '';
+        const message = `⚡ ${prefix} ${data.message}`;
         switch (data.level) {
             case 'info':
-                return pc.blue(`${prefix} ${data.message}`);
+                return pc.blue(message);
             case 'error':
-                return pc.red(`${prefix} ${data.message}`);
+                return pc.red(message);
             case 'success':
-                return pc.green(`${prefix} ${data.message}`);
+                return pc.green(message);
             case 'debug':
-                return pc.dim(pc.blue(`${prefix} ${data.message}`));
+                return pc.dim(pc.blue(message));
         }
     }
     
