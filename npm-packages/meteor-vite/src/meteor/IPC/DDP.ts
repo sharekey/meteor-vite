@@ -3,7 +3,7 @@ import SimpleDDP from 'simpleddp';
 import { createLabelledLogger } from '../../utilities/Logger';
 import { MeteorViteMethods } from 'meteor/jorgenvatle:vite-bundler/api/Endpoints';
 
-class DDPConnection {
+export class DDPConnection {
     protected readonly client: SimpleDDP;
     protected logger = createLabelledLogger('DDPConnection');
     constructor(config: {
