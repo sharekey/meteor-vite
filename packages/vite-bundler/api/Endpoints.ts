@@ -1,4 +1,5 @@
 import { Meteor } from 'meteor/meteor';
+import { getMeteorRuntimeConfig } from '../utility/Helpers';
 import {
     type BaseDocument,
     DataStreamCollection,
@@ -10,11 +11,12 @@ import { watchDataStreamLogs } from './Watchers';
 
 export const Methods = {
     async 'meteor-vite:status/update'(status: Omit<StatusDocument, keyof BaseDocument>) {
+        const { appId } = getMeteorRuntimeConfig();
         await StatusCollection.upsertAsync(
             { type: status.type },
             {
                 $set: {
-                    data: Object.assign(status.data, { updatedAt: new Date(), appId: __meteor_bootstrap__?.configJson?.appId }),
+                    data: Object.assign(status.data, { updatedAt: new Date(), appId  }),
                 },
                 $setOnInsert: {
                     createdAt: new Date(),
