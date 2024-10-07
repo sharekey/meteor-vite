@@ -40,5 +40,5 @@ Meteor.startup(() => {
             limit: 50,
             sort: { createdAt: -1 },
         });
-    })
+    });
 });

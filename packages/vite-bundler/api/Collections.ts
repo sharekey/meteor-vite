@@ -9,9 +9,20 @@ export interface BaseDocument {
     updatedAt?: Date;
 }
 
-export interface StatusDocument extends BaseDocument {
-    type: 'vite-config',
-    data: RuntimeConfig;
+export interface StatusDocument<TStatus extends keyof MeteorViteStatus = keyof MeteorViteStatus> extends BaseDocument {
+    type: TStatus,
+    data: MeteorViteStatus[TStatus];
+}
+
+interface MeteorViteStatus {
+    viteConfig: RuntimeConfig;
+    viteWorker: {
+        pid: number;
+        meteorPid: number;
+        meteorParentPid: number;
+        lastHeartbeat: Date;
+        startedAt: Date;
+    }
 }
 
 export interface DataStreamDocument extends BaseDocument {
