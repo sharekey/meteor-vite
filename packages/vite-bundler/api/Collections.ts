@@ -12,6 +12,7 @@ export interface BaseDocument {
 export interface StatusDocument<TStatus extends keyof MeteorViteStatus = keyof MeteorViteStatus> extends BaseDocument {
     type: TStatus,
     data: MeteorViteStatus[TStatus];
+    appId: string;
 }
 
 interface MeteorViteStatus {

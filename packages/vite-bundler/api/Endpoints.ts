@@ -14,7 +14,7 @@ export const Methods = {
             { type: status.type },
             {
                 $set: {
-                    data: Object.assign(status.data, { updatedAt: new Date() }),
+                    data: Object.assign(status.data, { updatedAt: new Date(), appId: __meteor_bootstrap__?.configJson?.appId }),
                 },
                 $setOnInsert: {
                     createdAt: new Date(),
