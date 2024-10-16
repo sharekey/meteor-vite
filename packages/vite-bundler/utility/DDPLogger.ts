@@ -39,6 +39,8 @@ class DDPLogger {
                 return pc.blue(message);
             case 'error':
                 return pc.red(message);
+            case 'warn':
+                return pc.yellow(message);
             case 'success':
                 return pc.green(message);
             case 'debug':
