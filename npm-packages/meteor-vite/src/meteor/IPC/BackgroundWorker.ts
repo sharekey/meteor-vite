@@ -1,6 +1,7 @@
 import FS from 'fs/promises';
 import Path from 'path';
 import Logger from '../../utilities/Logger';
+import type { DDPConnection } from './DDP';
 import type { ViteRuntimeConfig } from './methods/vite-server';
 
 export type WorkerRuntimeConfig = {
@@ -19,7 +20,7 @@ export class BackgroundWorker {
         'vite-dev-server.pid',
     );
     
-    public static async init(meteorParentPid: number) {
+    public static async init(meteorParentPid: number, ddpClient: DDPConnection) {
         if (BackgroundWorker.instance) {
             return BackgroundWorker.instance;
         }
@@ -33,9 +34,9 @@ export class BackgroundWorker {
             await FS.mkdir(Path.dirname(this.configPath), { recursive: true });
             const content = await FS.readFile(this.configPath, 'utf-8');
             const config = JSON.parse(content);
-            BackgroundWorker.instance = new BackgroundWorker(config);
+            BackgroundWorker.instance = new BackgroundWorker(config, ddpClient);
         } catch (error) {
-            BackgroundWorker.instance = new BackgroundWorker(myConfig);
+            BackgroundWorker.instance = new BackgroundWorker(myConfig, ddpClient);
         }
         
         const worker = BackgroundWorker.instance;
@@ -48,8 +49,7 @@ export class BackgroundWorker {
         return worker;
     }
     
-    constructor(public config: WorkerRuntimeConfig) {
-    }
+    constructor(public config: WorkerRuntimeConfig, protected ddpClient: DDPConnection) {}
     
     protected _watchForParentExit() {
         // Keep track of Meteor's parent process to exit if it has ended abruptly.
