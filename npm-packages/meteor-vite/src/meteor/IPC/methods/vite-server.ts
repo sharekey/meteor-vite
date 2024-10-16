@@ -1,9 +1,10 @@
 import type { MeteorRuntimeConfig } from 'meteor/jorgenvatle:vite-bundler/utility/Helpers';
-import { createServer, resolveConfig, type ResolvedServerUrls, ViteDevServer, build } from 'vite';
+import { createServer, resolveConfig, type ResolvedServerUrls, ViteDevServer } from 'vite';
 import { meteorWorker } from '../../../plugin/Meteor';
 import Logger from '../../../utilities/Logger';
 import { RefreshNeeded } from '../../../ViteLoadRequest';
 import { type ProjectJson, ResolvedMeteorViteConfig } from '../../../VitePluginSettings';
+import { MeteorServerBuilder } from '../../ServerBuilder';
 import { BackgroundWorker, type WorkerRuntimeConfig } from '../BackgroundWorker';
 import { DDPConnection } from '../DDP';
 import CreateIPCInterface, { IPCReply } from '../interface';
@@ -157,30 +158,7 @@ async function createViteServer({
     });
     
     if (viteConfig.meteor?.serverEntry) {
-        build({
-            configFile: viteConfig.configFile,
-            build: {
-                watch: {},
-                lib: {
-                    entry: viteConfig.meteor.serverEntry,
-                    name: 'meteor-server',
-                    fileName: 'meteor.server',
-                    formats: ['es'],
-                },
-                outDir: 'server/bundle',
-                rollupOptions: {
-                    external: (id) => {
-                        if (id.startsWith('meteor')) {
-                            return true;
-                        }
-                    }
-                }
-            }
-        }).catch((error) => {
-            Logger.error('Encountered error while preparing server build!', error);
-        }).then(() => {
-            Logger.info('Server build completed!');
-        });
+        await MeteorServerBuilder({ packageJson });
     }
     
     process.on('warning', (warning) => {
