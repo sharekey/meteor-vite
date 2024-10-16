@@ -75,6 +75,9 @@ class DDPLogger {
         }).catch((error) => {
             this._logger.error('Failed to log message through DDP', error);
         });
+        if (!this.ddp.status.connected) {
+            console.log(`⚡ (DDP Connection Lost) [${log.level}] ${log.message}`);
+        }
     }
     
     protected formatMessage(message: string, args: unknown[]) {
