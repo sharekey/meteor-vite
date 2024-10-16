@@ -9,6 +9,12 @@ export class DDPConnection {
     protected readonly client: SimpleDDP;
     protected _logger = createLabelledLogger('DDPConnection');
     public logger: DDPLogger;
+    protected readonly _status = {
+        lastConnectionTimestamp: Date.now(),
+        connected: false,
+        pingCount: 0,
+        timedOut: false,
+    }
     constructor(config: {
         endpoint: string;
     }) {
@@ -31,9 +37,8 @@ export class DDPConnection {
             this._logger.info(`Disconnected from DDP server`,  config);
         });
         
-        let pingIndex = 0;
         setInterval(() => {
-            this.logger.debug(`Ping #${pingIndex++}`);
+            this.logger.debug(`Ping #${this.status.pingCount++}`);
         }, 10_000);
     }
     
@@ -41,8 +46,19 @@ export class DDPConnection {
         return this.client.call(method, ...params);
     }
     
-    public get connected() {
-        return this.client?.connected;
+    public get status() {
+        const TIMEOUT_MS = 30_000;
+        const connected = this._status.connected = this.client.connected;
+        
+        if (connected) {
+            this._status.lastConnectionTimestamp = Date.now();
+        }
+        
+        if (Date.now() - this._status.lastConnectionTimestamp > TIMEOUT_MS) {
+            this._status.timedOut = true;
+        }
+        
+        return this._status;
     }
 }
 
