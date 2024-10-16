@@ -61,7 +61,6 @@ export default CreateIPCInterface({
             })
             Logger.info(`Vite server running as background process. (pid ${backgroundWorker.config.pid})`);
             return process.exit(0);
-        
         }
         
         const server = await createViteServer({
