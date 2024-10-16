@@ -1,5 +1,6 @@
 import FS from 'fs/promises';
 import Path from 'path';
+import Logger from '../../utilities/Logger';
 import type { DDPConnection } from './DDP';
 import type { ViteRuntimeConfig } from './methods/vite-server';
 
@@ -54,21 +55,29 @@ export class BackgroundWorker {
         this.logger = ddpClient.logger;
     }
     
+    protected exit() {
+        this.logger.info('[Background Worker] Shutting down...');
+        this.update({
+            pid: 0,
+            meteorPid: 0,
+            meteorParentPid: 0,
+            viteConfig: {},
+        }).then(() => {
+            process.exit(1);
+        });
+    }
+    
     protected _watchForParentExit() {
         // Keep track of Meteor's parent process to exit if it has ended abruptly.
         setInterval(() => {
-            if (!this.ddpClient.status.timedOut) {
-                return;
+            if (this.ddpClient.status.timedOut) {
+                this.logger.warn('Connection to Meteor DDP server timed out!');
+                this.exit();
             }
-            this.logger.warn('Meteor parent process is no longer running. Shutting down...');
-            this.update({
-                pid: 0,
-                meteorPid: 0,
-                meteorParentPid: 0,
-                viteConfig: {},
-            }).then(() => {
-                process.exit(1);
-            });
+            
+            if (!this._isRunning(this.config.meteorParentPid)) {
+                this.logger.warn('Meteor parent process is no longer running!');
+            }
         }, 1_000);
     }
     
