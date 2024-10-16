@@ -15,6 +15,9 @@ async function handleMessage(message: WorkerMethod) {
     }
     
     await callWorkerMethod((response) => {
+        if (!process.channel) {
+            return console.warn(new Error('Vite: No active IPC channel!'))
+        }
         validateIpcChannel(process.send);
         process.send(response);
     }, ...message.params as [params: any]).catch(
@@ -26,7 +29,9 @@ process.on('message', async (message: WorkerMethod) => handleMessage(message));
 
 if (process.env.WORKER_METHOD) {
     const message: WorkerMethod = JSON.parse(process.env.WORKER_METHOD);
-    handleMessage(message);
+    handleMessage(message).catch((error) => {
+        throw error;
+    });
 } else {
     validateIpcChannel(process.send);
 }
