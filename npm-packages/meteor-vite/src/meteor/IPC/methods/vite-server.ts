@@ -156,6 +156,33 @@ async function createViteServer({
         ],
     });
     
+    if (viteConfig.meteor?.serverEntry) {
+        build({
+            configFile: viteConfig.configFile,
+            build: {
+                watch: {},
+                lib: {
+                    entry: viteConfig.meteor.serverEntry,
+                    name: 'meteor-server',
+                    fileName: 'meteor.server',
+                    formats: ['es'],
+                },
+                outDir: 'server/bundle',
+                rollupOptions: {
+                    external: (id) => {
+                        if (id.startsWith('meteor')) {
+                            return true;
+                        }
+                    }
+                }
+            }
+        }).catch((error) => {
+            Logger.error('Encountered error while preparing server build!', error);
+        }).then(() => {
+            Logger.info('Server build completed!');
+        });
+    }
+    
     process.on('warning', (warning) => {
         if (warning.name !== RefreshNeeded.name) {
             return;
