@@ -104,9 +104,6 @@ build() {
     (link) || exit 1
     (cleanOutput) || exit 1
 
-    ## Disable file watcher for meteor-vite npm package to prevent builds from hanging indefinitely
-    METEOR_VITE_TSUP_BUILD_WATCHER="false"
-
     cd "$APP_DIR" || exit 1
     meteor build "$BUILD_TARGET" --directory "$@"
 }

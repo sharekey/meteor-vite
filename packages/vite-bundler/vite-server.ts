@@ -14,7 +14,6 @@ import { getMeteorRuntimeConfig } from './utility/Helpers';
 import { createWorkerFork, getProjectPackageJson, isMeteorIPCMessage } from './workers';
 
 if (Meteor.isDevelopment) {
-    let tsupWatcherRunning = false;
     DevConnectionLog.info('Starting Vite server...');
     
     WebAppInternals.registerBoilerplateDataCallback('meteor-vite', async (request: HTTP.IncomingMessage, data: BoilerplateData) => {
@@ -32,22 +31,6 @@ if (Meteor.isDevelopment) {
         refreshNeeded() {
             DevConnectionLog.info('Some lazy-loaded packages were imported, please refresh')
         },
-        
-        /**
-         * Builds the 'meteor-vite' npm package where the worker and Vite server is kept.
-         * Primarily to ease the testing process for the Vite plugin.
-         */
-        workerConfig({ listening }) {
-            if (!listening) return;
-            if (process.env.METEOR_VITE_TSUP_BUILD_WATCHER !== 'true') return;
-            if (tsupWatcherRunning) return;
-            
-            tsupWatcherRunning = true;
-            viteServer.call({
-                method: 'tsup.watch.meteor-vite',
-                params: [],
-            })
-        }
     }, { detached: true });
     
     viteServer.call({

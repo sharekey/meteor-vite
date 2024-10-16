@@ -52,37 +52,6 @@ export default CreateIPCInterface({
             throw error;
         }
     },
-    
-    /**
-     * Internal command for spinning up a watcher to rebuild meteor-vite on changes.
-     * Used to ease with the development of this package while running one of the example apps.
-     * Controlled through environment variables applied by the example-app.sh utility script.
-     */
-    async 'tsup.watch.meteor-vite'(reply) {
-        const npmPackagePath = Path.join(process.cwd(), '/node_modules/meteor-vite/') // to the meteor-vite npm package
-        const tsupPath = Path.join(npmPackagePath, '/node_modules/.bin/tsup-node'); // tsup to 2 node_modules dirs down.
-        
-        const child = spawn(tsupPath, ['--watch'], {
-            stdio: 'inherit',
-            cwd: npmPackagePath,
-            detached: false,
-            env: {
-                FORCE_COLOR: '3',
-            },
-        });
-        
-        child.on('error', (error) => {
-            throw new Error(`meteor-vite package build worker error: ${error.message}`, { cause: error })
-        });
-        
-        child.on('exit', (code) => {
-            if (!code) {
-                return;
-            }
-            process.exit(1);
-            throw new Error('TSUp watcher exited unexpectedly!');
-        });
-    }
 })
 
 async function prepareConfig(buildConfig: BuildOptions): Promise<ParsedConfig> {
