@@ -98,4 +98,8 @@ class DDPLogger {
     public debug(message: string, ...args: unknown[]) {
         this.log({ level: 'debug', message: this.formatMessage(message, args) });
     }
+    
+    public warn(message: string, ...args: unknown[]) {
+        this.log({ level: 'warn', message: this.formatMessage(message, args) });
+    }
 }
