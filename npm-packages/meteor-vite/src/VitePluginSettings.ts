@@ -12,6 +12,15 @@ export interface PluginSettings {
     clientEntry: string;
     
     /**
+     * Enter your Meteor server's entrypoint here to prebuild your Meteor server modules using Vite.
+     * This will not compile your Atmosphere packages, but will build all your app's server modules into
+     * a single file, greatly aiding Meteor in server reload performance during development.
+     *
+     * Not only does this come with improved performance, but also the flexibility of Vite's build system.
+     */
+    serverEntry?: string;
+    
+    /**
      * Skips bundling the provided npm packages if they are already provided by Meteor.
      * This assumes you have a Meteor package that depends on the provided npm packages.
      */
