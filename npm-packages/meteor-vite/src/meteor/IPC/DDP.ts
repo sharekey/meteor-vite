@@ -36,6 +36,9 @@ export class DDPConnection {
         return this.client.call(method, ...params);
     }
     
+    public get connected() {
+        return this.client?.connected;
+    }
 }
 
 class DDPLogger {
