@@ -1,5 +1,5 @@
 import type { MeteorRuntimeConfig } from 'meteor/jorgenvatle:vite-bundler/utility/Helpers';
-import { createServer, resolveConfig, type ResolvedServerUrls, ViteDevServer } from 'vite';
+import { createServer, resolveConfig, type ResolvedServerUrls, ViteDevServer, build } from 'vite';
 import { meteorWorker } from '../../../plugin/Meteor';
 import Logger from '../../../utilities/Logger';
 import { RefreshNeeded } from '../../../ViteLoadRequest';
@@ -9,7 +9,7 @@ import { DDPConnection } from '../DDP';
 import CreateIPCInterface, { IPCReply } from '../interface';
 import MeteorEvents, { MeteorIPCMessage } from '../MeteorEvents';
 
-let server: ViteDevServer & { config: ResolvedMeteorViteConfig };
+let viteDevServer: ViteDevServer & { config: ResolvedMeteorViteConfig };
 let viteConfig: ResolvedMeteorViteConfig;
 let listening = false;
 
@@ -95,16 +95,16 @@ export default CreateIPCInterface({
     },
 
     async 'vite.server.stop'() {
-        if (!server) return;
+        if (!viteDevServer) return;
         try {
             Logger.info('Shutting down vite server...');
-            await server.close()
+            await viteDevServer.close()
             Logger.info('Vite server shut down successfully!');
         } catch (error) {
             Logger.error('Failed to shut down Vite server:', error);
         }
     }
-})
+});
 
 async function createViteServer({
     packageJson,
@@ -114,8 +114,8 @@ async function createViteServer({
     buildStart: () => void;
     refreshNeeded: () => void;
 }) {
-    if (server) {
-        return server;
+    if (viteDevServer) {
+        return viteDevServer;
     }
     
     viteConfig = await resolveConfig({
@@ -124,7 +124,7 @@ async function createViteServer({
             ?? packageJson?.meteor?.viteConfig,
     }, 'serve');
     
-    server = await createServer({
+    viteDevServer = await createServer({
         configFile: viteConfig.configFile,
         plugins: [
             meteorWorker({
@@ -163,23 +163,23 @@ async function createViteServer({
         refreshNeeded();
     })
     
-    return server;
+    return viteDevServer;
 }
 
 async function sendViteConfig(reply: Replies) {
-    if (!server) {
+    if (!viteDevServer) {
         Logger.debug('Tried to get config from Vite server before it has been created!');
         return;
     }
     
-    const { config } = server;
+    const { config } = viteDevServer;
     const worker = BackgroundWorker.instance;
     
     await worker.setViteConfig({
         host: config.server?.host,
         port: config.server?.port,
         entryFile: config.meteor?.clientEntry,
-        resolvedUrls: server.resolvedUrls!,
+        resolvedUrls: viteDevServer.resolvedUrls!,
     });
     reply({
         kind: 'viteConfig',
