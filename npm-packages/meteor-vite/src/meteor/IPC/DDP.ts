@@ -99,6 +99,9 @@ class DDPLogger {
     }
     
     public debug(message: string, ...args: unknown[]) {
+        if (!process.env.ENABLE_DEBUG_LOGS) {
+            return;
+        }
         this.log({ level: 'debug', message: this.formatMessage(message, args) });
     }
     
