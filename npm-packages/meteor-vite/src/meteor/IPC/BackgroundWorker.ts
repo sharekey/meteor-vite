@@ -57,7 +57,7 @@ export class BackgroundWorker {
     protected _watchForParentExit() {
         // Keep track of Meteor's parent process to exit if it has ended abruptly.
         setInterval(() => {
-            if (this._isRunning(this.config.meteorPid)) {
+            if (!this.ddpClient.status.timedOut) {
                 return;
             }
             this.logger.warn('Meteor parent process is no longer running. Shutting down...');
