@@ -4,6 +4,7 @@
 ---
 
 Refactor IPC between Meteor and the Vite Dev Server to use DDP whenever possible.
+- Updated peer dependency for Vite to allow Vite v5. Meteor v2 users still need to use Vite v4 as v5 dropped support for Node v14 - the Node.js version used by Meteor. 
 
 ### Compatability Notes
 - `jorgenvatle:vite-bundler` now requires `meteor-vite@ >= v1.11.0`.
