@@ -43,6 +43,7 @@ export async function MeteorServerBuilder({ packageJson }: Pick<DevServerOptions
                 fileName: BUNDLE_OUT.filename,
                 formats: ['es'],
             },
+            sourcemap: true,
             outDir: BUNDLE_OUT.dir,
             rollupOptions: {
                 external: (id) => {
