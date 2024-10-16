@@ -30,6 +30,11 @@ export class DDPConnection {
         this.client.on('disconnected', () => {
             this._logger.info(`Disconnected from DDP server`,  config);
         });
+        
+        let pingIndex = 0;
+        setInterval(() => {
+            this.logger.debug(`Ping #${pingIndex++}`);
+        }, 10_000);
     }
     
     public async call<TMethod extends keyof MeteorViteMethods>(method: TMethod, ...params: Parameters<MeteorViteMethods[TMethod]>) {
