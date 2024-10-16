@@ -1,6 +1,5 @@
 import FS from 'fs/promises';
 import Path from 'path';
-import Logger from '../../utilities/Logger';
 import type { DDPConnection } from './DDP';
 import type { ViteRuntimeConfig } from './methods/vite-server';
 
@@ -44,12 +43,16 @@ export class BackgroundWorker {
             await worker.update(myConfig);
             worker._watchForParentExit();
         } else {
-            Logger.debug(`Background worker should be running with PID: ${worker.config.pid}`, worker.config);
+            ddpClient.logger.debug(`Background worker should be running with PID: ${worker.config.pid}`, worker.config);
         }
         return worker;
     }
     
-    constructor(public config: WorkerRuntimeConfig, protected ddpClient: DDPConnection) {}
+    protected logger: DDPConnection['logger'];
+    
+    constructor(public config: WorkerRuntimeConfig, protected ddpClient: DDPConnection) {
+        this.logger = ddpClient.logger;
+    }
     
     protected _watchForParentExit() {
         // Keep track of Meteor's parent process to exit if it has ended abruptly.
@@ -57,7 +60,7 @@ export class BackgroundWorker {
             if (this._isRunning(this.config.meteorPid)) {
                 return;
             }
-            Logger.warn('Meteor parent process is no longer running. Shutting down...');
+            this.logger.warn('Meteor parent process is no longer running. Shutting down...');
             this.update({
                 pid: 0,
                 meteorPid: 0,
@@ -80,15 +83,15 @@ export class BackgroundWorker {
     
     public get isRunning() {
         if (!this.config.pid) {
-            Logger.debug('No background worker process ID');
+            this.logger.debug('No background worker process ID');
             return false;
         }
         if (this.config.pid === process.pid) {
-            Logger.debug(`Background worker's process ID is identical to ours`);
+            this.logger.debug(`Background worker's process ID is identical to ours`);
             return false;
         }
         if (!this._isRunning(this.config.pid)) {
-            Logger.debug(`Background worker not running: ${this.config.pid} (current PID ${process.pid}) `);
+            this.logger.debug(`Background worker not running: ${this.config.pid} (current PID ${process.pid}) `);
             return false;
         }
         return true;
@@ -101,7 +104,7 @@ export class BackgroundWorker {
     
     public async setViteConfig(viteConfig: WorkerRuntimeConfig['viteConfig']) {
         if (this.config.pid !== process.pid && this.isRunning) {
-            Logger.debug(`Skipping Vite config write - config is controlled by different background process: ${this.config.pid}`);
+            this.logger.debug(`Skipping Vite config write - config is controlled by different background process: ${this.config.pid}`);
             return;
         }
         await this.update({
