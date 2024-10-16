@@ -45,6 +45,7 @@ export async function MeteorServerBuilder({ packageJson }: Pick<DevServerOptions
             },
             sourcemap: true,
             outDir: BUNDLE_OUT.dir,
+            minify: false,
             rollupOptions: {
                 external: (id) => {
                     if (id.startsWith('meteor')) {
