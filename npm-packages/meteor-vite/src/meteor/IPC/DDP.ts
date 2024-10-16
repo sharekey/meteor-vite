@@ -1,9 +1,9 @@
-import type { DataStreamDocument, DataStreamLogLevels } from 'meteor/jorgenvatle:vite-bundler/api/Collections';
+import type { DataStreamDocument } from 'meteor/jorgenvatle:vite-bundler/api/Collections';
+import { MeteorViteMethods } from 'meteor/jorgenvatle:vite-bundler/api/Endpoints';
+import SimpleDDP from 'simpleddp';
 import { inspect } from 'util';
 import WS from 'ws';
-import SimpleDDP from 'simpleddp';
 import { createLabelledLogger } from '../../utilities/Logger';
-import { MeteorViteMethods } from 'meteor/jorgenvatle:vite-bundler/api/Endpoints';
 
 export class DDPConnection {
     protected readonly client: SimpleDDP;
