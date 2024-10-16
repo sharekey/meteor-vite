@@ -78,7 +78,7 @@ async function prepareServerEntry(paths: {
     
     // Add import for Vite bundle to server mainModule
     {
-        const importString = `import ${JSON.stringify('./' + relativeViteModulePath)}`;
+        const importString = `import(${JSON.stringify('./' + relativeViteModulePath)}).catch((e) => console.warn('Failed to load Vite server bundle. If this is the first time starting the server, you can safely ignore this error.', e))`;
         
         if (mainModuleContent.includes(importString)) {
             return;
