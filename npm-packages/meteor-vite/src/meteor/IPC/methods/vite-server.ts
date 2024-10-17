@@ -42,10 +42,6 @@ export default CreateIPCInterface({
         await sendViteConfig(replyInterface);
     },
     
-    async 'meteor.events.emit'(reply, data: MeteorIPCMessage) {
-        MeteorEvents.ingest(data);
-    },
-    
     // todo: Add reply for triggering a server restart
     async 'vite.server.start'(replyInterface: Replies, { packageJson, meteorParentPid, meteorConfig }: DevServerOptions) {
         const ddpClient = DDPConnection.get();
