@@ -21,11 +21,7 @@ export function createWorkerFork(hooks: Partial<WorkerResponseHooks>, options?: 
         ])
     }
     validateNpmVersion();
-    let shouldKill = true;
     
-    if (options?.detached) {
-        shouldKill = false;
-    }
     if (options?.ipc) {
         options.ipc.setResponseHooks(hooks);
     }
@@ -57,12 +53,6 @@ export function createWorkerFork(hooks: Partial<WorkerResponseHooks>, options?: 
                 `Meteor PID: ${process.pid}`,
                 `Is vite server: ${listening}`,
             ].join('\n   '));
-        }
-        
-        if (listening) {
-            shouldKill = false;
-        } else {
-            shouldKill = true;
         }
     }
     
