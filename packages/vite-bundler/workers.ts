@@ -4,7 +4,6 @@ import Path from 'path';
 import FS from 'fs';
 import pc from 'picocolors';
 import type { WorkerMethod, WorkerResponse, WorkerResponseHooks, MeteorIPCMessage, ProjectJson } from 'meteor-vite';
-import * as process from 'process';
 import type { DDP_IPC } from './api/DDP-IPC';
 import { getMeteorRuntimeConfig } from './utility/Helpers';
 
