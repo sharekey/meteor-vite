@@ -3,15 +3,14 @@ import Path from 'path';
 import { build, resolveConfig } from 'vite';
 import { MeteorViteError } from '../error/MeteorViteError';
 import Logger from '../utilities/Logger';
-import { ResolvedMeteorViteConfig } from '../VitePluginSettings';
-import type { DevServerOptions } from './IPC/methods/vite-server';
+import { type ProjectJson, ResolvedMeteorViteConfig } from '../VitePluginSettings';
 
 const BUNDLE_OUT = {
     dir: 'server/bundle',
     filename: 'meteor.server',
 }
 
-export async function MeteorServerBuilder({ packageJson }: Pick<DevServerOptions, 'packageJson'>) {
+export async function MeteorServerBuilder({ packageJson, watch = true }: { packageJson: ProjectJson, watch: boolean }) {
     const viteConfig: ResolvedMeteorViteConfig = await resolveConfig({
         configFile: packageJson?.meteor?.vite?.configFile
             // Fallback for deprecated config format
@@ -37,7 +36,7 @@ export async function MeteorServerBuilder({ packageJson }: Pick<DevServerOptions
         mode: 'meteor-server:development',
         configFile: viteConfig.configFile,
         build: {
-            watch: {},
+            watch: watch ? {} : null,
             lib: {
                 entry: viteConfig.meteor.serverEntry,
                 name: 'meteor-server',
