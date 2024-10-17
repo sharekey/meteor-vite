@@ -2,7 +2,6 @@ import type HTTP from 'http';
 import { fetch } from 'meteor/fetch';
 import { Meteor } from 'meteor/meteor';
 import { WebAppInternals } from 'meteor/webapp';
-import { IpcCollection } from './api/Collections';
 import { DDP_IPC } from './api/DDP-IPC';
 import {
     DevConnectionLog,
