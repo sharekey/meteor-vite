@@ -1,6 +1,6 @@
 import Path from 'path';
 import pc from 'picocolors';
-import { Plugin, PluginOption, ResolvedConfig, UserConfig } from 'vite';
+import { type Plugin, ResolvedConfig, UserConfig } from 'vite';
 import PackageJSON from '../../package.json';
 import { FatalMeteorViteError } from '../error/MeteorViteError';
 import type { PartialPluginOptions, PluginOptions, PluginSettings } from '../VitePluginSettings';
@@ -36,7 +36,7 @@ export default function meteor(config: PluginOptions) {
  * Internal worker plugin. Merges the user's config with necessary overrides for the Meteor compiler and loads the
  * MeteorStubs plugin.
  */
-export function meteorWorker(config: PartialPluginOptions): PluginOption {
+export function meteorWorker(config: PartialPluginOptions): (Plugin | Promise<Plugin>)[] {
     const METEOR_LOCAL_DIR = process.env.METEOR_LOCAL_DIR || Path.join('.meteor', 'local');
     let enforce: 'pre' | undefined;
     let resolveId: Plugin['resolveId'];

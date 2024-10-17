@@ -1,5 +1,11 @@
 # @meteor-vite/plugin-zodern-relay
 
+## 1.0.5
+
+### Patch Changes
+
+- b2f8b9bb: Fix forked versions of zodern:relay: Adds a workaround for hardcoded zodern:relay/client import paths added by the Babel transformer.
+
 ## 1.0.3
 
 ### Patch Changes
