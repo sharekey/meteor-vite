@@ -4,12 +4,13 @@ import { meteorWorker } from '../../../plugin/Meteor';
 import Logger from '../../../utilities/Logger';
 import { RefreshNeeded } from '../../../ViteLoadRequest';
 import { type ProjectJson, ResolvedMeteorViteConfig } from '../../../VitePluginSettings';
+import { MeteorServerBuilder } from '../../ServerBuilder';
 import { BackgroundWorker, type WorkerRuntimeConfig } from '../BackgroundWorker';
 import { DDPConnection } from '../DDP';
 import CreateIPCInterface, { IPCReply } from '../interface';
 import MeteorEvents, { MeteorIPCMessage } from '../MeteorEvents';
 
-let server: ViteDevServer & { config: ResolvedMeteorViteConfig };
+let viteDevServer: ViteDevServer & { config: ResolvedMeteorViteConfig };
 let viteConfig: ResolvedMeteorViteConfig;
 let listening = false;
 
@@ -93,17 +94,18 @@ async function createViteServer({
     buildStart: () => void;
     refreshNeeded: () => void;
 }) {
-    if (server) {
-        return server;
+    if (viteDevServer) {
+        return viteDevServer;
     }
     
     viteConfig = await resolveConfig({
+        mode: 'development',
         configFile: packageJson?.meteor?.vite?.configFile
             // Fallback for deprecated config format
             ?? packageJson?.meteor?.viteConfig,
     }, 'serve');
     
-    server = await createServer({
+    viteDevServer = await createServer({
         configFile: viteConfig.configFile,
         plugins: [
             meteorWorker({
@@ -135,6 +137,10 @@ async function createViteServer({
         ],
     });
     
+    if (viteConfig.meteor?.serverEntry) {
+        await MeteorServerBuilder({ packageJson });
+    }
+    
     process.on('warning', (warning) => {
         if (warning.name !== RefreshNeeded.name) {
             return;
@@ -142,23 +148,23 @@ async function createViteServer({
         refreshNeeded();
     })
     
-    return server;
+    return viteDevServer;
 }
 
 async function sendViteConfig(reply: Replies) {
-    if (!server) {
+    if (!viteDevServer) {
         Logger.debug('Tried to get config from Vite server before it has been created!');
         return;
     }
     
-    const { config } = server;
+    const { config } = viteDevServer;
     const worker = BackgroundWorker.instance;
     
     await worker.setViteConfig({
         host: config.server?.host,
         port: config.server?.port,
         entryFile: config.meteor?.clientEntry,
-        resolvedUrls: server.resolvedUrls!,
+        resolvedUrls: viteDevServer.resolvedUrls!,
     });
     reply({
         kind: 'viteConfig',

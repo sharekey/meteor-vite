@@ -28,7 +28,7 @@ METEOR_LOCAL_DIR_ROOT="/tmp/.meteor-local/meteor-vite/examples"
 METEOR_LOCAL_DIR="$METEOR_LOCAL_DIR_ROOT/$app"
 
 export METEOR_PACKAGE_DIRS="$PWD/packages:$PWD/test-packages/atmosphere"
-export METEOR_VITE_TSUP_BUILD_WATCHER="${METEOR_VITE_TSUP_BUILD_WATCHER:-'true'}"
+export METEOR_VITE_TSUP_BUILD_WATCHER="${METEOR_VITE_TSUP_BUILD_WATCHER:-true}"
 
 npmPackages=("meteor-vite" "@meteor-vite/plugin-zodern-relay")
 npmPackagesDir="$PWD/npm-packages"
@@ -51,8 +51,13 @@ PROD_MONGO_CONNECTION_URI="mongodb://127.0.0.1:$(($PROD_MONGO_METEOR_PORT + 1))/
 
 # Start a development server
 start() {
-  cd "$APP_DIR" || exit 1
-  $npm start -- "$@"
+  if [[ "$METEOR_VITE_TSUP_BUILD_WATCHER" == 'true' ]]; then
+     export METEOR_VITE_TSUP_BUILD_WATCHER="false"
+     npx concurrently -k -n "tsup,$app" -c dim,yellow "'npm:build:package -- -- --watch'" "'npm:start $app'"
+  else
+    cd "$APP_DIR" || exit 1
+    $npm start -- "$@"
+  fi
 }
 
 # Run a command in the context of the provided example app
@@ -103,9 +108,6 @@ prepare:npm-packages() {
 build() {
     (link) || exit 1
     (cleanOutput) || exit 1
-
-    ## Disable file watcher for meteor-vite npm package to prevent builds from hanging indefinitely
-    METEOR_VITE_TSUP_BUILD_WATCHER="false"
 
     cd "$APP_DIR" || exit 1
     meteor build "$BUILD_TARGET" --directory "$@"
@@ -166,7 +168,6 @@ link() {
 
   log:success "Linked ${npmPackages[*]} to $app"
 }
-
 
 production:install() {
    cd "$BUILD_TARGET/bundle/programs/server" || exit 1

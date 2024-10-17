@@ -1,8 +1,8 @@
 import { OutputOptions } from 'rollup';
-import { ResolvedConfig } from 'vite';
+import { ResolvedConfig, type UserConfig } from 'vite';
 import { DeepPartial, MakeOptional, type MakeRequired } from './utilities/GenericTypes';
 
-export interface PluginSettings {
+export interface PluginSettings<TServerConfig extends UserConfig = {}> {
     /**
      * Vite client entry into Meteor.
      * Not to be confused with your Meteor mainModule.
@@ -10,6 +10,20 @@ export interface PluginSettings {
      * {@link https://github.com/JorgenVatle/meteor-vite#readme}
      */
     clientEntry: string;
+    
+    /**
+     * Enter your Meteor server's entrypoint here to prebuild your Meteor server modules using Vite.
+     * This will not compile your Atmosphere packages, but will build all your app's server modules into
+     * a single file, greatly aiding Meteor in server reload performance during development.
+     *
+     * Not only does this come with improved performance, but also the flexibility of Vite's build system.
+     */
+    serverEntry?: string;
+    
+    /**
+     * Vite config overrides when bundling the Meteor server with Vite.
+     */
+    serverEntryConfig?: TServerConfig;
     
     /**
      * Skips bundling the provided npm packages if they are already provided by Meteor.
