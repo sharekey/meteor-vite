@@ -10,7 +10,7 @@ const BUNDLE_OUT = {
     filename: 'meteor.server',
 }
 
-export async function MeteorServerBuilder({ packageJson, watch = true }: { packageJson: ProjectJson, watch: boolean }) {
+export async function MeteorServerBuilder({ packageJson, watch = true }: { packageJson: ProjectJson, watch?: boolean }) {
     const viteConfig: ResolvedMeteorViteConfig = await resolveConfig({
         configFile: packageJson?.meteor?.vite?.configFile
             // Fallback for deprecated config format
