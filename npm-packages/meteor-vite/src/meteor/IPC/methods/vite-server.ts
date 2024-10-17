@@ -43,15 +43,9 @@ export default CreateIPCInterface({
         await sendViteConfig(replyInterface);
     },
     
-    async 'meteor.events.emit'(reply, data: MeteorIPCMessage) {
-        MeteorEvents.ingest(data);
-    },
-    
     // todo: Add reply for triggering a server restart
     async 'vite.server.start'(replyInterface: Replies, { packageJson, meteorParentPid, meteorConfig }: DevServerOptions) {
-        const ddpClient = new DDPConnection({
-            endpoint: `ws://${meteorConfig.host}:${meteorConfig.port}/websocket`,
-        });
+        const ddpClient = DDPConnection.get();
         const backgroundWorker = await BackgroundWorker.init(meteorParentPid, ddpClient);
         const Logger = ddpClient.logger;
         
@@ -81,31 +75,16 @@ export default CreateIPCInterface({
             },
         });
         
-        await server.listen();
-        if (process.env.ENABLE_DEBUG_LOGS) {
-            Logger.info(`Vite server started`, { meteorParentPid });
-            let heartbeat = 0;
-            setInterval(() => {
-                Logger.info(`[${process.pid}.${process.ppid}] Heartbeat #${heartbeat++}`);
-            }, 5000);
+        if (!listening) {
+            await server.listen();
+            listening = true
+            server.printUrls();
         }
-        listening = true
-        server.printUrls();
+        
         await sendViteConfig(replyInterface);
         return;
     },
-
-    async 'vite.server.stop'() {
-        if (!viteDevServer) return;
-        try {
-            Logger.info('Shutting down vite server...');
-            await viteDevServer.close()
-            Logger.info('Vite server shut down successfully!');
-        } catch (error) {
-            Logger.error('Failed to shut down Vite server:', error);
-        }
-    }
-});
+})
 
 async function createViteServer({
     packageJson,

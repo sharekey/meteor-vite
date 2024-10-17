@@ -4,10 +4,16 @@ import Path from 'path';
 import FS from 'fs';
 import pc from 'picocolors';
 import type { WorkerMethod, WorkerResponse, WorkerResponseHooks, MeteorIPCMessage, ProjectJson } from 'meteor-vite';
+import * as process from 'process';
+import type { DDP_IPC } from './api/DDP-IPC';
+import { getMeteorRuntimeConfig } from './utility/Helpers';
 
 // Use a worker to skip reify and Fibers
 // Use a child process instead of worker to avoid WASM/archived threads error
-export function createWorkerFork(hooks: Partial<WorkerResponseHooks>, options?: { detached: boolean }) {
+export function createWorkerFork(hooks: Partial<WorkerResponseHooks>, options?: {
+    detached: boolean,
+    ipc?: DDP_IPC;
+}) {
     if (!FS.existsSync(workerPath)) {
         throw new MeteorViteError([
             `Unable to locate Meteor-Vite workers! Make sure you've installed the 'meteor-vite' npm package.`,
@@ -16,17 +22,16 @@ export function createWorkerFork(hooks: Partial<WorkerResponseHooks>, options?: 
         ])
     }
     validateNpmVersion();
-    let shouldKill = true;
     
-    if (options?.detached) {
-        shouldKill = false;
+    if (options?.ipc) {
+        options.ipc.setResponseHooks(hooks);
     }
     
     const child = fork(workerPath, ['--enable-source-maps'], {
         stdio: ['inherit', 'inherit', 'inherit', 'ipc'],
         cwd,
         detached: options?.detached ?? false,
-        env: prepareWorkerEnv(),
+        env: prepareWorkerEnv({ ipcOverDdp: !!options?.ipc }),
     });
     
     const hookMethods = Object.keys(hooks) as (keyof typeof hooks)[];
@@ -50,15 +55,13 @@ export function createWorkerFork(hooks: Partial<WorkerResponseHooks>, options?: 
                 `Is vite server: ${listening}`,
             ].join('\n   '));
         }
-        
-        if (listening) {
-            shouldKill = false;
-        } else {
-            shouldKill = true;
-        }
     }
     
     child.on('message', (message: WorkerResponse & { data: any }) => {
+        if (options?.ipc) {
+            console.warn('Received IPC message from child_process rather than DDP!', { message })
+            return;
+        }
         const hook = hooks[message.kind];
         
         if (typeof hook !== 'function') {
@@ -69,7 +72,9 @@ export function createWorkerFork(hooks: Partial<WorkerResponseHooks>, options?: 
     });
     
     child.on('exit', (code) => {
-        console.log('Child exited with code:', code);
+        if (code || process.env.ENABLE_DEBUG_LOGS) {
+            console.warn('Child exited with code:', code);
+        }
     })
     
     child.on('error', (error) => {
@@ -81,7 +86,11 @@ export function createWorkerFork(hooks: Partial<WorkerResponseHooks>, options?: 
     })
     
     return {
-        call(method: Omit<WorkerMethod, 'replies'>) {
+        call(method: WorkerMethod) {
+            if (options?.ipc) {
+                options.ipc.call(method);
+                return;
+            }
             if (!child.connected) {
                 console.warn('Oops worker process is not connected! Tried to send message to worker:', method);
                 console.log('The Vite server is likely running in the background. Try restarting Meteor. 👍');
@@ -147,12 +156,19 @@ function guessCwd () {
     return cwd
 }
 
-function prepareWorkerEnv() {
+function prepareWorkerEnv({ ipcOverDdp = false }) {
     const workerEnvPrefix = 'METEOR_VITE_WORKER_';
     const env: Record<string, string | undefined> = {
         FORCE_COLOR: '3',
         ENABLE_DEBUG_LOGS: process.env.ENABLE_DEBUG_LOGS,
         METEOR_LOCAL_DIR: process.env.METEOR_LOCAL_DIR,
+        STARTED_AT: Date.now().toString(),
+    }
+    if (ipcOverDdp) {
+        Object.assign(env, {
+            DDP_IPC: true,
+            METEOR_RUNTIME: JSON.stringify(getMeteorRuntimeConfig()),
+        })
     }
     Object.entries(process.env).forEach(([key, value]) => {
         if (!key.startsWith(workerEnvPrefix)) {

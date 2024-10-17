@@ -1,9 +1,13 @@
 import type { DataStreamDocument } from 'meteor/jorgenvatle:vite-bundler/api/Collections';
-import { MeteorViteMethods } from 'meteor/jorgenvatle:vite-bundler/api/Endpoints';
-import SimpleDDP from 'simpleddp';
+import type { MeteorViteMethods } from 'meteor/jorgenvatle:vite-bundler/api/Endpoints';
+import type { MeteorRuntimeConfig } from 'meteor/jorgenvatle:vite-bundler/utility/Helpers';
+import SimpleDDP, { DDPMessage } from 'simpleddp';
+import type { ddpCollection } from 'simpleddp/classes/ddpCollection';
+import type { ddpSubscription } from 'simpleddp/classes/ddpSubscription';
 import { inspect } from 'util';
 import WS from 'ws';
 import { createLabelledLogger } from '../../utilities/Logger';
+import type { WorkerMethod, WorkerResponse } from './methods';
 
 export class DDPConnection {
     protected readonly client: SimpleDDP;
@@ -15,7 +19,57 @@ export class DDPConnection {
         pingCount: 0,
         timedOut: false,
     }
-    constructor(config: {
+    protected static instance?: DDPConnection;
+    
+    public static get() {
+        if (this.instance) {
+            return this.instance;
+        }
+        const { host, port } = this.getMeteorRuntimeConfig();
+        this.instance = new DDPConnection({
+            endpoint: `ws://${host}:${port}/websocket`,
+        });
+        return this.instance;
+    }
+    
+    protected static getMeteorRuntimeConfig(): MeteorRuntimeConfig {
+        if (!process.env.METEOR_RUNTIME) {
+            throw new Error('[MeteorViteWorker] Missing required METEOR_RUNTIME environment variable!');
+        }
+        return JSON.parse(process.env.METEOR_RUNTIME)
+    }
+    
+    protected ipcSubscription?: ddpSubscription;
+    
+    public onIpcCall(handler: (message: WorkerMethod) => Promise<void>) {
+        if (!this.ipcSubscription) {
+            this.ipcSubscription = this.client.subscribe('meteor-vite:ipc');
+        }
+        const handledMessages = new Set<string>();
+        
+        this.client.on<DDPMessage.Added<WorkerMethod>>('added', (data) => {
+            if (data.collection !== '_meteor-vite.ipc') {
+                return;
+            }
+            if (handledMessages.has(data.id)) {
+                return;
+            }
+            handledMessages.add(data.id);
+            handler(data.fields)
+                .then(async () => {
+                    await this.client.call('meteor-vite:ipc.received', data.id)
+                })
+                .catch((error) => {
+                    this.logger.error('Failed to handle IPC request', data.fields, error)
+                });
+        })
+    }
+    
+    public ipcReply(message: WorkerResponse) {
+        return this.client.call('meteor-vite:ipc', message);
+    }
+    
+    protected constructor(config: {
         endpoint: string;
     }) {
         this.client = new SimpleDDP({
@@ -31,10 +85,10 @@ export class DDPConnection {
             this._logger.error('DDP Error', { error: String(error) });
         });
         this.client.on('connected', () => {
-            this._logger.info(`Connected to DDP server`, config);
+            this._logger.debug(`Connected to DDP server`, config);
         });
         this.client.on('disconnected', () => {
-            this._logger.info(`Disconnected from DDP server`,  config);
+            this._logger.debug(`Disconnected from DDP server`,  config);
         });
         
         setInterval(() => {
@@ -59,6 +113,23 @@ export class DDPConnection {
         }
         
         return this._status;
+    }
+}
+
+declare module 'simpleddp' {
+    
+    export namespace DDPMessage {
+        interface Added<TFields extends Record<string, unknown> = Record<string, unknown>> {
+            msg: 'added';
+            collection: string;
+            id: string;
+            fields: TFields;
+        }
+    }
+    
+    export default interface simpleDDP {
+        on<TEvent extends DDPMessage.Added>(event: 'added', handler: (data: TEvent) => void): void;
+        collection<TDocument = unknown>(name: string): ddpCollection<TDocument>;
     }
 }
 
