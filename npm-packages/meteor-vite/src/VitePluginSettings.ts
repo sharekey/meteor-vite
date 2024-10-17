@@ -1,5 +1,5 @@
 import { OutputOptions } from 'rollup';
-import { ResolvedConfig } from 'vite';
+import { ResolvedConfig, type UserConfig } from 'vite';
 import { DeepPartial, MakeOptional, type MakeRequired } from './utilities/GenericTypes';
 
 export interface PluginSettings {
@@ -19,6 +19,11 @@ export interface PluginSettings {
      * Not only does this come with improved performance, but also the flexibility of Vite's build system.
      */
     serverEntry?: string;
+    
+    /**
+     * Vite config overrides when bundling the Meteor server with Vite.
+     */
+    serverEntryConfig?: UserConfig;
     
     /**
      * Skips bundling the provided npm packages if they are already provided by Meteor.
