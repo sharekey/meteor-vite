@@ -42,11 +42,22 @@ export function getTempDir() {
 }
 
 export function getDevServerHost(): { host: string, port: number } {
-    const { portString, hostname } = process.argv.join(' ').match(/--port[\s=](?<hostname>[\d\w.]+:)?(?<portString>[\d]+)/)?.groups || { portString: '3000', hostname: 'localhost' };
+    let { portString, hostname } = process.argv.join(' ').match(/--port[\s=](?<hostname>[\d\w.]+:)?(?<portString>[\d]+)/)?.groups || {};
+    
+    if (!portString) {
+        portString = process.env.METEOR_PORT || ''
+    }
+    
+    if (!portString) {
+        const { port } = process.env.ROOT_URL?.match(/:(?<port>\d+)/)?.groups || { port: '' };
+        portString = port;
+    }
+    
+    
     const port = parseInt(portString);
     
     if (Number.isNaN(port)) {
-        console.warn(new MeteorViteError(`Unable to determine the port for your Meteor development server. We're going to assume it's localhost:3000. Please do report this issue on GitHub 🙏 https://github.com/JorgenVatle/meteor-vite/issues`));
+        console.warn(new MeteorViteError(`Unable to determine the port for your Meteor development server. We're going to assume it's localhost:3000. If you're using a different port specify it using the METEOR_PORT environment variable so that Vite can function correctly. E.g. METEOR_PORT=3030`));
         return {
             host: 'localhost',
             port: 3000,
