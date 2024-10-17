@@ -1,6 +1,6 @@
 import FS from 'fs/promises';
 import Path from 'path';
-import { build, resolveConfig } from 'vite';
+import { build, mergeConfig, resolveConfig } from 'vite';
 import { MeteorViteError } from '../error/MeteorViteError';
 import Logger from '../utilities/Logger';
 import { type ProjectJson, ResolvedMeteorViteConfig } from '../VitePluginSettings';
@@ -46,13 +46,13 @@ export async function MeteorServerBuilder({ packageJson, watch = true }: { packa
             sourcemap: true,
             outDir: BUNDLE_OUT.dir,
             minify: false,
-            rollupOptions: {
-                external: (id) => {
+            rollupOptions: mergeConfig({
+                external: (id: string) => {
                     if (id.startsWith('meteor')) {
                         return true;
                     }
                 }
-            }
+            }, viteConfig.meteor.serverEntryConfig?.build?.rollupOptions || {}, false)
         }
     }).catch((error) => {
         Logger.error('Encountered error while preparing server build!', error);
