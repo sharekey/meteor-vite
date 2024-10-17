@@ -8,7 +8,6 @@ export default defineConfig({
         vue(),
         meteor({
             clientEntry: 'imports/entrypoint/vite-client.ts',
-            serverEntry: 'server/main.ts',
         }),
         zodernRelay({
             directories: {
