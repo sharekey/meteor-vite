@@ -48,6 +48,10 @@ export class ViteProductionBoilerplate extends ViteBoilerplate {
             lines.push(`<link rel="modulepreload" crossorigin href="${this.filePath(file)}">`);
         }
         
+        for (const file of imports.moduleLazyPrefetch) {
+            lines.push(`<link rel="modulepreload" crossorigin fetchPriority="low" href="${this.filePath(file)}">`);
+        }
+        
         return lines.join('\n');
     }
     
@@ -111,6 +115,7 @@ export class ViteProductionBoilerplate extends ViteBoilerplate {
         const stylesheets = new Set<string>()
         const modules = new Set<string>()
         const modulePreload = new Set<string>();
+        const moduleLazyPrefetch = new Set<string>();
         
         function preloadImports(imports: string[]) {
             for (const path of imports) {
@@ -132,6 +137,9 @@ export class ViteProductionBoilerplate extends ViteBoilerplate {
         //  rel="preload" fetchPriority="low"
         for (const [name, chunk] of Object.entries(manifest.files)) {
             if (!chunk.isEntry) {
+                if (chunk.file.endsWith('.js')) {
+                    moduleLazyPrefetch.add(chunk.file);
+                }
                 continue;
             }
             
@@ -152,11 +160,13 @@ export class ViteProductionBoilerplate extends ViteBoilerplate {
             stylesheets,
             modules,
             modulePreload,
+            moduleLazyPrefetch,
         }
         
         Logger.debug('Parsed Vite manifest imports', Util.inspect({
             imports,
             manifest,
+            modules,
         }, { depth: 4, colors: true }));
         
         Object.assign(Meteor.settings.vite, { imports });
@@ -175,4 +185,5 @@ interface ManifestImports {
     stylesheets: Set<string>;
     modules: Set<string>;
     modulePreload: Set<string>;
+    moduleLazyPrefetch: Set<string>;
 }
