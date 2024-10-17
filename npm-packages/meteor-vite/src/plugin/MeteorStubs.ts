@@ -10,7 +10,7 @@ import { stubTemplate } from '../meteor/package/StubTemplate';
 import ViteLoadRequest from '../ViteLoadRequest';
 import { type PluginSettings, ResolvedMeteorViteConfig } from '../VitePluginSettings';
 
-export const MeteorStubs = setupPlugin(async () => {
+export const MeteorStubs: () => Promise<Plugin> = setupPlugin(async () => {
     return {
         name: 'meteor-vite: stubs',
         resolveId: (id) => ViteLoadRequest.resolveId(id),
