@@ -79,13 +79,6 @@ export default CreateIPCInterface({
         });
         
         await server.listen();
-        if (process.env.ENABLE_DEBUG_LOGS) {
-            Logger.info(`Vite server started`, { meteorParentPid });
-            let heartbeat = 0;
-            setInterval(() => {
-                Logger.info(`[${process.pid}.${process.ppid}] Heartbeat #${heartbeat++}`);
-            }, 5000);
-        }
         listening = true
         server.printUrls();
         await sendViteConfig(replyInterface);
