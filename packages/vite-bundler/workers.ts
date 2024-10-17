@@ -23,10 +23,6 @@ export function createWorkerFork(hooks: Partial<WorkerResponseHooks>, options?: 
     }
     validateNpmVersion();
     
-    if (options?.ipc) {
-        options.ipc.setResponseHooks(hooks);
-    }
-    
     const child = fork(workerPath, ['--enable-source-maps'], {
         stdio: ['inherit', 'inherit', 'inherit', 'ipc'],
         cwd,
@@ -55,6 +51,10 @@ export function createWorkerFork(hooks: Partial<WorkerResponseHooks>, options?: 
                 `Is vite server: ${listening}`,
             ].join('\n   '));
         }
+    }
+    
+    if (options?.ipc) {
+        options.ipc.setResponseHooks(hooks);
     }
     
     child.on('message', (message: WorkerResponse & { data: any }) => {
