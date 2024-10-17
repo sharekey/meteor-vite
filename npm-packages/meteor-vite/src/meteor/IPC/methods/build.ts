@@ -9,6 +9,7 @@ import {
     type MeteorStubsSettings,
 } from '../../../VitePluginSettings';
 import { meteorWorker } from '../../../plugin/Meteor';
+import { MeteorServerBuilder } from '../../ServerBuilder';
 import CreateIPCInterface, { IPCReply } from '../interface';
 
 type BuildOutput = Awaited<ReturnType<typeof build>>;
@@ -21,6 +22,9 @@ export default CreateIPCInterface({
         try {
             const { viteConfig, inlineBuildConfig, outDir } = await prepareConfig(buildConfig);
             const results = await build(inlineBuildConfig);
+            if (viteConfig.meteor?.serverEntry) {
+                await MeteorServerBuilder({ packageJson: buildConfig.packageJson, watch: false });
+            }
             const result = Array.isArray(results) ? results[0] : results;
             validateOutput(result);
 
