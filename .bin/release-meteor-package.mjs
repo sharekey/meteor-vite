@@ -89,7 +89,7 @@ async function setVersion(newVersion) {
 }
 
 async function publish() {
-    const meteorReleases = ['3.0-rc.2', '2.16'];
+    const meteorReleases = ['3.0.3', '2.16'];
     const { version: currentVersion } = await parsePackageJson();
 
     logger.info(`⚡  Publishing ${meteorPackage.releaseName}...`);
