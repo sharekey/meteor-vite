@@ -15,7 +15,6 @@ import { type Boilerplate, ViteBoilerplate } from './common';
 
 export class ViteDevServerWorker extends ViteBoilerplate {
     protected readonly viteServer: WorkerInstance;
-    protected tsupWatcherRunning = false;
     constructor() {
         super();
         const ipc = new DDP_IPC({
