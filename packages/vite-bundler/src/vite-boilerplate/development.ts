@@ -29,22 +29,6 @@ export class ViteDevServerWorker extends ViteBoilerplate {
             refreshNeeded() {
                 DevConnectionLog.info('Some lazy-loaded packages were imported, please refresh')
             },
-            
-            /**
-             * Builds the 'meteor-vite' npm package where the worker and Vite server is kept.
-             * Primarily to ease the testing process for the Vite plugin.
-             */
-            workerConfig: ({ listening }) => {
-                if (!listening) return;
-                if (process.env.METEOR_VITE_TSUP_BUILD_WATCHER !== 'true') return;
-                if (this.tsupWatcherRunning) return;
-                
-                this.tsupWatcherRunning = true;
-                viteServer.call({
-                    method: 'tsup.watch.meteor-vite',
-                    params: [],
-                })
-            }
         })
         const viteServer = this.viteServer = createWorkerFork({}, { detached: true, ipc });
         
