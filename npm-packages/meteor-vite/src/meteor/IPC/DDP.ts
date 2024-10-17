@@ -49,9 +49,13 @@ export class DDPConnection {
             if (data.collection !== '_meteor-vite.ipc') {
                 return;
             }
-            handler(data.fields).catch((error) => {
-                this.logger.error('Failed to handle IPC request', data.fields, error)
-            });
+            handler(data.fields)
+                .then(async () => {
+                    await this.client.call('meteor-vite:ipc.received', data.id)
+                })
+                .catch((error) => {
+                    this.logger.error('Failed to handle IPC request', data.fields, error)
+                });
         })
     }
     

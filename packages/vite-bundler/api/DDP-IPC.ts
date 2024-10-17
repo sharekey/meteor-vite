@@ -14,9 +14,15 @@ export class DDP_IPC {
                 }
                 
                 return hook(data);
+            },
+            async 'meteor-vite:ipc.received'(id: string) {
+                await IpcCollection.removeAsync(id)
             }
         });
         Meteor.publish('meteor-vite:ipc', function() {
+            IpcCollection.find().fetchAsync().then((messages) => {
+                console.log({ messages });
+            })
             return IpcCollection.find();
         })
     }
