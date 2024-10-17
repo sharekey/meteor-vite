@@ -4,10 +4,14 @@ import Path from 'path';
 import FS from 'fs';
 import pc from 'picocolors';
 import type { WorkerMethod, WorkerResponse, WorkerResponseHooks, MeteorIPCMessage, ProjectJson } from 'meteor-vite';
+import type { DDP_IPC } from './api/DDP-IPC';
 
 // Use a worker to skip reify and Fibers
 // Use a child process instead of worker to avoid WASM/archived threads error
-export function createWorkerFork(hooks: Partial<WorkerResponseHooks>, options?: { detached: boolean }) {
+export function createWorkerFork(hooks: Partial<WorkerResponseHooks>, options?: {
+    detached: boolean,
+    ipc?: DDP_IPC;
+}) {
     if (!FS.existsSync(workerPath)) {
         throw new MeteorViteError([
             `Unable to locate Meteor-Vite workers! Make sure you've installed the 'meteor-vite' npm package.`,
@@ -59,6 +63,10 @@ export function createWorkerFork(hooks: Partial<WorkerResponseHooks>, options?: 
     }
     
     child.on('message', (message: WorkerResponse & { data: any }) => {
+        if (options?.ipc) {
+            console.warn('Received IPC message from child_process rather than DDP!', { message })
+            return;
+        }
         const hook = hooks[message.kind];
         
         if (typeof hook !== 'function') {
@@ -81,7 +89,11 @@ export function createWorkerFork(hooks: Partial<WorkerResponseHooks>, options?: 
     })
     
     return {
-        call(method: Omit<WorkerMethod, 'replies'>) {
+        call(method: WorkerMethod) {
+            if (options?.ipc) {
+                options.ipc.call(method);
+                return;
+            }
             if (!child.connected) {
                 console.warn('Oops worker process is not connected! Tried to send message to worker:', method);
                 console.log('The Vite server is likely running in the background. Try restarting Meteor. 👍');
