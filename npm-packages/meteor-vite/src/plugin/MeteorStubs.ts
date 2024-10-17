@@ -1,7 +1,6 @@
 import FS from 'fs/promises';
 import Path from 'path';
 import pc from 'picocolors';
-import type { PluginContext } from 'rollup';
 import type { Plugin, ViteDevServer } from 'vite';
 import PackageJSON from '../../package.json';
 import { createErrorHandler } from '../error/ErrorHandler';
@@ -11,7 +10,7 @@ import { stubTemplate } from '../meteor/package/StubTemplate';
 import ViteLoadRequest from '../ViteLoadRequest';
 import { type PluginSettings, ResolvedMeteorViteConfig } from '../VitePluginSettings';
 
-export const MeteorStubs = setupPlugin(async () => {
+export const MeteorStubs: () => Promise<Plugin> = setupPlugin(async () => {
     return {
         name: 'meteor-vite: stubs',
         resolveId: (id) => ViteLoadRequest.resolveId(id),
@@ -96,7 +95,7 @@ async function storeDebugSnippet({ request, stubTemplate, meteorPackage }: {
  */
 function setupPlugin<Context extends ViteLoadRequest>(setup: () => Promise<{
     name: string;
-    load(this: PluginContext, request: Context): Promise<string>;
+    load(request: Context): Promise<string>;
     validateConfig(settings: PluginSettings): Promise<void>,
     setupContext(viteId: string, server: ViteDevServer, settings: PluginSettings): Promise<Context>;
     shouldProcess(viteId: string): boolean;
@@ -126,7 +125,7 @@ function setupPlugin<Context extends ViteLoadRequest>(setup: () => Promise<{
             configureServer(viteDevServer) {
                 server = viteDevServer;
             },
-            async load(this: PluginContext, viteId: string) {
+            async load(viteId: string) {
                 const shouldProcess = plugin.shouldProcess(viteId);
                 
                 if (!shouldProcess) {
@@ -139,12 +138,12 @@ function setupPlugin<Context extends ViteLoadRequest>(setup: () => Promise<{
                     createErrorHandler('Could not parse Meteor package', request)
                 )
             },
-        }
+        };
     }
     
     return () => createPlugin().catch(handleError)
 }
 
 
-type ResolvedPluginConfig = Required<PluginSettings>;
+type ResolvedPluginConfig = Required<PluginSettings> & { meteorStubs: Required<PluginSettings['meteorStubs']> };
 
