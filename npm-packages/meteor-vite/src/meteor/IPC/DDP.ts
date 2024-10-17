@@ -85,10 +85,10 @@ export class DDPConnection {
             this._logger.error('DDP Error', { error: String(error) });
         });
         this.client.on('connected', () => {
-            this._logger.info(`Connected to DDP server`, config);
+            this._logger.debug(`Connected to DDP server`, config);
         });
         this.client.on('disconnected', () => {
-            this._logger.info(`Disconnected from DDP server`,  config);
+            this._logger.debug(`Disconnected from DDP server`,  config);
         });
         
         setInterval(() => {
