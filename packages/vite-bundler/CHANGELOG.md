@@ -1,5 +1,11 @@
 # vite-bundler
 
+## 3.0.0-next.13
+
+### Patch Changes
+
+- b8f34bbd: Correct path to dev server splash screen HTML asset
+
 ## 3.0.0-next.12
 
 ### Minor Changes
