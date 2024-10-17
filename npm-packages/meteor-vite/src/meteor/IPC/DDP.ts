@@ -1,10 +1,11 @@
 import type { DataStreamDocument } from 'meteor/jorgenvatle:vite-bundler/api/Collections';
 import type { MeteorViteMethods } from 'meteor/jorgenvatle:vite-bundler/api/Endpoints';
 import type { MeteorRuntimeConfig } from 'meteor/jorgenvatle:vite-bundler/utility/Helpers';
-import SimpleDDP from 'simpleddp';
+import SimpleDDP, { DDPMessage } from 'simpleddp';
 import { inspect } from 'util';
 import WS from 'ws';
 import { createLabelledLogger } from '../../utilities/Logger';
+import type { WorkerMethod } from './methods';
 
 export class DDPConnection {
     protected readonly client: SimpleDDP;
@@ -34,6 +35,15 @@ export class DDPConnection {
             throw new Error('[MeteorViteWorker] Missing required METEOR_RUNTIME environment variable!');
         }
         return JSON.parse(process.env.METEOR_RUNTIME)
+    }
+    
+    public onIpcCall(handler: (message: WorkerMethod) => Promise<void>) {
+        this.client.on<DDPMessage.Added<WorkerMethod>>('added', async (data) => {
+            if (data.collection !== '_meteor-vite.ipc') {
+                return;
+            }
+            await handler(data.fields);
+        })
     }
     
     protected constructor(config: {
@@ -80,6 +90,22 @@ export class DDPConnection {
         }
         
         return this._status;
+    }
+}
+
+declare module 'simpleddp' {
+    
+    export namespace DDPMessage {
+        interface Added<TFields extends Record<string, unknown> = Record<string, unknown>> {
+            msg: 'added';
+            collection: string;
+            id: string;
+            fields: TFields;
+        }
+    }
+    
+    export default interface simpleDDP {
+        on<TEvent extends DDPMessage.Added>(event: 'added', handler: (data: TEvent) => void): void;
     }
 }
 
