@@ -78,9 +78,12 @@ export default CreateIPCInterface({
             },
         });
         
-        await server.listen();
-        listening = true
-        server.printUrls();
+        if (!server.httpServer?.listening) {
+            await server.listen();
+            listening = true
+            server.printUrls();
+        }
+        
         await sendViteConfig(replyInterface);
         return;
     },
