@@ -20,9 +20,6 @@ export class DDP_IPC {
             }
         });
         Meteor.publish('meteor-vite:ipc', function() {
-            IpcCollection.find().fetchAsync().then((messages) => {
-                console.log({ messages });
-            })
             return IpcCollection.find();
         })
     }
