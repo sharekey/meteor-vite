@@ -169,6 +169,7 @@ function prepareWorkerEnv({ ipcOverDdp = false }) {
         FORCE_COLOR: '3',
         ENABLE_DEBUG_LOGS: process.env.ENABLE_DEBUG_LOGS,
         METEOR_LOCAL_DIR: process.env.METEOR_LOCAL_DIR,
+        STARTED_AT: Date.now().toString(),
     }
     if (ipcOverDdp) {
         Object.assign(env, {
