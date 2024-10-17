@@ -6,7 +6,7 @@ import type { ddpSubscription } from 'simpleddp/classes/ddpSubscription';
 import { inspect } from 'util';
 import WS from 'ws';
 import { createLabelledLogger } from '../../utilities/Logger';
-import type { WorkerMethod } from './methods';
+import type { WorkerMethod, WorkerResponse } from './methods';
 
 export class DDPConnection {
     protected readonly client: SimpleDDP;
@@ -53,6 +53,10 @@ export class DDPConnection {
                 this.logger.error('Failed to handle IPC request', data.fields, error)
             });
         })
+    }
+    
+    public ipcReply(message: WorkerResponse) {
+        return this.client.call('meteor-vite:ipc', message);
     }
     
     protected constructor(config: {
