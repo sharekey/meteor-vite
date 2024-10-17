@@ -1,5 +1,13 @@
 # vite-bundler
 
+## 3.0.0-next.12
+
+### Minor Changes
+
+- f2e0e9d2: - Add Vite config option for bundling the Meteor server
+  - Use DDP instead of Node IPC for managing Vite Dev server status
+  - Prefetch all Vite production assets in the background using the lowest available link priority.
+
 ## 2.1.0
 
 ### Minor Changes
