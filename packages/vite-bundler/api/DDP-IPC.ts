@@ -4,7 +4,7 @@ import { IpcCollection } from './Collections';
 type IpcResponse = WorkerResponse & { data: any }
 
 export class DDP_IPC {
-    constructor(protected readonly responseHooks: Partial<WorkerResponseHooks>) {
+    constructor(public readonly responseHooks: Partial<WorkerResponseHooks>) {
         Meteor.methods({
             'meteor-vite:ipc': ({ kind, data }: IpcResponse) => {
                 const hook = this.responseHooks[kind];

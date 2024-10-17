@@ -34,7 +34,10 @@ if (Meteor.isDevelopment) {
         },
     })
     
-    const viteServer = createWorkerFork({}, { detached: true, ipc });
+    const viteServer = createWorkerFork({
+        viteConfig: ipc.responseHooks.viteConfig,
+        refreshNeeded: ipc.responseHooks.refreshNeeded,
+    }, { detached: true, ipc });
     
     viteServer.call({
         method: 'vite.server.start',

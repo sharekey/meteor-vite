@@ -164,10 +164,11 @@ function prepareWorkerEnv({ ipcOverDdp = false }) {
         METEOR_LOCAL_DIR: process.env.METEOR_LOCAL_DIR,
         STARTED_AT: Date.now().toString(),
     }
-    if (ipcOverDdp) {
+    const METEOR_RUNTIME = getMeteorRuntimeConfig();
+    if (ipcOverDdp && !METEOR_RUNTIME.fallback) {
         Object.assign(env, {
             DDP_IPC: true,
-            METEOR_RUNTIME: JSON.stringify(getMeteorRuntimeConfig()),
+            METEOR_RUNTIME: JSON.stringify(METEOR_RUNTIME),
         })
     }
     Object.entries(process.env).forEach(([key, value]) => {
