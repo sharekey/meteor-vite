@@ -2,7 +2,7 @@ import { OutputOptions } from 'rollup';
 import { ResolvedConfig, type UserConfig } from 'vite';
 import { DeepPartial, MakeOptional, type MakeRequired } from './utilities/GenericTypes';
 
-export interface PluginSettings {
+export interface PluginSettings<TServerConfig extends UserConfig = {}> {
     /**
      * Vite client entry into Meteor.
      * Not to be confused with your Meteor mainModule.
@@ -23,7 +23,7 @@ export interface PluginSettings {
     /**
      * Vite config overrides when bundling the Meteor server with Vite.
      */
-    serverEntryConfig?: UserConfig;
+    serverEntryConfig?: TServerConfig;
     
     /**
      * Skips bundling the provided npm packages if they are already provided by Meteor.
