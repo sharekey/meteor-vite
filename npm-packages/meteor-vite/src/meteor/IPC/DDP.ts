@@ -1,5 +1,6 @@
 import type { DataStreamDocument } from 'meteor/jorgenvatle:vite-bundler/api/Collections';
-import { MeteorViteMethods } from 'meteor/jorgenvatle:vite-bundler/api/Endpoints';
+import type { MeteorViteMethods } from 'meteor/jorgenvatle:vite-bundler/api/Endpoints';
+import type { MeteorRuntimeConfig } from 'meteor/jorgenvatle:vite-bundler/utility/Helpers';
 import SimpleDDP from 'simpleddp';
 import { inspect } from 'util';
 import WS from 'ws';
@@ -15,7 +16,27 @@ export class DDPConnection {
         pingCount: 0,
         timedOut: false,
     }
-    constructor(config: {
+    protected static instance?: DDPConnection;
+    
+    public static get() {
+        if (this.instance) {
+            return this.instance;
+        }
+        const { host, port } = this.getMeteorRuntimeConfig();
+        this.instance = new DDPConnection({
+            endpoint: `ws://${host}:${port}/websocket`,
+        });
+        return this.instance;
+    }
+    
+    protected static getMeteorRuntimeConfig(): MeteorRuntimeConfig {
+        if (!process.env.METEOR_RUNTIME) {
+            throw new Error('[MeteorViteWorker] Missing required METEOR_RUNTIME environment variable!');
+        }
+        return JSON.parse(process.env.METEOR_RUNTIME)
+    }
+    
+    protected constructor(config: {
         endpoint: string;
     }) {
         this.client = new SimpleDDP({
