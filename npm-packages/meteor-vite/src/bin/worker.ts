@@ -1,4 +1,5 @@
 import { createErrorHandler } from '../error/ErrorHandler';
+import { DDPConnection } from '../meteor/IPC/DDP';
 import { validateIpcChannel } from '../meteor/IPC/interface';
 import IpcMethods, { WorkerMethod } from '../meteor/IPC/methods';
 
@@ -27,11 +28,10 @@ async function handleMessage(message: WorkerMethod) {
 
 process.on('message', async (message: WorkerMethod) => handleMessage(message));
 
-if (process.env.WORKER_METHOD) {
-    const message: WorkerMethod = JSON.parse(process.env.WORKER_METHOD);
-    handleMessage(message).catch((error) => {
-        throw error;
-    });
+if (process.env.DDP_IPC) {
+    DDPConnection.get().onIpcCall((message) => {
+        return handleMessage(message)
+    })
 } else {
     validateIpcChannel(process.send);
 }
