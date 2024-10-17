@@ -173,7 +173,7 @@ function prepareWorkerEnv({ ipcOverDdp = false }) {
     if (ipcOverDdp) {
         Object.assign(env, {
             DDP_IPC: true,
-            METEOR_RUNTIME: getMeteorRuntimeConfig(),
+            METEOR_RUNTIME: JSON.stringify(getMeteorRuntimeConfig()),
         })
     }
     Object.entries(process.env).forEach(([key, value]) => {
