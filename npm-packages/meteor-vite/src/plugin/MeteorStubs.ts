@@ -103,13 +103,13 @@ function setupPlugin<Context extends ViteLoadRequest>(setup: () => Promise<{
     resolveId(viteId: string): string | undefined;
 }>): () => Promise<{
     name: string;
-    configResolved(config: unknown): void;
+    configResolved(config: unknown): Promise<void> | undefined;
     configureServer(server: unknown): void;
     load: Plugin['load'];
 }> {
     const handleError = createErrorHandler('Could not set up Vite plugin!');
     
-    const createPlugin = async (): Promise<Plugin> => {
+    const createPlugin = async () => {
         const plugin = await setup();
         let settings: PluginSettings;
         let server: ViteDevServer;
