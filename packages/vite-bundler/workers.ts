@@ -5,6 +5,7 @@ import FS from 'fs';
 import pc from 'picocolors';
 import type { WorkerMethod, WorkerResponse, WorkerResponseHooks, MeteorIPCMessage, ProjectJson } from 'meteor-vite';
 import type { DDP_IPC } from './api/DDP-IPC';
+import { getMeteorRuntimeConfig } from './utility/Helpers';
 
 // Use a worker to skip reify and Fibers
 // Use a child process instead of worker to avoid WASM/archived threads error
@@ -33,7 +34,7 @@ export function createWorkerFork(hooks: Partial<WorkerResponseHooks>, options?: 
         stdio: ['inherit', 'inherit', 'inherit', 'ipc'],
         cwd,
         detached: options?.detached ?? false,
-        env: prepareWorkerEnv(),
+        env: prepareWorkerEnv({ ipcOverDdp: !!options?.ipc }),
     });
     
     const hookMethods = Object.keys(hooks) as (keyof typeof hooks)[];
@@ -162,12 +163,18 @@ function guessCwd () {
     return cwd
 }
 
-function prepareWorkerEnv() {
+function prepareWorkerEnv({ ipcOverDdp = false }) {
     const workerEnvPrefix = 'METEOR_VITE_WORKER_';
     const env: Record<string, string | undefined> = {
         FORCE_COLOR: '3',
         ENABLE_DEBUG_LOGS: process.env.ENABLE_DEBUG_LOGS,
         METEOR_LOCAL_DIR: process.env.METEOR_LOCAL_DIR,
+    }
+    if (ipcOverDdp) {
+        Object.assign(env, {
+            DDP_IPC: true,
+            METEOR_RUNTIME: getMeteorRuntimeConfig(),
+        })
     }
     Object.entries(process.env).forEach(([key, value]) => {
         if (!key.startsWith(workerEnvPrefix)) {
