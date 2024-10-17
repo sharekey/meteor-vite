@@ -1,8 +1,10 @@
+import type { WorkerMethod } from 'meteor-vite';
 import { Mongo } from 'meteor/mongo';
 import type { RuntimeConfig } from '../loading/vite-connection-handler';
 
 export const StatusCollection = new Mongo.Collection<StatusDocument>('_meteor-vite.status', { connection: null });
 export const DataStreamCollection = new Mongo.Collection<DataStreamDocument>('_meteor-vite.data-stream');
+export const IpcCollection = new Mongo.Collection<IpcDocument>('_meteor-vite.ipc', { connection: null });
 
 export interface BaseDocument {
     createdAt: Date;
@@ -24,6 +26,11 @@ interface MeteorViteStatus {
         lastHeartbeat: Date;
         startedAt: Date;
     }
+}
+
+interface IpcDocument<TMethod extends WorkerMethod = WorkerMethod> {
+    method: TMethod['method']
+    params: TMethod['params'];
 }
 
 export type DataStreamLogType = 'log:client' | 'log:server' | 'log:shared';
