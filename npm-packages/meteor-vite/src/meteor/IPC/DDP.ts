@@ -2,6 +2,7 @@ import type { DataStreamDocument } from 'meteor/jorgenvatle:vite-bundler/api/Col
 import type { MeteorViteMethods } from 'meteor/jorgenvatle:vite-bundler/api/Endpoints';
 import type { MeteorRuntimeConfig } from 'meteor/jorgenvatle:vite-bundler/utility/Helpers';
 import SimpleDDP, { DDPMessage } from 'simpleddp';
+import type { ddpCollection } from 'simpleddp/classes/ddpCollection';
 import type { ddpSubscription } from 'simpleddp/classes/ddpSubscription';
 import { inspect } from 'util';
 import WS from 'ws';
@@ -123,6 +124,7 @@ declare module 'simpleddp' {
     
     export default interface simpleDDP {
         on<TEvent extends DDPMessage.Added>(event: 'added', handler: (data: TEvent) => void): void;
+        collection<TDocument = unknown>(name: string): ddpCollection<TDocument>;
     }
 }
 
