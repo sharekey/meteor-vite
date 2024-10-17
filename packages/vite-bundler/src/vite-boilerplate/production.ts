@@ -144,6 +144,7 @@ export class ViteProductionBoilerplate extends ViteBoilerplate {
             }
             
             if (chunk.file.endsWith('.js')) {
+                moduleLazyPrefetch.delete(chunk.file);
                 modules.add(chunk.file);
             }
             
