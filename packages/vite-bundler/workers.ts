@@ -25,6 +25,9 @@ export function createWorkerFork(hooks: Partial<WorkerResponseHooks>, options?: 
     if (options?.detached) {
         shouldKill = false;
     }
+    if (options?.ipc) {
+        options.ipc.setResponseHooks(hooks);
+    }
     
     const child = fork(workerPath, ['--enable-source-maps'], {
         stdio: ['inherit', 'inherit', 'inherit', 'ipc'],
