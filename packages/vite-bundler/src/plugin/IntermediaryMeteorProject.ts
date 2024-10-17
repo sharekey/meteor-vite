@@ -6,7 +6,7 @@ import path from 'node:path';
 import pc from 'picocolors';
 import { MeteorViteError } from '../utility/Errors';
 import { getBuildConfig } from '../utility/Helpers';
-import Logger from '../utility/BuildLogger';
+import Logger from '../utility/Logger';
 import { createWorkerFork, cwd } from '../workers';
 
 const {
