@@ -128,6 +128,7 @@ export class ViteProductionBoilerplate extends ViteBoilerplate {
             
         }
         
+        // Todo: Preload all assets app assets in the background after loading essential assets.
         for (const [name, chunk] of Object.entries(manifest.files)) {
             if (!chunk.isEntry) {
                 continue;
