@@ -2,6 +2,8 @@ import type HTTP from 'http';
 import { fetch } from 'meteor/fetch';
 import { Meteor } from 'meteor/meteor';
 import { WebAppInternals } from 'meteor/webapp';
+import { IpcCollection } from './api/Collections';
+import { DDP_IPC } from './api/DDP-IPC';
 import {
     DevConnectionLog,
     getConfig,
@@ -22,7 +24,7 @@ if (Meteor.isDevelopment) {
         data.dynamicBody = `${data.dynamicBody || ''}\n${await scripts.stringTemplate()}`;
     });
     
-    const viteServer = createWorkerFork({
+    const ipc = new DDP_IPC({
         async viteConfig(config) {
             const { ready } = await setConfig(config);
             if (ready) {
@@ -32,7 +34,9 @@ if (Meteor.isDevelopment) {
         refreshNeeded() {
             DevConnectionLog.info('Some lazy-loaded packages were imported, please refresh')
         },
-        
+    })
+    
+    const viteServer = createWorkerFork({
         /**
          * Builds the 'meteor-vite' npm package where the worker and Vite server is kept.
          * Primarily to ease the testing process for the Vite plugin.
@@ -48,7 +52,7 @@ if (Meteor.isDevelopment) {
                 params: [],
             })
         }
-    }, { detached: true });
+    }, { detached: true, ipc });
     
     viteServer.call({
         method: 'vite.server.start',
