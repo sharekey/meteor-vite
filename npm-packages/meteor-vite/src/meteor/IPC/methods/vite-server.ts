@@ -83,17 +83,6 @@ export default CreateIPCInterface({
         await sendViteConfig(replyInterface);
         return;
     },
-
-    async 'vite.server.stop'() {
-        if (!server) return;
-        try {
-            Logger.info('Shutting down vite server...');
-            await server.close()
-            Logger.info('Vite server shut down successfully!');
-        } catch (error) {
-            Logger.error('Failed to shut down Vite server:', error);
-        }
-    }
 })
 
 async function createViteServer({
