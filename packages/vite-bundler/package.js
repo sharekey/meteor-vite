@@ -19,19 +19,19 @@ Package.registerBuildPlugin({
         'workers.ts',
         'plugin/Compiler.ts',
         'plugin/IntermediaryMeteorProject.ts',
-        'utility/Logger.ts',
+        'utility/BuildLogger.ts',
         'utility/Helpers.ts',
         'utility/Errors.ts'
     ],
     npmDependencies: {
         execa: '6.1.0',
         'fs-extra': '10.1.0',
-        'picocolors': '1.0.0',
+        'picocolors': '1.1.0',
     },
 });
 
 Npm.depends({
-    'picocolors': '1.0.0',
+    'picocolors': '1.1.0',
 });
 
 Package.onUse(function (api) {

@@ -1,4 +1,4 @@
-import Logger from '../utility/Logger';
+import Logger from '../utility/BuildLogger';
 import Path from 'node:path';
 
 /**

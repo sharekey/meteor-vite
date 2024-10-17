@@ -1,6 +1,7 @@
 import { WorkerResponseData } from 'meteor-vite';
 import { Meteor } from 'meteor/meteor';
 import { Mongo } from 'meteor/mongo';
+import '../api/Endpoints';
 
 export type RuntimeConfig = WorkerResponseData<'viteConfig'> & { ready: boolean, lastUpdate: number, baseUrl: string };
 export let MeteorViteConfig: Mongo.Collection<RuntimeConfig>;

@@ -31,9 +31,15 @@ Use [Vite](https://vitejs.dev) in your Meteor app! ⚡️
 ## Installation
 
 ```sh
-# Install meteor-vite and Vite v4
-meteor npm i -D vite@4 
+# Install meteor-vite and Vite
 meteor npm i meteor-vite
+
+# Install Vite (Meteor v3)
+npm i -D vite 
+
+# Use Vite v4 on Meteor v2
+# Vite v5 dropped support for Node.js v14 which is what Meteor v2 uses internally 
+# npm i -D vite@4
 
 # Then add the Vite-Bundler package to your Meteor project.
 meteor add jorgenvatle:vite-bundler
