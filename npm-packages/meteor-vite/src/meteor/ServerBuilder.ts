@@ -34,6 +34,7 @@ export async function MeteorServerBuilder({ packageJson }: Pick<DevServerOptions
     })
     
     build({
+        mode: 'development',
         configFile: viteConfig.configFile,
         build: {
             watch: {},
