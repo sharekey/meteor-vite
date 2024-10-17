@@ -1,5 +1,6 @@
 import { fetch } from 'meteor/fetch';
 import { Meteor } from 'meteor/meteor';
+import { DDP_IPC } from '../api/DDP-IPC';
 import {
     DevConnectionLog,
     getConfig,
@@ -7,6 +8,7 @@ import {
     setConfig,
     ViteConnection, ViteDevScripts,
 } from '../loading/vite-connection-handler';
+import { getMeteorRuntimeConfig } from '../utility/Helpers';
 import { createWorkerFork, getProjectPackageJson, isMeteorIPCMessage, type WorkerInstance } from '../workers';
 import { type Boilerplate, ViteBoilerplate } from './common';
 
@@ -16,7 +18,7 @@ export class ViteDevServerWorker extends ViteBoilerplate {
     protected tsupWatcherRunning = false;
     constructor() {
         super();
-        const viteServer = this.viteServer = createWorkerFork({
+        const ipc = new DDP_IPC({
             async viteConfig(config) {
                 const { ready } = await setConfig(config);
                 if (ready) {
@@ -43,7 +45,8 @@ export class ViteDevServerWorker extends ViteBoilerplate {
                     params: [],
                 })
             }
-        }, { detached: true });
+        })
+        const viteServer = this.viteServer = createWorkerFork({}, { detached: true, ipc });
         
         Meteor.publish(ViteConnection.publication, () => {
             return MeteorViteConfig.find(ViteConnection.configSelector);
@@ -69,6 +72,7 @@ export class ViteDevServerWorker extends ViteBoilerplate {
             params: [{
                 packageJson: getProjectPackageJson(),
                 meteorParentPid: process.ppid,
+                meteorConfig: getMeteorRuntimeConfig(),
             }]
         });
         
