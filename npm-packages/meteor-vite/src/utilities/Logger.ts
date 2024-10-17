@@ -21,7 +21,7 @@ function formatMessage([message, ...params]: Parameters<typeof console.log>): Pa
     return [message, ...params];
 }
 export type LoggerObject<Params extends DefaultParams> = { [key in LoggerMethods]: (...params: Params) => void };
-type DefaultParams = Parameters<typeof console.log>;
+type DefaultParams = [...params: unknown[]];
 type LoggerMethods = 'info' | 'warn' | 'error' | 'debug';
 
 export const createLabelledLogger = (label: string) => createLogger((message: string, dataLines: [key: string, value: string][] | Record<string, string>) => {
