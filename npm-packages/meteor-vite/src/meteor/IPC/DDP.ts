@@ -45,11 +45,13 @@ export class DDPConnection {
             this.ipcSubscription = this.client.subscribe('meteor-vite:ipc');
         }
         
-        this.client.on<DDPMessage.Added<WorkerMethod>>('added', async (data) => {
+        this.client.on<DDPMessage.Added<WorkerMethod>>('added', (data) => {
             if (data.collection !== '_meteor-vite.ipc') {
                 return;
             }
-            await handler(data.fields);
+            handler(data.fields).catch((error) => {
+                this.logger.error('Failed to handle IPC request', data.fields, error)
+            });
         })
     }
     
