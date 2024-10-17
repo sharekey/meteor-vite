@@ -2,6 +2,7 @@ import type { DataStreamDocument } from 'meteor/jorgenvatle:vite-bundler/api/Col
 import type { MeteorViteMethods } from 'meteor/jorgenvatle:vite-bundler/api/Endpoints';
 import type { MeteorRuntimeConfig } from 'meteor/jorgenvatle:vite-bundler/utility/Helpers';
 import SimpleDDP, { DDPMessage } from 'simpleddp';
+import type { ddpSubscription } from 'simpleddp/classes/ddpSubscription';
 import { inspect } from 'util';
 import WS from 'ws';
 import { createLabelledLogger } from '../../utilities/Logger';
@@ -37,7 +38,13 @@ export class DDPConnection {
         return JSON.parse(process.env.METEOR_RUNTIME)
     }
     
+    protected ipcSubscription?: ddpSubscription;
+    
     public onIpcCall(handler: (message: WorkerMethod) => Promise<void>) {
+        if (!this.ipcSubscription) {
+            this.ipcSubscription = this.client.subscribe('meteor-vite:ipc');
+        }
+        
         this.client.on<DDPMessage.Added<WorkerMethod>>('added', async (data) => {
             if (data.collection !== '_meteor-vite.ipc') {
                 return;
