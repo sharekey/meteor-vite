@@ -4,6 +4,7 @@ import Path from 'path';
 import FS from 'fs';
 import pc from 'picocolors';
 import type { WorkerMethod, WorkerResponse, WorkerResponseHooks, MeteorIPCMessage, ProjectJson } from 'meteor-vite';
+import * as process from 'process';
 import type { DDP_IPC } from './api/DDP-IPC';
 import { getMeteorRuntimeConfig } from './utility/Helpers';
 
@@ -71,7 +72,9 @@ export function createWorkerFork(hooks: Partial<WorkerResponseHooks>, options?: 
     });
     
     child.on('exit', (code) => {
-        console.log('Child exited with code:', code);
+        if (code || process.env.ENABLE_DEBUG_LOGS) {
+            console.warn('Child exited with code:', code);
+        }
     })
     
     child.on('error', (error) => {
