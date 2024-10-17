@@ -45,11 +45,16 @@ export class DDPConnection {
         if (!this.ipcSubscription) {
             this.ipcSubscription = this.client.subscribe('meteor-vite:ipc');
         }
+        const handledMessages = new Set<string>();
         
         this.client.on<DDPMessage.Added<WorkerMethod>>('added', (data) => {
             if (data.collection !== '_meteor-vite.ipc') {
                 return;
             }
+            if (handledMessages.has(data.id)) {
+                return;
+            }
+            handledMessages.add(data.id);
             handler(data.fields)
                 .then(async () => {
                     await this.client.call('meteor-vite:ipc.received', data.id)
