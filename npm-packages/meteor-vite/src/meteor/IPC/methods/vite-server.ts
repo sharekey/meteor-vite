@@ -78,7 +78,7 @@ export default CreateIPCInterface({
             },
         });
         
-        if (!server.httpServer?.listening) {
+        if (!listening) {
             await server.listen();
             listening = true
             server.printUrls();
