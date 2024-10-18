@@ -21,11 +21,11 @@ export class DDPConnection {
     }
     protected static instance?: DDPConnection;
     
-    public static get() {
+    public static get(config?: { host: string, port: string | number }) {
         if (this.instance) {
             return this.instance;
         }
-        const { host, port } = this.getMeteorRuntimeConfig();
+        const { host, port } = config || this.getMeteorRuntimeConfig();
         this.instance = new DDPConnection({
             endpoint: `ws://${host}:${port}/websocket`,
         });
