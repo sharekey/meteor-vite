@@ -25,8 +25,11 @@ export class DDP_IPC {
         })
     }
     
-    public call(method: WorkerMethod) {
-        IpcCollection.insertAsync(method).catch((error: unknown) => {
+    public call({ method, params }: WorkerMethod) {
+        IpcCollection.insertAsync({
+            method,
+            params: JSON.stringify(params),
+        }).catch((error: unknown) => {
             console.error('Vite: Failed to send IPC event!', error);
         })
     }

@@ -4,7 +4,15 @@ import type { RuntimeConfig } from '../loading/vite-connection-handler';
 
 export const StatusCollection = new Mongo.Collection<StatusDocument>('_meteor-vite.status', { connection: null });
 export const DataStreamCollection = new Mongo.Collection<DataStreamDocument>('_meteor-vite.data-stream');
-export const IpcCollection = new Mongo.Collection<IpcDocument>('_meteor-vite.ipc', { connection: null });
+export const IpcCollection = new Mongo.Collection<SerializedIpcDocument, IpcDocument>('_meteor-vite.ipc', {
+    connection: null,
+    transform: (doc: SerializedIpcDocument) => {
+        return {
+            ...doc,
+            params: JSON.parse(doc.params),
+        }
+    }
+});
 
 export interface BaseDocument {
     createdAt: Date;
@@ -28,9 +36,14 @@ interface MeteorViteStatus {
     }
 }
 
-interface IpcDocument<TMethod extends WorkerMethod = WorkerMethod> {
+export interface IpcDocument<TMethod extends WorkerMethod = WorkerMethod> {
     method: TMethod['method']
     params: TMethod['params'];
+}
+
+export interface SerializedIpcDocument<TMethod extends WorkerMethod = WorkerMethod> {
+    method: TMethod;
+    params: string;
 }
 
 export type DataStreamLogType = 'log:client' | 'log:server' | 'log:shared';
