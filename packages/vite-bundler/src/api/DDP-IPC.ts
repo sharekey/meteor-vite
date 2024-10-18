@@ -1,10 +1,11 @@
 import type { WorkerMethod, WorkerResponse, WorkerResponseHooks } from 'meteor-vite';
+import { getMeteorRuntimeConfig } from '../utility/Helpers';
 import { IpcCollection } from './Collections';
 
 type IpcResponse = WorkerResponse & { data: any }
 
 export class DDP_IPC {
-    constructor(protected readonly responseHooks: Partial<WorkerResponseHooks>) {
+    constructor(public readonly responseHooks: Partial<WorkerResponseHooks>) {
         Meteor.methods({
             'meteor-vite:ipc': ({ kind, data }: IpcResponse) => {
                 const hook = this.responseHooks[kind];
@@ -24,13 +25,23 @@ export class DDP_IPC {
         })
     }
     
-    public call(method: WorkerMethod) {
-        IpcCollection.insertAsync(method).catch((error) => {
+    public call({ method, params }: WorkerMethod) {
+        IpcCollection.insertAsync({
+            method,
+            params: JSON.stringify(params),
+        }).catch((error: unknown) => {
             console.error('Vite: Failed to send IPC event!', error);
         })
     }
     
     public setResponseHooks(responseHooks: Partial<WorkerResponseHooks>) {
         Object.assign(this.responseHooks, responseHooks);
+    }
+    
+    /**
+     * Whether we are confident that Meteor can be reached over DDP from the current runtime config
+     */
+    public get active() {
+        return !getMeteorRuntimeConfig().fallback
     }
 }

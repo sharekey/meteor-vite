@@ -21,7 +21,7 @@ async function handleMessage({ message, reply }: { message: WorkerMethod, reply:
 }
 
 if (process.env.DDP_IPC) {
-    const ddp = DDPConnection.get();
+    const ddp = DDPConnection.init();
     ddp.onIpcCall((message) => {
         return handleMessage({
             message,

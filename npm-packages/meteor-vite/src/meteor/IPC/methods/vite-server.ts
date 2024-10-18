@@ -8,7 +8,7 @@ import { MeteorServerBuilder } from '../../ServerBuilder';
 import { BackgroundWorker, type WorkerRuntimeConfig } from '../BackgroundWorker';
 import { DDPConnection } from '../DDP';
 import CreateIPCInterface, { IPCReply } from '../interface';
-import MeteorEvents, { MeteorIPCMessage } from '../MeteorEvents';
+import MeteorEvents from '../MeteorEvents';
 
 let viteDevServer: ViteDevServer & { config: ResolvedMeteorViteConfig };
 let viteConfig: ResolvedMeteorViteConfig;
@@ -45,7 +45,7 @@ export default CreateIPCInterface({
     
     // todo: Add reply for triggering a server restart
     async 'vite.server.start'(replyInterface: Replies, { packageJson, meteorParentPid, meteorConfig }: DevServerOptions) {
-        const ddpClient = DDPConnection.get();
+        const ddpClient = DDPConnection.init(meteorConfig);
         const backgroundWorker = await BackgroundWorker.init(meteorParentPid, ddpClient);
         const Logger = ddpClient.logger;
         
