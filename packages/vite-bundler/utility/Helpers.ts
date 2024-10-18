@@ -43,14 +43,20 @@ export function getTempDir() {
 
 export function getDevServerHost(): { host: string, port: number, fallback: boolean } {
     let { portString, hostname } = process.argv.join(' ').match(/--port[\s=](?<hostname>[\d\w.]+:)?(?<portString>[\d]+)/)?.groups || {};
+    const { METEOR_PORT, DDP_DEFAULT_CONNECTION_URL, MOBILE_DDP_URL } = process.env;
     
  
-    if (!portString) {
-        portString = process.env.METEOR_PORT || ''
+    if (!portString && METEOR_PORT) {
+        portString = METEOR_PORT;
     }
     
-    if (!portString) {
-        const { port } = process.env.ROOT_URL?.match(/:(?<port>\d+)/)?.groups || { port: '' };
+    if (!portString && DDP_DEFAULT_CONNECTION_URL) {
+        const { port } = DDP_DEFAULT_CONNECTION_URL?.match(/:(?<port>\d+)/)?.groups || { port: '' };
+        portString = port;
+    }
+    
+    if (!portString && MOBILE_DDP_URL) {
+        const { port } = MOBILE_DDP_URL?.match(/:(?<port>\d+)/)?.groups || { port: '' };
         portString = port;
     }
     
