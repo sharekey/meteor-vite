@@ -27,7 +27,7 @@ export function createWorkerFork(hooks: Partial<WorkerResponseHooks>, options?: 
         stdio: ['inherit', 'inherit', 'inherit', 'ipc'],
         cwd,
         detached: options?.detached ?? false,
-        env: prepareWorkerEnv({ ipcOverDdp: !!options?.ipc }),
+        env: prepareWorkerEnv({ ipcOverDdp: !!options?.ipc?.active }),
     });
     
     const hookMethods = Object.keys(hooks) as (keyof typeof hooks)[];
@@ -53,12 +53,12 @@ export function createWorkerFork(hooks: Partial<WorkerResponseHooks>, options?: 
         }
     }
     
-    if (options?.ipc) {
+    if (options?.ipc?.active) {
         options.ipc.setResponseHooks(hooks);
     }
     
     child.on('message', (message: WorkerResponse & { data: any }) => {
-        if (options?.ipc) {
+        if (options?.ipc?.active) {
             console.warn('Received IPC message from child_process rather than DDP!', { message })
             return;
         }
@@ -82,12 +82,14 @@ export function createWorkerFork(hooks: Partial<WorkerResponseHooks>, options?: 
     });
     
     child.on('disconnect', () => {
-        console.log('Meteor: Worker process disconnected');
+        if (process.env.ENABLE_DEBUG_LOGS) {
+            console.warn('Meteor: Worker process disconnected');
+        }
     })
     
     return {
         call(method: WorkerMethod) {
-            if (options?.ipc) {
+            if (options?.ipc?.active) {
                 options.ipc.call(method);
                 return;
             }
@@ -169,10 +171,11 @@ function prepareWorkerEnv({ ipcOverDdp = false }) {
         METEOR_LOCAL_DIR: process.env.METEOR_LOCAL_DIR,
         STARTED_AT: Date.now().toString(),
     }
-    if (ipcOverDdp) {
+    const METEOR_RUNTIME = getMeteorRuntimeConfig();
+    if (ipcOverDdp && !METEOR_RUNTIME.fallback) {
         Object.assign(env, {
             DDP_IPC: true,
-            METEOR_RUNTIME: JSON.stringify(getMeteorRuntimeConfig()),
+            METEOR_RUNTIME: JSON.stringify(METEOR_RUNTIME),
         })
     }
     Object.entries(process.env).forEach(([key, value]) => {
@@ -204,7 +207,7 @@ function validateNpmVersion() {
         const { major, minor, patch } = MIN_METEOR_VITE_NPM_VERSION;
         console.error([
             '⚡  You are using an out of date version of `meteor-vite`.',
-            `   Please update it: ${pc.dim(`$ meteor npm i meteor-vite@${major}.${minor}.${patch}`)}`
+            `   Please update it: ${pc.dim(`$ meteor npm i meteor-vite@${major}.${minor}`)}`
         ].join('\n'))
     }
     

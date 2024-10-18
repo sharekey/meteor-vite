@@ -18,14 +18,15 @@ export class DDPConnection {
         connected: false,
         pingCount: 0,
         timedOut: false,
+        endpointValid: false,
     }
     protected static instance?: DDPConnection;
     
-    public static get() {
+    public static init(config?: MeteorRuntimeConfig) {
         if (this.instance) {
             return this.instance;
         }
-        const { host, port } = this.getMeteorRuntimeConfig();
+        const { host, port } = config || this.getMeteorRuntimeConfig();
         this.instance = new DDPConnection({
             endpoint: `ws://${host}:${port}/websocket`,
         });
@@ -47,7 +48,12 @@ export class DDPConnection {
         }
         const handledMessages = new Set<string>();
         
-        this.client.on<DDPMessage.Added<WorkerMethod>>('added', (data) => {
+        type SerializedIpcDocument = {
+            method: WorkerMethod['method'],
+            params: string;
+        }
+        
+        this.client.on<DDPMessage.Added<SerializedIpcDocument>>('added', (data) => {
             if (data.collection !== '_meteor-vite.ipc') {
                 return;
             }
@@ -55,7 +61,10 @@ export class DDPConnection {
                 return;
             }
             handledMessages.add(data.id);
-            handler(data.fields)
+            handler({
+                ...data.fields,
+                params: JSON.parse(data.fields.params),
+            })
                 .then(async () => {
                     await this.client.call('meteor-vite:ipc.received', data.id)
                 })
@@ -86,6 +95,7 @@ export class DDPConnection {
         });
         this.client.on('connected', () => {
             this._logger.debug(`Connected to DDP server`, config);
+            this._status.endpointValid = true;
         });
         this.client.on('disconnected', () => {
             this._logger.debug(`Disconnected from DDP server`,  config);

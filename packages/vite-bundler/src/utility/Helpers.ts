@@ -41,30 +41,39 @@ export function getTempDir() {
     }
 }
 
-export function getDevServerHost(): { host: string, port: number } {
+export function getDevServerHost(): { host: string, port: number, fallback: boolean } {
     let { portString, hostname } = process.argv.join(' ').match(/--port[\s=](?<hostname>[\d\w.]+:)?(?<portString>[\d]+)/)?.groups || {};
+    const { METEOR_PORT, DDP_DEFAULT_CONNECTION_URL, MOBILE_DDP_URL } = process.env;
     
-    if (!portString) {
-        portString = process.env.METEOR_PORT || ''
+ 
+    if (!portString && METEOR_PORT) {
+        portString = METEOR_PORT;
     }
     
-    if (!portString) {
-        const { port } = process.env.ROOT_URL?.match(/:(?<port>\d+)/)?.groups || { port: '' };
+    if (!portString && DDP_DEFAULT_CONNECTION_URL) {
+        const { port, host } = DDP_DEFAULT_CONNECTION_URL?.match(/\/\/(?<host>[\d\w\-_.]+):(?<port>\d+)/)?.groups || { port: '', host: '' };
+        portString = port;
+        hostname = host;
+    }
+    
+    if (!portString && MOBILE_DDP_URL) {
+        const { port } = MOBILE_DDP_URL?.match(/:(?<port>\d+)/)?.groups || { port: '' };
         portString = port;
     }
-    
     
     const port = parseInt(portString);
     
     if (Number.isNaN(port)) {
         console.warn(new MeteorViteError(`Unable to determine the port for your Meteor development server. We're going to assume it's localhost:3000. If you're using a different port specify it using the METEOR_PORT environment variable so that Vite can function correctly. E.g. METEOR_PORT=3030`));
         return {
+            fallback: true,
             host: 'localhost',
             port: 3000,
         };
     }
     
     return {
+        fallback: false,
         host: hostname || 'localhost',
         port,
     };
@@ -72,7 +81,7 @@ export function getDevServerHost(): { host: string, port: number } {
 
 export function getMeteorRuntimeConfig() {
     const appId = __meteor_bootstrap__?.configJson?.appId;
-    const { port, host } = getDevServerHost();
+    const { port, host, fallback } = getDevServerHost();
     
     if (!appId) {
         console.warn(new MeteorViteError('Unable to retrieve your Meteor App ID. (`./.meteor/.id`) This is probably fine in most cases, but can lead to issues when running multiple concurrent instances. Please do report this issue on GitHub 🙏 https://github.com/JorgenVatle/meteor-vite/issues'));
@@ -82,6 +91,7 @@ export function getMeteorRuntimeConfig() {
         host,
         port,
         appId,
+        fallback,
     }
 }
 
