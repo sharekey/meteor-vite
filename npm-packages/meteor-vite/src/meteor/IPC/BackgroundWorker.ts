@@ -70,21 +70,24 @@ export class BackgroundWorker {
     protected _watchForParentExit() {
         // Keep track of Meteor's parent process to exit if it has ended abruptly.
         setInterval(() => {
+            // Exit when Meteor's parent process (meteor-tool) exits
             if (!this._isRunning(this.config.meteorParentPid)) {
                 this.logger.warn('Meteor parent process is no longer running!');
                 this.exit();
             }
             
+            // Exit if DDP times out
             if (this.ddpClient.status.endpointValid) {
                 if (this.ddpClient.status.timedOut) {
                     this.logger.warn('Connection to Meteor DDP server timed out!');
                     this.exit();
                 }
-            } else if (!this._isRunning(this.config.meteorPid)) {
+            }
+            // If no DDP connection could be established, exit when Meteor does.
+            else if (!this._isRunning(this.config.meteorPid)) {
                 this.logger.warn('Meteor process no longer running. Cannot run in background without a valid DDP connection.');
                 this.exit();
             }
-            
         }, 1_000);
     }
     
