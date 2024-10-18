@@ -1,5 +1,11 @@
 # vite-bundler
 
+## 3.0.0-next.16
+
+### Patch Changes
+
+- 531bacbf: Fix issue where global meteor runtime variable would be accessed before being defined
+
 ## 3.0.0-next.15
 
 ### Patch Changes
