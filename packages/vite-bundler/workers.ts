@@ -26,7 +26,7 @@ export function createWorkerFork(hooks: Partial<WorkerResponseHooks>, options?: 
         stdio: ['inherit', 'inherit', 'inherit', 'ipc'],
         cwd,
         detached: options?.detached ?? false,
-        env: prepareWorkerEnv({ ipcOverDdp: !!options?.ipc }),
+        env: prepareWorkerEnv({ ipcOverDdp: !!options?.ipc?.active }),
     });
     
     const hookMethods = Object.keys(hooks) as (keyof typeof hooks)[];
@@ -52,12 +52,12 @@ export function createWorkerFork(hooks: Partial<WorkerResponseHooks>, options?: 
         }
     }
     
-    if (options?.ipc) {
+    if (options?.ipc?.active) {
         options.ipc.setResponseHooks(hooks);
     }
     
     child.on('message', (message: WorkerResponse & { data: any }) => {
-        if (options?.ipc) {
+        if (options?.ipc?.active) {
             console.warn('Received IPC message from child_process rather than DDP!', { message })
             return;
         }
@@ -86,7 +86,7 @@ export function createWorkerFork(hooks: Partial<WorkerResponseHooks>, options?: 
     
     return {
         call(method: WorkerMethod) {
-            if (options?.ipc) {
+            if (options?.ipc?.active) {
                 options.ipc.call(method);
                 return;
             }
