@@ -29,7 +29,10 @@ export class ViteDevServerWorker extends ViteBoilerplate {
                 DevConnectionLog.info('Some lazy-loaded packages were imported, please refresh')
             },
         })
-        const viteServer = this.viteServer = createWorkerFork({}, { detached: true, ipc });
+        const viteServer = this.viteServer = createWorkerFork({
+            viteConfig: ipc.responseHooks.viteConfig,
+            refreshNeeded: ipc.responseHooks.refreshNeeded,
+        }, { detached: true, ipc });
         
         Meteor.publish(ViteConnection.publication, () => {
             return MeteorViteConfig.find(ViteConnection.configSelector);
