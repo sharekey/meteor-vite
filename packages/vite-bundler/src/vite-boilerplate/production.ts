@@ -126,6 +126,7 @@ export class ViteProductionBoilerplate extends ViteBoilerplate {
                 if (modulePreload.has(chunk.file)) {
                     continue;
                 }
+                moduleLazyPrefetch.delete(chunk.file);
                 modulePreload.add(chunk.file);
                 chunk.css?.forEach(css => stylesheets.add(css));
                 preloadImports(chunk.imports || []);
