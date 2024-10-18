@@ -1,4 +1,5 @@
 import type { WorkerMethod, WorkerResponse, WorkerResponseHooks } from 'meteor-vite';
+import { getMeteorRuntimeConfig } from '../utility/Helpers';
 import { IpcCollection } from './Collections';
 
 type IpcResponse = WorkerResponse & { data: any }
@@ -32,5 +33,12 @@ export class DDP_IPC {
     
     public setResponseHooks(responseHooks: Partial<WorkerResponseHooks>) {
         Object.assign(this.responseHooks, responseHooks);
+    }
+    
+    /**
+     * Whether we are confident that Meteor can be reached over DDP from the current runtime config
+     */
+    public get active() {
+        return !getMeteorRuntimeConfig().fallback
     }
 }
