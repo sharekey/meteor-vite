@@ -4,35 +4,35 @@
       "releases": [
         {
           "name": "meteor-vite",
-          "type": "minor"
+          "type": "patch"
         },
         {
           "name": "vite-bundler",
-          "type": "minor"
+          "type": "patch"
         }
       ],
-      "summary": "Refactor IPC between Meteor and the Vite Dev Server to use DDP whenever possible.\n- Updated peer dependency for Vite to allow Vite v5. Meteor v2 users still need to use Vite v4 as v5 dropped support for Node v14 - the Node.js version used by Meteor v2.\n\n### Build Meteor Server with Vite (experimental)\nAdded an option to bundle the Meteor server with Vite. Bundles all your server assets into a single module before \npassing it onto the Meteor compiler. This should significantly reduce the load on Meteor's dependency tracker, leading\nto much faster time-to-restart times in development.\n\nAlso comes with the added flexibility provided by Vite and its plugin ecosystem. Lets you take full control over what\ncode is imported on the server and how it's transformed.\n\n```ts\n// vite.config.ts\nexport default defineConfig({\n    plugins: [\n        meteor({\n            clientEntry: './client/main.vite.ts',\n            serverEntry: './server/main.vite.ts', // Write your server code from this entrypoint.\n        })\n    ]\n});\n```\n\n```json5\n// package.json\n{\n  \"meteor\": {\n    \"mainModule\": {\n      \"client\": \"./client/main.meteor.js\",\n      // Create an empty main.meteor.js file in your server directory.\n      // This will be populated with your final Vite-built server bundle.\n      \"server\": \"./server/main.meteor.js\", \n    }\n  }\n}\n```\n\n### Compatability Notes\n- `jorgenvatle:vite-bundler` now requires `meteor-vite@ >= v1.11.0`.\n- This release only affects development builds. But it now assumes your development server is accessible locally over\nDDP. If you bind Meteor to an IP address that for some reason is not accessible to other processes, you may run into \nissues where the Vite Dev server won't start.\n\n### Resolves issues\n- #195\n- #179",
-      "id": "pink-baboons-serve"
+      "summary": "Allow Vite dev server to run without a DDP connection.\n- Fix Meteor DDP URL parsing from Meteor runtime environment. Falls back to using `MOBILE_DDP_URL`. \n- Fix #208",
+      "id": "silly-jobs-divide"
     }
   ],
   "releases": [
     {
       "name": "meteor-vite",
-      "type": "minor",
-      "oldVersion": "1.10.4",
+      "type": "patch",
+      "oldVersion": "1.11.0",
       "changesets": [
-        "pink-baboons-serve"
+        "silly-jobs-divide"
       ],
-      "newVersion": "1.11.0"
+      "newVersion": "1.11.1"
     },
     {
       "name": "vite-bundler",
-      "type": "minor",
-      "oldVersion": "2.0.3",
+      "type": "patch",
+      "oldVersion": "2.1.2",
       "changesets": [
-        "pink-baboons-serve"
+        "silly-jobs-divide"
       ],
-      "newVersion": "2.1.0"
+      "newVersion": "2.1.3"
     }
   ]
 }

@@ -1,5 +1,13 @@
 # vite-bundler
 
+## 2.1.3
+
+### Patch Changes
+
+- 4d92b722: Allow Vite dev server to run without a DDP connection.
+  - Fix Meteor DDP URL parsing from Meteor runtime environment. Falls back to using `MOBILE_DDP_URL`.
+  - Fix #208
+
 ## 2.1.0
 
 ### Minor Changes
