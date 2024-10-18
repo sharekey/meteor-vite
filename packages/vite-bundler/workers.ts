@@ -81,7 +81,9 @@ export function createWorkerFork(hooks: Partial<WorkerResponseHooks>, options?: 
     });
     
     child.on('disconnect', () => {
-        console.log('Meteor: Worker process disconnected');
+        if (process.env.ENABLE_DEBUG_LOGS) {
+            console.warn('Meteor: Worker process disconnected');
+        }
     })
     
     return {
