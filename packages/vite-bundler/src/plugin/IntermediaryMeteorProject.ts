@@ -30,6 +30,7 @@ function prepareTemporaryMeteorProject() {
         path.join('.meteor', 'platforms'),
         path.join('.meteor', 'release'),
         path.join('.meteor', 'versions'),
+        path.join('.meteor', 'local', 'resolver-result-cache.json'),
         'package.json',
         meteorMainModule,
     ]
