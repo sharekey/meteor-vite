@@ -48,7 +48,12 @@ export class DDPConnection {
         }
         const handledMessages = new Set<string>();
         
-        this.client.on<DDPMessage.Added<WorkerMethod>>('added', (data) => {
+        type SerializedIpcDocument = {
+            method: WorkerMethod['method'],
+            params: string;
+        }
+        
+        this.client.on<DDPMessage.Added<SerializedIpcDocument>>('added', (data) => {
             if (data.collection !== '_meteor-vite.ipc') {
                 return;
             }
@@ -56,7 +61,10 @@ export class DDPConnection {
                 return;
             }
             handledMessages.add(data.id);
-            handler(data.fields)
+            handler({
+                ...data.fields,
+                params: JSON.parse(data.fields.params),
+            })
                 .then(async () => {
                     await this.client.call('meteor-vite:ipc.received', data.id)
                 })
