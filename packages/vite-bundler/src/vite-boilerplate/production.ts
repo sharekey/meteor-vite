@@ -49,7 +49,11 @@ export class ViteProductionBoilerplate extends ViteBoilerplate {
         }
         
         for (const file of imports.moduleLazyPrefetch) {
-            lines.push(`<link rel="modulepreload" crossorigin fetchPriority="low" href="${this.filePath(file)}">`);
+            lines.push(`<link rel="modulepreload" crossorigin href="${this.filePath(file)}" fetchPriority="low">`);
+        }
+        
+        for (const file of imports.cssLazyPrefetch) {
+            lines.push(`<link rel="preload" crossorigin href="${this.filePath(file)}" as="style" fetchPriority="low">`);
         }
         
         return lines.join('\n');
@@ -116,6 +120,7 @@ export class ViteProductionBoilerplate extends ViteBoilerplate {
         const modules = new Set<string>()
         const modulePreload = new Set<string>();
         const moduleLazyPrefetch = new Set<string>();
+        const cssLazyPrefetch = new Set<string>();
         
         function preloadImports(imports: string[]) {
             for (const path of imports) {
@@ -141,6 +146,9 @@ export class ViteProductionBoilerplate extends ViteBoilerplate {
                 if (chunk.file.endsWith('.js')) {
                     moduleLazyPrefetch.add(chunk.file);
                 }
+                if (chunk.file.endsWith('.css')) {
+                    cssLazyPrefetch.add(chunk.file);
+                }
                 continue;
             }
             
@@ -155,7 +163,10 @@ export class ViteProductionBoilerplate extends ViteBoilerplate {
             
             preloadImports(chunk.imports || []);
             
-            chunk.css?.forEach(css => stylesheets.add(css));
+            chunk.css?.forEach(css => {
+                stylesheets.add(css);
+                cssLazyPrefetch.delete(css);
+            });
         }
         
         const imports = {
@@ -163,6 +174,7 @@ export class ViteProductionBoilerplate extends ViteBoilerplate {
             modules,
             modulePreload,
             moduleLazyPrefetch,
+            cssLazyPrefetch,
         }
         
         Logger.debug('Parsed Vite manifest imports', Util.inspect({
@@ -188,4 +200,5 @@ interface ManifestImports {
     modules: Set<string>;
     modulePreload: Set<string>;
     moduleLazyPrefetch: Set<string>;
+    cssLazyPrefetch: Set<string>;
 }
