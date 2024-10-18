@@ -69,7 +69,7 @@ export class ViteDevServerWorker extends ViteBoilerplate {
             await fetch(`${baseUrl}/__meteor__/ipc-message`, {
                 method: 'POST',
                 body: JSON.stringify(message),
-            }).catch((error) => {
+            }).catch((error: unknown) => {
                 console.error(error);
             })
         })
