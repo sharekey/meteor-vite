@@ -8,7 +8,7 @@ import { MeteorServerBuilder } from '../../ServerBuilder';
 import { BackgroundWorker, type WorkerRuntimeConfig } from '../BackgroundWorker';
 import { DDPConnection } from '../DDP';
 import CreateIPCInterface, { IPCReply } from '../interface';
-import MeteorEvents, { MeteorIPCMessage } from '../MeteorEvents';
+import MeteorEvents from '../MeteorEvents';
 
 let viteDevServer: ViteDevServer & { config: ResolvedMeteorViteConfig };
 let viteConfig: ResolvedMeteorViteConfig;
