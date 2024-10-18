@@ -18,6 +18,7 @@ export class DDPConnection {
         connected: false,
         pingCount: 0,
         timedOut: false,
+        endpointValid: false,
     }
     protected static instance?: DDPConnection;
     
@@ -86,6 +87,7 @@ export class DDPConnection {
         });
         this.client.on('connected', () => {
             this._logger.debug(`Connected to DDP server`, config);
+            this._status.endpointValid = true;
         });
         this.client.on('disconnected', () => {
             this._logger.debug(`Disconnected from DDP server`,  config);
