@@ -51,8 +51,9 @@ export function getDevServerHost(): { host: string, port: number, fallback: bool
     }
     
     if (!portString && DDP_DEFAULT_CONNECTION_URL) {
-        const { port } = DDP_DEFAULT_CONNECTION_URL?.match(/:(?<port>\d+)/)?.groups || { port: '' };
+        const { port, host } = DDP_DEFAULT_CONNECTION_URL?.match(/\/\/(?<host>[\d\w\-_.]+):(?<port>\d+)/)?.groups || { port: '', host: '' };
         portString = port;
+        hostname = host;
     }
     
     if (!portString && MOBILE_DDP_URL) {
