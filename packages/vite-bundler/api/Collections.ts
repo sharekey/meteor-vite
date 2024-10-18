@@ -42,7 +42,7 @@ export interface IpcDocument<TMethod extends WorkerMethod = WorkerMethod> {
 }
 
 export interface SerializedIpcDocument<TMethod extends WorkerMethod = WorkerMethod> {
-    method: TMethod;
+    method: TMethod['method'];
     params: string;
 }
 
