@@ -77,6 +77,7 @@ export class BackgroundWorker {
             
             if (!this._isRunning(this.config.meteorParentPid)) {
                 this.logger.warn('Meteor parent process is no longer running!');
+                this.exit();
             }
         }, 1_000);
     }
