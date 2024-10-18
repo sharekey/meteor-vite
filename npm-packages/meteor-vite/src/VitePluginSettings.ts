@@ -1,8 +1,11 @@
-import { OutputOptions } from 'rollup';
-import { ResolvedConfig, type UserConfig } from 'vite';
-import { DeepPartial, MakeOptional, type MakeRequired } from './utilities/GenericTypes';
+import type { OutputOptions } from 'rollup';
+import type { ResolvedConfig, UserConfig } from 'vite';
+import type { DeepPartial, MakeOptional, MakeRequired } from './utilities/GenericTypes';
 
-export interface PluginSettings<TServerConfig extends UserConfig = {}> {
+export interface PluginSettings<
+    TServerConfig extends UserConfig = {},
+    TChunkFileNames extends OutputOptions['chunkFileNames'] = undefined
+> {
     /**
      * Vite client entry into Meteor.
      * Not to be confused with your Meteor mainModule.
@@ -150,7 +153,7 @@ export interface PluginSettings<TServerConfig extends UserConfig = {}> {
      *
      * Only change this if you are sure you know what you're doing.
      */
-    chunkFileNames?: OutputOptions['chunkFileNames'];
+    chunkFileNames?: TChunkFileNames
 }
 
 export type StubValidationSettings = PluginSettings['stubValidation'];
