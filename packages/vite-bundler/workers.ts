@@ -201,7 +201,7 @@ function validateNpmVersion() {
         const { major, minor, patch } = MIN_METEOR_VITE_NPM_VERSION;
         console.error([
             '⚡  You are using an out of date version of `meteor-vite`.',
-            `   Please update it: ${pc.dim(`$ meteor npm i meteor-vite@${major}.${minor}.${patch}`)}`
+            `   Please update it: ${pc.dim(`$ meteor npm i meteor-vite@${major}.${minor}`)}`
         ].join('\n'))
     }
     
