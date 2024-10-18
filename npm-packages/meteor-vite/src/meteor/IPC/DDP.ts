@@ -21,7 +21,7 @@ export class DDPConnection {
     }
     protected static instance?: DDPConnection;
     
-    public static get(config?: { host: string, port: string | number }) {
+    public static init(config?: MeteorRuntimeConfig) {
         if (this.instance) {
             return this.instance;
         }

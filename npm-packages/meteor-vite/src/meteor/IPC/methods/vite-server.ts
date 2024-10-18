@@ -45,7 +45,7 @@ export default CreateIPCInterface({
     
     // todo: Add reply for triggering a server restart
     async 'vite.server.start'(replyInterface: Replies, { packageJson, meteorParentPid, meteorConfig }: DevServerOptions) {
-        const ddpClient = DDPConnection.get(meteorConfig);
+        const ddpClient = DDPConnection.init(meteorConfig);
         const backgroundWorker = await BackgroundWorker.init(meteorParentPid, ddpClient);
         const Logger = ddpClient.logger;
         
