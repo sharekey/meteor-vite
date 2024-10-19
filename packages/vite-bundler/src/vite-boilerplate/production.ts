@@ -35,6 +35,7 @@ export class ViteProductionBoilerplate extends ViteBoilerplate {
     protected get dynamicHead() {
         const imports = this.imports;
         const lines = [];
+        const prefetchArray: PrefetchObject[] = [];
         
         for (const file of imports.stylesheets) {
             lines.push(`<link rel="stylesheet" crossorigin href="${this.filePath(file)}">`);
@@ -49,12 +50,71 @@ export class ViteProductionBoilerplate extends ViteBoilerplate {
         }
         
         for (const file of imports.moduleLazyPrefetch) {
-            lines.push(`<link rel="modulepreload" crossorigin href="${this.filePath(file)}" fetchPriority="low">`);
+            prefetchArray.push({
+                href: this.filePath(file),
+            })
         }
         
         for (const file of imports.cssLazyPrefetch) {
-            lines.push(`<link rel="preload" crossorigin href="${this.filePath(file)}" as="style" fetchPriority="low">`);
+            prefetchArray.push({
+                href: this.filePath(file),
+                as: 'style',
+            })
         }
+        
+        function lazyPrefetch(assets: PrefetchObject[]) {
+            window.addEventListener('load', () => window.setTimeout(() => {
+                const makeLink = (asset: PrefetchObject) => {
+                    const link = document.createElement('link')
+                    link.rel = 'prefetch';
+                    link.fetchPriority = 'low';
+                    
+                    Object.entries(asset).forEach(([key, value]) => {
+                        link.setAttribute(key, value)
+                    })
+                    
+                    return link
+                }
+                
+                const loadNext = (assets: PrefetchObject[], count: number) => window.setTimeout(() => {
+                    if (count > assets.length) {
+                        count = assets.length
+                        
+                        if (count === 0) {
+                            return
+                        }
+                    }
+                    
+                    const fragment = new DocumentFragment
+                    
+                    while (count > 0) {
+                        const asset = assets.shift();
+                        if (!asset) {
+                            break;
+                        }
+                        const link = makeLink(asset)
+                        fragment.append(link)
+                        count--
+                        
+                        if (assets.length) {
+                            link.onload = () => loadNext(assets, 1)
+                            link.onerror = () => loadNext(assets, 1)
+                        }
+                    }
+                    
+                    document.head.append(fragment)
+                })
+                
+                loadNext(assets, 3);
+            }))
+        }
+        
+        lines.push(
+`<script type="text/javascript">
+${lazyPrefetch.toString()};
+lazyPrefetch(${JSON.stringify(prefetchArray)})
+</script>`
+        )
         
         return lines.join('\n');
     }
@@ -193,6 +253,11 @@ interface MeteorProgramManifest {
     path: string;
     url?: string;
     cacheable: boolean;
+}
+
+interface PrefetchObject {
+    href: string;
+    as?: 'style';
 }
 
 interface ManifestImports {
