@@ -1,5 +1,11 @@
 # vite-bundler
 
+## 3.0.0-next.17
+
+### Minor Changes
+
+- ab461a9a: Prefetch all Vite assets asynchronously in the background after initial page load.
+
 ## 3.0.0-next.16
 
 ### Patch Changes
