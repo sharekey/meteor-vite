@@ -109,12 +109,14 @@ export class ViteProductionBoilerplate extends ViteBoilerplate {
             }))
         }
         
-        lines.push(
-`<script type="text/javascript">
-${lazyPrefetch.toString()};
-lazyPrefetch(${JSON.stringify(prefetchArray)})
-</script>`
-        )
+        if (!process.env.DISABLE_FULL_APP_PREFETCH) {
+            lines.push(
+                `<script type="text/javascript">`,
+                `${lazyPrefetch.toString()};`,
+                `lazyPrefetch(${JSON.stringify(prefetchArray)})`,
+                `</script>`
+            )
+        }
         
         return lines.join('\n');
     }
