@@ -87,9 +87,13 @@ async function prepareServerEntry(paths: {
         await FS.writeFile(gitignorePath, '*');
     }
     
-    // Add import for Vite bundle to server mainModule
+    // Modify Meteor Server mainModule with an import for the Vite bundle.
     {
-        const importString = `import(${JSON.stringify('./' + relativeViteModulePath)}).catch((e) => console.warn('Failed to load Vite server bundle. If this is the first time starting the server, you can safely ignore this error.', e))`;
+        const errorMessage = JSON.stringify(
+            `Failed to import Meteor Server bundle from Vite! This may sometimes happen if it's your first time starting the app.`,
+        )
+        
+        const importString = `import(${JSON.stringify('./' + relativeViteModulePath)}).catch((e) => console.warn(${errorMessage}, e));`;
         
         if (mainModuleContent.includes(importString)) {
             return;
