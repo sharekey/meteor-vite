@@ -237,6 +237,7 @@ declare module 'meteor/meteor' {
     interface DefinedPublications {}
     interface DefinedMethods {}
     
+    // Comment out these two interfaces if you want to strictly define types for your Meteor methods and publications.
     interface DefinedPublications extends Record<string, (...params: unknown[]) => PublishReturnType> {}
     interface DefinedMethods extends Record<string, (...params: unknown[]) => unknown> {}
     
