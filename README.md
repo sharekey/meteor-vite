@@ -56,14 +56,12 @@ two additional entry files.
 
 ```text
 - client/
-  - meteor.js         # Leave empty, Vite will modify this file at runtime.
+  - entry-meteor.js  # Leave empty, Vite will modify this file at runtime.
+  - entry-vite.ts    # Write your Meteor client code from here.
   - index.html
-- imports/
-  - entrypoint/
-    - vite.ts          # Write your Meteor client code from here.
-    - vite.server.ts   # Write your Meteor server code from here.
 - server/
-  - meteor.js          # Leave empty, Vite will modify this file at runtime if you specify a serverEntry in your Vite config.
+  - entry-meteor.js   # Leave empty, Vite will modify this file at runtime if you specify a serverEntry in your Vite config.
+  - entry-vite.ts     # Write your Meteor server code from here.
 - package.json
 - vite.config.ts
 ```
@@ -84,17 +82,17 @@ Make sure you specify a `mainModule` entry for the Meteor server and client in y
   },
   "meteor": {
     "mainModule": {
-      "client": "client/meteor.js",
-      "server": "server/meteor.js"
+      "client": "client/entry-meteor.js",
+      "server": "server/entry-meteor.js"
     },
   }
 }
 ```
 
 You can leave your Meteor client entry file empty, but it's necessary to enable Meteor import mode. In the example
-above, we have already created an empty `client/meteor.js` file.
+above, we have already created an empty `client/entry-meteor.js` file.
 
-If you also want to build the Meteor server with Vite, also create an empty `server/meteor.js` file. Otherwise, point
+If you also want to build the Meteor server with Vite, also create an empty `server/entry-meteor.js` file. Otherwise, point
 the `mainModule.server` field to your existing server main module.
 
 #### Vite config
@@ -107,10 +105,10 @@ import { meteor } from 'meteor-vite/plugin';
 export default defineConfig({
     plugins: [
         meteor({
-          clientEntry: 'imports/entrypoint/vite.ts',
+          clientEntry: 'client/entry-vite.ts',
             
           // Optionally specify a server entrypoint to build the Meteor server with Vite.
-          serverEntry: 'imports/entrypoint/vite.server.ts',
+          serverEntry: 'server/entry-vite.ts',
           enableExperimentalFeatures: true, // Required to enable server bundling.
         }),
         
@@ -119,7 +117,7 @@ export default defineConfig({
 })
 ```
 
-Now you can write your code from the `vite.ts` and `vite.server.ts` files. The rest will be handled by Vite! ⚡️
+Now you can write your code from `entry-vite.ts`. The rest will be handled by Vite! ⚡️
 
 
 ## Example with Vue 3
@@ -132,7 +130,7 @@ import vue from '@vitejs/plugin-vue'
 export default defineConfig({
     plugins: [
         meteor({
-          clientEntry: 'imports/entrypoint/vite.ts',
+          clientEntry: 'client/entry-vite.ts',
         }),
         vue(),
     ],
@@ -150,7 +148,7 @@ import vue from '@vitejs/plugin-vue2'
 export default defineConfig({
     plugins: [
         meteor({
-          clientEntry: 'imports/entrypoint/vite.ts',
+          clientEntry: 'client/entry-vite.ts',
         }),
         vue(),
     ],
@@ -168,7 +166,7 @@ import react from '@vitejs/plugin-react'
 export default defineConfig({
     plugins: [
         meteor({
-          clientEntry: 'imports/entrypoint/vite.ts',
+          clientEntry: 'client/entry-vite.ts',
         }),
         react({
             jsxRuntime: 'classic',
@@ -208,7 +206,7 @@ export default defineConfig({
     plugins: [
         react(),
         meteor({
-            clientEntry: "imports/entrypoint/vite.tsx",
+            clientEntry: "client/entry-vite.tsx",
             // This instructs Vite to not bundle react and react-dom as they will be bundled by Meteor instead.
             externalizeNpmPackages: ['react', 'react-dom'], 
             stubValidation: {
@@ -230,7 +228,7 @@ Then in your Meteor client's `mainModule`, we need to explicitly import React to
 omitting unused React components from your bundle.
 
 ```ts
-// ./client/meteor.js
+// ./client/entry-meteor.js
 import 'react';
 import 'react-dom';
 import 'react-dom/client';
@@ -261,7 +259,7 @@ export default defineConfig({
        * This becomes your new Vite-powered mainModule for Meteor.
        * @required
        */
-      clientEntry: 'imports/entrypoint/vite.ts',
+      clientEntry: 'client/entry-vite.ts',
       
       /**
        * Skips bundling the provided npm packages if they are already provided by Meteor.
@@ -360,8 +358,8 @@ entrypoint as specified in the `meteor.mainModule.client` field of your `package
 {
   "meteor": {
     "mainModule": {
-      "client": "client/meteor.js", // Lazy loaded packages checked for and added to this file.
-      "server": "server/main.ts"
+      "client": "client/entry-meteor.js", // Lazy loaded packages checked for and added to this file.
+      "server": "server/entry-meteor.js"
     }
   }
 }
