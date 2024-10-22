@@ -52,7 +52,10 @@ meteor npm i -D vite@4
 
 #### Application structure
 You can structure your app just like you would with a typical Meteor application. The key difference is the addition of 
-two additional entry files.
+a Vite entry file for your Meteor client and server. These will become the primary entrypoints for your app.
+
+If you're installing Meteor-Vite for an existing project, just rename your current client/server entry modules to `entry-vite.ts`.
+Then create a new empty `entry-meteor.js` file for your Meteor client and server.
 
 ```text
 - client/
@@ -67,7 +70,7 @@ two additional entry files.
 ```
 
 #### Package.json
-Make sure you specify a `mainModule` entry for the Meteor server and client in your `package.json`.
+Now, make sure you have `mainModule` entry in your `package.json` for each of the new `meteor-entry.js` files.
 
 ```json5
 {
@@ -89,11 +92,10 @@ Make sure you specify a `mainModule` entry for the Meteor server and client in y
 }
 ```
 
-You can leave your Meteor client entry file empty, but it's necessary to enable Meteor import mode. In the example
-above, we have already created an empty `client/entry-meteor.js` file.
-
-If you also want to build the Meteor server with Vite, also create an empty `server/entry-meteor.js` file. Otherwise, point
-the `mainModule.server` field to your existing server main module.
+You can leave your `meteor-entry.js` files empty, or write to them if you'd like. Do keep in mind that Vite may write to 
+them during development and production bundling. What you add to your `meteor-entry.js` files will be ignored by Vite.
+So you should generally avoid adding anything to these modules unless you have a very specific use case that cannot 
+be handled by Vite.
 
 #### Vite config
 Create a Vite configuration file (`vite.config.ts`) in your project root. And load in the `meteor-vite` plugin.
