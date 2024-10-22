@@ -1,4 +1,3 @@
-import { spawn } from 'child_process';
 import FS from 'fs';
 import Path from 'path';
 import { RollupOutput } from 'rollup';

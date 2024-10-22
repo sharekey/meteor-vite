@@ -1,5 +1,40 @@
 # meteor-vite
 
+## 1.12.0
+
+### Minor Changes
+
+- 92ce6b41: Build `serverEntry` bundles using Vite's SSR build process instead of using an inline browser build config.
+
+  - Resolves some of the configuration necessary to get the new server builds to work correctly. Default settings should now work for most users.
+  - SSR with Meteor can now be done entirely through Vite's build system.
+  - Import aliases no longer need to be defined in a Babel config if you intend to use them in server code.
+
+  #### SSR example
+
+  - See the new [Vue + SSR](/examples/vue-ssr) example app to see it in action. Or check the [live preview](https://vue-ssr--meteor-vite.wcaserver.com)!
+
+  #### Related issues
+
+  - #195
+  - #215
+
+  Related release notes: https://github.com/JorgenVatle/meteor-vite/releases/tag/vite-bundler%402.1.2
+
+## 1.11.2
+
+### Patch Changes
+
+- 9f986bde: Add failsafe for experimental serverEntry feature.
+
+## 1.11.1
+
+### Patch Changes
+
+- 4d92b722: Allow Vite dev server to run without a DDP connection.
+  - Fix Meteor DDP URL parsing from Meteor runtime environment. Falls back to using `MOBILE_DDP_URL`.
+  - Fix #208
+
 ## 2.0.0-next.4
 
 ### Patch Changes

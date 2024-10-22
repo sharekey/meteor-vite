@@ -1,9 +1,8 @@
 import type { OutputOptions } from 'rollup';
-import type { ResolvedConfig, UserConfig } from 'vite';
+import type { ResolvedConfig } from 'vite';
 import type { DeepPartial, MakeOptional, MakeRequired } from './utilities/GenericTypes';
 
 export interface PluginSettings<
-    TServerConfig extends UserConfig = {},
     TChunkFileNames extends OutputOptions['chunkFileNames'] = undefined
 > {
     /**
@@ -20,13 +19,17 @@ export interface PluginSettings<
      * a single file, greatly aiding Meteor in server reload performance during development.
      *
      * Not only does this come with improved performance, but also the flexibility of Vite's build system.
+     * The Meteor server is built using Vite SSR mode. To configure just the server builds see
+     * {@link https://vite.dev/config/#conditional-config Conditional Configuration docs}
+     *
+     * @experimental There's still some work left to be done before this is stable without additional configuration.
      */
     serverEntry?: string;
     
     /**
-     * Vite config overrides when bundling the Meteor server with Vite.
+     * Failsafe opt-in to prevent experimental features and configuration from taking effect.
      */
-    serverEntryConfig?: TServerConfig;
+    enableExperimentalFeatures?: boolean;
     
     /**
      * When building for production, Vite will normally serve static assets from the root of the current domain.

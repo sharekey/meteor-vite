@@ -6,7 +6,6 @@
       <sourceFolder url="file://$MODULE_DIR$/npm-packages/@meteor-vite/plugin-zodern-relay/src" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/packages/vite-bundler/src" isTestSource="false" />
       <excludeFolder url="file://$MODULE_DIR$/examples/output" />
-      <excludeFolder url="file://$MODULE_DIR$/examples/vue-ssr" />
       <excludeFolder url="file://$MODULE_DIR$/examples/vue/.meteor-vite" />
       <excludeFolder url="file://$MODULE_DIR$/examples/vue/vite" />
       <excludeFolder url="file://$MODULE_DIR$/examples/react/.meteor/local" />
@@ -35,6 +34,7 @@
       <excludePattern pattern=".babel-cache" />
       <excludePattern pattern="local" />
       <excludePattern pattern="package-lock.json" />
+      <excludePattern pattern="_vite-bundle" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />

@@ -44,3 +44,9 @@ jobs:
     uses: ./.github/workflows/_reuse_.build.yml
     with:
       appBasename: 'meteor-v3-vue'
+
+  vue-ssr:
+    name: 'Vue + SSR'
+    uses: ./.github/workflows/_reuse_.build.yml
+    with:
+      appBasename: 'vue-ssr'

@@ -1,9 +1,8 @@
-import Chalk from 'chalk';
-import { Meteor } from 'meteor/meteor';
 import { Mongo } from 'meteor/mongo';
+import { Meteor } from 'meteor/meteor';
 import safeJson from 'safe-json-stringify';
+import Chalk from 'chalk';
 import util from 'util';
-
 const chalk = new Chalk.Instance({ level: 3 });
 
 interface LogEntry {
@@ -53,28 +52,18 @@ export const Logger: typeof console = new Proxy(console, {
         }
         
         return (...args: any[]) => {
-            logQueue.add({
+            LogsCollection.insertAsync({
                 createdAt: new Date(),
                 level,
                 args: args.map(arg => safeJson(arg)),
+            }).catch(() => {
+                // Ignore error to prevent infinite logging loop.
+                // Meteor appears to emit an error message anyway, regardless of whether the exception is handled
             });
-            value(...args);
+            value.apply(this, args);
         }
     }
 });
-
-const logQueue = new Set<LogEntry>();
-
-setInterval(() => {
-    if (!logQueue.size) {
-        return;
-    }
-    const inserts = [...logQueue].map((log) => LogsCollection.insertAsync(log));
-    logQueue.clear();
-    Promise.all(inserts).catch((error) => {
-        console.error('Error inserting logs:', error);
-    })
-}, 1000);
 
 export function WrapConsole() {
     if (!Meteor.isClient) {

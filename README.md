@@ -26,32 +26,51 @@ Use [Vite](https://vitejs.dev) in your Meteor app! ⚡️
   - [**Meteor v3**](https://v3-migration-docs.meteor.com/)
     - [Example Project](/examples/meteor-v3-vue)
     - [Preview](https://meteor-v3-vue--meteor-vite.wcaserver.com)
+  - [**Vue 3 + SSR**](https://vuejs.org/)
+    - [Example Project](/examples/vue-ssr)
+    - [Preview](https://vue-ssr--meteor-vite.wcaserver.com)
 
 
 ## Installation
 
 ```sh
-# Install meteor-vite and Vite
+# Add the Meteor-Vite plugin to your dependencies
 meteor npm i meteor-vite
 
-# Install Vite (Meteor v3)
+# Install the latest version of Vite (Meteor v3+)
 npm i -D vite 
-
-# Use Vite v4 on Meteor v2
-# Vite v5 dropped support for Node.js v14 which is what Meteor v2 uses internally 
-# npm i -D vite@4
 
 # Then add the Vite-Bundler package to your Meteor project.
 meteor add jorgenvatle:vite-bundler
 ```
 
-You can also install any vite plugin, for example `@vitejs/plugin-vue`:
+If you are using Meteor v2, you need to make sure you install Vite v4 instead.
 
 ```sh
-meteor npm i -D @vitejs/plugin-vue
+meteor npm i -D vite@4
 ```
 
-Make sure to have an import client entry (`meteor.mainModule.client`) in your `package.json`:
+#### Application structure
+You can structure your app just like you would with a typical Meteor application. The key difference is the addition of 
+a Vite entry file for your Meteor client and server. These will become the primary entrypoints for your app.
+
+If you're installing Meteor-Vite for an existing project, just rename your current client/server entry modules to `entry-vite.ts`.
+Then create a new empty `entry-meteor.js` file for your Meteor client and server.
+
+```text
+- client/
+  - entry-vite.ts    # Write your Meteor client code from here.
+  - entry-meteor.js  # Leave empty, Vite will write to this file to load missing dependencies at runtime.
+  - index.html
+- server/
+  - entry-vite.ts     # Write your Meteor server code from here.
+  - entry-meteor.js   # If you enable server builds with Vite: Leave empty. Vite will write to this file to load your finished server bundle.
+- package.json
+- vite.config.ts
+```
+
+#### Package.json
+Now, make sure you have `mainModule` entry in your `package.json` for each of the new `meteor-entry.js` files.
 
 ```json5
 {
@@ -66,16 +85,19 @@ Make sure to have an import client entry (`meteor.mainModule.client`) in your `p
   },
   "meteor": {
     "mainModule": {
-      "client": "imports/entrypoint/meteor.ts",
-      "server": "server/main.ts"
+      "client": "client/entry-meteor.js",
+      "server": "server/entry-meteor.js"
     },
   }
 }
 ```
 
-You can leave your Meteor client entry file empty, but it's necessary to enable Meteor import mode. In the example
-above, we can create an empty `imports/entrypoint/meteor.ts` file.
+You can leave your `meteor-entry.js` files empty, or write to them if you'd like. Do keep in mind that Vite may write to 
+them during development and production bundling. What you add to your `meteor-entry.js` files will be ignored by Vite.
+So you should generally avoid adding anything to these modules unless you have a very specific use case that cannot 
+be handled by Vite.
 
+#### Vite config
 Create a Vite configuration file (`vite.config.ts`) in your project root. And load in the `meteor-vite` plugin.
 ```ts
 // vite.config.ts
@@ -85,13 +107,35 @@ import { meteor } from 'meteor-vite/plugin';
 export default defineConfig({
     plugins: [
         meteor({
-          clientEntry: 'imports/entrypoint/vite.ts',
+          clientEntry: 'client/entry-vite.ts',
+            
+          // Optionally specify a server entrypoint to build the Meteor server with Vite.
+          serverEntry: 'server/entry-vite.ts',
+          enableExperimentalFeatures: true, // Required to enable server bundling.
         }),
-        // Other Vite plugins here. E.g. React or Vue (See examples below)
+        
+        // ... Other Vite plugins here. E.g. React or Vue (See examples below)
     ],
 })
 ```
-You can then write your code from the `vite.ts` entry point and it will be handled by Vite! ⚡️
+
+#### ⚡️ Final steps
+
+Write your code from your `entry-vite.ts` files. Install any Vite plugins you prefer to power your Meteor app. 
+See below for examples with popular UI frameworks.
+
+If you have any existing Meteor build plugins like `typescript`, etc. you can safely remove them. 
+Vite comes with out-of-the-box support most of these. For the rest, it's usually as simple as just adding a plugin to
+`vite.config.ts`.
+
+- [Official Vite plugins](https://vite.dev/plugins/)
+- [Vite plugin documentation](https://vite.dev/guide/using-plugins.html)
+
+
+Start your app and enjoy blazingly fast HMR and builds, all powered by Vite! ⚡️
+```sh
+meteor run
+```
 
 ## Example with Vue 3
 ```js
@@ -103,7 +147,7 @@ import vue from '@vitejs/plugin-vue'
 export default defineConfig({
     plugins: [
         meteor({
-          clientEntry: 'imports/entrypoint/vite.ts',
+          clientEntry: 'client/entry-vite.ts',
         }),
         vue(),
     ],
@@ -121,7 +165,7 @@ import vue from '@vitejs/plugin-vue2'
 export default defineConfig({
     plugins: [
         meteor({
-          clientEntry: 'imports/entrypoint/vite.ts',
+          clientEntry: 'client/entry-vite.ts',
         }),
         vue(),
     ],
@@ -139,7 +183,7 @@ import react from '@vitejs/plugin-react'
 export default defineConfig({
     plugins: [
         meteor({
-          clientEntry: 'imports/entrypoint/vite.ts',
+          clientEntry: 'client/entry-vite.ts',
         }),
         react({
             jsxRuntime: 'classic',
@@ -179,7 +223,7 @@ export default defineConfig({
     plugins: [
         react(),
         meteor({
-            clientEntry: "imports/entrypoint/vite.tsx",
+            clientEntry: "client/entry-vite.tsx",
             // This instructs Vite to not bundle react and react-dom as they will be bundled by Meteor instead.
             externalizeNpmPackages: ['react', 'react-dom'], 
             stubValidation: {
@@ -201,7 +245,7 @@ Then in your Meteor client's `mainModule`, we need to explicitly import React to
 omitting unused React components from your bundle.
 
 ```ts
-// ./imports/entrypoint/meteor.ts
+// ./client/entry-meteor.js
 import 'react';
 import 'react-dom';
 import 'react-dom/client';
@@ -232,7 +276,25 @@ export default defineConfig({
        * This becomes your new Vite-powered mainModule for Meteor.
        * @required
        */
-      clientEntry: 'imports/entrypoint/vite.ts',
+      clientEntry: 'client/entry-vite.ts',
+        
+      /**
+       * Enter your Meteor server's entrypoint here to prebuild your Meteor server modules using Vite.
+       * This will not compile your Atmosphere packages, but will build all your app's server modules into
+       * a single file, greatly aiding Meteor in server reload performance during development.
+       *
+       * Not only does this come with improved performance, but also the flexibility of Vite's build system.
+       * The Meteor server is built using Vite SSR mode. To configure just the server builds see
+       * {@link https://vite.dev/config/#conditional-config Conditional Configuration docs}
+       * @optional
+       */
+      serverEntry: 'server/entry-vite.ts',
+        
+      /**
+       * Failsafe opt-in to prevent experimental features and configuration from taking effect.
+       * Required if {@link serverEntry} is specified.
+       */
+      enableExperimentalFeatures: true,
       
       /**
        * Skips bundling the provided npm packages if they are already provided by Meteor.
@@ -331,8 +393,8 @@ entrypoint as specified in the `meteor.mainModule.client` field of your `package
 {
   "meteor": {
     "mainModule": {
-      "client": "imports/entrypoint/meteor.ts", // Lazy loaded packages checked for and added to this file.
-      "server": "server/main.ts"
+      "client": "client/entry-meteor.js", // Lazy loaded packages checked for and added to this file.
+      "server": "server/entry-meteor.js"
     }
   }
 }
@@ -392,7 +454,7 @@ The Vite integration comes with two dependencies that work together to enable co
 
 
 ## Roadmap
-- [ ] SSR (not tested)
+- [x] SSR (See [Vue-SSR example app](/examples/vue-ssr))
 - [x] Meteor v3 support
     - [x] Migrate bundler from Fibers to Async/Await
     - [x] Update Meteor bundle parser to support new format introduced in v3.
