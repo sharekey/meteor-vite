@@ -35,7 +35,7 @@ export default async function zodernRelay(options?: Options): Promise<Plugin> {
     
     return {
         name: 'zodern-relay',
-        async load(filename, options) {
+        async load(filename, fileOptions) {
             const relay = resolveRelay(filename || '');
             
             if (!relay) {
@@ -51,7 +51,7 @@ export default async function zodernRelay(options?: Options): Promise<Plugin> {
             
             let arch = 'web.browser.vite';
             
-            if (options?.ssr) {
+            if (fileOptions?.ssr) {
                 arch = 'os.vite.ssr';
             }
             
