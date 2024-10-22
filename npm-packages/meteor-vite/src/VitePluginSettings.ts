@@ -20,7 +20,9 @@ export interface PluginSettings<
      * a single file, greatly aiding Meteor in server reload performance during development.
      *
      * Not only does this come with improved performance, but also the flexibility of Vite's build system.
-     * @experimental
+     *
+     * @experimental There's still some work left to be done before this is stable without additional configuration.
+     * For now, you can work around those issues by specifying server-build-specific settings in {@link serverEntryConfig}
      */
     serverEntry?: string;
     
