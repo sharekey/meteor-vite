@@ -110,6 +110,12 @@ function setupPlugin<Context extends ViteLoadRequest>(setup: () => Promise<{
         return {
             name: plugin.name,
             resolveId: plugin.resolveId,
+            apply: (config, { ssrBuild, }) => {
+                if (ssrBuild) {
+                    return false;
+                }
+                return true;
+            },
             async configResolved(resolvedConfig) {
                 const pluginSettings = (resolvedConfig as ResolvedMeteorViteConfig).meteor;
                 if (!pluginSettings) {
