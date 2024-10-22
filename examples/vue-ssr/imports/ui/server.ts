@@ -15,6 +15,8 @@ WebAppInternals.registerBoilerplateDataCallback('vue-ssr', async (req, data) => 
     
     const html = await renderToString(app, context);
     
-    const oldBody = data.dynamicBody || '';
-    data.dynamicBody = `${oldBody}\n${html}`;
+    data.dynamicBody = [
+        data.dynamicBody || '',
+        `<div id="app">${html}</div>`,
+    ].join('\n')
 })
