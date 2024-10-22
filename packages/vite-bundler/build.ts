@@ -23,6 +23,8 @@ if (pluginEnabled) {
   );
 }
 
+fs.writeFileSync(path.join(path.dirname(viteOutSrcDir), '.gitignore'), '*')
+
 if (!pluginEnabled) {
   Logger.info('Build plugin is disabled')
 }
