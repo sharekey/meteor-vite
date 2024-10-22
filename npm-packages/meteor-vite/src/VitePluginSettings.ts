@@ -3,7 +3,7 @@ import type { ResolvedConfig, UserConfig } from 'vite';
 import type { DeepPartial, MakeOptional, MakeRequired } from './utilities/GenericTypes';
 
 export interface PluginSettings<
-    TServerConfig extends UserConfig = {},
+    TServerConfig extends UserConfig = UserConfig,
     TChunkFileNames extends OutputOptions['chunkFileNames'] = undefined
 > {
     /**
