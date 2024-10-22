@@ -1,5 +1,11 @@
 # vite-bundler
 
+## 3.0.0-next.18
+
+### Patch Changes
+
+- 5e669858: Update serverEntry config option to use Vite SSR build internally
+
 ## 3.0.0-next.17
 
 ### Minor Changes
