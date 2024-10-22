@@ -1,5 +1,16 @@
 # @meteor-vite/plugin-zodern-relay
 
+## 1.0.6
+
+### Patch Changes
+
+- eed4b4d1: Fix server-side transpilation when building Meteor server with Vite. Fixes an issue where server bundles would use client stubs from babel-plugin-zodern-relay.
+
+  Related issues
+
+  - #195
+  - #182
+
 ## 1.0.5
 
 ### Patch Changes
