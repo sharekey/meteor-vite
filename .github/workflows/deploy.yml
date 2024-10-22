@@ -52,3 +52,12 @@ jobs:
       appBasename: 'meteor-v3-vue'
       meteorBaseImage: 'jorgenvatle/meteor-base'
       nodeVersion: '20-alpine'
+
+  vue-ssr:
+    name: 'Vue + SSR'
+    uses: ./.github/workflows/_reuse_.deploy.yml
+    secrets: inherit
+    with:
+      appBasename: 'vue-ssr'
+      meteorBaseImage: 'jorgenvatle/meteor-base'
+      nodeVersion: '20-alpine'
