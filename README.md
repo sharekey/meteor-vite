@@ -100,7 +100,6 @@ export default defineConfig({
     ],
 })
 ```
-You can then write your code from the `vite.ts` file, and it will be handled by Vite! ⚡️
 
 #### Application structure
 Your app's file structure should look something like the following example:
@@ -117,6 +116,9 @@ Your app's file structure should look something like the following example:
 - package.json
 - vite.config.ts
 ```
+
+Now you can write your code from the `vite.ts` and `vite.server.ts` files. The rest will be handled by Vite! ⚡️
+
 
 ## Example with Vue 3
 ```js
