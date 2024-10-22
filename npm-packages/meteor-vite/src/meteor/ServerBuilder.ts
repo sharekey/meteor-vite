@@ -47,6 +47,9 @@ export async function MeteorServerBuilder({ packageJson, watch = true }: { packa
     
     build({
         configFile: viteConfig.configFile,
+        ssr: {
+            target: 'node',
+        },
         build: {
             watch: watch ? {} : null,
             ssr: viteConfig.meteor.serverEntry,
@@ -54,6 +57,13 @@ export async function MeteorServerBuilder({ packageJson, watch = true }: { packa
             minify: false,
             sourcemap: true,
             emptyOutDir: false,
+            rollupOptions: {
+                external: (id) => {
+                    if (id.startsWith('meteor/')) {
+                        return true;
+                    }
+                }
+            }
         }
     }).catch((error) => {
         Logger.error('Encountered error while preparing server build!', error);
