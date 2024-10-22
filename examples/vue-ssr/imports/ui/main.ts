@@ -6,12 +6,14 @@ import App from './App.vue'
 import { routes } from './router';
 
 export function createApp() {
-  const router = createRouter({
-    history: Meteor.isClient ? createMemoryHistory() : createWebHistory(),
-    routes,
-  });
+  let history = createMemoryHistory();
+  
+  if (Meteor.isClient) {
+    history = createWebHistory();
+  }
   
   const app = createSSRApp(App);
+  const router = createRouter({ history, routes });
   
   app.use(router);
   
