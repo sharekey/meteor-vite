@@ -17,6 +17,7 @@ const {
 // Empty stubs from any previous builds
 if (pluginEnabled) {
   fs.ensureDirSync(viteOutSrcDir);
+  fs.writeFileSync(path.join(path.dirname(viteOutSrcDir), '.gitignore'), '*');
   fs.writeFileSync(
       path.join(viteOutSrcDir, `meteor-entry.js.${BUNDLE_FILE_EXTENSION}`),
       `// Stub file for Meteor-Vite\n`, 'utf8'
