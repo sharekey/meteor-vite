@@ -29,6 +29,11 @@ export interface PluginSettings<
     serverEntryConfig?: TServerConfig;
     
     /**
+     * Failsafe opt-in to prevent experimental features and configuration from taking effect.
+     */
+    enableExperimentalFeatures?: boolean;
+    
+    /**
      * Skips bundling the provided npm packages if they are already provided by Meteor.
      * This assumes you have a Meteor package that depends on the provided npm packages.
      */
