@@ -5,34 +5,21 @@
         {
           "name": "meteor-vite",
           "type": "patch"
-        },
-        {
-          "name": "vite-bundler",
-          "type": "patch"
         }
       ],
-      "summary": "Allow Vite dev server to run without a DDP connection.\n- Fix Meteor DDP URL parsing from Meteor runtime environment. Falls back to using `MOBILE_DDP_URL`. \n- Fix #208",
-      "id": "silly-jobs-divide"
+      "summary": "Add failsafe for experimental serverEntry feature.",
+      "id": "warm-turtles-rule"
     }
   ],
   "releases": [
     {
       "name": "meteor-vite",
       "type": "patch",
-      "oldVersion": "1.11.0",
+      "oldVersion": "1.11.1",
       "changesets": [
-        "silly-jobs-divide"
+        "warm-turtles-rule"
       ],
-      "newVersion": "1.11.1"
-    },
-    {
-      "name": "vite-bundler",
-      "type": "patch",
-      "oldVersion": "2.1.2",
-      "changesets": [
-        "silly-jobs-divide"
-      ],
-      "newVersion": "2.1.3"
+      "newVersion": "1.11.2"
     }
   ]
 }
