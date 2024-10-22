@@ -1,6 +1,9 @@
 import { Meteor } from 'meteor/meteor'
 import { LinksCollection } from '/imports/api/links'
 
+// Initializes SSR for the Vue app.
+import '/imports/ui/server';
+
 async function insertLink({ title, url }: { title: string, url: string }) {
     await LinksCollection.insertAsync({ title, url, createdAt: new Date() })
 }
