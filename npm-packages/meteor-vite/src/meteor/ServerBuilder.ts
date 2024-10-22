@@ -6,7 +6,7 @@ import Logger from '../utilities/Logger';
 import { type ProjectJson, ResolvedMeteorViteConfig } from '../VitePluginSettings';
 
 const BUNDLE_OUT = {
-    dir: 'server/bundle',
+    dir: Path.join('_vite', 'server'),
     filename: 'meteor.server',
 }
 
