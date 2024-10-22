@@ -36,6 +36,7 @@ export async function MeteorServerBuilder({ packageJson, watch = true }: { packa
     }
     
     await build({
+        mode: watch ? 'development' : 'production',
         configFile: viteConfig.configFile,
         ssr: {
             target: 'node',
