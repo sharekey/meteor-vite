@@ -5,7 +5,7 @@ import { MeteorViteError } from '../error/MeteorViteError';
 import Logger from '../utilities/Logger';
 import { type ProjectJson, ResolvedMeteorViteConfig } from '../VitePluginSettings';
 
-const BUNDLE_OUT_DIR = Path.join('_vite', 'server');
+const BUNDLE_OUT_DIR = Path.join('_vite-bundle', 'server');
 
 export async function MeteorServerBuilder({ packageJson, watch = true }: { packageJson: ProjectJson, watch?: boolean }) {
     const viteConfig: ResolvedMeteorViteConfig = await resolveConfig({
