@@ -13,3 +13,5 @@ Build `serverEntry` bundles using Vite's SSR build process instead of using an i
 #### Related issues
 - #195
 - #215
+
+Related release notes: https://github.com/JorgenVatle/meteor-vite/releases/tag/vite-bundler%402.1.2
