@@ -409,7 +409,7 @@ The Vite integration comes with two dependencies that work together to enable co
     - [x] Update Meteor bundle parser to support new format introduced in v3.
 - [x] Code-splitting/Dynamic imports
 - [ ] Migrate intermediary production-build transpile step from Babel to esbuild.
-- [ ] SSR (not tested)
+- [x] SSR (See [Vue-SSR example app](/examples/vue-ssr))
 - [x] Starter/demo templates
     - [x] [Vue 3](/examples/vue)
         - [Live demo](https://vue--meteor-vite.wcaserver.com/)
