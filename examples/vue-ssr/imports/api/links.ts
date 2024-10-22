@@ -8,3 +8,10 @@ if (Meteor.isServer) {
     return LinksCollection.find({})
   })
 }
+
+
+declare module 'meteor/meteor' {
+  interface DefinedPublications {
+    'links': () => PublishReturnType;
+  }
+}
