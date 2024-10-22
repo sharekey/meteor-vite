@@ -117,14 +117,14 @@ async function prepareServerEntry(paths: {
                 `console.warn(${errorMessage});`,
                 `console.error(e);`,
             `});`
-        ].join('');
+        ];
         
-        if (mainModuleContent.includes(importString)) {
+        if (mainModuleContent.includes(bundleEntryPath[0])) {
             return;
         }
         
         Logger.info(`Added explicit import for Meteor-Vite server bundle to mainModule ${Path.relative(Path.resolve('.'), paths.meteorMainModule)}`);
-        const newMainModuleContent = `${importString}\n${mainModuleContent}`;
+        const newMainModuleContent = `${importString.join('')}\n${mainModuleContent}`;
         await FS.writeFile(paths.meteorMainModule, newMainModuleContent);
     }
     
