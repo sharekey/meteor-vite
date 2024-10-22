@@ -1,6 +1,6 @@
 import { type RouteRecordRaw } from 'vue-router';
-import About from './About.vue';
-import Home from './Home.vue';
+import About from './pages/About.vue';
+import Home from './pages/Home.vue';
 
 export const routes = [
   {
