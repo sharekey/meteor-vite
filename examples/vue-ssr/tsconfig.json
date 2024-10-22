@@ -45,6 +45,10 @@
     "isolatedModules": true,
   },
   "include": [
-    "../../packages/vite-bundler/types/*",
+    "../../packages/vite-bundler/types/*.ts",
+    "./imports/**/*.ts",
+    "./server/**/*.ts",
+    "./client/**/*.ts",
+    "./*.ts"
   ]
 }
