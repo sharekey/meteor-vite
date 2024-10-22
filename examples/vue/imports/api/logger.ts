@@ -52,10 +52,12 @@ export const Logger: typeof console = new Proxy(console, {
         }
         
         return (...args: any[]) => {
-            LogsCollection.insert({
+            LogsCollection.insertAsync({
                 createdAt: new Date(),
                 level,
                 args: args.map(arg => safeJson(arg)),
+            }).catch(() => {
+                // Ignore error
             });
             value(...args);
         }
