@@ -1,9 +1,8 @@
 import type { OutputOptions } from 'rollup';
-import type { ResolvedConfig, UserConfig } from 'vite';
+import type { ResolvedConfig } from 'vite';
 import type { DeepPartial, MakeOptional, MakeRequired } from './utilities/GenericTypes';
 
 export interface PluginSettings<
-    TServerConfig extends UserConfig = UserConfig,
     TChunkFileNames extends OutputOptions['chunkFileNames'] = undefined
 > {
     /**
@@ -221,7 +220,7 @@ export type ProjectJson = {
 }
 
 export type PluginOptions = MakeOptional<PluginSettings, 'stubValidation' | 'meteorStubs' | 'tempDir'>;
-export type PartialPluginOptions = DeepPartial<PluginSettings<{}>>;
+export type PartialPluginOptions = DeepPartial<PluginSettings>;
 export type MeteorStubsSettings = Required<MakeRequired<PluginSettings['meteorStubs'], 'meteor'>>;
 export type ResolvedPluginSettings = MakeRequired<
     Omit<PluginSettings, 'meteorStubs'> & { meteorStubs: MeteorStubsSettings },
