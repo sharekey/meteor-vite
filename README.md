@@ -50,6 +50,24 @@ If you are using Meteor v2, you need to make sure you install Vite v4 instead.
 meteor npm i -D vite@4
 ```
 
+#### Application structure
+You can structure your app just like you would with a typical Meteor application. The key difference is the addition of 
+two additional entry files.
+
+```text
+- client/
+  - meteor.js         # Leave empty, Vite will modify this file at runtime.
+  - index.html
+- imports/
+  - entrypoint/
+    - vite.ts          # Write your Meteor client code from here.
+    - vite.server.ts   # Write your Meteor server code from here.
+- server/
+  - meteor.js          # Leave empty, Vite will modify this file at runtime if you specify a serverEntry in your Vite config.
+- package.json
+- vite.config.ts
+```
+
 #### Package.json
 Make sure you specify a `mainModule` entry for the Meteor server and client in your `package.json`.
 
@@ -99,22 +117,6 @@ export default defineConfig({
         // ... Other Vite plugins here. E.g. React or Vue (See examples below)
     ],
 })
-```
-
-#### Application structure
-Your app's file structure should look something like the following example:
-```text
-- client/
-  - meteor.js         # Leave empty, Vite will modify this file at runtime.
-  - index.html
-- imports/
-  - entrypoint/
-    - vite.ts          # Write your Meteor client code from here.
-    - vite.server.ts   # Write your Meteor server code from here.
-- server/
-  - meteor.js          # Leave empty, Vite will modify this file at runtime if you specified a serverEntry in your Vite config.
-- package.json
-- vite.config.ts
 ```
 
 Now you can write your code from the `vite.ts` and `vite.server.ts` files. The rest will be handled by Vite! ⚡️
