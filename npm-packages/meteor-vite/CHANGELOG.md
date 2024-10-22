@@ -1,5 +1,11 @@
 # meteor-vite
 
+## 2.0.0-next.5
+
+### Patch Changes
+
+- 5e669858: Update serverEntry config option to use Vite SSR build internally
+
 ## 1.12.0
 
 ### Minor Changes
