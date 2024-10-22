@@ -137,7 +137,6 @@ Start your app and enjoy blazingly fast HMR and builds, all powered by Vite! ⚡
 meteor run
 ```
 
-
 ## Example with Vue 3
 ```js
 // vite.config.ts
@@ -278,6 +277,24 @@ export default defineConfig({
        * @required
        */
       clientEntry: 'client/entry-vite.ts',
+        
+      /**
+       * Enter your Meteor server's entrypoint here to prebuild your Meteor server modules using Vite.
+       * This will not compile your Atmosphere packages, but will build all your app's server modules into
+       * a single file, greatly aiding Meteor in server reload performance during development.
+       *
+       * Not only does this come with improved performance, but also the flexibility of Vite's build system.
+       * The Meteor server is built using Vite SSR mode. To configure just the server builds see
+       * {@link https://vite.dev/config/#conditional-config Conditional Configuration docs}
+       * @optional
+       */
+      serverEntry: 'server/entry-vite.ts',
+        
+      /**
+       * Failsafe opt-in to prevent experimental features and configuration from taking effect.
+       * Required if {@link serverEntry} is specified.
+       */
+      enableExperimentalFeatures: true,
       
       /**
        * Skips bundling the provided npm packages if they are already provided by Meteor.
