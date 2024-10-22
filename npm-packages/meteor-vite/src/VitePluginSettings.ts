@@ -20,16 +20,12 @@ export interface PluginSettings<
      * a single file, greatly aiding Meteor in server reload performance during development.
      *
      * Not only does this come with improved performance, but also the flexibility of Vite's build system.
+     * The Meteor server is built using Vite SSR mode. To configure just the server builds see
+     * {@link https://vite.dev/config/#conditional-config Conditional Configuration docs}
      *
      * @experimental There's still some work left to be done before this is stable without additional configuration.
-     * For now, you can work around those issues by specifying server-build-specific settings in {@link serverEntryConfig}
      */
     serverEntry?: string;
-    
-    /**
-     * Vite config overrides when bundling the Meteor server with Vite.
-     */
-    serverEntryConfig?: TServerConfig;
     
     /**
      * Failsafe opt-in to prevent experimental features and configuration from taking effect.
