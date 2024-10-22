@@ -50,7 +50,7 @@ If you are using Meteor v2, you need to make sure you install Vite v4 instead.
 meteor npm i -D vite@4
 ```
 
-Make sure to have an import client entry (`meteor.mainModule.client`) in your `package.json`:
+Make sure you specify a `mainModule` entry for the Meteor server and client in your `package.json`.
 
 ```json5
 {
@@ -73,7 +73,10 @@ Make sure to have an import client entry (`meteor.mainModule.client`) in your `p
 ```
 
 You can leave your Meteor client entry file empty, but it's necessary to enable Meteor import mode. In the example
-above, we can create an empty `client/meteor.js` file.
+above, we have already created an empty `client/meteor.js` file.
+
+If you also want to build the Meteor server with Vite, also create an empty `server/meteor.js` file. Otherwise, point
+the `mainModule.server` field to your existing server main module.
 
 Create a Vite configuration file (`vite.config.ts`) in your project root. And load in the `meteor-vite` plugin.
 ```ts
@@ -94,7 +97,7 @@ export default defineConfig({
     ],
 })
 ```
-You can then write your code from the `vite.ts` entry point and it will be handled by Vite! ⚡️
+You can then write your code from the `vite.ts` file, and it will be handled by Vite! ⚡️
 
 ## Example with Vue 3
 ```js
