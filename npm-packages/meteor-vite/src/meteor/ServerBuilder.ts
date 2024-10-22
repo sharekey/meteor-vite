@@ -46,26 +46,14 @@ export async function MeteorServerBuilder({ packageJson, watch = true }: { packa
     })
     
     build({
-        mode: 'meteor-server:development',
+        mode: 'development',
         configFile: viteConfig.configFile,
         build: {
             watch: watch ? {} : null,
-            lib: {
-                entry: viteConfig.meteor.serverEntry,
-                name: 'meteor-server',
-                fileName: BUNDLE_OUT.filename,
-                formats: ['es'],
-            },
-            sourcemap: true,
+            ssr: viteConfig.meteor.serverEntry,
             outDir: BUNDLE_OUT.dir,
             minify: false,
-            rollupOptions: mergeConfig({
-                external: (id: string) => {
-                    if (id.startsWith('meteor')) {
-                        return true;
-                    }
-                }
-            }, viteConfig.meteor.serverEntryConfig?.build?.rollupOptions || {}, false)
+            sourcemap: true,
         }
     }).catch((error) => {
         Logger.error('Encountered error while preparing server build!', error);
