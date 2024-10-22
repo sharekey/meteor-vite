@@ -110,7 +110,7 @@ export class MeteorVueClient<TClient extends MeteorDDPClient> {
         
         let subscriptionHandle: Meteor.SubscriptionHandle | null = null;
         
-        const computation = Tracker.autorun(() => {
+        const computation = this._createTracker(() => {
             const subscribeParams = params.get();
             if (subscribeParams === null) {
                 return;
@@ -187,7 +187,7 @@ export class MeteorVueClient<TClient extends MeteorDDPClient> {
         let firstRun = true;
         
         watchEffect((onCleanup) => {
-            const computation = Tracker.autorun(() => {
+            const computation = this._createTracker(() => {
                 let result: any = compute();
                 
                 if (result instanceof Mongo.Cursor) {
@@ -209,6 +209,13 @@ export class MeteorVueClient<TClient extends MeteorDDPClient> {
         });
         
         return computed(() => data.value) as any;
+    }
+    
+    protected _createTracker(compute: () => void): { stop: () => void } {
+        if (Meteor.isServer) {
+            return { stop: () => {} }
+        }
+        return Tracker.autorun(compute);
     }
 }
 
