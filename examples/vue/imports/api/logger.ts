@@ -57,7 +57,8 @@ export const Logger: typeof console = new Proxy(console, {
                 level,
                 args: args.map(arg => safeJson(arg)),
             }).catch(() => {
-                // Ignore error
+                // Ignore error to prevent infinite logging loop.
+                // Meteor appears to emit an error message anyway, regardless of whether the exception is handled
             });
             value.apply(this, args);
         }
