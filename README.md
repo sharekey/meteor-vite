@@ -93,6 +93,7 @@ export default defineConfig({
             
           // Optionally specify a server entrypoint to build the Meteor server with Vite.
           serverEntry: 'imports/entrypoint/vite.server.ts',
+          enableExperimentalFeatures: true, // Required to enable server bundling.
         }),
         
         // ... Other Vite plugins here. E.g. React or Vue (See examples below)
@@ -100,6 +101,22 @@ export default defineConfig({
 })
 ```
 You can then write your code from the `vite.ts` file, and it will be handled by Vite! ⚡️
+
+#### Application structure
+Your app's file structure will now look something like the following example.
+```text
+- client/
+  - meteor.js         # Leave empty, Vite will modify this file at runtime.
+  - index.html
+- imports/
+  - entrypoint/
+    - vite.ts          # Write your Meteor client code from here.
+    - vite.server.ts   # Write your Meteor server code from here.
+- server/
+  - meteor.js          # Leave empty, Vite will modify this file at runtime if you specified a serverEntry in your Vite config.
+- package.json
+
+```
 
 ## Example with Vue 3
 ```js
