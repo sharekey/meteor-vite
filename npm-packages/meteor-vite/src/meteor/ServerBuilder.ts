@@ -53,6 +53,7 @@ export async function MeteorServerBuilder({ packageJson, watch = true }: { packa
             outDir: BUNDLE_OUT.dir,
             minify: false,
             sourcemap: true,
+            emptyOutDir: false,
         }
     }).catch((error) => {
         Logger.error('Encountered error while preparing server build!', error);
