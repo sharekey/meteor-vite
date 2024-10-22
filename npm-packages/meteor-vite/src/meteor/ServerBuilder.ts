@@ -35,14 +35,6 @@ export async function MeteorServerBuilder({ packageJson, watch = true }: { packa
         throw new MeteorViteError('You need to specify a Meteor server mainModule in your package.json file!')
     }
     
-    const { name } = Path.parse(viteConfig.meteor.serverEntry);
-    await prepareServerEntry({
-        meteorMainModule: Path.resolve(packageJson.meteor.mainModule.server),
-        viteServerBundle: Path.resolve(
-            Path.join(BUNDLE_OUT_DIR, name)
-        ),
-    })
-    
     build({
         configFile: viteConfig.configFile,
         ssr: {
@@ -68,6 +60,14 @@ export async function MeteorServerBuilder({ packageJson, watch = true }: { packa
     }).then(() => {
         Logger.info('Server build completed!');
     });
+    
+    const { name } = Path.parse(viteConfig.meteor.serverEntry);
+    await prepareServerEntry({
+        meteorMainModule: Path.resolve(packageJson.meteor.mainModule.server),
+        viteServerBundle: Path.resolve(
+            Path.join(BUNDLE_OUT_DIR, name)
+        ),
+    })
 }
 
 async function prepareServerEntry(paths: {
