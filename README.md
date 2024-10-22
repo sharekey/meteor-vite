@@ -56,12 +56,12 @@ two additional entry files.
 
 ```text
 - client/
-  - entry-meteor.js  # Leave empty, Vite will modify this file at runtime.
   - entry-vite.ts    # Write your Meteor client code from here.
+  - entry-meteor.js  # Leave empty, Vite will modify this file at runtime.
   - index.html
 - server/
-  - entry-meteor.js   # Leave empty, Vite will modify this file at runtime if you specify a serverEntry in your Vite config.
   - entry-vite.ts     # Write your Meteor server code from here.
+  - entry-meteor.js   # Leave empty, Vite will modify this file at runtime if you specify a serverEntry in your Vite config.
 - package.json
 - vite.config.ts
 ```
