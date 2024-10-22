@@ -1,6 +1,6 @@
 <script setup>
 import { subscribe, autorun } from 'vue-meteor-tracker'
-import { LinksCollection } from '/examples/vue-ssr/imports/api/links'
+import { LinksCollection } from '/imports/api/links'
 
 subscribe('links')
 const links = autorun(() => LinksCollection.find({}).fetch()).result
