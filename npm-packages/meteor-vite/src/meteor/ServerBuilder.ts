@@ -1,6 +1,6 @@
 import FS from 'fs/promises';
 import Path from 'path';
-import { build, mergeConfig, resolveConfig } from 'vite';
+import { build, resolveConfig } from 'vite';
 import { MeteorViteError } from '../error/MeteorViteError';
 import Logger from '../utilities/Logger';
 import { type ProjectJson, ResolvedMeteorViteConfig } from '../VitePluginSettings';
@@ -35,7 +35,7 @@ export async function MeteorServerBuilder({ packageJson, watch = true }: { packa
         throw new MeteorViteError('You need to specify a Meteor server mainModule in your package.json file!')
     }
     
-    build({
+    await build({
         configFile: viteConfig.configFile,
         ssr: {
             target: 'node',
@@ -55,10 +55,6 @@ export async function MeteorServerBuilder({ packageJson, watch = true }: { packa
                 }
             }
         }
-    }).catch((error) => {
-        Logger.error('Encountered error while preparing server build!', error);
-    }).then(() => {
-        Logger.info('Server build completed!');
     });
     
     const { name } = Path.parse(viteConfig.meteor.serverEntry);
