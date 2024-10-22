@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import { LinksCollection } from '/imports/api/links'
 import VueMeteor from '/imports/ui/lib/VueMeteor';
 
