@@ -43,5 +43,8 @@
 
     /* Vite setup */
     "isolatedModules": true,
-  }
+  },
+  "include": [
+    "../../packages/vite-bundler/types/*",
+  ]
 }
