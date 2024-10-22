@@ -5,6 +5,11 @@ import { MeteorViteError } from '../error/MeteorViteError';
 import Logger from '../utilities/Logger';
 import { type ProjectJson, ResolvedMeteorViteConfig } from '../VitePluginSettings';
 
+const BUNDLE_OUT = {
+    dir: 'server/bundle',
+    filename: 'meteor.server',
+}
+
 export async function MeteorServerBuilder({ packageJson, watch = true }: { packageJson: ProjectJson, watch?: boolean }) {
     const viteConfig: ResolvedMeteorViteConfig = await resolveConfig({
         configFile: packageJson?.meteor?.vite?.configFile
@@ -33,15 +38,10 @@ export async function MeteorServerBuilder({ packageJson, watch = true }: { packa
         throw new MeteorViteError('You need to specify a Meteor server mainModule in your package.json file!')
     }
     
-    const output = {
-        dir: Path.join(viteConfig.meteor.tempDir, 'server-bundle'),
-        filename: 'meteor.server',
-    }
-    
     await prepareServerEntry({
         meteorMainModule: Path.resolve(packageJson.meteor.mainModule.server),
         viteServerBundle: Path.resolve(
-            Path.join(output.dir, output.filename)
+            Path.join(BUNDLE_OUT.dir, BUNDLE_OUT.filename)
         ),
     })
     
@@ -53,11 +53,11 @@ export async function MeteorServerBuilder({ packageJson, watch = true }: { packa
             lib: {
                 entry: viteConfig.meteor.serverEntry,
                 name: 'meteor-server',
-                fileName: output.filename,
+                fileName: BUNDLE_OUT.filename,
                 formats: ['es'],
             },
             sourcemap: true,
-            outDir: output.dir,
+            outDir: BUNDLE_OUT.dir,
             minify: false,
             rollupOptions: mergeConfig({
                 external: (id: string) => {
