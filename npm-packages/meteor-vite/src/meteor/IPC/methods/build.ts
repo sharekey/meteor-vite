@@ -1,14 +1,13 @@
-import { spawn } from 'child_process';
 import Path from 'path';
 import { RollupOutput } from 'rollup';
 import { build, InlineConfig, resolveConfig } from 'vite';
 import MeteorVitePackage from '../../../../package.json';
-import {
-    type ResolvedMeteorViteConfig,
-    type ProjectJson,
-    type MeteorStubsSettings,
-} from '../../../VitePluginSettings';
 import { meteorWorker } from '../../../plugin/Meteor';
+import {
+    type MeteorStubsSettings,
+    type ProjectJson,
+    type ResolvedMeteorViteConfig,
+} from '../../../VitePluginSettings';
 import { MeteorServerBuilder } from '../../ServerBuilder';
 import CreateIPCInterface, { IPCReply } from '../interface';
 
