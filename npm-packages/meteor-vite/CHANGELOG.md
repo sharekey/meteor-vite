@@ -1,5 +1,11 @@
 # meteor-vite
 
+## 1.11.2
+
+### Patch Changes
+
+- 9f986bde: Add failsafe for experimental serverEntry feature.
+
 ## 1.11.1
 
 ### Patch Changes
