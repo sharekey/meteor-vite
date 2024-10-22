@@ -1,9 +1,9 @@
 <script setup>
-import { subscribe, autorun } from 'vue-meteor-tracker'
 import { LinksCollection } from '/imports/api/links'
+import VueMeteor from '/imports/ui/lib/VueMeteor';
 
-subscribe('links')
-const links = autorun(() => LinksCollection.find({}).fetch()).result
+VueMeteor.subscribe('links');
+const links = VueMeteor.computed(() => LinksCollection.find());
 </script>
 
 <template>
