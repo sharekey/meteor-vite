@@ -121,11 +121,12 @@ export default defineConfig({
 
 #### ⚡️ Final steps
 
-From now should write your code from your `entry-vite.ts` files. Add any Vite plugins you prefer to power your Meteor app. 
+Write your code from your `entry-vite.ts` files. Install any Vite plugins you prefer to power your Meteor app. 
 See below for examples with popular UI frameworks.
 
 If you have any existing Meteor build plugins like `typescript`, etc. you can safely remove them. 
-Vite comes with out-of-the-box support most of these. For the rest, it's as simple as adding a plugin to `vite.config.ts`.
+Vite comes with out-of-the-box support most of these. For the rest, it's usually as simple as just adding a plugin to
+`vite.config.ts`.
 
 - [Official Vite plugins](https://vite.dev/plugins/)
 - [Vite plugin documentation](https://vite.dev/guide/using-plugins.html)
