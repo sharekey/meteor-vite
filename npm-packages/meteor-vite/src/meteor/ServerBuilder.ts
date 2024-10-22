@@ -64,6 +64,9 @@ export async function MeteorServerBuilder({ packageJson, watch = true }: { packa
     const { name } = Path.parse(viteConfig.meteor.serverEntry);
     await prepareServerEntry({
         meteorMainModule: Path.resolve(packageJson.meteor.mainModule.server),
+        staticEntryFile: Path.resolve(
+            Path.join(BUNDLE_OUT_DIR, '__entry.js'),
+        ),
         viteServerBundle: Path.resolve(
             Path.join(BUNDLE_OUT_DIR, name)
         ),
@@ -73,12 +76,13 @@ export async function MeteorServerBuilder({ packageJson, watch = true }: { packa
 async function prepareServerEntry(paths: {
     meteorMainModule: string;
     viteServerBundle: string;
+    /**
+     * Proxy module with a static filename which imports the final Vite build.
+     * An import for this module is injected into the user's server mainModule.
+     */
+    staticEntryFile: string;
 }) {
     const mainModuleContent = await FS.readFile(paths.meteorMainModule, 'utf8');
-    const relativeViteModulePath = Path.relative(
-        Path.dirname(paths.meteorMainModule),
-        paths.viteServerBundle,
-    );
     
     // Add .gitignore to build output
     {
@@ -87,19 +91,39 @@ async function prepareServerEntry(paths: {
         await FS.writeFile(gitignorePath, '*');
     }
     
+    // Create entry module for the Server bundle.
+    // Since Vite SSR build filenames aren't static, it's important we have one file that has a static filename
+    // which we can add as a one-off import to the Meteor mainModule controlled by the user.
+    {
+        const relativeViteServerModulePath = Path.relative(
+            Path.dirname(paths.staticEntryFile),
+            paths.viteServerBundle,
+        )
+        const importString = `import ${JSON.stringify('./' + relativeViteServerModulePath)};`;
+        await FS.writeFile(paths.staticEntryFile, importString);
+    }
+    
     // Modify Meteor Server mainModule with an import for the Vite bundle.
     {
+        const bundleEntryPath = Path.relative(
+            Path.dirname(paths.meteorMainModule),
+            paths.staticEntryFile
+        )
+        
         const errorMessage = JSON.stringify(
             `Failed to import Meteor Server bundle from Vite! This may sometimes happen if it's your first time starting the app.`,
         )
         
-        const importString = `import(${JSON.stringify('./' + relativeViteModulePath)}).catch((e) => console.warn(${errorMessage}, e));`;
+        const importString = [
+            `import(${JSON.stringify('./' + bundleEntryPath)})`,
+            `.catch((e) => console.warn(${errorMessage}, e));`
+        ].join('');
         
         if (mainModuleContent.includes(importString)) {
             return;
         }
         
-        Logger.info(`Added explicit import for Meteor-Vite server bundle to ${relativeViteModulePath}`);
+        Logger.info(`Added explicit import for Meteor-Vite server bundle to mainModule ${Path.relative(Path.resolve('.'), paths.meteorMainModule)}`);
         const newMainModuleContent = `${importString}\n${mainModuleContent}`;
         await FS.writeFile(paths.meteorMainModule, newMainModuleContent);
     }
