@@ -26,6 +26,9 @@ Use [Vite](https://vitejs.dev) in your Meteor app! ⚡️
   - [**Meteor v3**](https://v3-migration-docs.meteor.com/)
     - [Example Project](/examples/meteor-v3-vue)
     - [Preview](https://meteor-v3-vue--meteor-vite.wcaserver.com)
+  - [**Vue 3 + SSR**](https://vuejs.org/)
+    - [Example Project](/examples/vue-ssr)
+    - [Preview](https://vue-ssr--meteor-vite.wcaserver.com)
 
 
 ## Installation
@@ -406,7 +409,7 @@ The Vite integration comes with two dependencies that work together to enable co
     - [x] Update Meteor bundle parser to support new format introduced in v3.
 - [x] Code-splitting/Dynamic imports
 - [ ] Migrate intermediary production-build transpile step from Babel to esbuild.
-- [ ] SSR (not tested)
+- [x] SSR (See [Vue-SSR example app](/examples/vue-ssr))
 - [x] Starter/demo templates
     - [x] [Vue 3](/examples/vue)
         - [Live demo](https://vue--meteor-vite.wcaserver.com/)
