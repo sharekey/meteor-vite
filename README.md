@@ -50,6 +50,7 @@ If you are using Meteor v2, you need to make sure you install Vite v4 instead.
 meteor npm i -D vite@4
 ```
 
+#### Package.json
 Make sure you specify a `mainModule` entry for the Meteor server and client in your `package.json`.
 
 ```json5
@@ -78,6 +79,7 @@ above, we have already created an empty `client/meteor.js` file.
 If you also want to build the Meteor server with Vite, also create an empty `server/meteor.js` file. Otherwise, point
 the `mainModule.server` field to your existing server main module.
 
+#### Vite config
 Create a Vite configuration file (`vite.config.ts`) in your project root. And load in the `meteor-vite` plugin.
 ```ts
 // vite.config.ts
