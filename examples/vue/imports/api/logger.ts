@@ -59,7 +59,7 @@ export const Logger: typeof console = new Proxy(console, {
             }).catch(() => {
                 // Ignore error
             });
-            value(...args);
+            value.apply(this, args);
         }
     }
 });
