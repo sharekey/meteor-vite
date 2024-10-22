@@ -103,7 +103,7 @@ export default defineConfig({
 You can then write your code from the `vite.ts` file, and it will be handled by Vite! ⚡️
 
 #### Application structure
-Your app's file structure will now look something like the following example.
+Your app's file structure should look something like the following example:
 ```text
 - client/
   - meteor.js         # Leave empty, Vite will modify this file at runtime.
@@ -115,7 +115,7 @@ Your app's file structure will now look something like the following example.
 - server/
   - meteor.js          # Leave empty, Vite will modify this file at runtime if you specified a serverEntry in your Vite config.
 - package.json
-
+- vite.config.ts
 ```
 
 ## Example with Vue 3
