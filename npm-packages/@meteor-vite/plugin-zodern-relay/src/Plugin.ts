@@ -35,7 +35,7 @@ export default async function zodernRelay(options?: Options): Promise<Plugin> {
     
     return {
         name: 'zodern-relay',
-        async load(filename) {
+        async load(filename, options) {
             const relay = resolveRelay(filename || '');
             
             if (!relay) {
@@ -49,6 +49,12 @@ export default async function zodernRelay(options?: Options): Promise<Plugin> {
                 return;
             }
             
+            let arch = 'web.browser.vite';
+            
+            if (options?.ssr) {
+                arch = 'os.vite.ssr';
+            }
+            
             const transform = await transformAsync(code, {
                 configFile: false,
                 babelrc: false,
@@ -59,7 +65,7 @@ export default async function zodernRelay(options?: Options): Promise<Plugin> {
                     name: '@meteor-vite/plugin-zodern-relay',
                     
                     // @ts-expect-error No type definition for this, but it's required by the Babel plugin.
-                    arch: 'web.browser.vite',
+                    arch,
                 }
             });
             
