@@ -44,7 +44,7 @@ npm i -D vite
 meteor add jorgenvatle:vite-bundler
 ```
 
-If you are using Meteor v2, you need to make sure you install Vite v4, following releases dropped support for Node.js v14.
+If you are using Meteor v2, you need to make sure you install Vite v4 instead.
 
 ```sh
 meteor npm i -D vite@4
