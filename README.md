@@ -69,15 +69,15 @@ Make sure to have an import client entry (`meteor.mainModule.client`) in your `p
   },
   "meteor": {
     "mainModule": {
-      "client": "imports/entrypoint/meteor.ts",
-      "server": "server/main.ts"
+      "client": "client/meteor.js",
+      "server": "server/meteor.js"
     },
   }
 }
 ```
 
 You can leave your Meteor client entry file empty, but it's necessary to enable Meteor import mode. In the example
-above, we can create an empty `imports/entrypoint/meteor.ts` file.
+above, we can create an empty `client/meteor.js` file.
 
 Create a Vite configuration file (`vite.config.ts`) in your project root. And load in the `meteor-vite` plugin.
 ```ts
@@ -89,8 +89,12 @@ export default defineConfig({
     plugins: [
         meteor({
           clientEntry: 'imports/entrypoint/vite.ts',
+            
+          // Optionally specify a server entrypoint to build the Meteor server with Vite.
+          serverEntry: 'imports/entrypoint/vite.server.ts',
         }),
-        // Other Vite plugins here. E.g. React or Vue (See examples below)
+        
+        // ... Other Vite plugins here. E.g. React or Vue (See examples below)
     ],
 })
 ```
@@ -204,7 +208,7 @@ Then in your Meteor client's `mainModule`, we need to explicitly import React to
 omitting unused React components from your bundle.
 
 ```ts
-// ./imports/entrypoint/meteor.ts
+// ./client/meteor.js
 import 'react';
 import 'react-dom';
 import 'react-dom/client';
@@ -334,7 +338,7 @@ entrypoint as specified in the `meteor.mainModule.client` field of your `package
 {
   "meteor": {
     "mainModule": {
-      "client": "imports/entrypoint/meteor.ts", // Lazy loaded packages checked for and added to this file.
+      "client": "client/meteor.js", // Lazy loaded packages checked for and added to this file.
       "server": "server/main.ts"
     }
   }
