@@ -1,5 +1,5 @@
 ---
-"meteor-vite": patch
+"meteor-vite": minor
 ---
 
 Build `serverEntry` bundles using Vite's SSR build process instead of using an inline browser build config.
