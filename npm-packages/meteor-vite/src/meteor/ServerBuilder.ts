@@ -17,6 +17,10 @@ export async function MeteorServerBuilder({ packageJson, watch = true }: { packa
             ?? packageJson?.meteor?.viteConfig,
     }, 'serve');
     
+    if (!viteConfig.meteor?.serverEntry) {
+        return;
+    }
+    
     Logger.warn(
         'Meteor Server bundling with Vite is enabled. This is an experimental feature that will attempt to bundle' +
         ' your Meteor server using Vite.',
@@ -27,10 +31,6 @@ export async function MeteorServerBuilder({ packageJson, watch = true }: { packa
             'To enable server bundling, you need to set "enableExperimentalFeatures" to true in your Vite' +
             ' config. To disable these warnings, just remove the "serverEntry" field in your Vite config.'
         )
-        return;
-    }
-    
-    if (!viteConfig.meteor?.serverEntry) {
         return;
     }
     
