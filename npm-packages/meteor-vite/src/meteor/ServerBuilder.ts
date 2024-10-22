@@ -108,12 +108,15 @@ async function prepareServerEntry(paths: {
         )
         
         const errorMessage = JSON.stringify(
-            `Failed to import Meteor Server bundle from Vite! This may sometimes happen if it's your first time starting the app.`,
+            `\nFailed to import Meteor Server bundle from Vite!`,
         )
         
         const importString = [
             `import(${JSON.stringify('./' + bundleEntryPath)})`,
-            `.catch((e) => console.warn(${errorMessage}, e));`
+            `.catch((e) => {`,
+                `console.warn(${errorMessage});`,
+                `console.error(e);`,
+            `});`
         ].join('');
         
         if (mainModuleContent.includes(importString)) {
