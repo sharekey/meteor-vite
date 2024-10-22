@@ -158,7 +158,7 @@ export class MeteorVueClient<TClient extends MeteorDDPClient> {
         })
     }
     
-    public subscribe<TName extends keyof DefinedPublications>(publicationName: TName, ...inputParams: ParametersMaybeRef<DefinedPublications[TName]>) {
+    public subscribe<TName extends PublicationName>(publicationName: TName, ...inputParams: ParametersMaybeRef<DefinedPublications[TName]>) {
         const subscription = this.subscription({
             name: publicationName,
             params: inputParams,
@@ -237,8 +237,12 @@ declare module 'meteor/meteor' {
     interface DefinedPublications {}
     interface DefinedMethods {}
     
-    type MethodName = keyof DefinedMethods;
-    type PublicationName = keyof DefinedMethods;
+    interface DefinedPublications extends Record<string, (...params: unknown[]) => PublishReturnType> {}
+    interface DefinedMethods extends Record<string, (...params: unknown[]) => unknown> {}
+    
+    type MethodName = Extract<keyof DefinedMethods, string>;
+    type PublicationName = Extract<keyof DefinedMethods, string>;
     type MethodParams<TName extends MethodName> = Parameters<DefinedMethods[TName]>;
     type MethodResult<TName extends MethodName> = Awaited<ReturnType<DefinedMethods[TName]>>;
+    type PublishReturnType = void | Mongo.Cursor<any> | Array<Mongo.Cursor<any>> | Promise<void | Mongo.Cursor<any> | Array<Mongo.Cursor<any>>>;
 }
