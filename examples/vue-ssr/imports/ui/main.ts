@@ -1,13 +1,19 @@
 import { Meteor } from 'meteor/meteor'
-import { createApp } from 'vue'
-import { VueMeteor } from 'vue-meteor-tracker'
+import { createSSRApp } from 'vue';
+import { createMemoryHistory, createRouter, createWebHistory } from 'vue-router';
 
 import App from './App.vue'
-import { router } from './router'
+import { routes } from './router';
 
-Meteor.startup(() => {
-  const app = createApp(App)
-  app.use(router)
-  app.use(VueMeteor)
-  app.mount('#app')
-})
+export function createApp() {
+  const router = createRouter({
+    history: Meteor.isClient ? createMemoryHistory() : createWebHistory(),
+    routes,
+  });
+  
+  const app = createSSRApp(App);
+  
+  app.use(router);
+  
+  return { app, router };
+}
