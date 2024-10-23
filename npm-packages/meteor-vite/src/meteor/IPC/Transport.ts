@@ -1,12 +1,16 @@
 import { createErrorHandler } from '../../error/ErrorHandler';
 import IpcMethods, { WorkerMethod, type WorkerReplyKind, type WorkerResponse } from './methods';
 
-type IncomingMessageHandler = (message: WorkerMethod) => Promise<void>;
+export type IncomingMessageHandler = (message: WorkerMethod) => Promise<void>;
 
-interface IpcTransport {
-    listen(handler: IncomingMessageHandler): Promise<void>;
-    reply(message: WorkerResponse): Promise<void>;
-    active: boolean;
+export abstract class IpcTransport {
+    abstract listen(handler: IncomingMessageHandler): Promise<void> | void;
+    abstract reply(message: WorkerResponse): Promise<void>;
+    abstract active: boolean;
+    
+    constructor() {
+        IPC.addTransport(this);
+    }
 }
 
 export async function defineIpcTransport(adapter: IpcTransport) {
