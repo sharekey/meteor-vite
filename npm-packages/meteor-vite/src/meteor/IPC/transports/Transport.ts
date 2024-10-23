@@ -25,6 +25,7 @@ const STATUS_UPDATE_INTERVAL = 1000;
 
 class IPCAdapter {
     protected readonly transports: Set<IpcTransport> = new Set();
+    protected readonly handledMessageIds: Set<string> = new Set();
     protected readonly status = {
         connected: false,
         msSinceLastConnection: 0,
@@ -83,6 +84,13 @@ class IPCAdapter {
         for (const adapter of this.transports) {
             await adapter.listen(async (message) => {
                 adapter.logger.debug('call', Object.entries(message));
+                
+                if (this.handledMessageIds.has(message.id)) {
+                    adapter.logger.debug('already handled', Object.entries(message));
+                    return;
+                }
+                
+                this.handledMessageIds.add(message.id);
                 
                 if (!message || !message.method) {
                     adapter.logger.error('Vite: Unrecognized worker IPC message', { message });

@@ -32,6 +32,7 @@ export type WorkerResponse<TName extends WorkerReplyKind = WorkerReplyKind> = {
 
 export type WorkerMethod = {
     [key in keyof IPCMethods]: {
+        id: string;
         method: key;
         params: Parameters<IPCMethods[key]>
     }
