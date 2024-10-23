@@ -1,4 +1,5 @@
 import { DDPConnection } from '../meteor/IPC/DDP';
+import { NodeTransport } from '../meteor/IPC/transports/NodeTransport';
 import { IPC } from '../meteor/IPC/transports/Transport';
 import { DDPTransport } from '../meteor/IPC/transports/DDPTransport';
 import Logger from '../utilities/Logger';
@@ -11,7 +12,7 @@ if (process.env.DDP_IPC) {
 }
 
 if (process.channel) {
-    const nodeIpc = new IpcNodeTransport();
+    const nodeIpc = new NodeTransport();
     IPC.addTransport(nodeIpc);
 }
 
