@@ -16,7 +16,8 @@ if (process.channel) {
     IPC.addTransport(nodeIpc);
 }
 
-if (!IPC.hasTransports()) {
-    throw new Error('Missing valid IPC transport to initiate meteor-vite worker process!');
-}
+IPC.listen().catch((error: unknown) => {
+    Logger.error(error);
+    process.exit(1);
+});
 
