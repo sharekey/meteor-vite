@@ -1,6 +1,7 @@
 import { createErrorHandler } from '../../../error/ErrorHandler';
 import Logger, { createLabelledLogger, type LabelLogger, type LoggerObject } from '../../../utilities/Logger';
 import IpcMethods, { WorkerMethod, type WorkerReplyKind, type WorkerResponse } from '../methods';
+import pc from 'picocolors';
 
 export type IncomingMessageHandler = (message: WorkerMethod) => Promise<void>;
 
@@ -14,7 +15,7 @@ export abstract class IpcTransport {
         if (this._logger) {
             return this._logger;
         }
-        return this._logger = createLabelledLogger(`IPC Transport: ${this.name}`);
+        return this._logger = createLabelledLogger(pc.blue(`${pc.underline(this.name)} IPC`));
     }
     
     constructor() {
