@@ -1,6 +1,5 @@
 import { createErrorHandler } from '../error/ErrorHandler';
 import { DDPConnection } from '../meteor/IPC/DDP';
-import { validateIpcChannel } from '../meteor/IPC/interface';
 import IpcMethods, { WorkerMethod, type WorkerResponse } from '../meteor/IPC/methods';
 
 async function handleMessage({ message, reply }: { message: WorkerMethod, reply: (response: WorkerResponse) => void }) {
@@ -18,6 +17,12 @@ async function handleMessage({ message, reply }: { message: WorkerMethod, reply:
     await callWorkerMethod((response) => reply(response), ...message.params as [params: any]).catch(
         createErrorHandler('Vite: worker process encountered an exception!')
     );
+}
+
+function validateIpcChannel(send: NodeJS.Process['send']): asserts send is Required<Pick<NodeJS.Process, 'send'>>['send'] {
+    if (typeof process.send !== 'function') {
+        throw new Error('Worker was not launched with an IPC channel!');
+    }
 }
 
 if (process.env.DDP_IPC) {

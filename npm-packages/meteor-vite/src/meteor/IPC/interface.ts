@@ -12,9 +12,3 @@ export type IPCReply<Reply extends {
     readonly kind: string;
     data: unknown;
 }> = (reply: Reply) => void;
-
-export function validateIpcChannel(send: NodeJS.Process['send']): asserts send is Required<Pick<NodeJS.Process, 'send'>>['send'] {
-    if (typeof process.send !== 'function') {
-        throw new Error('Worker was not launched with an IPC channel!');
-    }
-}
