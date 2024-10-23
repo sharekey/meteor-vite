@@ -9,15 +9,13 @@ import {
     type ResolvedMeteorViteConfig,
 } from '../../../VitePluginSettings';
 import { MeteorServerBuilder } from '../../ServerBuilder';
-import CreateIPCInterface, { IPCReply } from '../interface';
+import { defineIpcMethods, IPCReply } from '../interface';
+import { IPC } from '../transports/Transport';
 
 type BuildOutput = Awaited<ReturnType<typeof build>>;
 
-export default CreateIPCInterface({
-    async 'vite.build'(
-        reply: Replies,
-        buildConfig: BuildOptions
-    ) {
+export default defineIpcMethods({
+    async'vite.build'(buildConfig: BuildOptions) {
         try {
             const { viteConfig, inlineBuildConfig, outDir } = await prepareConfig(buildConfig);
             const results = await build(inlineBuildConfig);
@@ -26,9 +24,9 @@ export default CreateIPCInterface({
             }
             const result = Array.isArray(results) ? results[0] : results;
             validateOutput(result);
-
+            
             // Result payload
-            reply({
+            await IPC.reply({
                 kind: 'buildResult',
                 data: {
                     payload: {
@@ -44,7 +42,7 @@ export default CreateIPCInterface({
                 }
             })
         } catch (error) {
-            reply({
+            await IPC.reply({
                 kind: 'buildResult',
                 data: {
                     payload: {
@@ -54,7 +52,7 @@ export default CreateIPCInterface({
             })
             throw error;
         }
-    },
+    }
 })
 
 async function prepareConfig(buildConfig: BuildOptions): Promise<ParsedConfig> {
