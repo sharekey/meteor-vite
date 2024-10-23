@@ -27,6 +27,7 @@ class IPCAdapter {
     protected readonly status = {
         connected: false,
         msSinceLastConnection: 0,
+        pingCount: 0,
     }
     
     constructor() {}
@@ -53,12 +54,21 @@ class IPCAdapter {
     }
     
     protected updateStatus() {
+        const shouldLogStatus = this.status.pingCount++ % 10 === 0
+        
         for (const transport of this.transports) {
-            if (transport.active) {
-                this.status.connected = true;
-                this.status.msSinceLastConnection = 0;
-                return;
+            if (!transport.active) {
+                shouldLogStatus && transport.logger.debug('disconnected')
+                continue;
             }
+            
+            if (shouldLogStatus) {
+                transport.logger.debug('disconnected');
+            }
+            
+            this.status.connected = true;
+            this.status.msSinceLastConnection = 0;
+            return;
         }
         this.status.msSinceLastConnection += this.STATUS_UPDATE_INTERVAL;
         this.status.connected = false;
