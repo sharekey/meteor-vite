@@ -54,7 +54,7 @@ class IPCAdapter {
     
     protected updateStatus() {
         for (const transport of this.transports) {
-            if (!transport.active) {
+            if (transport.active) {
                 this.status.connected = true;
                 this.status.msSinceLastConnection = 0;
                 return;
