@@ -7,23 +7,13 @@ import { type ProjectJson, ResolvedMeteorViteConfig } from '../../../VitePluginS
 import { MeteorServerBuilder } from '../../ServerBuilder';
 import { BackgroundWorker, type WorkerRuntimeConfig } from '../BackgroundWorker';
 import { DDPConnection } from '../DDP';
-import CreateIPCInterface, { IPCReply } from '../interface';
+import { defineIpcMethods } from '../interface';
 import MeteorEvents from '../MeteorEvents';
+import { IPC } from '../transports/Transport';
 
 let viteDevServer: ViteDevServer & { config: ResolvedMeteorViteConfig };
 let viteConfig: ResolvedMeteorViteConfig;
 let listening = false;
-
-export type Replies = IPCReply<{
-    kind: 'viteConfig',
-    data: ViteRuntimeConfig;
-} | {
-    kind: 'refreshNeeded',
-    data: {},
-} | {
-    kind: 'workerConfig';
-    data: WorkerRuntimeConfig & { listening: boolean };
-}>
 
 export type ViteRuntimeConfig = {
     host?: string | boolean;
@@ -38,19 +28,18 @@ export interface DevServerOptions {
     meteorConfig: MeteorRuntimeConfig;
 }
 
-export default CreateIPCInterface({
-    async 'vite.server.getConfig'(replyInterface: Replies) {
-        await sendViteConfig(replyInterface);
+export default defineIpcMethods({
+    async 'vite.server.getConfig'() {
+        await sendViteConfig();
     },
     
-    // todo: Add reply for triggering a server restart
-    async 'vite.server.start'(replyInterface: Replies, { packageJson, meteorParentPid, meteorConfig }: DevServerOptions) {
+    async 'vite.server.start'({ packageJson, meteorParentPid, meteorConfig }: DevServerOptions) {
         const ddpClient = DDPConnection.init(meteorConfig);
         const backgroundWorker = await BackgroundWorker.init(meteorParentPid, ddpClient);
         const Logger = ddpClient.logger;
         
         if (backgroundWorker.isRunning) {
-            replyInterface({
+            await IPC.reply({
                 kind: 'viteConfig',
                 data: backgroundWorker.config.viteConfig,
             })
@@ -62,13 +51,13 @@ export default CreateIPCInterface({
             packageJson,
             meteorConfig,
             refreshNeeded: () => {
-                replyInterface({
+                IPC.reply({
                     kind: 'refreshNeeded',
-                    data: {},
+                    data: undefined,
                 })
             },
             buildStart: () => {
-                sendViteConfig(replyInterface).catch((error) => {
+                sendViteConfig().catch((error) => {
                     Logger.error(error);
                     process.exit(1);
                 });
@@ -81,7 +70,7 @@ export default CreateIPCInterface({
             server.printUrls();
         }
         
-        await sendViteConfig(replyInterface);
+        await sendViteConfig();
         return;
     },
 })
@@ -151,7 +140,7 @@ async function createViteServer({
     return viteDevServer;
 }
 
-async function sendViteConfig(reply: Replies) {
+async function sendViteConfig() {
     if (!viteDevServer) {
         Logger.debug('Tried to get config from Vite server before it has been created!');
         return;
@@ -166,11 +155,12 @@ async function sendViteConfig(reply: Replies) {
         entryFile: config.meteor?.clientEntry,
         resolvedUrls: viteDevServer.resolvedUrls!,
     });
-    reply({
+    
+    await IPC.reply({
         kind: 'viteConfig',
         data: worker.config.viteConfig,
     });
-    reply({
+    await IPC.reply({
         kind: 'workerConfig',
         data: {
             ...worker.config,
