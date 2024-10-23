@@ -17,8 +17,13 @@ export abstract class IpcTransport {
 }
 
 class IPCAdapter {
-    protected transports: Set<IpcTransport> = new Set();
+    /**
+     * Exit current process if all available IPC transports are disconnected
+     * for more than 5 seconds.
+     */
+    protected readonly PROCESS_TIMEOUT = 5_000;
     protected readonly STATUS_UPDATE_INTERVAL = 1000;
+    protected readonly transports: Set<IpcTransport> = new Set();
     protected readonly status = {
         connected: false,
         msSinceLastConnection: 0,
@@ -87,6 +92,11 @@ class IPCAdapter {
         
         setInterval(() => {
             this.updateStatus();
+            
+            if (this.status.msSinceLastConnection > this.PROCESS_TIMEOUT) {
+                Logger.warn(`All IPC channels closed for more than ${this.PROCESS_TIMEOUT.toLocaleString()}ms. Exiting...`);
+                process.exit(1);
+            }
         }, this.STATUS_UPDATE_INTERVAL);
     }
 }
