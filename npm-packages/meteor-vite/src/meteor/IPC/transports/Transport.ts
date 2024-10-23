@@ -12,7 +12,6 @@ export abstract class IpcTransport {
     public readonly logger: LabelLogger;
     
     constructor(public readonly name: string) {
-        IPC.addTransport(this);
         this.logger = createLabelledLogger(pc.blue(`${pc.underline(name)} IPC`));
     }
 }
