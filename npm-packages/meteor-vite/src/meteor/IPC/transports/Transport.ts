@@ -31,11 +31,13 @@ class IPCAdapter {
     }
     
     public async reply<TKind extends WorkerReplyKind>(message: WorkerResponse<TKind>) {
-        for (const transport of this.transports) {
-            if (!transport.active) {
+        for (const adapter of this.transports) {
+            if (!adapter.active) {
+                adapter.logger.debug('inactive');
                 continue;
             }
-            await transport.reply(message);
+            adapter.logger.debug('reply', { message: message.kind });
+            await adapter.reply(message);
             break;
         }
     }
@@ -51,6 +53,8 @@ class IPCAdapter {
         
         for (const adapter of this.transports) {
             await adapter.listen(async (message) => {
+                adapter.logger.debug('call', Object.entries(message));
+                
                 if (!message || !message.method) {
                     adapter.logger.error('Vite: Unrecognized worker IPC message', { message });
                     return;
