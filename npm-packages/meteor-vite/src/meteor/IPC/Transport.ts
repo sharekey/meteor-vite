@@ -29,10 +29,12 @@ export async function defineIpcTransport(adapter: IpcTransport) {
 }
 
 class IPC {
-    constructor(
-        protected transports: IpcTransport[]
-    ) {}
+    protected transports: Set<IpcTransport> = new Set();
+    constructor() {}
     
+    public addTransport(transport: IpcTransport) {
+        this.transports.add(transport);
+    }
     
     public async reply<TKind extends WorkerReplyKind>(message: WorkerResponse<TKind>) {
         for (const transport of this.transports) {
