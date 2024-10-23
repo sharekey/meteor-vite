@@ -26,8 +26,11 @@ type LoggerMethods = 'info' | 'warn' | 'error' | 'debug';
 
 export const createLabelledLogger = (label: string) => createLogger((
     message: string,
-    dataLines: [key: string, value: string][] | Record<string, string>
+    dataLines?: [key: string, value: string][] | Record<string, string>
 ) => {
+    if (!dataLines) {
+        dataLines = []
+    }
     if (!Array.isArray(dataLines)) {
         dataLines = Object.entries(dataLines);
     }
