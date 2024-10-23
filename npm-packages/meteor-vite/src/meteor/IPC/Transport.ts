@@ -28,7 +28,7 @@ export async function defineIpcTransport(adapter: IpcTransport) {
     })
 }
 
-class IPC {
+class IPCAdapter {
     protected transports: Set<IpcTransport> = new Set();
     constructor() {}
     
@@ -46,3 +46,6 @@ class IPC {
         }
     }
 }
+
+export const IPC = new IPCAdapter();
+
