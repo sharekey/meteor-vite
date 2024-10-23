@@ -63,7 +63,7 @@ class IPCAdapter {
             }
             
             if (shouldLogStatus) {
-                transport.logger.debug('disconnected');
+                transport.logger.debug('connected');
             }
             
             this.status.connected = true;
