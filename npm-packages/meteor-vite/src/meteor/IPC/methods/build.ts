@@ -9,7 +9,7 @@ import {
     type ResolvedMeteorViteConfig,
 } from '../../../VitePluginSettings';
 import { MeteorServerBuilder } from '../../ServerBuilder';
-import { defineIpcMethods, IPCReply } from '../interface';
+import { defineIpcMethods } from '../interface';
 import { IPC } from '../transports/Transport';
 
 type BuildOutput = Awaited<ReturnType<typeof build>>;
@@ -128,20 +128,6 @@ export interface BuildOptions {
     meteor: MeteorStubsSettings['meteor'];
     packageJson: ProjectJson;
 }
-
-type Replies = IPCReply<{
-    kind: 'buildResult',
-    data: {
-        payload: {
-                     success: true;
-                     outDir: string;
-                     meteorViteConfig: any,
-                     output?: {name?: string, type: string, fileName: string}[]
-                 } | {
-                     success: false;
-                 };
-    }
-}>
 
 type ParsedConfig = {
     viteConfig: ResolvedMeteorViteConfig;
