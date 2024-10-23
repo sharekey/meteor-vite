@@ -3,9 +3,8 @@ import type { WorkerResponse } from '../methods';
 import { type IncomingMessageHandler, IpcTransport } from './Transport';
 
 export class DDPTransport extends IpcTransport {
-    public readonly name = 'DDP';
     constructor(protected ddp: DDPConnection) {
-        super();
+        super('DDP');
     }
     
     public listen(handler: IncomingMessageHandler) {
