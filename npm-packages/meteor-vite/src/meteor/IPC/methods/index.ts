@@ -30,15 +30,13 @@ export type WorkerResponse<TName extends WorkerReplyKind = WorkerReplyKind> = {
     data: WorkerReplies[TName]
 };
 
-export type WorkerMethod = { [key in keyof IPCMethods]: [name: key, method: IPCMethods[key]]
-                           } extends {
-                               [key: string]: [infer Name, infer Method]
-                           } ? Name extends keyof IPCMethods
-                               ? { method: Name, params: Parameters<IPCMethods[Name]> extends [infer Reply, ...infer Params]
-                                                         ? Params
-                                                         : [] }
-                               : never
-                             : never;
+export type WorkerMethod = {
+    [key in keyof IPCMethods]: {
+        method: key;
+        params: Parameters<IPCMethods[key]>
+    }
+}[keyof IPCMethods];
+
 
 export type WorkerReplyKind = keyof WorkerReplies;
 
