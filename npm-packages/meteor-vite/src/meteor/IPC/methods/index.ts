@@ -1,5 +1,4 @@
 import type { WorkerRuntimeConfig } from '../BackgroundWorker';
-import type { IpcReplies } from '../Transport';
 import BuildWorker from './build';
 import ViteServerWorker, { type ViteRuntimeConfig } from './vite-server';
 
@@ -28,7 +27,7 @@ export interface WorkerReplies {
 
 export type WorkerResponse<TName extends WorkerReplyKind = WorkerReplyKind> = {
     kind: TName,
-    data: IpcReplies[TName]
+    data: WorkerReplies[TName]
 };
 
 export type WorkerMethod = { [key in keyof IPCMethods]: [name: key, method: IPCMethods[key]]
