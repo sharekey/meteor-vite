@@ -3,6 +3,7 @@ import type { WorkerResponse } from '../methods';
 import type { IncomingMessageHandler, IpcTransport } from './Transport';
 
 export class DDPTransport implements IpcTransport {
+    public readonly name = 'DDP';
     constructor(protected ddp: DDPConnection) {
     }
     

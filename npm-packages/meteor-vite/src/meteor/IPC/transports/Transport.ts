@@ -4,9 +4,10 @@ import IpcMethods, { WorkerMethod, type WorkerReplyKind, type WorkerResponse } f
 export type IncomingMessageHandler = (message: WorkerMethod) => Promise<void>;
 
 export abstract class IpcTransport {
-    abstract listen(handler: IncomingMessageHandler): Promise<void> | void;
-    abstract reply(message: WorkerResponse): Promise<void>;
-    abstract active: boolean;
+    public abstract readonly name: string;
+    public abstract listen(handler: IncomingMessageHandler): Promise<void> | void;
+    public abstract reply(message: WorkerResponse): Promise<void>;
+    public abstract active: boolean;
     
     constructor() {
         IPC.addTransport(this);

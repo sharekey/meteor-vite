@@ -2,6 +2,7 @@ import type { WorkerResponse } from '../methods';
 import { type IncomingMessageHandler, IpcTransport } from './Transport';
 
 export class NodeTransport extends IpcTransport {
+    public readonly name = 'NodeJS Process'
     protected process: NodeJS.Process = process;
     
     public get active() {
