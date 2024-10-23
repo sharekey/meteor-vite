@@ -1,5 +1,5 @@
-import { createErrorHandler } from '../../error/ErrorHandler';
-import IpcMethods, { WorkerMethod, type WorkerReplyKind, type WorkerResponse } from './methods';
+import { createErrorHandler } from '../../../error/ErrorHandler';
+import IpcMethods, { WorkerMethod, type WorkerReplyKind, type WorkerResponse } from '../methods';
 
 export type IncomingMessageHandler = (message: WorkerMethod) => Promise<void>;
 
