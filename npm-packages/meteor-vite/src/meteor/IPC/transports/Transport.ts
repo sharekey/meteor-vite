@@ -1,4 +1,5 @@
 import { createErrorHandler } from '../../../error/ErrorHandler';
+import Logger, { createLabelledLogger, type LabelLogger, type LoggerObject } from '../../../utilities/Logger';
 import IpcMethods, { WorkerMethod, type WorkerReplyKind, type WorkerResponse } from '../methods';
 
 export type IncomingMessageHandler = (message: WorkerMethod) => Promise<void>;
@@ -8,6 +9,13 @@ export abstract class IpcTransport {
     public abstract listen(handler: IncomingMessageHandler): Promise<void> | void;
     public abstract reply(message: WorkerResponse): Promise<void>;
     public abstract active: boolean;
+    protected _logger?: LabelLogger;
+    public get logger() {
+        if (this._logger) {
+            return this._logger;
+        }
+        return this._logger = createLabelledLogger(`IPC Transport: ${this.name}`);
+    }
     
     constructor() {
         IPC.addTransport(this);
@@ -44,14 +52,14 @@ class IPCAdapter {
         for (const adapter of this.transports) {
             await adapter.listen(async (message) => {
                 if (!message || !message.method) {
-                    console.error('Vite: Unrecognized worker IPC message', { message });
+                    adapter.logger.error('Vite: Unrecognized worker IPC message', { message });
                     return;
                 }
                 
                 const callWorkerMethod = IpcMethods[message.method];
                 
                 if (typeof callWorkerMethod !== 'function') {
-                    console.error(`Vite: The provided IPC method hasn't been defined yet!`, { message });
+                    adapter.logger.error(`Vite: The provided IPC method hasn't been defined yet!`, Object.entries(message));
                 }
                 
                 await callWorkerMethod(...message.params as [params: any]).catch(

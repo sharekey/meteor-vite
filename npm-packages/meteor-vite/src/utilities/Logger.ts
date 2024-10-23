@@ -20,7 +20,7 @@ function formatMessage([message, ...params]: Parameters<typeof console.log>): Pa
     }
     return [message, ...params];
 }
-export type LoggerObject<Params extends DefaultParams> = { [key in LoggerMethods]: (...params: Params) => void };
+export type LoggerObject<Params extends DefaultParams = DefaultParams> = { [key in LoggerMethods]: (...params: Params) => void };
 type DefaultParams = [...params: unknown[]];
 type LoggerMethods = 'info' | 'warn' | 'error' | 'debug';
 
