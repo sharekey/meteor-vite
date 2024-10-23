@@ -1,10 +1,11 @@
 import type { DDPConnection } from '../DDP';
 import type { WorkerResponse } from '../methods';
-import type { IncomingMessageHandler, IpcTransport } from './Transport';
+import { type IncomingMessageHandler, IpcTransport } from './Transport';
 
-export class DDPTransport implements IpcTransport {
+export class DDPTransport extends IpcTransport {
     public readonly name = 'DDP';
     constructor(protected ddp: DDPConnection) {
+        super();
     }
     
     public listen(handler: IncomingMessageHandler) {
