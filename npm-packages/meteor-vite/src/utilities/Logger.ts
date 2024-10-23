@@ -6,7 +6,9 @@ function createLogger<Params extends DefaultParams>(formatter: (...params: Param
         info: (...params: Params) => console.log(...formatMessage(formatter(...params))),
         warn: (...params: Params) => console.warn(...formatMessage(formatter(...params))),
         error: (...params: Params) => console.error(...formatMessage(formatter(...params))),
-        debug: (...params: Params) => process.env.ENABLE_DEBUG_LOGS && console.debug(...formatMessage(formatter(...params))),
+        debug: (...params: Params) => process.env.ENABLE_DEBUG_LOGS && console.debug(
+            ...formatMessage(formatter(...params)).map((field) => typeof field === 'string' ? pc.dim(field) : field)
+        ),
     }
 }
 
