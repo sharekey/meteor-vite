@@ -12,3 +12,9 @@ export type IPCReply<Reply extends {
     readonly kind: string;
     data: unknown;
 }> = (reply: Reply) => void;
+
+export function defineIpcMethods<TMethods extends {
+    [key in string]: (...params: any) => Promise<void> | void;
+}>(methods: TMethods): TMethods {
+    return methods;
+}
