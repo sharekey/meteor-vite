@@ -1,14 +1,17 @@
 import { createErrorHandler } from '../../error/ErrorHandler';
 import type { WorkerRuntimeConfig } from './BackgroundWorker';
-import IpcMethods, { WorkerMethod, type WorkerResponse } from './methods';
+import IpcMethods, { WorkerMethod, type WorkerReplyKind, type WorkerResponse } from './methods';
 import type { ViteRuntimeConfig } from './methods/vite-server';
 
 type IncomingMessageHandler = (message: WorkerMethod) => Promise<void>;
 
-export async function defineIpcTransport(adapter: {
+interface IpcTransport {
     listen(handler: IncomingMessageHandler): Promise<void>;
     reply(message: WorkerResponse): Promise<void>;
-}) {
+    active: boolean;
+}
+
+export async function defineIpcTransport(adapter: IpcTransport) {
     await adapter.listen(async (message) => {
         if (!message || !message.method) {
             console.error('Vite: Unrecognized worker IPC message', { message });
@@ -25,6 +28,23 @@ export async function defineIpcTransport(adapter: {
             createErrorHandler('Vite: worker process encountered an exception!')
         );
     })
+}
+
+class IPC {
+    constructor(
+        protected transports: IpcTransport[]
+    ) {}
+    
+    
+    public async reply<TKind extends WorkerReplyKind>(message: WorkerResponse<TKind>) {
+        for (const transport of this.transports) {
+            if (!transport.active) {
+                continue;
+            }
+            await transport.reply(message);
+            break;
+        }
+    }
 }
 
 
