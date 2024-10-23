@@ -10,6 +10,7 @@ interface IpcTransport {
 }
 
 export async function defineIpcTransport(adapter: IpcTransport) {
+    IPC.addTransport(adapter);
     await adapter.listen(async (message) => {
         if (!message || !message.method) {
             console.error('Vite: Unrecognized worker IPC message', { message });
