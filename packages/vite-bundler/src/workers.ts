@@ -1,5 +1,6 @@
 import { fork } from 'node:child_process';
 import { Meteor } from 'meteor/meteor';
+import { Random } from 'meteor/random';
 import Path from 'path';
 import FS from 'fs';
 import pc from 'picocolors';
@@ -83,13 +84,20 @@ export function createWorkerFork(hooks: Partial<WorkerResponseHooks>, options?: 
     })
     
     return {
-        call(data: WorkerMethod) {
+        call({ params, method }: Omit<WorkerMethod, 'id'>) {
+            const message = {
+                id: Random.id(),
+                method,
+                params,
+            } as WorkerMethod;
+            
             if (options?.ipc?.active) {
-                options.ipc.call(data);
+                options.ipc.call(message);
             } else if (!child.connected) {
-                throw new MeteorViteError(`Oops worker process is not connected! Tried to send message to worker: ${data.method}`);
+                throw new MeteorViteError(`Oops worker process is not connected! Tried to send message to worker: ${method}`);
             }
-            child.send(data);
+            
+            child.send(message);
         },
         child,
     }
