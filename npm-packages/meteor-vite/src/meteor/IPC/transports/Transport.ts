@@ -28,6 +28,7 @@ class IPCAdapter {
     constructor() {}
     
     public addTransport(transport: IpcTransport) {
+        transport.logger.debug('init');
         this.transports.add(transport);
     }
     
