@@ -18,6 +18,12 @@ export abstract class IpcTransport {
 
 class IPCAdapter {
     protected transports: Set<IpcTransport> = new Set();
+    protected readonly STATUS_UPDATE_INTERVAL = 1000;
+    protected readonly status = {
+        connected: false,
+        msSinceLastConnection: 0,
+    }
+    
     constructor() {}
     
     public addTransport(transport: IpcTransport) {
@@ -39,6 +45,18 @@ class IPCAdapter {
     
     public hasTransports() {
         return this.transports.size > 0;
+    }
+    
+    protected updateStatus() {
+        for (const transport of this.transports) {
+            if (!transport.active) {
+                this.status.connected = true;
+                this.status.msSinceLastConnection = 0;
+                return;
+            }
+        }
+        this.status.msSinceLastConnection += this.STATUS_UPDATE_INTERVAL;
+        this.status.connected = false;
     }
     
     public async listen() {
@@ -66,6 +84,10 @@ class IPCAdapter {
                 )
             })
         }
+        
+        setInterval(() => {
+            this.updateStatus();
+        }, this.STATUS_UPDATE_INTERVAL);
     }
 }
 
