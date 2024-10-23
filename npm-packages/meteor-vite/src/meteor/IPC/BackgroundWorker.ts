@@ -1,8 +1,10 @@
 import FS from 'fs/promises';
 import Path from 'path';
 import Logger from '../../utilities/Logger';
+import { wait } from '../package/AutoImportQueue';
 import type { DDPConnection } from './DDP';
 import type { ViteRuntimeConfig } from './methods/vite-server';
+import { PROCESS_TIMEOUT } from './transports/Transport';
 
 export type WorkerRuntimeConfig = {
     pid: number;
@@ -76,6 +78,16 @@ export class BackgroundWorker {
                 this.exit();
             }
         }, 1_000);
+    }
+    
+    public async hasActiveSibling() {
+        if (!this.isRunning) {
+            return false;
+        }
+        
+        await wait(PROCESS_TIMEOUT + 150);
+        
+        return this.isRunning;
     }
     
     protected _isRunning(pid: number) {

@@ -38,7 +38,7 @@ export default defineIpcMethods({
         const backgroundWorker = await BackgroundWorker.init(meteorParentPid, ddpClient);
         const Logger = ddpClient.logger;
         
-        if (backgroundWorker.isRunning) {
+        if (await backgroundWorker.hasActiveSibling()) {
             await IPC.reply({
                 kind: 'viteConfig',
                 data: backgroundWorker.config.viteConfig,
