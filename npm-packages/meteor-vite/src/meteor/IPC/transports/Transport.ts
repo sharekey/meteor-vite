@@ -50,6 +50,10 @@ class IPCAdapter {
             break;
         }
     }
+    
+    public hasTransports() {
+        return this.transports.size > 0;
+    }
 }
 
 export const IPC = new IPCAdapter();
