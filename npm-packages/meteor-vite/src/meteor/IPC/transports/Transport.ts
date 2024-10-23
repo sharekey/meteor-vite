@@ -6,20 +6,14 @@ import pc from 'picocolors';
 export type IncomingMessageHandler = (message: WorkerMethod) => Promise<void>;
 
 export abstract class IpcTransport {
-    public abstract readonly name: string;
     public abstract listen(handler: IncomingMessageHandler): Promise<void> | void;
     public abstract reply(message: WorkerResponse): Promise<void>;
     public abstract active: boolean;
-    protected _logger?: LabelLogger;
-    public get logger() {
-        if (this._logger) {
-            return this._logger;
-        }
-        return this._logger = createLabelledLogger(pc.blue(`${pc.underline(this.name)} IPC`));
-    }
+    public readonly logger: LabelLogger;
     
-    constructor() {
+    constructor(public readonly name: string) {
         IPC.addTransport(this);
+        this.logger = createLabelledLogger(pc.blue(`${pc.underline(name)} IPC`));
     }
 }
 
@@ -28,8 +22,8 @@ class IPCAdapter {
     constructor() {}
     
     public addTransport(transport: IpcTransport) {
-        transport.logger.debug('init');
         this.transports.add(transport);
+        transport.logger.debug('init');
     }
     
     public async reply<TKind extends WorkerReplyKind>(message: WorkerResponse<TKind>) {
