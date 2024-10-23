@@ -1,50 +1,23 @@
-import { createErrorHandler } from '../error/ErrorHandler';
 import { DDPConnection } from '../meteor/IPC/DDP';
-import { validateIpcChannel } from '../meteor/IPC/interface';
-import IpcMethods, { WorkerMethod, type WorkerResponse } from '../meteor/IPC/methods';
+import { NodeTransport } from '../meteor/IPC/transports/NodeTransport';
+import { IPC } from '../meteor/IPC/transports/Transport';
+import { DDPTransport } from '../meteor/IPC/transports/DDPTransport';
+import Logger from '../utilities/Logger';
 
-async function handleMessage({ message, reply }: { message: WorkerMethod, reply: (response: WorkerResponse) => void }) {
-    if (!message || !message.method) {
-        console.error('Vite: Unrecognized worker IPC message', { message });
-        return;
-    }
-    
-    const callWorkerMethod = IpcMethods[message.method];
-    
-    if (typeof callWorkerMethod !== 'function') {
-        console.error(`Vite: The provided IPC method hasn't been defined yet!`, { message });
-    }
-    
-    await callWorkerMethod((response) => reply(response), ...message.params as [params: any]).catch(
-        createErrorHandler('Vite: worker process encountered an exception!')
-    );
-}
+Logger.info('Spawned new Meteor-Vite worker process');
 
 if (process.env.DDP_IPC) {
-    const ddp = DDPConnection.init();
-    ddp.onIpcCall((message) => {
-        return handleMessage({
-            message,
-            reply: (response) => {
-                ddp.ipcReply(response).catch((error) => {
-                    console.warn('Failed to reply to IPC request', error);
-                });
-            }
-        })
-    })
-} else {
-    validateIpcChannel(process.send);
-    
-    process.on('message', async (message: WorkerMethod) => handleMessage({
-        message,
-        reply: (response) => {
-            if (!process.channel) {
-                return console.warn(new Error('Vite: No active IPC channel!'))
-            }
-            
-            validateIpcChannel(process.send);
-            process.send(response);
-        }
-    }));
+    const ddp = new DDPTransport(DDPConnection.init());
+    IPC.addTransport(ddp);
 }
+
+if (process.channel) {
+    const nodeIpc = new NodeTransport();
+    IPC.addTransport(nodeIpc);
+}
+
+IPC.listen().catch((error: unknown) => {
+    Logger.error(error);
+    process.exit(1);
+});
 

@@ -1,8 +1,10 @@
 import FS from 'fs/promises';
 import Path from 'path';
 import Logger from '../../utilities/Logger';
+import { wait } from '../package/AutoImportQueue';
 import type { DDPConnection } from './DDP';
 import type { ViteRuntimeConfig } from './methods/vite-server';
+import { PROCESS_TIMEOUT } from './transports/Transport';
 
 export type WorkerRuntimeConfig = {
     pid: number;
@@ -75,20 +77,17 @@ export class BackgroundWorker {
                 this.logger.warn('Meteor parent process is no longer running!');
                 this.exit();
             }
-            
-            // Exit if DDP times out
-            if (this.ddpClient.status.endpointValid) {
-                if (this.ddpClient.status.timedOut) {
-                    this.logger.warn('Connection to Meteor DDP server timed out!');
-                    this.exit();
-                }
-            }
-            // If no DDP connection could be established, exit when Meteor does.
-            else if (!this._isRunning(this.config.meteorPid)) {
-                this.logger.warn('Meteor process no longer running. Cannot run in background without a valid DDP connection.');
-                this.exit();
-            }
         }, 1_000);
+    }
+    
+    public async hasActiveSibling() {
+        if (!this.isRunning) {
+            return false;
+        }
+        
+        await wait(PROCESS_TIMEOUT + 150);
+        
+        return this.isRunning;
     }
     
     protected _isRunning(pid: number) {
