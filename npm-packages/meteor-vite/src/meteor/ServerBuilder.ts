@@ -12,7 +12,7 @@ export async function MeteorServerBuilder({ packageJson, watch = true }: { packa
         configFile: packageJson?.meteor?.vite?.configFile
             // Fallback for deprecated config format
             ?? packageJson?.meteor?.viteConfig,
-    }, 'serve');
+    }, 'build');
     
     if (!viteConfig.meteor?.serverEntry) {
         return;
