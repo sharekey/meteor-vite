@@ -88,7 +88,7 @@ export async function MeteorServerBuilder({ packageJson, watch = true }: { packa
                     }
                     
                     
-                    build.onResolve({ filter: /\.(vue|svelte)$/ }, (args) => {
+                    build.onResolve({ filter: /\.(vue|svelte)$/i }, (args) => {
                         console.log({ args });
                         return {
                             path: args.path,
