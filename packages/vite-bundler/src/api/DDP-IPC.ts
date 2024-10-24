@@ -25,8 +25,9 @@ export class DDP_IPC {
         })
     }
     
-    public call({ method, params }: WorkerMethod) {
+    public call({ method, params, id }: WorkerMethod) {
         IpcCollection.insertAsync({
+            id,
             method,
             params: JSON.stringify(params),
         }).catch((error: unknown) => {

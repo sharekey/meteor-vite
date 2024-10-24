@@ -1,5 +1,6 @@
 import { fork } from 'node:child_process';
 import { Meteor } from 'meteor/meteor';
+import { Random } from 'meteor/random';
 import Path from 'path';
 import FS from 'fs';
 import pc from 'picocolors';
@@ -57,10 +58,6 @@ export function createWorkerFork(hooks: Partial<WorkerResponseHooks>, options?: 
     }
     
     child.on('message', (message: WorkerResponse & { data: any }) => {
-        if (options?.ipc?.active) {
-            console.warn('Received IPC message from child_process rather than DDP!', { message })
-            return;
-        }
         const hook = hooks[message.kind];
         
         if (typeof hook !== 'function') {
@@ -87,17 +84,20 @@ export function createWorkerFork(hooks: Partial<WorkerResponseHooks>, options?: 
     })
     
     return {
-        call(method: WorkerMethod) {
+        call({ params, method }: Omit<WorkerMethod, 'id'>) {
+            const message = {
+                id: Random.id(),
+                method,
+                params,
+            } as WorkerMethod;
+            
             if (options?.ipc?.active) {
-                options.ipc.call(method);
-                return;
+                options.ipc.call(message);
+            } else if (!child.connected) {
+                throw new MeteorViteError(`Oops worker process is not connected! Tried to send message to worker: ${method}`);
             }
-            if (!child.connected) {
-                console.warn('Oops worker process is not connected! Tried to send message to worker:', method);
-                console.log('The Vite server is likely running in the background. Try restarting Meteor. 👍');
-                return;
-            }
-            child.send(method);
+            
+            child.send(message);
         },
         child,
     }
