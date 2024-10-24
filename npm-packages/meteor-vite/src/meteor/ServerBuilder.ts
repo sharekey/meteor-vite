@@ -90,7 +90,6 @@ export async function MeteorServerBuilder({ packageJson, watch = true }: { packa
                             }).then((output) => {
                                 // Todo: Refactor to handle multiple chunks
                                 if ('output' in output) {
-                                    Logger.debug(inspect(output, { depth: 5, colors: true }));
                                     return output.output[0];
                                 }
                                 
