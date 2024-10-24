@@ -2,6 +2,7 @@ import type { MeteorRuntimeConfig } from 'meteor/jorgenvatle:vite-bundler/utilit
 import { createServer, resolveConfig, type ResolvedServerUrls, ViteDevServer } from 'vite';
 import { meteorWorker } from '../../../plugin/Meteor';
 import Logger from '../../../utilities/Logger';
+import { fork } from 'node:child_process';
 import { RefreshNeeded } from '../../../ViteLoadRequest';
 import { type ProjectJson, ResolvedMeteorViteConfig } from '../../../VitePluginSettings';
 import { MeteorServerBuilder } from '../../ServerBuilder';
@@ -10,6 +11,7 @@ import { DDPConnection } from '../DDP';
 import { defineIpcMethods } from '../interface';
 import MeteorEvents from '../MeteorEvents';
 import { IPC } from '../transports/Transport';
+import type { IPCMethods, WorkerMethod } from './index';
 
 let viteDevServer: ViteDevServer & { config: ResolvedMeteorViteConfig };
 let viteConfig: ResolvedMeteorViteConfig;
@@ -33,7 +35,7 @@ export default defineIpcMethods({
         await sendViteConfig();
     },
     
-    async 'vite.watch.ssr'({ packageJson }: DevServerOptions) {
+    async 'vite.watch.ssr'({ packageJson }: Pick<DevServerOptions, 'packageJson'>) {
         await MeteorServerBuilder({ packageJson });
     },
     
@@ -99,10 +101,7 @@ async function createViteServer({
     }, 'serve');
     
     if (viteConfig.meteor?.serverEntry) {
-        await IPC.reply({
-            kind: 'startSSRWatcher',
-            data: { serverEntry: viteConfig.meteor.serverEntry }
-        })
+        createSSRWatcher({ packageJson })
     }
     
     viteDevServer = await createServer({
@@ -146,6 +145,22 @@ async function createViteServer({
     })
     
     return viteDevServer;
+}
+
+function createSSRWatcher(options: Pick<DevServerOptions, 'packageJson'>) {
+    const child = fork(process.argv0, {
+        stdio: ['inherit', 'inherit', 'inherit', 'ipc'],
+        detached: false,
+    });
+    
+    child.on('error', (error) => Logger.error(error));
+    child.send({
+        id: Math.random().toString(),
+        method: 'vite.watch.ssr',
+        params: [options],
+    } satisfies WorkerMethod);
+    
+    return child;
 }
 
 async function sendViteConfig() {
