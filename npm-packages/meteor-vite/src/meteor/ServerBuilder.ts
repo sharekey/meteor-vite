@@ -88,15 +88,15 @@ export async function MeteorServerBuilder({ packageJson, watch = true }: { packa
                     }
                     
                     
-                    build.onResolve({ filter: /\.vue$/ }, (args) => {
+                    build.onResolve({ filter: /\.(vue|svelte)$/ }, (args) => {
                         console.log({ args });
                         return {
                             path: args.path,
-                            namespace: 'vue',
+                            namespace: 'vite',
                         }
                     });
                     
-                    build.onLoad({ filter: /.*/, namespace: 'vue' }, (args) => {
+                    build.onLoad({ filter: /.*/, namespace: 'vite' }, (args) => {
                         for (const [vitePath, module] of Object.entries(mainChunk.modules)) {
                             if (matchesModulePath({ vite: vitePath, esbuild: args.path })) {
                                 return {
