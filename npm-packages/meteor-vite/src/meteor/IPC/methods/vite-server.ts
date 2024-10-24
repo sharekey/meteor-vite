@@ -95,6 +95,7 @@ async function createViteServer({
     }, 'serve');
     
     viteDevServer = await createServer({
+        mode: 'development',
         configFile: viteConfig.configFile,
         plugins: [
             meteorWorker({
