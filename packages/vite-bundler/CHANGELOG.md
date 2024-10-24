@@ -1,5 +1,11 @@
 # vite-bundler
 
+## 3.0.0-next.19
+
+### Patch Changes
+
+- e743310e: Use any available IPC interface for workers instead of relying on one transport strategy
+
 ## 3.0.0-next.18
 
 ### Patch Changes

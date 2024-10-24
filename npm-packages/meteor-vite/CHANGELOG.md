@@ -1,5 +1,11 @@
 # meteor-vite
 
+## 2.0.0-next.6
+
+### Patch Changes
+
+- e743310e: Use any available IPC interface for workers instead of relying on one transport strategy
+
 ## 2.0.0-next.5
 
 ### Patch Changes
