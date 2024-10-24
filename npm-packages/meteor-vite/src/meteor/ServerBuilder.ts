@@ -2,6 +2,7 @@ import FS from 'fs/promises';
 import Path from 'path';
 import { resolveConfig, build as viteBuild } from 'vite';
 import { RollupOutput, OutputChunk } from 'rollup';
+import { inspect } from 'util';
 import { build } from 'tsup';
 import { MeteorViteError } from '../error/MeteorViteError';
 import Logger from '../utilities/Logger';
@@ -66,7 +67,7 @@ export async function MeteorServerBuilder({ packageJson, watch = true }: { packa
                         const esbuildImport = Path.relative('', Path.join(process.cwd(), paths.esbuild));
                         const viteImport = Path.relative(process.cwd(), paths.vite.replace(/\?.*/, ''));
                         
-                        console.log({ esbuildImport, viteImport });
+                        Logger.debug({ esbuildImport, viteImport });
                         return esbuildImport === viteImport;
                     }
                     
@@ -87,7 +88,7 @@ export async function MeteorServerBuilder({ packageJson, watch = true }: { packa
                             }).then((output) => {
                                 // Todo: Refactor to handle multiple chunks
                                 if ('output' in output) {
-                                    console.dir({ output }, { depth: 5 });
+                                    Logger.debug(inspect(output, { depth: 5, colors: true }));
                                     return output.output[0];
                                 }
                                 
