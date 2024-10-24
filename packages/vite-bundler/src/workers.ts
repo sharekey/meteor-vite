@@ -76,6 +76,9 @@ export function createWorkerFork(hooks: Partial<WorkerResponseHooks>, options?: 
     
     child.on('error', (error) => {
         console.error('Meteor: Worker process error:', error);
+        if (!child.connected) {
+            throw new MeteorViteError('Lost connection to Vite worker process');
+        }
     });
     
     child.on('disconnect', () => {
