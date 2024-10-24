@@ -1,6 +1,7 @@
 import FS from 'fs/promises';
 import Path from 'path';
-import { build, resolveConfig } from 'vite';
+import { resolveConfig } from 'vite';
+import { build } from 'tsup';
 import { MeteorViteError } from '../error/MeteorViteError';
 import Logger from '../utilities/Logger';
 import { type ProjectJson, ResolvedMeteorViteConfig } from '../VitePluginSettings';
@@ -36,26 +37,26 @@ export async function MeteorServerBuilder({ packageJson, watch = true }: { packa
     }
     
     await build({
-        mode: watch ? 'development' : 'production',
-        configFile: viteConfig.configFile,
-        ssr: {
-            target: 'node',
-        },
-        build: {
-            watch: watch ? {} : null,
-            ssr: viteConfig.meteor.serverEntry,
-            outDir: BUNDLE_OUT_DIR,
-            minify: false,
-            sourcemap: true,
-            emptyOutDir: false,
-            rollupOptions: {
-                external: (id) => {
-                    if (id.startsWith('meteor/')) {
-                        return true;
-                    }
+        watch,
+        entry: [viteConfig.meteor.serverEntry],
+        sourcemap: true,
+        skipNodeModulesBundle: true,
+        minify: false,
+        clean: false,
+        target: 'es2022',
+        outDir: BUNDLE_OUT_DIR,
+        esbuildPlugins: [
+            {
+                name: 'external-meteor',
+                setup(build) {
+                    build.onResolve({ filter: /^meteor\// }, (args) => ({
+                        path: args.path,
+                        namespace: 'meteor',
+                        external: true,
+                    }));
                 }
             }
-        }
+        ]
     });
     
     const { name } = Path.parse(viteConfig.meteor.serverEntry);
