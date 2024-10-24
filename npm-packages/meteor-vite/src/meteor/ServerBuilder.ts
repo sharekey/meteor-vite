@@ -47,11 +47,14 @@ export async function MeteorServerBuilder({ packageJson, watch = true }: { packa
         });
     }
     
+    const { name } = Path.parse(viteConfig.meteor.serverEntry);
+    
     await build({
         watch,
         entry: [viteConfig.meteor.serverEntry],
         sourcemap: true,
         skipNodeModulesBundle: true,
+        name,
         minify: false,
         clean: false,
         target: 'es2022',
@@ -136,7 +139,6 @@ export async function MeteorServerBuilder({ packageJson, watch = true }: { packa
         ]
     });
     
-    const { name } = Path.parse(viteConfig.meteor.serverEntry);
     await prepareServerEntry({
         meteorMainModule: Path.resolve(packageJson.meteor.mainModule.server),
         staticEntryFile: Path.resolve(
