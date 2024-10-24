@@ -67,7 +67,6 @@ export async function MeteorServerBuilder({ packageJson, watch = true }: { packa
                         const esbuildImport = Path.relative('', Path.join(process.cwd(), paths.esbuild));
                         const viteImport = Path.relative(process.cwd(), paths.vite.replace(/\?.*/, ''));
                         
-                        Logger.debug({ esbuildImport, viteImport });
                         return esbuildImport === viteImport;
                     }
                     
