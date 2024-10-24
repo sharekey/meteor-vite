@@ -1,6 +1,7 @@
 import FS from 'fs/promises';
 import Path from 'path';
 import { resolveConfig, build as viteBuild } from 'vite';
+import { RollupOutput, OutputChunk } from 'rollup';
 import { build } from 'tsup';
 import { MeteorViteError } from '../error/MeteorViteError';
 import Logger from '../utilities/Logger';
@@ -59,25 +60,7 @@ export async function MeteorServerBuilder({ packageJson, watch = true }: { packa
             {
                 name: 'vue',
                 async setup(build) {
-                    // Todo: Only run Vite build if ESBuild tries to load module without a supported content type.
-                    //  E.g. Vue or Svelte components.
-                    const output = await viteBuild({
-                        configFile: viteConfig.configFile,
-                        mode: 'production',
-                        build: {
-                            ssr: viteConfig.meteor?.serverEntry,
-                            ssrEmitAssets: false,
-                            write: false,
-                            rollupOptions: {
-                                external: (id) => id.startsWith('meteor'),
-                            },
-                        }
-                    });
-                    
-                    if (!('output' in output)) {
-                        throw Error('no output');
-                    }
-                    const mainChunk = output.output[0];
+                    let output: null | Promise<OutputChunk> = null;
                     
                     function matchesModulePath(paths: { vite: string, esbuild: string }) {
                         const esbuildImport = Path.relative('', Path.join(process.cwd(), paths.esbuild));
@@ -89,14 +72,40 @@ export async function MeteorServerBuilder({ packageJson, watch = true }: { packa
                     
                     
                     build.onResolve({ filter: /\.(vue|svelte)$/i }, (args) => {
-                        console.log({ args });
+                        if (!output) {
+                            output = viteBuild({
+                                configFile: viteConfig.configFile,
+                                mode: 'production',
+                                build: {
+                                    ssr: viteConfig.meteor?.serverEntry,
+                                    ssrEmitAssets: false,
+                                    write: false,
+                                    rollupOptions: {
+                                        external: (id) => id.startsWith('meteor'),
+                                    },
+                                }
+                            }).then((output) => {
+                                // Todo: Refactor to handle multiple chunks
+                                if ('output' in output) {
+                                    console.dir({ output }, { depth: 5 });
+                                    return output.output[0];
+                                }
+                                
+                                throw new Error('Unable to parse Vite build output');
+                            });
+                        }
                         return {
                             path: args.path,
                             namespace: 'vite',
                         }
                     });
                     
-                    build.onLoad({ filter: /.*/, namespace: 'vite' }, (args) => {
+                    build.onLoad({ filter: /.*/, namespace: 'vite' }, async (args) => {
+                        const mainChunk = await output;
+                        if (!mainChunk) {
+                            throw new Error('Missing primary chunk from Vite build output!')
+                        }
+                        
                         for (const [vitePath, module] of Object.entries(mainChunk.modules)) {
                             if (matchesModulePath({ vite: vitePath, esbuild: args.path })) {
                                 return {
@@ -111,7 +120,7 @@ export async function MeteorServerBuilder({ packageJson, watch = true }: { packa
                         }
                     })
 
-                    console.dir({ mainChunk }, { depth: 5 });
+                    
                 },
             },
             {
