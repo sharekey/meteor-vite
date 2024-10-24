@@ -59,7 +59,7 @@ export async function MeteorServerBuilder({ packageJson, watch = true }: { packa
         noExternal,
         esbuildPlugins: [
             {
-                name: 'vue',
+                name: 'vite',
                 async setup(build) {
                     let output: null | Promise<OutputChunk> = null;
                     
