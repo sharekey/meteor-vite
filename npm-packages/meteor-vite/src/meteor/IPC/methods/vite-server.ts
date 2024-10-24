@@ -33,10 +33,6 @@ export default defineIpcMethods({
         await sendViteConfig();
     },
     
-    async 'vite.watch.ssr'({ packageJson }: DevServerOptions) {
-        await MeteorServerBuilder({ packageJson });
-    },
-    
     async 'vite.server.start'({ packageJson, meteorParentPid, meteorConfig }: DevServerOptions) {
         const ddpClient = DDPConnection.init(meteorConfig);
         const backgroundWorker = await BackgroundWorker.init(meteorParentPid, ddpClient);
@@ -98,15 +94,7 @@ async function createViteServer({
             ?? packageJson?.meteor?.viteConfig,
     }, 'serve');
     
-    if (viteConfig.meteor?.serverEntry) {
-        await IPC.reply({
-            kind: 'startSSRWatcher',
-            data: { serverEntry: viteConfig.meteor.serverEntry }
-        })
-    }
-    
     viteDevServer = await createServer({
-        mode: 'development',
         configFile: viteConfig.configFile,
         plugins: [
             meteorWorker({
@@ -137,6 +125,10 @@ async function createViteServer({
             }
         ],
     });
+    
+    if (viteConfig.meteor?.serverEntry) {
+        await MeteorServerBuilder({ packageJson });
+    }
     
     process.on('warning', (warning) => {
         if (warning.name !== RefreshNeeded.name) {
