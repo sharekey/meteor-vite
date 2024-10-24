@@ -148,7 +148,7 @@ async function createViteServer({
 }
 
 function createSSRWatcher(options: Pick<DevServerOptions, 'packageJson'>) {
-    const child = fork(process.argv0, {
+    const child = fork(process.argv[1], {
         stdio: ['inherit', 'inherit', 'inherit', 'ipc'],
         detached: false,
     });
