@@ -1,6 +1,6 @@
 import FS from 'fs/promises';
 import Path from 'path';
-import { resolveConfig } from 'vite';
+import { resolveConfig, build as viteBuild } from 'vite';
 import { build } from 'tsup';
 import { MeteorViteError } from '../error/MeteorViteError';
 import Logger from '../utilities/Logger';
@@ -58,13 +58,58 @@ export async function MeteorServerBuilder({ packageJson, watch = true }: { packa
         esbuildPlugins: [
             {
                 name: 'vue',
-                setup(build) {
-                    // todo: Use Vue plugin from Vite - if available to load Vue components
-                    build.onResolve({ filter: /\.vue$/ }, (args) => ({
-                        path: args.path,
-                        namespace: 'vue',
-                        external: true,
-                    }))
+                async setup(build) {
+                    const output = await viteBuild({
+                        configFile: viteConfig.configFile,
+                        mode: 'production',
+                        build: {
+                            ssr: viteConfig.meteor?.serverEntry,
+                            ssrEmitAssets: false,
+                            write: false,
+                            rollupOptions: {
+                                external: (id) => id.startsWith('meteor'),
+                            },
+                        }
+                    });
+                    
+                    if (!('output' in output)) {
+                        throw Error('no output');
+                    }
+                    const mainChunk = output.output[0];
+                    
+                    function matchesModulePath(paths: { vite: string, esbuild: string }) {
+                        const esbuildImport = Path.relative('', Path.join(process.cwd(), paths.esbuild));
+                        const viteImport = Path.relative(process.cwd(), paths.vite.replace(/\?.*/, ''));
+                        
+                        console.log({ esbuildImport, viteImport });
+                        return esbuildImport === viteImport;
+                    }
+                    
+                    
+                    build.onResolve({ filter: /\.vue$/ }, (args) => {
+                        console.log({ args });
+                        return {
+                            path: args.path,
+                            namespace: 'vue',
+                        }
+                    });
+                    
+                    build.onLoad({ filter: /.*/, namespace: 'vue' }, (args) => {
+                        for (const [vitePath, module] of Object.entries(mainChunk.modules)) {
+                            if (matchesModulePath({ vite: vitePath, esbuild: args.path })) {
+                                return {
+                                    contents: module.code || '',
+                                    loader: 'js',
+                                }
+                            }
+                        }
+                        return {
+                            loader: 'empty',
+                            contents: '',
+                        }
+                    })
+
+                    console.dir({ mainChunk }, { depth: 5 });
                 },
             },
             {
