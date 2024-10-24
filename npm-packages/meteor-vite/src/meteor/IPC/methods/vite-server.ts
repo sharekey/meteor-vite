@@ -128,7 +128,7 @@ async function createViteServer({
     });
     
     if (viteConfig.meteor?.serverEntry) {
-        await MeteorServerBuilder({ packageJson });
+        await MeteorServerBuilder({ packageJson, watch: true });
     }
     
     process.on('warning', (warning) => {
