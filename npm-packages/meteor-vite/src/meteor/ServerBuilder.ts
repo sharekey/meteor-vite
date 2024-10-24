@@ -59,6 +59,8 @@ export async function MeteorServerBuilder({ packageJson, watch = true }: { packa
             {
                 name: 'vue',
                 async setup(build) {
+                    // Todo: Only run Vite build if ESBuild tries to load module without a supported content type.
+                    //  E.g. Vue or Svelte components.
                     const output = await viteBuild({
                         configFile: viteConfig.configFile,
                         mode: 'production',
