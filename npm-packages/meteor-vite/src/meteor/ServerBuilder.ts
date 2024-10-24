@@ -1,9 +1,8 @@
 import FS from 'fs/promises';
 import Path from 'path';
-import { resolveConfig, build as viteBuild } from 'vite';
-import { RollupOutput, OutputChunk } from 'rollup';
-import { inspect } from 'util';
+import { OutputChunk } from 'rollup';
 import { build } from 'tsup';
+import { build as viteBuild, resolveConfig } from 'vite';
 import { MeteorViteError } from '../error/MeteorViteError';
 import Logger from '../utilities/Logger';
 import { type ProjectJson, ResolvedMeteorViteConfig } from '../VitePluginSettings';
