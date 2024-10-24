@@ -17,7 +17,6 @@ export class DDPConnection {
         lastConnectionTimestamp: Date.now(),
         connected: false,
         pingCount: 0,
-        timedOut: false,
         endpointValid: false,
     }
     protected static instance?: DDPConnection;
@@ -111,15 +110,10 @@ export class DDPConnection {
     }
     
     public get status() {
-        const TIMEOUT_MS = 30_000;
         const connected = this._status.connected = this.client.connected;
         
         if (connected) {
             this._status.lastConnectionTimestamp = Date.now();
-        }
-        
-        if (Date.now() - this._status.lastConnectionTimestamp > TIMEOUT_MS) {
-            this._status.timedOut = true;
         }
         
         return this._status;

@@ -10,15 +10,13 @@ import {
 } from '../../../VitePluginSettings';
 import { meteorWorker } from '../../../plugin/Meteor';
 import { MeteorServerBuilder } from '../../ServerBuilder';
-import CreateIPCInterface, { IPCReply } from '../interface';
+import { defineIpcMethods } from '../interface';
+import { IPC } from '../transports/Transport';
 
 type BuildOutput = Awaited<ReturnType<typeof build>>;
 
-export default CreateIPCInterface({
-    async 'vite.build'(
-        reply: Replies,
-        buildConfig: BuildOptions
-    ) {
+export default defineIpcMethods({
+    async'vite.build'(buildConfig: BuildOptions) {
         try {
             const { viteConfig, inlineBuildConfig, outDir } = await prepareConfig(buildConfig);
             const results = await build(inlineBuildConfig);
@@ -49,7 +47,7 @@ export default CreateIPCInterface({
             })
 
             // Result payload
-            reply({
+            await IPC.reply({
                 kind: 'buildResult',
                 data: {
                     payload: {
@@ -61,7 +59,7 @@ export default CreateIPCInterface({
                 }
             })
         } catch (error) {
-            reply({
+            await IPC.reply({
                 kind: 'buildResult',
                 data: {
                     payload: {
@@ -71,7 +69,7 @@ export default CreateIPCInterface({
             })
             throw error;
         }
-    },
+    }
 })
 
 async function prepareConfig(buildConfig: BuildOptions) {
@@ -145,20 +143,6 @@ export interface BuildOptions {
     meteor: MeteorStubsSettings['meteor'];
     packageJson: ProjectJson;
 }
-
-type Replies = IPCReply<{
-    kind: 'buildResult',
-    data: {
-        payload: {
-                     success: true;
-                     outDir: string;
-                     meteorViteConfig: any,
-                     output?: BuildResultChunk[]
-                 } | {
-                     success: false;
-                 };
-    }
-}>
 
 export type BuildResultChunk = {name?: string, type: string, fileName: string};
 
