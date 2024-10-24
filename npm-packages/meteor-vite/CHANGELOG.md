@@ -1,5 +1,11 @@
 # meteor-vite
 
+## 2.0.0-next.7
+
+### Minor Changes
+
+- 436fd5bc: Use ESBuild instead of Vite's SSR bundler for Meteor server bundle.
+
 ## 2.0.0-next.6
 
 ### Patch Changes
