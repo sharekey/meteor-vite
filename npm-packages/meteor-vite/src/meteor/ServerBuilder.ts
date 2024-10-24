@@ -57,6 +57,17 @@ export async function MeteorServerBuilder({ packageJson, watch = true }: { packa
         noExternal,
         esbuildPlugins: [
             {
+                name: 'vue',
+                setup(build) {
+                    // todo: Use Vue plugin from Vite - if available to load Vue components
+                    build.onResolve({ filter: /\.vue$/ }, (args) => ({
+                        path: args.path,
+                        namespace: 'vue',
+                        external: true,
+                    }))
+                },
+            },
+            {
                 name: 'external-meteor',
                 setup(build) {
                     build.onResolve({ filter: /^meteor\// }, (args) => ({
