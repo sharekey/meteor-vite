@@ -36,6 +36,15 @@ export async function MeteorServerBuilder({ packageJson, watch = true }: { packa
         throw new MeteorViteError('You need to specify a Meteor server mainModule in your package.json file!')
     }
     
+    const noExternal: (string | RegExp)[] = [];
+    
+    if (Array.isArray(viteConfig.ssr.noExternal)) {
+        viteConfig.ssr.noExternal.forEach((entry) => {
+            if (!entry) return;
+            noExternal.push(entry);
+        });
+    }
+    
     await build({
         watch,
         entry: [viteConfig.meteor.serverEntry],
@@ -45,6 +54,7 @@ export async function MeteorServerBuilder({ packageJson, watch = true }: { packa
         clean: false,
         target: 'es2022',
         outDir: BUNDLE_OUT_DIR,
+        noExternal,
         esbuildPlugins: [
             {
                 name: 'external-meteor',
