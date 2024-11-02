@@ -173,6 +173,7 @@ function prepareWorkerEnv({ ipcOverDdp = false }) {
         ENABLE_DEBUG_LOGS: process.env.ENABLE_DEBUG_LOGS,
         METEOR_LOCAL_DIR: process.env.METEOR_LOCAL_DIR,
         STARTED_AT: Date.now().toString(),
+        NODE_ENV: process.env.NODE_ENV,
     }
     if (ipcOverDdp) {
         const METEOR_RUNTIME = getMeteorRuntimeConfig()
