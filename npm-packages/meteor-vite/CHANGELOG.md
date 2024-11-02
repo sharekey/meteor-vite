@@ -1,5 +1,11 @@
 # meteor-vite
 
+## 2.0.0-next.8
+
+### Patch Changes
+
+- f597f099: Fix environment passthrough to Vite
+
 ## 2.0.0-next.7
 
 ### Minor Changes
