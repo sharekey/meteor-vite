@@ -1,5 +1,11 @@
 # vite-bundler
 
+## 3.0.0-next.22
+
+### Patch Changes
+
+- f597f099: Fix environment passthrough to Vite
+
 ## 3.0.0-next.19
 
 ### Patch Changes
