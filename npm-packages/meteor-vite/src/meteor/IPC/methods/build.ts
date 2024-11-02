@@ -102,6 +102,7 @@ async function prepareConfig(buildConfig: BuildOptions) {
         viteConfig,
         outDir,
         inlineBuildConfig: {
+            mode: 'production',
             base: viteConfig.meteor.assetsBaseUrl || '',
             configFile,
             build: {
