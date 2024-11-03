@@ -95,13 +95,17 @@ export function createWorkerFork(hooks: Partial<WorkerResponseHooks>, options?: 
                 params,
             } as WorkerMethod;
             
-            if (options?.ipc?.active) {
-                options.ipc.call(message);
-            } else if (!child.connected) {
+            if (!options?.ipc?.active && !child.connected) {
                 throw new MeteorViteError(`Oops worker process is not connected! Tried to send message to worker: ${method}`);
             }
             
-            child.send(message);
+            if (options?.ipc?.active) {
+                options.ipc.call(message);
+            }
+            
+            if (child.connected) {
+                child.send(message);
+            }
         },
         child,
     }
