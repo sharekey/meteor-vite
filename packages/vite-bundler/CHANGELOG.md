@@ -1,5 +1,11 @@
 # vite-bundler
 
+## 3.0.0-next.23
+
+### Patch Changes
+
+- b9a42719: Fix issue where server would exit prematurely if worker child process disconnects despite having an active DDP connection to the worker.
+
 ## 3.0.0-next.22
 
 ### Patch Changes
