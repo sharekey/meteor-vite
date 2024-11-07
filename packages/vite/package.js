@@ -23,5 +23,5 @@ Package.onUse((api) => {
         'typescript'
     ]);
 
-    api.mainModule('src/server.ts', ['server'], { bare: false });
+    api.mainModule('dist/server.js', ['server'], { bare: false });
 });
