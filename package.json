@@ -12,7 +12,8 @@
   },
   "devDependencies": {
     "@types/node": "^22.9.0",
-    "concurrently": "^8.2.2"
+    "concurrently": "^8.2.2",
+    "vite": "^6.0.0-alpha.24"
   },
   "scripts": {
     "start": "npm run example start",
