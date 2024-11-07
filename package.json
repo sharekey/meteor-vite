@@ -20,6 +20,7 @@
     "start": "npm run example start",
     "launch": "npm run example launch",
     "build": "npm run example build",
+    "build:vite": "tsup --outDir packages/vite/dist packages/vite/src/server.ts",
     "link": "npm run example link",
     "release": "npm run publish:vite-bundler && changeset publish",
     "version": "(npm run version:vite-bundler || exit 1) && changeset version",
