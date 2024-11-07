@@ -1,19 +1,21 @@
 import Path from 'node:path';
 import { Script, constants } from 'vm';
 import { guessCwd } from './util/CurrentConfig';
+import type * as Vite from 'vite';
 
-// language=typescript
-const ViteRuntime = new Script(`
+async function vite(): Promise<typeof Vite> {
     console.log('Preparing new Vite runtime environment');
+    
+    return new Script(`import('vite')`, {
+        filename: Path.join(guessCwd(), 'server', '__meteor-vite-runtime-proxy__.ts'),
+        importModuleDynamically: constants.USE_MAIN_CONTEXT_DEFAULT_LOADER,
+    }).runInThisContext()
+}
 
-    import('vite').then(async ({ createServer }) => {
-        const server = await createServer();
-        await server.listen();
-        server.printUrls();
-    })
-`, {
-    filename: Path.join(guessCwd(), 'server', 'main.vite.ts'),
-    importModuleDynamically: constants.USE_MAIN_CONTEXT_DEFAULT_LOADER,
-});
+const { createServer } = await vite();
 
-ViteRuntime.runInThisContext();
+const server = await createServer();
+await server.listen();
+server.printUrls();
+
+console.log('Vite should be ready to go!');
