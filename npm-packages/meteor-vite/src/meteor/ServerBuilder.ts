@@ -57,6 +57,7 @@ export async function MeteorServerBuilder({ packageJson, watch = true }: { packa
         minify: false,
         clean: false,
         target: 'es2022',
+        platform: 'node',
         outDir: BUNDLE_OUT_DIR,
         config: false,
         noExternal,
