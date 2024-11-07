@@ -1,3 +1,4 @@
+import FS from 'fs';
 import Path from 'path';
 
 function guessCwd () {
@@ -10,8 +11,10 @@ function guessCwd () {
 }
 
 const projectRoot = guessCwd();
+const packageJson = FS.readFileSync(Path.join(projectRoot, 'package.json'), 'utf8');
 
 export const CurrentConfig = {
     projectRoot,
-    bootstrapEvalFilename: Path.join(projectRoot, 'server', '__meteor-vite-runtime-bootstrap__.ts')
+    bootstrapEvalFilename: Path.join(projectRoot, 'server', '__meteor-vite-runtime-bootstrap__.ts'),
+    packageJson: JSON.parse(packageJson),
 };
