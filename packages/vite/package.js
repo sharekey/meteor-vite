@@ -20,7 +20,6 @@ Package.onUse((api) => {
     api.versionsFrom(['3.0']);
     api.use([
         'isobuild:compiler-plugin',
-        'typescript'
     ]);
 
     api.mainModule('dist/server.js', ['server'], { bare: false });
