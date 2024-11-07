@@ -1,4 +1,6 @@
+import Path from 'node:path';
 import { Script, constants } from 'vm';
+import { guessCwd } from './util/CurrentConfig';
 
 // language=typescript
 const ViteRuntime = new Script(`
@@ -10,6 +12,7 @@ const ViteRuntime = new Script(`
         server.printUrls();
     })
 `, {
+    filename: Path.join(guessCwd(), 'server', 'main.vite.ts'),
     importModuleDynamically: constants.USE_MAIN_CONTEXT_DEFAULT_LOADER,
 });
 
