@@ -7,7 +7,7 @@ const ViteRuntime = new Script(`
     console.log('Preparing new Vite runtime environment');
 
     import('vite').then(async ({ createServer }) => {
-        const server = createServer();
+        const server = await createServer();
         await server.listen();
         server.printUrls();
     })
