@@ -31,6 +31,10 @@ export function createWorkerFork(hooks: Partial<WorkerResponseHooks>, options?: 
         env: prepareWorkerEnv({ ipcOverDdp: !!options?.ipc?.active }),
     });
     
+    if (options?.detached) {
+        child.unref();
+    }
+    
     const hookMethods = Object.keys(hooks) as (keyof typeof hooks)[];
     hookMethods.forEach((method) => {
         const hook = hooks[method];
