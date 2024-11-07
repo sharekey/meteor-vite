@@ -13,6 +13,7 @@
   "devDependencies": {
     "@types/node": "^22.9.0",
     "concurrently": "^8.2.2",
+    "tsup": "^8.3.5",
     "vite": "^6.0.0-alpha.24"
   },
   "scripts": {
