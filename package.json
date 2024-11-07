@@ -11,6 +11,7 @@
     "@changesets/cli": "^2.26.2"
   },
   "devDependencies": {
+    "@types/node": "^22.9.0",
     "concurrently": "^8.2.2"
   },
   "scripts": {
@@ -18,19 +19,14 @@
     "launch": "npm run example launch",
     "build": "npm run example build",
     "link": "npm run example link",
-
     "release": "npm run publish:vite-bundler && changeset publish",
     "version": "(npm run version:vite-bundler || exit 1) && changeset version",
-
     "example": ".bin/example-app.sh",
-
     "version:vite-bundler": "meteor node .bin/release-meteor-package.mjs version",
     "publish:vite-bundler": "meteor node .bin/release-meteor-package.mjs publish",
-
     "start:vue": "npm start vue",
     "start:react": "npm start react",
     "start:<example app>": "npm start <example app>",
-
     "build:package": "cd npm-packages/meteor-vite && meteor npm run build",
     "install:package": "cd npm-packages/meteor-vite && meteor npm install",
     "link:package": "meteor npm run link:vue && meteor npm run link:svelte"
