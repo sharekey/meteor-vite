@@ -8,7 +8,7 @@ import type { ResolvedMeteorViteConfig } from '../VitePluginSettings';
  * This is called internally by the jorgenvatle:vite package when
  * starting Meteor in a development environment.
  */
-export async function initializeViteDevServer(): Promise<ViteDevServer> {
+export async function initializeViteDevServer(): Promise<{ server: ViteDevServer, scriptTags: string[] }> {
     const { packageJson, projectRoot } = globalThis.MeteorViteRuntimeConfig;
     process.chdir(projectRoot);
     let config: ResolvedMeteorViteConfig = await resolveConfig({
@@ -35,5 +35,13 @@ export async function initializeViteDevServer(): Promise<ViteDevServer> {
         await server.ssrLoadModule(config.meteor.serverEntry);
     }
     
-    return server;
+    const baseUrl = server.resolvedUrls?.network[0] || server.resolvedUrls?.local[0];
+    const scriptTags = [
+        `${baseUrl}@vite/client`,
+        `${baseUrl}/${config.meteor?.clientEntry}`
+    ].map((url) => {
+        return `<script src="${url}" type="module" crossorigin></script>`
+    });
+    
+    return { server, scriptTags };
 }
