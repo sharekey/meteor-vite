@@ -23,6 +23,5 @@ Package.onUse((api) => {
         'ecmascript'
     ]);
 
-    api.addAssets('assets/dev-server.ts', ['server']);
     api.mainModule('dist/server.mjs', ['server'], { bare: false });
 });
