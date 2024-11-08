@@ -31,7 +31,7 @@ export async function initializeViteDevServer(): Promise<{ server: ViteDevServer
     }, 'serve');
     
     const server = await createServer({
-        base: 'vite',
+        base: '/vite',
         appType: 'custom',
         server: { middlewareMode: true, },
         mode: 'development',
