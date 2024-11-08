@@ -8,7 +8,9 @@ import PackageJson from '../../package.json';
 if (import.meta.hot) {
     // Initial handles
     // Todo: refactor to use stubs for tracking methods and publications created by the server entry.
-    const { method_handlers, publish_handlers } = Meteor.server;
+    const method_handlers = {};
+    const publish_handlers = {};
+    
     await new Promise<void>((resolve) => {
         Meteor.startup(() => {
             Object.assign(method_handlers, Meteor.server.method_handlers)
