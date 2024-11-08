@@ -1,3 +1,5 @@
+import FS from 'fs';
+import Path from 'path';
 import { defineConfig } from 'tsup';
 
 export default defineConfig([
@@ -12,6 +14,14 @@ export default defineConfig([
         format: 'esm',
         sourcemap: true,
         dts: false,
+        onSuccess: async () => {
+            try {
+                const atmospherePackageOutDir = Path.join(__dirname, '..', '..', 'packages', 'vite', 'dist');
+                FS.appendFileSync(Path.join(atmospherePackageOutDir, 'server.mjs'), '\n // Forcing reload');
+            } catch (error) {
+                console.warn(error);
+            }
+        }
     },
     
     // Plugin entry

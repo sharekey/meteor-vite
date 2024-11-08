@@ -26,7 +26,6 @@ export async function initializeViteDevServer(): Promise<{ server: ViteDevServer
         ]
     });
     
-    
     await server.listen();
     server.printUrls();
     config = server.config;
