@@ -1,6 +1,6 @@
 import type * as _ from  'meteor/jorgenvatle:vite';
 import Path from 'path';
-import { createServer, resolveConfig, type ViteDevServer } from 'vite';
+import { createServer, resolveConfig, type ViteDevServer, version } from 'vite';
 import { meteorWorker } from '../plugin/Meteor';
 import type { ResolvedMeteorViteConfig } from '../VitePluginSettings';
 import { type WebApp as WebApp_, type WebAppInternals as WebAppInternals_ } from 'meteor/webapp';
@@ -14,6 +14,8 @@ declare const WebAppInternals: typeof WebAppInternals_;
  * starting Meteor in a development environment.
  */
 export async function initializeViteDevServer(): Promise<{ server: ViteDevServer, scriptTags: string[] }> {
+    Logger.info(`Vite version ${version} | Initializing Vite Dev Server...`);
+    
     const { packageJson, projectRoot } = globalThis.MeteorViteRuntimeConfig;
     process.chdir(projectRoot);
     let config: ResolvedMeteorViteConfig = await resolveConfig({
