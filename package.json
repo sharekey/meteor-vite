@@ -11,6 +11,7 @@
     "@changesets/cli": "^2.26.2"
   },
   "devDependencies": {
+    "@types/meteor": "^2.9.8",
     "@types/node": "^22.9.0",
     "concurrently": "^8.2.2",
     "tsup": "^8.3.5",
