@@ -1,4 +1,4 @@
-import 'meteor/jorgenvatle:vite'
+import type * as _ from  'meteor/jorgenvatle:vite';
 import { createServer, resolveConfig, type ViteDevServer } from 'vite';
 import { meteorWorker } from '../plugin/Meteor';
 
