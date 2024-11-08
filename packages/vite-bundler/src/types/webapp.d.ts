@@ -1,5 +1,5 @@
 import type HTTP from 'http';
-import * as Connect from 'connect';
+import type * as Connect from 'connect';
 
 declare module 'meteor/webapp' {
     import { StaticFiles } from 'meteor/webapp';
