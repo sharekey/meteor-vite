@@ -10,6 +10,8 @@ export interface Link {
 
 export const LinksCollection = new Mongo.Collection<Link>('links')
 
+console.log('foo')
+
 Meteor.methods({
   'links.insert'(title: string, url: string) {
     LinksCollection.insert({

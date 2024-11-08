@@ -1,4 +1,3 @@
-import { WebApp } from 'meteor/webapp';
 import { Script, constants } from 'vm';
 import { CurrentConfig } from './util/CurrentConfig';
 import type * as BootstrapScripts from 'meteor-vite/bootstrap';
@@ -17,16 +16,6 @@ try {
 }  catch (error) {
     console.warn('Failed to start Vite dev server!');
     console.error(error);
-    
-    WebApp.handlers.use('/', (req, res, next) => {
-        // Todo: make this beautiful.
-        res.writeHead(500);
-        res.end([
-            'Vite dev server failed to start!',
-            '',
-            error.stack,
-        ].join('\n'))
-    })
 }
 
 
