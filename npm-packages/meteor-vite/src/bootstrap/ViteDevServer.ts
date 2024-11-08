@@ -1,7 +1,15 @@
 import type * as _ from  'meteor/jorgenvatle:vite';
 import Path from 'path';
-import { createServer, resolveConfig, type ViteDevServer, version } from 'vite';
+import {
+    createServer,
+    resolveConfig,
+    type ViteDevServer,
+    version,
+    createNodeDevEnvironment,
+    createServerHotChannel, createServerModuleRunner,
+} from 'vite';
 import { meteorWorker } from '../plugin/Meteor';
+import Logger from '../utilities/Logger';
 import type { ResolvedMeteorViteConfig } from '../VitePluginSettings';
 import { type WebApp as WebApp_, type WebAppInternals as WebAppInternals_ } from 'meteor/webapp';
 
@@ -31,14 +39,28 @@ export async function initializeViteDevServer(): Promise<{ server: ViteDevServer
             meteorWorker({
                 meteorStubs: { packageJson }
             })
-        ]
+        ],
+        environments: {
+            node: {
+                dev: {
+                    createEnvironment(name, config) {
+                        return createNodeDevEnvironment(name, config, {
+                            hot: createServerHotChannel(),
+                        })
+                    }
+                }
+            }
+        }
     });
     
     config = server.config;
     
+    
     if (config.meteor?.serverEntry) {
-        console.log(`Loading server entry: ${config.meteor.serverEntry}`);
-        await server.ssrLoadModule(config.meteor.serverEntry);
+        const runner = createServerModuleRunner(server.environments.node);
+        const serverEntry = Path.resolve(config.meteor.serverEntry);
+        console.log(`Loading server entry: ${serverEntry}`);
+        await runner.import(serverEntry);
     }
     
     const baseUrl = server.resolvedUrls?.network[0] || server.resolvedUrls?.local[0] || '//';
