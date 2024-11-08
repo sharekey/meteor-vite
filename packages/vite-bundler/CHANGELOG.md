@@ -1,5 +1,12 @@
 # vite-bundler
 
+## 3.0.0-next.24
+
+### Patch Changes
+
+- ff6eee0f: Unref child processes running in detached mode
+  - Allow disabling the Vite dev server through setting `METEOR_VITE_DISABLED` to any value.
+
 ## 3.0.0-next.23
 
 ### Patch Changes
