@@ -11,19 +11,12 @@ function runBootstrapScript<TScript extends keyof typeof BootstrapScripts>(scrip
 }
 
 
-const server = await runBootstrapScript('initializeViteDevServer');
+const { server, scriptTags } = await runBootstrapScript('initializeViteDevServer');
 console.log('Vite should be ready to go!', server.resolvedUrls);
-
-const baseUrl = server.resolvedUrls?.network[0] || server.resolvedUrls?.local[0];
-const moduleImports = [
-    `${baseUrl}@vite/client`,
-].map((url) => {
-    return `<script src="${url}" type="module" crossorigin></script>`
-})
 
 WebAppInternals.registerBoilerplateDataCallback('vite', (req, data) => {
     data.dynamicHead = data.dynamicHead || '';
-    data.dynamicHead += moduleImports.join('\n');
+    data.dynamicHead += scriptTags.join('\n');
 })
 
 
