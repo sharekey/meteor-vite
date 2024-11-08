@@ -12,11 +12,13 @@ function guessCwd () {
 
 const projectRoot = guessCwd();
 const packageJson = FS.readFileSync(Path.join(projectRoot, 'package.json'), 'utf8');
+const configFile = Path.resolve(Path.join(projectRoot, 'vite.config.ts'));
 
 export const CurrentConfig = {
     projectRoot,
     bootstrapEvalFilename: Path.join(projectRoot, '__meteor-vite-runtime-bootstrap__.ts'),
     packageJson: JSON.parse(packageJson),
+    configFile,
 };
 
 console.debug({

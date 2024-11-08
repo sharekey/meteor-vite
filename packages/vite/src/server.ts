@@ -20,7 +20,7 @@ const { createServer, resolveConfig } = await importVm('vite');
 const { meteor } = await importVm('meteor-vite/plugin');
 const config = await resolveConfig({
     mode: 'development',
-    configFile: Path.join(CurrentConfig.projectRoot, 'vite.config.ts'),
+    configFile: CurrentConfig.configFile,
 }, 'serve');
 
 const server = await createServer({
