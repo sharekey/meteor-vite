@@ -14,9 +14,13 @@ import { type Boilerplate, ViteBoilerplate } from './common';
 
 
 export class ViteDevServerWorker extends ViteBoilerplate {
-    protected readonly viteServer: WorkerInstance;
+    protected viteServer?: WorkerInstance;
     constructor() {
         super();
+    }
+    
+    public start() {
+        DevConnectionLog.info('Starting Vite server...');
         const ipc = new DDP_IPC({
             async viteConfig(config) {
                 const { ready } = await setConfig(config);
@@ -48,12 +52,8 @@ export class ViteDevServerWorker extends ViteBoilerplate {
                 return getConfig();
             }
         });
-    }
-    
-    public start() {
-        DevConnectionLog.info('Starting Vite server...');
         
-        this.viteServer.call({
+        viteServer.call({
             method: 'vite.server.start',
             params: [{
                 packageJson: getProjectPackageJson(),
