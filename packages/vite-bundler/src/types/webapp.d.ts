@@ -1,4 +1,5 @@
 import type HTTP from 'http';
+import * as Connect from 'connect';
 
 declare module 'meteor/webapp' {
     import { StaticFiles } from 'meteor/webapp';
@@ -16,6 +17,10 @@ declare module 'meteor/webapp' {
         }
         
         function registerBoilerplateDataCallback(id: string, callback: (request: HTTP.IncomingMessage, data: BoilerplateData) => void): void
+    }
+    
+    namespace WebApp {
+        const handlers: Connect.Server;
     }
 }
 
