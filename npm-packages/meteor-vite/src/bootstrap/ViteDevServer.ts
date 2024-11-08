@@ -1,7 +1,7 @@
 import FS from 'node:fs';
 import { createServer, resolveConfig, type ViteDevServer } from 'vite';
-import { meteorWorker } from '../../plugin/Meteor';
-import type { ProjectJson } from '../../VitePluginSettings';
+import { meteorWorker } from '../plugin/Meteor';
+import type { ProjectJson } from '../VitePluginSettings';
 
 /**
  * Helper function for Meteor to launch the Vite dev server within a virtual context.
