@@ -14,8 +14,12 @@ if (import.meta.hot) {
     
     import.meta.hot.on('vite:beforeFullReload', () => {
         const count = {
-            methodHandles: pc.yellow(Object.keys(Meteor.server.method_handlers).length.toLocaleString()),
-            publishHandlers: pc.yellow(Object.keys(Meteor.server.publish_handlers).length.toLocaleString()),
+            methodHandles: pc.yellow(
+                (Object.keys(Meteor.server.method_handlers).length - Object.keys(method_handlers).length).toLocaleString()
+            ),
+            publishHandlers: pc.yellow(
+                (Object.keys(Meteor.server.publish_handlers).length - Object.keys(publish_handlers).length).toLocaleString()
+            ),
         }
         Meteor.server.method_handlers = Object.assign({}, method_handlers);
         Meteor.server.publish_handlers = Object.assign({}, publish_handlers);
