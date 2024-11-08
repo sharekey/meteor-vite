@@ -31,6 +31,7 @@ export async function initializeViteDevServer(): Promise<{ server: ViteDevServer
     }, 'serve');
     
     const server = await createServer({
+        base: 'vite',
         appType: 'custom',
         server: { middlewareMode: true, },
         mode: 'development',
@@ -70,10 +71,9 @@ export async function initializeViteDevServer(): Promise<{ server: ViteDevServer
     
     // ⚡ [Client] Inject module import scripts into the Meteor WebApp boilerplate.
     {
-        const baseUrl = server.resolvedUrls?.network[0] || server.resolvedUrls?.local[0] || '//';
         const scriptTags = [
-            Path.join(baseUrl, '@vite/client'),
-            '/./'+ Path.relative(projectRoot, config.meteor?.clientEntry || ''),
+            Path.join(config.base, '@vite/client'),
+            Path.join(config.base, Path.relative(projectRoot, config.meteor?.clientEntry || '')),
         ].map((url) => {
             return `<script src="${url}" type="module" crossorigin></script>`
         });
