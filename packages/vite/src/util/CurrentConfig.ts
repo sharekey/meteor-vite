@@ -1,4 +1,5 @@
 import FS from 'fs';
+import type { ProjectJson } from 'meteor-vite/VitePluginSettings';
 import Path from 'path';
 
 function guessCwd () {
@@ -10,8 +11,18 @@ function guessCwd () {
     return cwd
 }
 
+function parsePackageJson(): ProjectJson {
+    const path = Path.join(projectRoot, 'package.json');
+    
+    if (!FS.existsSync(path)) {
+        throw new Error(`⚡ Could not resolve package.json for your project: ${projectRoot}`);
+    }
+    
+    return JSON.parse(FS.readFileSync(path, 'utf8'));
+}
+
 const projectRoot = guessCwd();
-const packageJson = FS.readFileSync(Path.join(projectRoot, 'package.json'), 'utf8');
+const packageJson = parsePackageJson();
 const configFile = Path.resolve(Path.join(projectRoot, 'vite.config.ts'));
 
 process.env.METEOR_PROJECT_ROOT = projectRoot;
@@ -19,7 +30,7 @@ process.env.METEOR_PROJECT_ROOT = projectRoot;
 export const CurrentConfig = {
     projectRoot,
     bootstrapEvalFilename: Path.join(projectRoot, '__meteor-vite-runtime-bootstrap__.ts'),
-    packageJson: JSON.parse(packageJson),
+    packageJson,
     configFile,
 } as const;
 
