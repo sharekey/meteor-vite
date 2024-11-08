@@ -60,6 +60,11 @@ export async function initializeViteDevServer(): Promise<{ server: ViteDevServer
         const runner = createServerModuleRunner(server.environments.node);
         const serverEntry = Path.resolve(config.meteor.serverEntry);
         console.log(`Loading server entry: ${serverEntry}`);
+        
+        // HMR listener to clean up side-effects from things like
+        // Meteor.publish(), new Mongo.Collection(), etc. on server-side hot reload.
+        await runner.import('meteor-vite/bootstrap/HMRServerCleanup');
+        
         await runner.import(serverEntry);
     }
     
