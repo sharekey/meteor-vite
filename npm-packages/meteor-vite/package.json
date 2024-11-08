@@ -8,13 +8,10 @@
   "main": "",
   "exports": {
     "./plugin": {
-      "import": [
-        "./dist/plugin/index.mjs"
-      ],
-      "require": [
-        "./dist/plugin/index.js"
-      ]
+      "import": ["./dist/plugin/index.mjs"],
+      "require": ["./dist/plugin/index.js"]
     },
+    "./bootstrap": "./dist/bootstrap/index.mjs",
     "./client": "./dist/client/index.mjs"
   },
   "scripts": {
@@ -28,7 +25,8 @@
     {
       "entry": [
         "./src/bin/worker.ts",
-        "./src/client/index.ts"
+        "./src/client/index.ts",
+        "./src/bootstrap/index.ts"
       ],
       "outDir": "dist",
       "format": "esm",
