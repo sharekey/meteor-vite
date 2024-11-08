@@ -55,25 +55,31 @@ export async function initializeViteDevServer(): Promise<{ server: ViteDevServer
     });
     
     config = server.config;
+    const modules = {
+        clientEntry: Path.relative(projectRoot, config.meteor?.clientEntry || ''),
+        serverEntry: config.meteor?.serverEntry && Path.resolve(config.meteor.serverEntry),
+    }
+    
+    await server.warmupRequest(modules.clientEntry);
     
     // ⚡ [Server] Transform and load the Meteor main module using Vite.
-    if (config.meteor?.serverEntry) {
+    if (modules.serverEntry) {
         const runner = createServerModuleRunner(server.environments.node);
-        const serverEntry = Path.resolve(config.meteor.serverEntry);
-        console.log(`Loading server entry: ${serverEntry}`);
+        console.log(`Loading server entry: ${modules.serverEntry}`);
         
         // HMR listener to clean up side-effects from things like
         // Meteor.publish(), new Mongo.Collection(), etc. on server-side hot reload.
         await runner.import('meteor-vite/bootstrap/HMRServerCleanup');
         
-        await runner.import(serverEntry);
+        await runner.import(modules.serverEntry);
     }
     
     // ⚡ [Client] Inject module import scripts into the Meteor WebApp boilerplate.
     {
+       
         const scriptTags = [
             Path.join(config.base, '@vite/client'),
-            Path.join(config.base, Path.relative(projectRoot, config.meteor?.clientEntry || '')),
+            Path.join(config.base, modules.clientEntry)
         ].map((url) => {
             return `<script src="${url}" type="module" crossorigin></script>`
         });
