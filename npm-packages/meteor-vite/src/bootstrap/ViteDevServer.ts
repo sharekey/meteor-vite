@@ -35,10 +35,10 @@ export async function initializeViteDevServer(): Promise<{ server: ViteDevServer
         await server.ssrLoadModule(config.meteor.serverEntry);
     }
     
-    const baseUrl = server.resolvedUrls?.network[0] || server.resolvedUrls?.local[0];
+    const baseUrl = server.resolvedUrls?.network[0] || server.resolvedUrls?.local[0] || '//';
     const scriptTags = [
-        `${baseUrl}@vite/client`,
-        `${baseUrl}./${config.meteor?.clientEntry}`
+        Path.join(baseUrl, '@vite/client'),
+        baseUrl + './' + Path.relative(projectRoot, config.meteor?.clientEntry || ''),
     ].map((url) => {
         return `<script src="${url}" type="module" crossorigin></script>`
     });
