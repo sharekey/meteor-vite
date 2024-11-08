@@ -13,12 +13,14 @@ import type { StubValidationSettings } from '../VitePluginSettings';
  * rather than just an undefined check.
  */
 export function validateStub(stubbedPackage: any, { exportKeys, packageName, requestId, warnOnly }: StubValidatorOptions) {
-    console.debug('Meteor-Vite package validation:', {
-        packageName,
-        stubbedPackage,
-        exportKeys,
-        warnOnly,
-    });
+    if (globalThis?.Meteor?.isClient || globalThis?.process?.env.ENABLE_DEBUG_LOGS) {
+        console.debug('Meteor-Vite package validation:', {
+            packageName,
+            stubbedPackage,
+            exportKeys,
+            warnOnly,
+        });
+    }
     
     const errors: Error[] = [];
     
