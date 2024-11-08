@@ -21,7 +21,7 @@ declare const WebAppInternals: typeof WebAppInternals_;
  * This is called internally by the jorgenvatle:vite package when
  * starting Meteor in a development environment.
  */
-export async function initializeViteDevServer(): Promise<{ server: ViteDevServer, scriptTags: string[] }> {
+export async function initializeViteDevServer(): Promise<{ server: ViteDevServer, }> {
     Logger.info(`Vite version ${version} | Initializing Vite Dev Server...`);
     
     const { packageJson, projectRoot } = globalThis.MeteorViteRuntimeConfig;
@@ -55,7 +55,7 @@ export async function initializeViteDevServer(): Promise<{ server: ViteDevServer
     
     config = server.config;
     
-    
+    // ⚡ [Server] Transform and load the Meteor main module using Vite.
     if (config.meteor?.serverEntry) {
         const runner = createServerModuleRunner(server.environments.node);
         const serverEntry = Path.resolve(config.meteor.serverEntry);
@@ -63,19 +63,22 @@ export async function initializeViteDevServer(): Promise<{ server: ViteDevServer
         await runner.import(serverEntry);
     }
     
-    const baseUrl = server.resolvedUrls?.network[0] || server.resolvedUrls?.local[0] || '//';
-    const scriptTags = [
-        Path.join(baseUrl, '@vite/client'),
-        '/./'+ Path.relative(projectRoot, config.meteor?.clientEntry || ''),
-    ].map((url) => {
-        return `<script src="${url}" type="module" crossorigin></script>`
-    });
+    // ⚡ [Client] Inject module import scripts into the Meteor WebApp boilerplate.
+    {
+        const baseUrl = server.resolvedUrls?.network[0] || server.resolvedUrls?.local[0] || '//';
+        const scriptTags = [
+            Path.join(baseUrl, '@vite/client'),
+            '/./'+ Path.relative(projectRoot, config.meteor?.clientEntry || ''),
+        ].map((url) => {
+            return `<script src="${url}" type="module" crossorigin></script>`
+        });
+        
+        WebApp.handlers.use(server.middlewares);
+        WebAppInternals.registerBoilerplateDataCallback('vite', (req, data) => {
+            data.dynamicHead = data.dynamicHead || '';
+            data.dynamicHead += scriptTags.join('\n');
+        })
+    }
     
-    WebApp.handlers.use(server.middlewares);
-    WebAppInternals.registerBoilerplateDataCallback('vite', (req, data) => {
-        data.dynamicHead = data.dynamicHead || '';
-        data.dynamicHead += scriptTags.join('\n');
-    })
-    
-    return { server, scriptTags };
+    return { server }
 }
