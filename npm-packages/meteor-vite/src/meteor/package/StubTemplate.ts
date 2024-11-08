@@ -37,7 +37,7 @@ export function stubTemplate({ requestId, meteorPackage, importPath, stubValidat
 // packageId: ${packageId}
 
 ${stubValidation.importString}
-const ${TEMPLATE_GLOBAL_KEY} = typeof window !== 'undefined' ? window : global;
+const ${TEMPLATE_GLOBAL_KEY} = typeof window !== 'undefined' ? window : globalThis ?? global;
 ${serializedPackage.imports.join('\n')}
 ${serializedPackage.reExports.join('\n')}
 
