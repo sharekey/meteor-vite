@@ -15,6 +15,10 @@ const packageJson = FS.readFileSync(Path.join(projectRoot, 'package.json'), 'utf
 
 export const CurrentConfig = {
     projectRoot,
-    bootstrapEvalFilename: Path.join(projectRoot, 'server', '__meteor-vite-runtime-bootstrap__.ts'),
+    bootstrapEvalFilename: Path.join(projectRoot, '__meteor-vite-runtime-bootstrap__.ts'),
     packageJson: JSON.parse(packageJson),
 };
+
+console.debug({
+    CurrentConfig,
+})
