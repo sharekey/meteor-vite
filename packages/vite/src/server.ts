@@ -16,24 +16,39 @@ async function importVm<TPath extends keyof VMs>(path: TPath): Promise<VMs[TPath
     }).runInThisContext()
 }
 
-const { createServer, resolveConfig } = await importVm('vite');
-const { meteor } = await importVm('meteor-vite/plugin');
-const config = await resolveConfig({
-    mode: 'development',
-    configFile: CurrentConfig.configFile,
-}, 'serve');
+async function startDevServerFromMeteor() {
+    const { createServer, resolveConfig } = await importVm('vite');
+    const { meteor } = await importVm('meteor-vite/plugin');
+    const config = await resolveConfig({
+        mode: 'development',
+        configFile: CurrentConfig.configFile,
+    }, 'serve');
+    
+    const server = await createServer({
+        configFile: config.configFile,
+        plugins: [
+            meteor({
+                meteorStubs: {
+                    packageJson: CurrentConfig.packageJson,
+                }
+            })
+        ]
+    });
+    await server.listen();
+    server.printUrls();
+}
 
-const server = await createServer({
-    configFile: config.configFile,
-    plugins: [
-        meteor({
-            meteorStubs: {
-                packageJson: CurrentConfig.packageJson,
-            }
-        })
-    ]
-});
-await server.listen();
-server.printUrls();
+async function startDevServerUsingAssets() {
+    const ViteServer = new Script(await Assets.getTextAsync('assets/dev-server.ts'), {
+        filename: CurrentConfig.bootstrapEvalFilename,
+        importModuleDynamically: constants.USE_MAIN_CONTEXT_DEFAULT_LOADER,
+    });
+    
+    const result = await ViteServer.runInThisContext() ;
+}
 
+
+await startDevServerUsingAssets();
 console.log('Vite should be ready to go!');
+
+export {}
