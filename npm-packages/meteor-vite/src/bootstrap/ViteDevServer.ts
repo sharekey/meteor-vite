@@ -3,6 +3,10 @@ import Path from 'path';
 import { createServer, resolveConfig, type ViteDevServer } from 'vite';
 import { meteorWorker } from '../plugin/Meteor';
 import type { ResolvedMeteorViteConfig } from '../VitePluginSettings';
+import { type WebApp as WebApp_, type WebAppInternals as WebAppInternals_ } from 'meteor/webapp';
+
+declare const WebApp: typeof WebApp_;
+declare const WebAppInternals: typeof WebAppInternals_;
 
 /**
  * Helper function for Meteor to launch the Vite dev server within a virtual context.
@@ -17,6 +21,8 @@ export async function initializeViteDevServer(): Promise<{ server: ViteDevServer
     }, 'serve');
     
     const server = await createServer({
+        appType: 'custom',
+        server: { middlewareMode: true, },
         mode: 'development',
         configFile: config.configFile,
         plugins: [
@@ -26,8 +32,6 @@ export async function initializeViteDevServer(): Promise<{ server: ViteDevServer
         ]
     });
     
-    await server.listen();
-    server.printUrls();
     config = server.config;
     
     if (config.meteor?.serverEntry) {
@@ -38,10 +42,16 @@ export async function initializeViteDevServer(): Promise<{ server: ViteDevServer
     const baseUrl = server.resolvedUrls?.network[0] || server.resolvedUrls?.local[0] || '//';
     const scriptTags = [
         Path.join(baseUrl, '@vite/client'),
-        baseUrl + './' + Path.relative(projectRoot, config.meteor?.clientEntry || ''),
+        '/./'+ Path.relative(projectRoot, config.meteor?.clientEntry || ''),
     ].map((url) => {
         return `<script src="${url}" type="module" crossorigin></script>`
     });
+    
+    WebApp.handlers.use(server.middlewares);
+    WebAppInternals.registerBoilerplateDataCallback('vite', (req, data) => {
+        data.dynamicHead = data.dynamicHead || '';
+        data.dynamicHead += scriptTags.join('\n');
+    })
     
     return { server, scriptTags };
 }
