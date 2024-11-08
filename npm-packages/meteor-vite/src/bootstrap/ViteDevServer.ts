@@ -10,6 +10,7 @@ import type { ResolvedMeteorViteConfig } from '../VitePluginSettings';
  */
 export async function initializeViteDevServer(): Promise<ViteDevServer> {
     const { packageJson, projectRoot } = globalThis.MeteorViteRuntimeConfig;
+    process.chdir(projectRoot);
     let config: ResolvedMeteorViteConfig = await resolveConfig({
         configFile: packageJson.meteor.vite?.configFile
     }, 'serve');
@@ -17,7 +18,6 @@ export async function initializeViteDevServer(): Promise<ViteDevServer> {
     const server = await createServer({
         mode: 'development',
         configFile: config.configFile,
-        root: projectRoot,
         plugins: [
             meteorWorker({
                 meteorStubs: { packageJson }
