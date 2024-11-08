@@ -9,6 +9,10 @@ declare global {
     }
 }
 
+declare namespace globalThis {
+    let MeteorViteRuntimeConfig: typeof CurrentConfig;
+}
+
 function guessCwd () {
     let cwd = process.env.PWD ?? process.cwd()
     const index = cwd.indexOf('.meteor')
@@ -30,6 +34,8 @@ export const CurrentConfig = {
     packageJson: JSON.parse(packageJson),
     configFile,
 };
+
+globalThis.MeteorViteRuntimeConfig = CurrentConfig;
 
 console.debug({
     CurrentConfig,
