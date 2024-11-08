@@ -107,6 +107,6 @@
   },
 
   "include": [
-    "./packages/vite-bundler/**"
+    "./packages/vite/**/*.ts"
   ]
 }
