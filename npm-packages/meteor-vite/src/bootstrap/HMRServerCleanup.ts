@@ -16,8 +16,10 @@ if (import.meta.hot) {
             [
                 'If there are other resources that persist after hot-reloading,',
                 'please open an issue over on GitHub so we can have that taken care of.',
-                `🐛  ${pc.blue(PackageJson.bugs.url)}`
-            ].map((line) => `    ${pc.dim('L')} ${line}`),
-        ].flat().join('\n') + '\n\n');
+            ].map((line) => `${pc.dim('L')}   ${line}`),
+            
+            `🐛  ${pc.blue(PackageJson.bugs.url)}`
+            
+        ].flat().join('\n  ') + '\n\n');
     })
 }
