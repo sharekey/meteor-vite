@@ -13,12 +13,11 @@ if (import.meta.hot) {
         Meteor.server.publish_handlers = {};
         console.info([
             `[${pc.cyan('HMR')}] Cleaned up ${count.methodHandles} method and ${count.publishHandlers} publish handlers`,
-            pc.dim([
+            [
                 'If there are other resources that persist after hot-reloading,',
                 'please open an issue over on GitHub so we can have that taken care of.',
-                `🐛 ${pc.blue(PackageJson.bugs.url)}`
-            ].join('\n'))
-        ].join('\n')
-        );
+                `🐛  ${pc.blue(PackageJson.bugs.url)}`
+            ].map((line) => `    ${pc.dim('L')} ${line}`),
+        ].flat().join('\n') + '\n\n');
     })
 }
