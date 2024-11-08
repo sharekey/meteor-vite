@@ -8,7 +8,7 @@ import { meteorWorker } from '../plugin/Meteor';
  * starting Meteor in a development environment.
  */
 export async function initializeViteDevServer(): Promise<ViteDevServer> {
-    const { packageJson } = globalThis.MeteorViteRuntimeConfig;
+    const { packageJson, projectRoot } = globalThis.MeteorViteRuntimeConfig;
     const config = await resolveConfig({
         configFile: packageJson.meteor.vite?.configFile
     }, 'serve');
@@ -16,6 +16,7 @@ export async function initializeViteDevServer(): Promise<ViteDevServer> {
     const server = await createServer({
         mode: 'development',
         configFile: config.configFile,
+        root: projectRoot,
         plugins: [
             meteorWorker({
                 meteorStubs: { packageJson }
