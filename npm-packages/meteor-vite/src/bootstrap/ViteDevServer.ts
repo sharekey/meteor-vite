@@ -1,4 +1,5 @@
 import type * as _ from  'meteor/jorgenvatle:vite';
+import Path from 'path';
 import { createServer, resolveConfig, type ViteDevServer } from 'vite';
 import { meteorWorker } from '../plugin/Meteor';
 import type { ResolvedMeteorViteConfig } from '../VitePluginSettings';
@@ -38,7 +39,7 @@ export async function initializeViteDevServer(): Promise<{ server: ViteDevServer
     const baseUrl = server.resolvedUrls?.network[0] || server.resolvedUrls?.local[0];
     const scriptTags = [
         `${baseUrl}@vite/client`,
-        `${baseUrl}/${config.meteor?.clientEntry}`
+        `${baseUrl}./${config.meteor?.clientEntry}`
     ].map((url) => {
         return `<script src="${url}" type="module" crossorigin></script>`
     });
