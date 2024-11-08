@@ -20,6 +20,6 @@ if (import.meta.hot) {
             
             `🐛  ${pc.blue(PackageJson.bugs.url)}`
             
-        ].flat().join('\n  ') + '\n\n');
+        ].flat().join('\n') + '\n\n');
     })
 }
