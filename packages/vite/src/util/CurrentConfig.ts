@@ -1,18 +1,6 @@
 import FS from 'fs';
 import Path from 'path';
 
-declare global {
-    namespace NodeJS {
-        interface ProcessEnv {
-            METEOR_PROJECT_ROOT?: string
-        }
-    }
-}
-
-declare namespace globalThis {
-    let MeteorViteRuntimeConfig: typeof CurrentConfig;
-}
-
 function guessCwd () {
     let cwd = process.env.PWD ?? process.cwd()
     const index = cwd.indexOf('.meteor')
@@ -33,7 +21,7 @@ export const CurrentConfig = {
     bootstrapEvalFilename: Path.join(projectRoot, '__meteor-vite-runtime-bootstrap__.ts'),
     packageJson: JSON.parse(packageJson),
     configFile,
-};
+} as const;
 
 globalThis.MeteorViteRuntimeConfig = CurrentConfig;
 
