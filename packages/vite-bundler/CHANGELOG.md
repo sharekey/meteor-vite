@@ -1,5 +1,11 @@
 # vite-bundler
 
+## 3.0.0-next.25
+
+### Patch Changes
+
+- b1c7b7a8: Prevent Vite dev server from launching a worker process before it is really necessary. Fixes an issue where test environments can get stuck waiting for the worker to exit.
+
 ## 3.0.0-next.24
 
 ### Patch Changes
