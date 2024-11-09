@@ -9,7 +9,7 @@ import { ViteProductionBoilerplate } from './vite-boilerplate/production';
 const worker = Meteor.isProduction ? new ViteProductionBoilerplate()
                                    : new ViteDevServerWorker();
 
-if (!getBuildConfig().pluginEnabled) {
+if (Meteor.isProduction || !getBuildConfig().pluginEnabled) {
     Logger.warn('Meteor Vite plugin disabled. No Vite assets will be served to clients');
 }
 
