@@ -1,5 +1,11 @@
 # vite-bundler
 
+## 3.0.0-next.27
+
+### Patch Changes
+
+- 30d802ad: Fix issue where client module entrypoints would not load in production mode
+
 ## 3.0.0-next.26
 
 ### Patch Changes
