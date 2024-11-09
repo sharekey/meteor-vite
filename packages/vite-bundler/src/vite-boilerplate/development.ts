@@ -8,7 +8,8 @@ import {
     setConfig,
     ViteConnection, ViteDevScripts,
 } from '../loading/vite-connection-handler';
-import { getMeteorRuntimeConfig } from '../utility/Helpers';
+import { getBuildConfig, getMeteorRuntimeConfig } from '../utility/Helpers';
+import Logger from '../utility/Logger';
 import { createWorkerFork, getProjectPackageJson, isMeteorIPCMessage, type WorkerInstance } from '../workers';
 import { type Boilerplate, ViteBoilerplate } from './common';
 
@@ -20,6 +21,13 @@ export class ViteDevServerWorker extends ViteBoilerplate {
     }
     
     public start() {
+        if (Meteor.isProduction) {
+            throw new Error('Tried to start Vite dev server in production!');
+        }
+        if (!getBuildConfig().pluginEnabled) {
+            Logger.warn('Meteor Vite plugin disabled. Aborting dev server startup');
+        }
+        
         DevConnectionLog.info('Starting Vite server...');
         const ipc = new DDP_IPC({
             async viteConfig(config) {
