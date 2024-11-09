@@ -8,7 +8,7 @@ Package.registerBuildPlugin({
     name: 'vite',
     use: [],
     sources: [
-        'src/plugin.js',
+        'dist/build.mjs',
     ],
 });
 
