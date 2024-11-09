@@ -26,6 +26,7 @@ export class ViteDevServerWorker extends ViteBoilerplate {
         }
         if (!getBuildConfig().pluginEnabled) {
             Logger.warn('Meteor Vite plugin disabled. Aborting dev server startup');
+            return;
         }
         
         DevConnectionLog.info('Starting Vite server...');
