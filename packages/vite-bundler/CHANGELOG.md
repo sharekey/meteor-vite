@@ -1,5 +1,11 @@
 # vite-bundler
 
+## 3.0.0-next.26
+
+### Patch Changes
+
+- e1778a90: Avoid running validation for package.json when running in production
+
 ## 3.0.0-next.25
 
 ### Patch Changes
