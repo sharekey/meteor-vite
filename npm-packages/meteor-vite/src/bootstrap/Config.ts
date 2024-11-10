@@ -61,15 +61,6 @@ export async function resolveMeteorViteConfig(
                 build: buildEnvironment,
             },
         },
-        builder: {
-            buildApp: async (builder) => {
-                const builds = Object.entries(builder.environments).map(([name, environment]) => {
-                    Logger.info(`Building app: ${name}`);
-                    return builder.build(environment)
-                });
-                await Promise.all(builds);
-            }
-        }
     } satisfies InlineConfig & Pick<ResolvedMeteorViteConfig, 'meteor'>;
     
     return {
