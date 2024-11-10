@@ -1,3 +1,4 @@
+import FS from 'fs';
 import Path from 'path';
 import pc from 'picocolors';
 import {
@@ -21,12 +22,13 @@ export async function resolveMeteorViteConfig(
     BuildLogger.info(pc.green(`Vite version ${pc.cyan(version)} | Initializing Vite Dev Server...`));
     process.chdir(projectRoot);
     const userConfig: ResolvedMeteorViteConfig = await resolveConfig(inlineConfig, command);
-    const tempDir = userConfig.meteor?.tempDir || '_vite-bundle';
     let serverBuildConfig: BuildEnvironmentOptions | undefined = undefined;
+    
+    prepareServerEntry();
     
     if (userConfig.meteor?.serverEntry) {
         serverBuildConfig = {
-            outDir: Path.join(tempDir, 'build', 'server'),
+            outDir: Path.join(CurrentConfig.tempDir, 'build', 'server'),
             rollupOptions: {
                 input: userConfig.meteor.serverEntry,
             }
@@ -68,7 +70,7 @@ export async function resolveMeteorViteConfig(
             },
             client: {
                 build: {
-                    outDir: Path.join(tempDir, 'build', 'client'),
+                    outDir: Path.join(CurrentConfig.tempDir, 'build', 'client'),
                     rollupOptions: {
                         input: userConfig.meteor?.clientEntry,
                     }
@@ -80,4 +82,12 @@ export async function resolveMeteorViteConfig(
     return {
         config,
     }
+}
+
+/**
+ * Create an empty entry module that can imported by Meteor's mainModule configured in package.json.
+ */
+function prepareServerEntry() {
+    FS.mkdirSync(CurrentConfig.serverEntryModule, { recursive: true });
+    FS.writeFileSync(CurrentConfig.serverEntryModule, '// Dynamic entrypoint for the Meteor server. Imports are added here during builds');
 }

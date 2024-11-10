@@ -24,6 +24,7 @@ function parsePackageJson(): ProjectJson {
 const projectRoot = guessCwd();
 const packageJson = parsePackageJson();
 const configFile = Path.resolve(Path.join(projectRoot, 'vite.config.ts'));
+const tempDir = Path.join(projectRoot, '_vite-bundle');
 
 process.env.METEOR_PROJECT_ROOT = projectRoot;
 
@@ -34,6 +35,8 @@ export const CurrentConfig = {
     configFile,
     mode: process.env.NODE_ENV || 'development',
     bundleFileExtension: '_vite-bundle.tmp',
+    tempDir,
+    serverEntryModule: Path.join(tempDir, 'server', '_server-entry.mjs'),
 } as const;
 
 globalThis.MeteorViteRuntimeConfig = CurrentConfig;

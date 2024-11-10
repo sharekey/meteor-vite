@@ -77,10 +77,6 @@ export async function buildForProduction() {
     }
 }
 
-function prepareServerEntry(path: string) {
-    FS.mkdirSync(path, { recursive: true });
-    FS.writeFileSync(path, '// Dynamic entrypoint for the Meteor server. Imports are added here during builds');
-}
 
 function addServerEntry({ sourceFile, importPath }: {
     sourceFile: string,
