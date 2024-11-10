@@ -38,11 +38,11 @@ class CompilerPlugin {
 
 if (CurrentConfig.mode === 'production') {
     try {
-        const { entry, outDir } = await runBootstrapScript('buildForProduction');
+        const bundle = runBootstrapScript('buildForProduction');
         Plugin.registerCompiler({
-            filenames: [Path.parse(entry.client).base, Path.parse(entry.server || '').base],
-            extensions: []
-        }, () => new CompilerPlugin({ distDir: Path.dirname(outDir.client) }))
+            filenames: [],
+            extensions: [BUNDLE_FILE_EXTENSION]
+        }, () => bundle.then((() => new CompilerPlugin({ distDir: '' }))));
     } catch (error) {
         Logger.error('build failed');
         console.error(error);
