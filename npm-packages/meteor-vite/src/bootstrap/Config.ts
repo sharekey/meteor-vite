@@ -91,3 +91,21 @@ function prepareServerEntry() {
     FS.mkdirSync(CurrentConfig.serverEntryModule, { recursive: true });
     FS.writeFileSync(CurrentConfig.serverEntryModule, '// Dynamic entrypoint for the Meteor server. Imports are added here during builds');
 }
+
+/**
+ * Add an import for the Vite-built server entry module to Meteor's configured mainModule.
+ * This ensures that assets built by Vite will actually be loaded by the Meteor server after
+ * creating a production build. Otherwise, the files emitted by Vite will be ignored by the
+ * Meteor server.
+ */
+function injectServerEntryImport() {
+    const meteorMainModule = CurrentConfig.packageJson.meteor.mainModule.server;
+    const originalContent = FS.readFileSync(meteorMainModule, 'utf-8');
+    const importPath = Path.relative(meteorMainModule, CurrentConfig.serverEntryModule);
+    
+    if (originalContent.includes(importPath)) {
+        return;
+    }
+    
+    FS.writeFileSync(meteorMainModule, [`import ${JSON.parse(importPath)}`, originalContent].join('\n'));
+}
