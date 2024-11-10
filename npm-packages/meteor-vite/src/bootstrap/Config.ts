@@ -114,5 +114,9 @@ function injectServerEntryImport() {
         return;
     }
     
+    Logger.warn(`Meteor-Vite needs to write to the Meteor main module defined in your package.json`);
+    Logger.warn(`If you've migrated an existing project, please make sure to move any existing code in this file over to the entry module specified in your Vite config.`);
+    
+    
     FS.writeFileSync(mainModule, [`import ${JSON.parse(importPath)}`, originalContent].join('\n'));
 }
