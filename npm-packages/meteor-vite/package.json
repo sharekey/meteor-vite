@@ -52,7 +52,6 @@
     "@babel/traverse": "^7.22.5",
     "p-limit": "^3.1.0",
     "picocolors": "^1.0.0",
-    "simpleddp": "^2.2.4",
     "ws": "^8.18.0"
   },
   "peerDependencies": {
