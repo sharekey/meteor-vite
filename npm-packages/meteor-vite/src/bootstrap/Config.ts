@@ -27,6 +27,7 @@ export async function resolveMeteorViteConfig(
     prepareServerEntry();
     
     if (userConfig.meteor?.serverEntry) {
+        injectServerEntryImport();
         serverBuildConfig = {
             outDir: Path.join(CurrentConfig.tempDir, 'build', 'server'),
             rollupOptions: {
