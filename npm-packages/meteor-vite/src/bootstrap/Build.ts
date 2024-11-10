@@ -58,7 +58,7 @@ export async function buildForProduction() {
     
     fileNames['server']?.forEach((filename) => {
         const sourceFile = packageJson.meteor.mainModule.server;
-        prepareServerEntry({
+        addServerEntry({
             sourceFile,
             importPath: Path.relative(sourceFile, filename)
         })
@@ -77,8 +77,12 @@ export async function buildForProduction() {
     }
 }
 
+function prepareServerEntry(path: string) {
+    FS.mkdirSync(path, { recursive: true });
+    FS.writeFileSync(path, '// Dynamic entrypoint for the Meteor server. Imports are added here during builds');
+}
 
-async function prepareServerEntry({ sourceFile, importPath }: {
+function addServerEntry({ sourceFile, importPath }: {
     sourceFile: string,
     importPath: string,
 }) {
