@@ -31,6 +31,11 @@ export async function buildForProduction() {
         BuildLogger.info(`Preparing ${pc.yellow(name)} bundle...`);
         await builder.build(environment);
     }
+    
+    Plugin.registerCompiler({
+        filenames: [config.meteor.clientEntry, config.meteor.serverEntry],
+        extensions: [],
+    }, () => new CompilerPlugin({ distDir: config.meteor?.tempDir }))
 }
 
 class CompilerPlugin {
