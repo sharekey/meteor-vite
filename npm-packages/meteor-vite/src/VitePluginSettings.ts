@@ -244,7 +244,7 @@ export type ResolvedPluginSettings = MakeRequired<
 /**
  * A resolved Vite config, after our workers has merged it with default settings and overrides from the Meteor instance.
  */
-export declare interface ResolvedMeteorViteConfig extends ResolvedConfig {
+export interface ResolvedMeteorViteConfig extends ResolvedConfig {
     meteor?: ResolvedPluginSettings;
 }
 
