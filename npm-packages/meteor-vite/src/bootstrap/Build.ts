@@ -66,15 +66,15 @@ export async function buildForProduction() {
 }
 
 
-async function prepareServerEntry(path: string, packageJson: ProjectJson) {
-    FS.mkdirSync(Path.dirname(path), { recursive: true });
-    const mainModule = packageJson.meteor.mainModule.server;
-    if (!mainModule) {
-        throw new Error('Missing server mainModule!');
-    }
-    const originalContent = FS.readFileSync(mainModule, 'utf-8');
-    if (originalContent.includes(path)) {
+async function prepareServerEntry({ sourceFile, importPath }: {
+    sourceFile: string,
+    importPath: string,
+    packageJson: ProjectJson
+}) {
+    FS.mkdirSync(Path.dirname(importPath), { recursive: true });
+    const originalContent = FS.readFileSync(sourceFile, 'utf-8');
+    if (originalContent.includes(importPath)) {
         return;
     }
-    FS.writeFileSync(mainModule, [`import ${JSON.parse(path)}`, originalContent].join('\n'));
+    FS.writeFileSync(sourceFile, [`import ${JSON.parse(importPath)}`, originalContent].join('\n'));
 }
