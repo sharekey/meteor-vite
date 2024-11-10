@@ -88,7 +88,7 @@ export async function resolveMeteorViteConfig(
  * Create an empty entry module that can imported by Meteor's mainModule configured in package.json.
  */
 function prepareServerEntry() {
-    FS.mkdirSync(CurrentConfig.serverEntryModule, { recursive: true });
+    FS.mkdirSync(Path.dirname(CurrentConfig.serverEntryModule), { recursive: true });
     FS.writeFileSync(
         Path.join(
             Path.dirname(CurrentConfig.serverEntryModule),
