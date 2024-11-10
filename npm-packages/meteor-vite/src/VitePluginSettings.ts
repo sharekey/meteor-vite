@@ -1,3 +1,4 @@
+import Path from 'path';
 import type { OutputOptions } from 'rollup';
 import { type InlineConfig, resolveConfig, type ResolvedConfig } from 'vite';
 import type { DeepPartial, MakeOptional, MakeRequired } from './utilities/GenericTypes';
@@ -257,9 +258,27 @@ export async function resolveMeteorViteConfig(
     isPreview?: boolean
 ): Promise<{
     config: ResolvedMeteorViteConfig,
+    buildConfig: {
+        tempDir: string;
+        outDir: {
+            server: string;
+            client: string;
+        },
+    }
 }> {
-    const config = await resolveConfig(inlineConfig, command, defaultMode, defaultNodeEnv, isPreview);
+    const config: ResolvedMeteorViteConfig = await resolveConfig(inlineConfig, command, defaultMode, defaultNodeEnv, isPreview);
+    const tempDir = config.meteor?.tempDir || '_vite-bundle';
+    
+    const buildConfig = {
+        tempDir,
+        outDir: {
+            server: Path.join(tempDir, 'server', 'build'),
+            client: Path.join(tempDir, 'client', 'build'),
+        }
+    }
+    
     return {
         config,
+        buildConfig,
     }
 }
