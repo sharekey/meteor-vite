@@ -30,14 +30,27 @@ export async function buildForProduction() {
     }
     
     const builder = await createBuilder(config);
+    const fileNames: string[] = [];
     
     for (const [name, environment] of Object.entries(builder.environments)) {
         if (name === 'ssr') continue;
         BuildLogger.info(`Preparing ${pc.yellow(name)} bundle...`);
-        await builder.build(environment);
+        const result = await builder.build(environment);
+        if ('close' in result) {
+            throw new Error('Unexpected build output!');
+        }
+        if (!Array.isArray(result)) {
+            result.output.forEach((chunk) => fileNames.push(chunk.fileName));
+            continue;
+        }
+        
+        result.forEach(({ output }) => {
+            output.forEach((chunk) => fileNames.push(chunk.fileName))
+        });
     }
     
     return {
+        fileNames,
         entry: {
             client: config.meteor.clientEntry,
             server: config.meteor.serverEntry,
