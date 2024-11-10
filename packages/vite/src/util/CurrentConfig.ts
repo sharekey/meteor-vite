@@ -33,6 +33,7 @@ export const CurrentConfig = {
     packageJson,
     configFile,
     mode: process.env.NODE_ENV || 'development',
+    bundleFileExtension: '_vite-bundle.tmp',
 } as const;
 
 globalThis.MeteorViteRuntimeConfig = CurrentConfig;

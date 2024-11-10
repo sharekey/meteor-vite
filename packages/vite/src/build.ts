@@ -4,8 +4,6 @@ import { runBootstrapScript } from './util/Bootstrap';
 import { CurrentConfig } from './util/CurrentConfig';
 import Logger from './util/Logger';
 
-const BUNDLE_FILE_EXTENSION = 'vite.mjs';
-
 class CompilerPlugin {
     constructor(public readonly config: { distDir: string }) {
     }
@@ -32,7 +30,7 @@ class CompilerPlugin {
         })
     }
     protected _formatFilename(nameOrPath: string) {
-        return nameOrPath.replace(`.${BUNDLE_FILE_EXTENSION}`, '');
+        return nameOrPath.replace(`.${CurrentConfig.bundleFileExtension}`, '');
     }
 }
 
@@ -41,7 +39,7 @@ if (CurrentConfig.mode === 'production') {
         const bundle = runBootstrapScript('buildForProduction');
         Plugin.registerCompiler({
             filenames: [],
-            extensions: [BUNDLE_FILE_EXTENSION]
+            extensions: [CurrentConfig.bundleFileExtension]
         }, () => bundle.then((() => new CompilerPlugin({ distDir: '' }))));
     } catch (error) {
         Logger.error('build failed');
