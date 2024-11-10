@@ -1,5 +1,6 @@
 import type * as _ from  'meteor/jorgenvatle:vite';
 import Path from 'path';
+import pc from 'picocolors';
 import {
     createServer,
     resolveConfig,
@@ -9,7 +10,7 @@ import {
     createServerHotChannel, createServerModuleRunner,
 } from 'vite';
 import { meteorWorker } from '../plugin/Meteor';
-import Logger from '../utilities/Logger';
+import Logger, { BuildLogger } from '../utilities/Logger';
 import type { ResolvedMeteorViteConfig } from '../VitePluginSettings';
 import { type WebApp as WebApp_, type WebAppInternals as WebAppInternals_ } from 'meteor/webapp';
 
@@ -22,7 +23,7 @@ declare const WebAppInternals: typeof WebAppInternals_;
  * starting Meteor in a development environment.
  */
 export async function initializeViteDevServer(): Promise<{ server: ViteDevServer, }> {
-    Logger.info(`Vite version ${version} | Initializing Vite Dev Server...`);
+    BuildLogger.info(pc.green(`Vite version ${pc.cyan(version)} | Initializing Vite Dev Server...`));
     
     const { packageJson, projectRoot } = globalThis.MeteorViteRuntimeConfig;
     process.chdir(projectRoot);
