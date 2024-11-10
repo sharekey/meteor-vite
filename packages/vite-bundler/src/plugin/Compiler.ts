@@ -62,7 +62,7 @@ export default class Compiler {
 }
 type CleanupHandler = () => void;
 type PluginFileBuffer = ArrayBufferLike;
-interface BuildPluginFile {
+export interface BuildPluginFile {
     getContentsAsString(): string;
     getPathInPackage(): string;
     getContentsAsBuffer(): PluginFileBuffer;
