@@ -119,5 +119,15 @@ function injectServerEntryImport() {
     Logger.warn(`If you've migrated an existing project, please make sure to move any existing code in this file over to the entry module specified in your Vite config.`);
     
     
-    FS.writeFileSync(mainModule, [`import ${JSON.stringify(importPath)}`, originalContent].join('\n'));
+    FS.writeFileSync(mainModule, [
+        `/**`,
+        ` * These modules are automatically imported by jorgenvatle:vite-bundler.`,
+        ` * You can commit these to your project or move them elsewhere if you'd like,`,
+        ` * but they must be imported somewhere in your Meteor mainModule.`,
+        ` *`,
+        ` * More info: https://github.com/JorgenVatle/meteor-vite#lazy-loaded-meteor-packages`,
+        ` **/`,
+        `import ${JSON.stringify(importPath)}`, originalContent,
+        '/** End of vite-bundler auto-imports **/'
+    ].join('\n'));
 }
