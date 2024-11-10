@@ -119,5 +119,5 @@ function injectServerEntryImport() {
     Logger.warn(`If you've migrated an existing project, please make sure to move any existing code in this file over to the entry module specified in your Vite config.`);
     
     
-    FS.writeFileSync(mainModule, [`import ${JSON.parse(importPath)}`, originalContent].join('\n'));
+    FS.writeFileSync(mainModule, [`import ${JSON.stringify(importPath)}`, originalContent].join('\n'));
 }
