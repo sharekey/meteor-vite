@@ -13,6 +13,7 @@ import { resolveMeteorViteConfig } from './Config';
 export async function buildForProduction() {
     Logger.info(`Building with Vite v${version}...`);
     const { config } = await resolveMeteorViteConfig({ mode: 'production' }, 'build');
+    const { packageJson } = CurrentConfig;
     
     if (!config.meteor?.clientEntry) {
         throw new MeteorViteError('No client entrypoint specified in Vite config!')
@@ -33,7 +34,7 @@ export async function buildForProduction() {
     }
     
     const builder = await createBuilder(config);
-    const fileNames: string[] = [];
+    const fileNames: Partial<Record<string, string[]>> = {};
     
     for (const [name, environment] of Object.entries(builder.environments).reverse()) {
         if (name.toLowerCase() === 'ssr') continue;
@@ -42,15 +43,26 @@ export async function buildForProduction() {
         if ('close' in result) {
             throw new Error('Unexpected build output!');
         }
+        const list = fileNames[name] || [];
+        fileNames[name] = list;
+        
         if (!Array.isArray(result)) {
-            result.output.forEach((chunk) => fileNames.push(chunk.fileName));
+            result.output.forEach((chunk) => list.push(chunk.fileName));
             continue;
         }
         
         result.forEach(({ output }) => {
-            output.forEach((chunk) => fileNames.push(chunk.fileName))
+            output.forEach((chunk) => list.push(chunk.fileName))
         });
     }
+    
+    fileNames['server']?.forEach((filename) => {
+        const sourceFile = packageJson.meteor.mainModule.server;
+        prepareServerEntry({
+            sourceFile,
+            importPath: Path.relative(sourceFile, filename)
+        })
+    })
     
     return {
         fileNames,
