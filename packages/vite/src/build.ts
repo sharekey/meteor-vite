@@ -1,4 +1,5 @@
 import Path from 'path';
+import pc from 'picocolors';
 import type { BuildPluginFile } from '../../vite-bundler/src/plugin/Compiler';
 import { runBootstrapScript } from './util/Bootstrap';
 import { CurrentConfig } from './util/CurrentConfig';
@@ -20,7 +21,7 @@ class CompilerPlugin {
             }
             const sourcePath = file.getPathInPackage();
             
-            Logger.debug(`[${file.getArch()}] Processing: ${fileMeta.basename}`, { fileMeta });
+            Logger.debug(`[${pc.yellow(file.getArch())}] Processing: ${fileMeta.basename}`, { fileMeta });
             
             file.addAsset({
                 path: fileMeta.relativePath,
