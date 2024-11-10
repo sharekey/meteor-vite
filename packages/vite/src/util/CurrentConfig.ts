@@ -1,6 +1,7 @@
 import FS from 'fs';
 import type { ProjectJson } from 'meteor-vite/VitePluginSettings';
 import Path from 'path';
+import { parseAst } from 'vite';
 
 function guessCwd () {
     let cwd = process.env.PWD ?? process.cwd()
@@ -37,6 +38,7 @@ export const CurrentConfig = {
     bundleFileExtension: '_vite-bundle.tmp',
     tempDir,
     serverEntryModule: Path.join(tempDir, 'server', '_server-entry.mjs'),
+    serverMainModule: Path.resolve(projectRoot, packageJson.meteor.mainModule.server || ''),
 } as const;
 
 globalThis.MeteorViteRuntimeConfig = CurrentConfig;
