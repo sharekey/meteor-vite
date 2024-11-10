@@ -1,4 +1,6 @@
 import { type BuildPluginFile, BUNDLE_FILE_EXTENSION } from 'meteor/jorgenvatle:vite-bundler/plugin/Compiler';
+import 'meteor/jorgenvatle:vite'
+import { Meteor } from 'meteor/meteor';
 import Path from 'node:path';
 import pc from 'picocolors';
 import type { InputOption } from 'rollup';
@@ -20,8 +22,13 @@ export async function buildForProduction() {
     };
     
     
+    const tempDir = config.meteor.tempDir;
     if (config.meteor.serverEntry) {
         input.server = config.meteor.serverEntry;
+    }
+    
+    if (!tempDir) {
+        throw new Meteor.Error('no-output-directory', 'Missing output directory to build server and client to');
     }
     
     const builder = await createBuilder(config);
@@ -35,7 +42,7 @@ export async function buildForProduction() {
     Plugin.registerCompiler({
         filenames: [config.meteor.clientEntry, config.meteor.serverEntry],
         extensions: [],
-    }, () => new CompilerPlugin({ distDir: config.meteor?.tempDir }))
+    }, () => new CompilerPlugin({ distDir: tempDir }))
 }
 
 class CompilerPlugin {
