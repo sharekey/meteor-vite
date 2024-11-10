@@ -1,47 +1,14 @@
 import { Mongo } from 'meteor/mongo';
 import { Meteor } from 'meteor/meteor';
 import safeJson from 'safe-json-stringify';
-import Chalk from 'chalk';
-import util from 'util';
-const chalk = new Chalk.Instance({ level: 3 });
 
-interface LogEntry {
+export interface LogEntry {
     createdAt: Date;
     level: LogLevel;
     args: any[];
 }
 
 export const LogsCollection = new Mongo.Collection<LogEntry>('log-entries');
-
-if (Meteor.isServer) {
-    function printEntry(entry: LogEntry) {
-        const rawMessage = util.formatWithOptions(
-            { colors: true },
-            ...entry.args.map(arg => JSON.parse(arg))
-        );
-        const message = rawMessage.split(/[\n\r]+/)
-            .map((line) => `[${chalk.bold.cyan('Client')}] ${line}`)
-            .join('\n');
-        process.stdout.write(message + '\n');
-    }
-    
-    const insertHook = (userId: string | null, entry: LogEntry) => {
-        const logFunction = console[entry.level];
-        
-        if (!isLogMethod(entry.level, logFunction)) {
-            console.warn('Unknown "%s" log level from client', entry.level, entry.args)
-            return false;
-        }
-        
-        printEntry(entry);
-        return true;
-    }
-    
-    LogsCollection.allow({
-        insert: insertHook,
-        insertAsync: insertHook,
-    })
-}
 
 export const Logger: typeof console = new Proxy(console, {
     get(target, level: LogLevel) {
@@ -79,6 +46,6 @@ export function WrapConsole() {
 
 type LogLevel = typeof loggableLevels[number];
 const loggableLevels = [ 'log', 'info', 'warn', 'error'] as const;
-function isLogMethod(level: LogLevel | string, value: any): value is typeof console[LogLevel]  {
+export function isLogMethod(level: LogLevel | string, value: any): value is typeof console[LogLevel]  {
     return loggableLevels.includes(level as LogLevel);
 }
