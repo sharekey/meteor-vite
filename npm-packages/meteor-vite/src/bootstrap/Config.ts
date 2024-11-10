@@ -89,6 +89,13 @@ export async function resolveMeteorViteConfig(
  */
 function prepareServerEntry() {
     FS.mkdirSync(CurrentConfig.serverEntryModule, { recursive: true });
+    FS.writeFileSync(
+        Path.join(
+            Path.dirname(CurrentConfig.serverEntryModule),
+            '.gitignore'
+        ),
+        '*'
+    );
     FS.writeFileSync(CurrentConfig.serverEntryModule, '// Dynamic entrypoint for the Meteor server. Imports are added here during builds');
 }
 
