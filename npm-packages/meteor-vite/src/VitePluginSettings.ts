@@ -249,12 +249,17 @@ export interface ResolvedMeteorViteConfig extends ResolvedConfig {
 }
 
 
-export function resolveMeteorViteConfig(
+export async function resolveMeteorViteConfig(
     inlineConfig: InlineConfig,
     command: 'build' | 'serve',
     defaultMode?: string,
     defaultNodeEnv?: string,
     isPreview?: boolean
-): Promise<ResolvedMeteorViteConfig> {
-    return resolveConfig(inlineConfig, command, defaultMode, defaultNodeEnv, isPreview);
+): Promise<{
+    config: ResolvedMeteorViteConfig,
+}> {
+    const config = await resolveConfig(inlineConfig, command, defaultMode, defaultNodeEnv, isPreview);
+    return {
+        config,
+    }
 }
