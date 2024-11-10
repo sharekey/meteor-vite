@@ -1,8 +1,10 @@
-import { build, createNodeDevEnvironment, resolveConfig } from 'vite';
+import { build, resolveConfig, version } from 'vite';
 import { meteorWorker } from '../plugin/Meteor';
+import Logger from '../utilities/Logger';
 import type { ResolvedMeteorViteConfig } from '../VitePluginSettings';
 
 export async function buildForProduction() {
+    Logger.info(`Building with Vite v${version}...`);
     const { packageJson, projectRoot } = globalThis.MeteorViteRuntimeConfig;
     process.chdir(projectRoot);
     const config: ResolvedMeteorViteConfig = await resolveConfig({
