@@ -1,4 +1,4 @@
-import { type BuildPluginFile, BUNDLE_FILE_EXTENSION } from 'meteor/jorgenvatle:vite-bundler/plugin/Compiler';
+import { type BuildPluginFile } from 'meteor/jorgenvatle:vite-bundler/plugin/Compiler';
 import Path from 'node:path';
 import pc from 'picocolors';
 import type { InputOption } from 'rollup';
@@ -6,6 +6,8 @@ import { createBuilder, version } from 'vite';
 import { MeteorViteError } from '../error/MeteorViteError';
 import Logger, { BuildLogger } from '../utilities/Logger';
 import { resolveMeteorViteConfig } from './Config';
+
+const BUNDLE_FILE_EXTENSION = 'vite.mjs';
 
 export async function buildForProduction() {
     Logger.info(`Building with Vite v${version}...`);
