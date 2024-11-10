@@ -106,13 +106,13 @@ function prepareServerEntry() {
  * Meteor server.
  */
 function injectServerEntryImport() {
-    const meteorMainModule = CurrentConfig.packageJson.meteor.mainModule.server;
-    const originalContent = FS.readFileSync(meteorMainModule, 'utf-8');
-    const importPath = Path.relative(meteorMainModule, CurrentConfig.serverEntryModule);
+    const mainModule = CurrentConfig.serverMainModule;
+    const originalContent = FS.readFileSync(mainModule, 'utf-8');
+    const importPath = Path.relative(mainModule, CurrentConfig.serverEntryModule);
     
     if (originalContent.includes(importPath)) {
         return;
     }
     
-    FS.writeFileSync(meteorMainModule, [`import ${JSON.parse(importPath)}`, originalContent].join('\n'));
+    FS.writeFileSync(mainModule, [`import ${JSON.parse(importPath)}`, originalContent].join('\n'));
 }
