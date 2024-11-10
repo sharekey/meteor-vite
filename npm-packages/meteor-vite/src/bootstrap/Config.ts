@@ -45,6 +45,9 @@ export async function resolveMeteorViteConfig(
         ],
         build: {
             outDir: Path.join(tempDir, 'build', 'client'),
+            rollupOptions: {
+                input: userConfig.meteor?.clientEntry,
+            }
         },
         environments: {
             node: {
