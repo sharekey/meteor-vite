@@ -18,24 +18,25 @@ export async function resolveMeteorViteConfig(
     const { packageJson, projectRoot } = globalThis.MeteorViteRuntimeConfig;
     Logger.info(`Vite version ${version} | Preparing Vite runtime environment...`);
     process.chdir(projectRoot);
-    const { meteor }: ResolvedMeteorViteConfig = await resolveConfig(inlineConfig, command);
-    const tempDir = meteor?.tempDir || '_vite-bundle';
+    const userConfig: ResolvedMeteorViteConfig = await resolveConfig(inlineConfig, command);
+    const tempDir = userConfig.meteor?.tempDir || '_vite-bundle';
     let buildEnvironment: BuildEnvironmentOptions | undefined = undefined;
     
-    if (meteor?.serverEntry) {
+    if (userConfig.meteor?.serverEntry) {
         buildEnvironment = {
             outDir: Path.join(tempDir, 'build', 'server'),
             rollupOptions: {
-                input: meteor.serverEntry,
+                input: userConfig.meteor.serverEntry,
             }
         }
     }
     
-    const config: ResolvedMeteorViteConfig = await resolveConfig({
+    const config = {
         ...inlineConfig,
         base: '/vite',
         appType: 'custom',
         server: { middlewareMode: true, },
+        configFile: userConfig.configFile,
         plugins: [
             meteorWorker({
                 meteorStubs: { packageJson }
@@ -65,7 +66,7 @@ export async function resolveMeteorViteConfig(
                 await Promise.all(builds);
             }
         }
-    }, command);
+    } satisfies InlineConfig;
     
     return {
         config,
