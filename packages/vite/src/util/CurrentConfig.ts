@@ -32,6 +32,7 @@ export const CurrentConfig = {
     bootstrapEvalFilename: Path.join(projectRoot, '__meteor-vite-runtime-bootstrap__.ts'),
     packageJson,
     configFile,
+    mode: process.env.NODE_ENV || 'development',
 } as const;
 
 globalThis.MeteorViteRuntimeConfig = CurrentConfig;
