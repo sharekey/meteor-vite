@@ -69,7 +69,6 @@ export async function buildForProduction() {
 async function prepareServerEntry({ sourceFile, importPath }: {
     sourceFile: string,
     importPath: string,
-    packageJson: ProjectJson
 }) {
     FS.mkdirSync(Path.dirname(importPath), { recursive: true });
     const originalContent = FS.readFileSync(sourceFile, 'utf-8');
