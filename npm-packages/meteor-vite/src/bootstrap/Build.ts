@@ -1,10 +1,13 @@
+import FS from 'fs';
 import { type BuildPluginFile } from 'meteor/jorgenvatle:vite-bundler/plugin/Compiler';
 import Path from 'node:path';
 import pc from 'picocolors';
 import type { InputOption } from 'rollup';
 import { createBuilder, version } from 'vite';
+import { CurrentConfig } from '../../../../packages/vite/src/util/CurrentConfig';
 import { MeteorViteError } from '../error/MeteorViteError';
 import Logger, { BuildLogger } from '../utilities/Logger';
+import type { ProjectJson } from '../VitePluginSettings';
 import { resolveMeteorViteConfig } from './Config';
 
 export async function buildForProduction() {
@@ -32,8 +35,8 @@ export async function buildForProduction() {
     const builder = await createBuilder(config);
     const fileNames: string[] = [];
     
-    for (const [name, environment] of Object.entries(builder.environments)) {
-        if (name === 'ssr') continue;
+    for (const [name, environment] of Object.entries(builder.environments).reverse()) {
+        if (name.toLowerCase() === 'ssr') continue;
         BuildLogger.info(`Preparing ${pc.yellow(name)} bundle...`);
         const result = await builder.build(environment);
         if ('close' in result) {
@@ -62,3 +65,16 @@ export async function buildForProduction() {
     }
 }
 
+
+async function prepareServerEntry(path: string, packageJson: ProjectJson) {
+    FS.mkdirSync(Path.dirname(path), { recursive: true });
+    const mainModule = packageJson.meteor.mainModule.server;
+    if (!mainModule) {
+        throw new Error('Missing server mainModule!');
+    }
+    const originalContent = FS.readFileSync(mainModule, 'utf-8');
+    if (originalContent.includes(path)) {
+        return;
+    }
+    FS.writeFileSync(mainModule, [`import ${JSON.parse(path)}`, originalContent].join('\n'));
+}
