@@ -20,10 +20,10 @@ export async function resolveMeteorViteConfig(
     process.chdir(projectRoot);
     const userConfig: ResolvedMeteorViteConfig = await resolveConfig(inlineConfig, command);
     const tempDir = userConfig.meteor?.tempDir || '_vite-bundle';
-    let buildEnvironment: BuildEnvironmentOptions | undefined = undefined;
+    let serverBuildConfig: BuildEnvironmentOptions | undefined = undefined;
     
     if (userConfig.meteor?.serverEntry) {
-        buildEnvironment = {
+        serverBuildConfig = {
             outDir: Path.join(tempDir, 'build', 'server'),
             rollupOptions: {
                 input: userConfig.meteor.serverEntry,
@@ -43,14 +43,8 @@ export async function resolveMeteorViteConfig(
                 meteorStubs: { packageJson }
             })
         ],
-        build: {
-            outDir: Path.join(tempDir, 'build', 'client'),
-            rollupOptions: {
-                input: userConfig.meteor?.clientEntry,
-            }
-        },
         environments: {
-            node: {
+            server: {
                 dev: {
                     createEnvironment(name, config) {
                         return createNodeDevEnvironment(name, config, {
@@ -58,8 +52,16 @@ export async function resolveMeteorViteConfig(
                         })
                     }
                 },
-                build: buildEnvironment,
+                build: serverBuildConfig,
             },
+            client: {
+                build: {
+                    outDir: Path.join(tempDir, 'build', 'client'),
+                    rollupOptions: {
+                        input: userConfig.meteor?.clientEntry,
+                    }
+                }
+            }
         },
     } satisfies InlineConfig & Pick<ResolvedMeteorViteConfig, 'meteor'>;
     
