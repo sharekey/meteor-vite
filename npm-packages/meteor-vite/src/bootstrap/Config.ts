@@ -1,4 +1,12 @@
-import { createNodeDevEnvironment, createServerHotChannel, type InlineConfig, resolveConfig, version } from 'vite';
+import Path from 'path';
+import {
+    type BuildEnvironmentOptions,
+    createNodeDevEnvironment,
+    createServerHotChannel,
+    type InlineConfig,
+    resolveConfig,
+    version,
+} from 'vite';
 import { meteorWorker } from '../plugin/Meteor';
 import Logger from '../utilities/Logger';
 import { type ResolvedMeteorViteConfig } from '../VitePluginSettings';
@@ -10,6 +18,18 @@ export async function resolveMeteorViteConfig(
     const { packageJson, projectRoot } = globalThis.MeteorViteRuntimeConfig;
     Logger.info(`Vite version ${version} | Preparing Vite runtime environment...`);
     process.chdir(projectRoot);
+    const { meteor }: ResolvedMeteorViteConfig = await resolveConfig(inlineConfig, command);
+    const tempDir = meteor?.tempDir || '_vite-bundle';
+    let buildEnvironment: BuildEnvironmentOptions | undefined = undefined;
+    
+    if (meteor?.serverEntry) {
+        buildEnvironment = {
+            outDir: Path.join(tempDir, 'build', 'server'),
+            rollupOptions: {
+                input: meteor.serverEntry,
+            }
+        }
+    }
     
     const config: ResolvedMeteorViteConfig = await resolveConfig({
         ...inlineConfig,
@@ -21,6 +41,9 @@ export async function resolveMeteorViteConfig(
                 meteorStubs: { packageJson }
             })
         ],
+        build: {
+            outDir: Path.join(tempDir, 'build', 'client'),
+        },
         environments: {
             node: {
                 dev: {
@@ -29,8 +52,9 @@ export async function resolveMeteorViteConfig(
                             hot: createServerHotChannel(),
                         })
                     }
-                }
-            }
+                },
+                build: buildEnvironment,
+            },
         }
     }, command);
     
