@@ -8,6 +8,7 @@ import {
     resolveConfig,
     version,
 } from 'vite';
+import { CurrentConfig } from '../../../../packages/vite/src/util/CurrentConfig';
 import { meteorWorker } from '../plugin/Meteor';
 import Logger, { BuildLogger } from '../utilities/Logger';
 import { type ResolvedMeteorViteConfig } from '../VitePluginSettings';
@@ -44,6 +45,15 @@ export async function resolveMeteorViteConfig(
                 meteorStubs: { packageJson }
             })
         ],
+        build: {
+            rollupOptions: {
+                output: {
+                    assetFileNames: `assets/[name]-[hash][extname]${CurrentConfig.bundleFileExtension}`,
+                    chunkFileNames: `[name]-[hash].js${CurrentConfig.bundleFileExtension}`,
+                    entryFileNames: `[name].js${CurrentConfig.bundleFileExtension}`
+                }
+            }
+        },
         environments: {
             server: {
                 dev: {
