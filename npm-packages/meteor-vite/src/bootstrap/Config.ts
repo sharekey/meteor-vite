@@ -1,4 +1,5 @@
 import Path from 'path';
+import pc from 'picocolors';
 import {
     type BuildEnvironmentOptions,
     createNodeDevEnvironment,
@@ -8,7 +9,7 @@ import {
     version,
 } from 'vite';
 import { meteorWorker } from '../plugin/Meteor';
-import Logger from '../utilities/Logger';
+import Logger, { BuildLogger } from '../utilities/Logger';
 import { type ResolvedMeteorViteConfig } from '../VitePluginSettings';
 
 export async function resolveMeteorViteConfig(
@@ -16,7 +17,7 @@ export async function resolveMeteorViteConfig(
     command: 'build' | 'serve',
 ) {
     const { packageJson, projectRoot } = globalThis.MeteorViteRuntimeConfig;
-    Logger.info(`Vite version ${version} | Preparing Vite runtime environment...`);
+    BuildLogger.info(pc.green(`Vite version ${pc.cyan(version)} | Initializing Vite Dev Server...`));
     process.chdir(projectRoot);
     const userConfig: ResolvedMeteorViteConfig = await resolveConfig(inlineConfig, command);
     const tempDir = userConfig.meteor?.tempDir || '_vite-bundle';
