@@ -84,5 +84,5 @@ function addServerEntryImport({ importPath }: {
     if (originalContent.includes(importPath)) {
         return;
     }
-    FS.writeFileSync(CurrentConfig.serverEntryModule, [`import ${JSON.parse(importPath)}`, originalContent].join('\n'));
+    FS.writeFileSync(CurrentConfig.serverEntryModule, [`import ${JSON.stringify(importPath)}`, originalContent].join('\n'));
 }
