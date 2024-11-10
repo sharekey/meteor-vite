@@ -58,8 +58,7 @@ export async function buildForProduction() {
     
     fileNames['server']?.forEach((filename) => {
         const sourceFile = packageJson.meteor.mainModule.server;
-        addServerEntry({
-            sourceFile,
+        addServerEntryImport({
             importPath: Path.relative(sourceFile, filename)
         })
     })
@@ -78,14 +77,12 @@ export async function buildForProduction() {
 }
 
 
-function addServerEntry({ sourceFile, importPath }: {
-    sourceFile: string,
+function addServerEntryImport({ importPath }: {
     importPath: string,
 }) {
-    FS.mkdirSync(Path.dirname(importPath), { recursive: true });
-    const originalContent = FS.readFileSync(sourceFile, 'utf-8');
+    const originalContent = FS.readFileSync(CurrentConfig.serverEntryModule, 'utf-8');
     if (originalContent.includes(importPath)) {
         return;
     }
-    FS.writeFileSync(sourceFile, [`import ${JSON.parse(importPath)}`, originalContent].join('\n'));
+    FS.writeFileSync(CurrentConfig.serverEntryModule, [`import ${JSON.parse(importPath)}`, originalContent].join('\n'));
 }
