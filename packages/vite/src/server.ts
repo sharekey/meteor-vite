@@ -1,11 +1,12 @@
 import { runBootstrapScript } from './util/Bootstrap';
+import Logger from './util/Logger';
 
 
 try {
     await runBootstrapScript('initializeViteDevServer');
-    console.log('Vite should be ready to go!');
+    Logger.success('Vite should be ready to go!');
 }  catch (error) {
-    console.warn('Failed to start Vite dev server!');
+    Logger.warn('Failed to start Vite dev server!');
     console.error(error);
 }
 

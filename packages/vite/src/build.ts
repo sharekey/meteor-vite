@@ -1,9 +1,10 @@
 import { runBootstrapScript } from './util/Bootstrap';
+import Logger from './util/Logger';
 
 try {
     await runBootstrapScript('buildForProduction')
 } catch (error) {
-    console.error('⚡ build failed');
+    Logger.error('build failed');
     console.error(error);
     throw error;
 }
