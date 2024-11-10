@@ -127,7 +127,8 @@ function injectServerEntryImport() {
         ` *`,
         ` * More info: https://github.com/JorgenVatle/meteor-vite#lazy-loaded-meteor-packages`,
         ` **/`,
-        `import ${JSON.stringify(importPath)}`, originalContent,
-        '/** End of vite-bundler auto-imports **/'
+        `import ${JSON.stringify(importPath)}`,
+        '/** End of vite-bundler auto-imports **/',
+        originalContent,
     ].join('\n'));
 }
