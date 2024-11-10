@@ -3,7 +3,7 @@ import { inspect } from 'node:util';
 import fs from 'node:fs';
 import { performance } from 'node:perf_hooks';
 
-class BuildLogger {
+class Logger {
     protected debugEnabled = false;
     protected github = new GithubActions();
     protected static DEBUG_ENV_TRIGGERS = [
@@ -14,7 +14,7 @@ class BuildLogger {
     constructor() {
         const debugEnv = process.env.DEBUG || 'false';
         this.debugEnabled = !!debugEnv.trim().split(/\s+/).find((field) => {
-            return BuildLogger.DEBUG_ENV_TRIGGERS.includes(field.trim())
+            return Logger.DEBUG_ENV_TRIGGERS.includes(field.trim())
         });
         
     }
@@ -106,7 +106,7 @@ interface GithubAnnotationOptions {
 }
 
 type LogMethodArgs = unknown[];
-export default new BuildLogger();
+export default new Logger();
 
 function msToHumanTime(milliseconds: number) {
     const duration = {
