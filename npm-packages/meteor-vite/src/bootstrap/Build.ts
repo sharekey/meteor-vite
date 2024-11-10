@@ -40,7 +40,7 @@ export async function buildForProduction() {
     }
     
     Plugin.registerCompiler({
-        filenames: [config.meteor.clientEntry, config.meteor.serverEntry],
+        filenames: [config.meteor.clientEntry],
         extensions: [],
     }, () => new CompilerPlugin({ distDir: tempDir }))
 }
