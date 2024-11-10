@@ -48,9 +48,9 @@ export async function resolveMeteorViteConfig(
         build: {
             rollupOptions: {
                 output: {
-                    assetFileNames: `assets/[name]-[hash][extname]${CurrentConfig.bundleFileExtension}`,
-                    chunkFileNames: `[name]-[hash].js${CurrentConfig.bundleFileExtension}`,
-                    entryFileNames: `[name].js${CurrentConfig.bundleFileExtension}`
+                    assetFileNames: `assets/[name]-[hash][extname]`,
+                    chunkFileNames: `[name]-[hash].js`,
+                    entryFileNames: `entry-[name]-[hash].js`
                 }
             }
         },
