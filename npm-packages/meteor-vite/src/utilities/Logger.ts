@@ -48,8 +48,8 @@ export type LabelLogger = ReturnType<typeof createLabelledLogger>
 export default createLogger((...params: DefaultParams) => params);
 
 export const BuildLogger = {
-    info: (message: string, ...params: DefaultParams) => formatMessage([pc.blue(message), params]),
-    success: (message: string, ...params: DefaultParams) => formatMessage([pc.green(message), params]),
-    error: (message: string, ...params: DefaultParams) => formatMessage([pc.red(message), params]),
-    warn: (message: string, ...params: DefaultParams) => formatMessage([pc.yellow(message), params]),
+    info: (message: string, ...params: DefaultParams) => console.info.apply(this, formatMessage([pc.blue(message), params])),
+    success: (message: string, ...params: DefaultParams) => console.log.apply(this, formatMessage([pc.green(message), params])),
+    error: (message: string, ...params: DefaultParams) => console.error.apply(this, formatMessage([pc.red(message), params])),
+    warn: (message: string, ...params: DefaultParams) => console.warn.apply(this, formatMessage([pc.yellow(message), params])),
 }
