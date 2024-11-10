@@ -1,5 +1,5 @@
 import type { OutputOptions } from 'rollup';
-import type { ResolvedConfig } from 'vite';
+import { type InlineConfig, resolveConfig, type ResolvedConfig } from 'vite';
 import type { DeepPartial, MakeOptional, MakeRequired } from './utilities/GenericTypes';
 
 export interface PluginSettings<
@@ -248,3 +248,13 @@ export interface ResolvedMeteorViteConfig extends ResolvedConfig {
     meteor?: ResolvedPluginSettings;
 }
 
+
+export function resolveMeteorViteConfig(
+    inlineConfig: InlineConfig,
+    command: 'build' | 'serve',
+    defaultMode?: string,
+    defaultNodeEnv?: string,
+    isPreview?: boolean
+): Promise<ResolvedMeteorViteConfig> {
+    return resolveConfig(inlineConfig, command, defaultMode, defaultNodeEnv, isPreview);
+}
