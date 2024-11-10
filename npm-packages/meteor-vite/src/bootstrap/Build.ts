@@ -7,8 +7,6 @@ import { MeteorViteError } from '../error/MeteorViteError';
 import Logger, { BuildLogger } from '../utilities/Logger';
 import { resolveMeteorViteConfig } from './Config';
 
-const BUNDLE_FILE_EXTENSION = 'vite.mjs';
-
 export async function buildForProduction() {
     Logger.info(`Building with Vite v${version}...`);
     const { config } = await resolveMeteorViteConfig({ mode: 'production' }, 'build');
@@ -51,32 +49,3 @@ export async function buildForProduction() {
     }
 }
 
-class CompilerPlugin {
-    constructor(public readonly config: { distDir: string }) {
-    }
-    processFilesForTarget(files: BuildPluginFile[]) {
-        files.forEach(file => {
-            const fileMeta = {
-                _original: {
-                    basename: file.getBasename(),
-                    path: file.getPathInPackage(),
-                },
-                basename: this._formatFilename(file.getBasename()),
-                path: this._formatFilename(file.getPathInPackage()),
-                relativePath: Path.relative(this.config.distDir, this._formatFilename(file.getPathInPackage())),
-            }
-            const sourcePath = file.getPathInPackage();
-            
-            Logger.debug(`[${file.getArch()}] Processing: ${fileMeta.basename}`, { fileMeta });
-            
-            file.addAsset({
-                path: fileMeta.relativePath,
-                data: file.getContentsAsBuffer(),
-                sourcePath,
-            });
-        })
-    }
-    protected _formatFilename(nameOrPath: string) {
-        return nameOrPath.replace(`.${BUNDLE_FILE_EXTENSION}`, '');
-    }
-}
