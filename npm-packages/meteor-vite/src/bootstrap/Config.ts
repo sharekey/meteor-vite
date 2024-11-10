@@ -33,6 +33,7 @@ export async function resolveMeteorViteConfig(
         }
     }
     
+    const { bundleFileExtension: ext } = CurrentConfig;
     const config = {
         ...inlineConfig,
         meteor: userConfig.meteor,
@@ -48,9 +49,9 @@ export async function resolveMeteorViteConfig(
         build: {
             rollupOptions: {
                 output: {
-                    assetFileNames: `assets/[name]-[hash][extname]`,
-                    chunkFileNames: `chunk/[name]-[hash].js`,
-                    entryFileNames: `entry/[name]-[hash].js`
+                    assetFileNames: `assets/[name]-[hash][extname]${ext}`,
+                    chunkFileNames: `chunk/[name]-[hash].js${ext}`,
+                    entryFileNames: `entry/[name]-[hash].js${ext}`
                 }
             }
         },
