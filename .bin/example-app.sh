@@ -167,7 +167,7 @@ cleanOutput() {
 
 link() {
   for package in "${npmPackages[@]}"; do
-    (npmPackage "$package" link) || exit 1
+    (npmPackage "$package" link --ws false) || exit 1
     log:success "Added npm link for $package"
   done
 
