@@ -13,6 +13,7 @@
     "meteor-vite-internal:start": "npm run meteor-vite-internal:setup-env meteor npm start",
     "meteor-vite-internal:build": "npm run meteor-vite-internal:setup-env meteor npm run build"
   },
+  "type": "module",
   "dependencies": {
     "@babel/runtime": "^7.20.13",
     "@meteor-vite/test-externalization": "^1.0.0",
