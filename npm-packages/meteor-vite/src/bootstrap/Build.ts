@@ -1,5 +1,4 @@
 import { type BuildPluginFile, BUNDLE_FILE_EXTENSION } from 'meteor/jorgenvatle:vite-bundler/plugin/Compiler';
-import { Meteor } from 'meteor/meteor';
 import Path from 'node:path';
 import pc from 'picocolors';
 import type { InputOption } from 'rollup';
