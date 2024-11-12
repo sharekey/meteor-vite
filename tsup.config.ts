@@ -15,6 +15,7 @@ export default defineConfig(() => ({
     platform: 'node',
     sourcemap: true,
     format: 'esm',
+    noExternal: ['meteor'],
     esbuildPlugins: [
         EsbuildPluginMeteorStubs
     ]
