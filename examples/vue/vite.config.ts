@@ -15,9 +15,4 @@ export default defineConfig({
       }
     }),
   ],
-  optimizeDeps: {
-    exclude: [
-        'ts-minitest',
-    ]
-  },
 })
