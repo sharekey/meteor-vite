@@ -1,7 +1,6 @@
 import FS from 'fs';
 import type { ProjectJson } from 'meteor-vite/VitePluginSettings';
 import Path from 'path';
-import { parseAst } from 'vite';
 
 function guessCwd () {
     let cwd = process.env.PWD ?? process.cwd()
