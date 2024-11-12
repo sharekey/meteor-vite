@@ -1,25 +1,26 @@
 import FS from 'fs';
 import Path from 'path';
-import pc from 'picocolors';
 import {
     type BuildEnvironmentOptions,
     createNodeDevEnvironment,
     createServerHotChannel,
     type InlineConfig,
     resolveConfig,
-    version,
 } from 'vite';
 import { CurrentConfig } from '../../../../packages/vite/src/util/CurrentConfig';
 import { meteorWorker } from '../plugin/Meteor';
-import Logger, { BuildLogger } from '../utilities/Logger';
+import Logger from '../utilities/Logger';
 import { type ResolvedMeteorViteConfig } from '../VitePluginSettings';
+import Instance from './Instance';
 
 export async function resolveMeteorViteConfig(
     inlineConfig: InlineConfig,
     command: 'build' | 'serve',
 ) {
+    Instance.printWelcomeMessage();
+    Instance.logger.info('Resolving Vite config...');
+    
     const { packageJson, projectRoot } = globalThis.MeteorViteRuntimeConfig;
-    BuildLogger.info(pc.green(`Vite version ${pc.cyan(version)} | Initializing Vite Dev Server...`));
     process.chdir(projectRoot);
     const userConfig: ResolvedMeteorViteConfig = await resolveConfig(inlineConfig, command);
     let serverBuildConfig: BuildEnvironmentOptions | undefined = undefined;
