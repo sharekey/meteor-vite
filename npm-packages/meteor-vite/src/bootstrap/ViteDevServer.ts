@@ -27,7 +27,7 @@ export async function initializeViteDevServer(): Promise<{ server: ViteDevServer
     const logger = createSimpleLogger(pc.cyan('[DEV]'));
     logger.success([
         `Vite ${pc.cyan(`v${viteVersion}`)}`,
-        pc.dim(`(MeteorVite ${pc.cyan(`v${version}`)})`)
+        pc.dim(`(MeteorVite ${pc.cyan(`v${version}`)} - ${pc.cyan(Meteor.release)})`)
     ].map((line) => pc.green(line)).join(' '));
     logger.success('Initializing Vite Dev Server...');
     const startTime = performance.now();
