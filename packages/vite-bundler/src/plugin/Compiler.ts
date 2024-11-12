@@ -77,4 +77,5 @@ interface FileData {
     path: string;
     data: string | PluginFileBuffer;
     sourcePath?: string;
+    sourceMap?: null | string;
 }
