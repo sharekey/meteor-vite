@@ -56,9 +56,13 @@ export async function buildForProduction() {
     }
     
     fileNames['server']?.forEach((filename) => {
-        addServerEntryImport({
-            importPath: Path.relative(Path.dirname(CurrentConfig.serverEntryModule), filename)
-        })
+        const importPath = Path.relative(Path.dirname(CurrentConfig.serverEntryModule), filename)
+        addServerEntryImport({ importPath, })
+        logger.debug('Added import to server entry', {
+            importPath,
+            filename,
+            entry: CurrentConfig.serverEntryModule,
+        });
     })
     
     return {
