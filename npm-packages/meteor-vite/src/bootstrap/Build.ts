@@ -18,7 +18,7 @@ export async function buildForProduction() {
     }
     
     const builder = await createBuilder(config);
-    const fileNames: Partial<Record<string, { filePath: string }[]>> = {};
+    const fileNames: Partial<Record<string, { filePath: string, originalFilePath: string }[]>> = {};
     
     for (const [context, environment] of Object.entries(builder.environments).reverse()) {
         if (context.toLowerCase() === 'ssr') {
@@ -37,13 +37,14 @@ export async function buildForProduction() {
         
         result.forEach(({ output }) => {
             output.forEach((chunk) => {
-                const filePath = Path.resolve(environment.config.build.outDir, chunk.fileName);
+                const originalFilePath = Path.resolve(environment.config.build.outDir, chunk.fileName);
+                const filePath = originalFilePath + CurrentConfig.bundleFileExtension;
                 
-                list.push({ filePath });
+                list.push({ filePath, originalFilePath });
                 
                 // Appending our own temporary file extension on output files
                 // to help Meteor identify files to be processed by our compiler plugin.
-                FS.renameSync(filePath, filePath + CurrentConfig.bundleFileExtension);
+                FS.renameSync(originalFilePath, filePath);
             });
         });
     }
