@@ -43,13 +43,6 @@ export async function buildForProduction() {
                 
                 list.push({ filePath, originalFilePath });
                 
-                
-                // Move manifest files into server assets.
-                if (originalFilePath.endsWith('manifest.json')) {
-                    FS.renameSync(originalFilePath, Path.resolve(outDir.server, chunk.fileName + ext));
-                    return;
-                }
-                
                 // Appending our own temporary file extension on output files
                 // to help Meteor identify files to be processed by our compiler plugin.
                 FS.renameSync(originalFilePath, filePath);
