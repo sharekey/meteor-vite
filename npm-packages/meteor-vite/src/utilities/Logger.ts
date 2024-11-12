@@ -53,3 +53,20 @@ export const BuildLogger = {
     error: (message: string, ...params: DefaultParams) => console.error(...formatMessage([pc.red(message), ...params])),
     warn: (message: string, ...params: DefaultParams) => console.warn(...formatMessage([pc.yellow(message), ...params])),
 }
+
+export function createSimpleLogger(label: string) {
+    const log = (log: typeof console.log, colorize: typeof pc.white) => {
+        return (...params: unknown[]) => log(`⚡  ${label} ${colorize('%s')}`, ...params);
+    }
+    
+    return {
+        info: log(console.info, pc.blue),
+        success: log(console.info, pc.green),
+        error: log(console.error, pc.red),
+        warn: log(console.warn, pc.yellow),
+        debug: log(
+            process.env.ENABLE_DEBUG_LOGS ? console.debug : () => {},
+            pc.dim
+        )
+    }
+}
