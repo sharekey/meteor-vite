@@ -1,8 +1,7 @@
 import FS from 'fs';
-import { Meteor } from 'meteor/meteor';
 import Path from 'node:path';
 import pc from 'picocolors';
-import type { InputOption, RollupOutput, RollupWatcher } from 'rollup';
+import type { RollupOutput, RollupWatcher } from 'rollup';
 import { createBuilder, version } from 'vite';
 import { CurrentConfig } from '../../../../packages/vite/src/util/CurrentConfig';
 import { MeteorViteError } from '../error/MeteorViteError';
@@ -22,16 +21,21 @@ export async function buildForProduction() {
     const fileNames: Partial<Record<string, { filePath: string }[]>> = {};
     
     for (const [context, environment] of Object.entries(builder.environments).reverse()) {
-        if (context.toLowerCase() === 'ssr') continue;
+        if (context.toLowerCase() === 'ssr') {
+            continue;
+        }
+        
         logger.info(`Preparing ${pc.yellow(context)} bundle...`);
-        const output = normalizeBuildOutput(
+        const list = fileNames[context] || [];
+        
+        const result = normalizeBuildOutput(
             // @ts-expect-error Todo: correct configuration issue that causes mismatches between types imported at the root of node_modules
             await builder.build(environment)
         );
-        const list = fileNames[context] || [];
+        
         fileNames[context] = list;
         
-        output.forEach(({ output }) => {
+        result.forEach(({ output }) => {
             output.forEach((chunk) => {
                 const filePath = Path.resolve(environment.config.build.outDir, chunk.fileName);
                 
