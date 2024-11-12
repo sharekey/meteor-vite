@@ -17,7 +17,7 @@ class CompilerPlugin {
                     path: file.getPathInPackage(),
                 },
                 basename: this._formatFilename(file.getBasename()),
-                path: this._formatFilename(file.getPathInPackage()),
+                path: Path.resolve(CurrentConfig.projectRoot, this._formatFilename(file.getPathInPackage())),
                 relativePath: Path.relative(this.config.distDir, this._formatFilename(file.getPathInPackage())),
                 arch: file.getArch(),
             }
@@ -27,8 +27,8 @@ class CompilerPlugin {
             
             if (fileMeta.arch.startsWith('os') && fileMeta.basename.endsWith('js')) {
                 file.addJavaScript({
-                    path: fileMeta.relativePath,
-                    data: file.getContentsAsBuffer(),
+                    path: fileMeta.path,
+                    data: file.getContentsAsString(),
                     sourcePath,
                 });
                 Logger.debug(`Added ${pc.yellow('JavaScript')} to ${pc.cyan(fileMeta.arch)}: ${fileMeta.basename}`);
