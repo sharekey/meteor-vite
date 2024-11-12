@@ -52,7 +52,7 @@ function meteorImportStubs(packages: {
                 
                 return {
                     contents: `
-                        const PackageStub = Package[${JSON.stringify(packageName)}];
+                        const PackageStub = Package?.[${JSON.stringify(packageName)}] || {};
                         ${stubFunction()}
                     `
                 }
