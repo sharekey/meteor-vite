@@ -3,7 +3,7 @@ import { Meteor } from 'meteor/meteor';
 import Path from 'node:path';
 import pc from 'picocolors';
 import type { InputOption, RollupOutput, RollupWatcher } from 'rollup';
-import { createBuilder, version } from 'vite';
+import { createBuilder, version, type ViteBuilder } from 'vite';
 import { CurrentConfig } from '../../../../packages/vite/src/util/CurrentConfig';
 import { MeteorViteError } from '../error/MeteorViteError';
 import { resolveMeteorViteConfig } from './Config';
@@ -38,7 +38,10 @@ export async function buildForProduction() {
     for (const [name, environment] of Object.entries(builder.environments).reverse()) {
         if (name.toLowerCase() === 'ssr') continue;
         logger.info(`Preparing ${pc.yellow(name)} bundle...`);
-        const output = normalizeBuildOutput(await builder.build(environment));
+        const output = normalizeBuildOutput(
+            // @ts-expect-error Todo: correct configuration issue that causes mismatches between types imported at the root of node_modules
+            await builder.build(environment)
+        );
         const list = fileNames[name] || [];
         fileNames[name] = list;
         
