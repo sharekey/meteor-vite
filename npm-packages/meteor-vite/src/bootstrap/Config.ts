@@ -28,13 +28,17 @@ export async function resolveMeteorViteConfig(
     process.chdir(projectRoot);
     const userConfig: ResolvedMeteorViteConfig = await resolveConfig(inlineConfig, command);
     let serverBuildConfig: BuildEnvironmentOptions | undefined = undefined;
+    const outDir = {
+        server: Path.join(CurrentConfig.tempDir, 'build', 'server'),
+        client: Path.join(CurrentConfig.tempDir, 'build', 'client'),
+    }
     
     prepareServerEntry();
     
     if (userConfig.meteor?.serverEntry) {
         injectServerEntryImport(packageJson.meteor.mainModule.server);
         serverBuildConfig = {
-            outDir: Path.join(CurrentConfig.tempDir, 'build', 'server'),
+            outDir: outDir.server,
             rollupOptions: {
                 input: userConfig.meteor.serverEntry,
             }
@@ -76,7 +80,7 @@ export async function resolveMeteorViteConfig(
             },
             client: {
                 build: {
-                    outDir: Path.join(CurrentConfig.tempDir, 'build', 'client'),
+                    outDir: outDir.client,
                     rollupOptions: {
                         input: userConfig.meteor?.clientEntry,
                     }
@@ -88,6 +92,7 @@ export async function resolveMeteorViteConfig(
     return {
         config,
         packageJson,
+        outDir,
     }
 }
 
