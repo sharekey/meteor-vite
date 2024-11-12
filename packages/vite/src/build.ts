@@ -17,8 +17,8 @@ class CompilerPlugin {
                     path: file.getPathInPackage(),
                 },
                 basename: this._formatFilename(file.getBasename()),
-                path: Path.resolve(CurrentConfig.projectRoot, this._formatFilename(file.getPathInPackage())),
-                relativePath: Path.relative(this.config.distDir, this._formatFilename(file.getPathInPackage())),
+                path: Path.relative(Path.join(CurrentConfig.tempDir, 'build'), this._formatFilename(file.getPathInPackage())),
+                relativePath: Path.relative(Path.join(CurrentConfig.tempDir, 'build'), this._formatFilename(file.getPathInPackage())),
                 arch: file.getArch(),
             }
             const sourcePath = file.getPathInPackage();
@@ -29,16 +29,17 @@ class CompilerPlugin {
                 file.addJavaScript({
                     path: fileMeta.path,
                     data: file.getContentsAsString(),
-                    sourcePath,
+                    sourcePath: fileMeta.relativePath,
                 });
                 Logger.debug(`Added ${pc.yellow('JavaScript')} to ${pc.cyan(fileMeta.arch)}: ${fileMeta.basename}`);
                 return;
             }
             
             file.addAsset({
-                path: fileMeta.relativePath,
+                path: fileMeta.path,
                 data: file.getContentsAsBuffer(),
-                sourcePath,
+                sourcePath: fileMeta.relativePath,
+                cacheable: true,
             });
             
             file.cacheable = true;
