@@ -40,6 +40,8 @@ export async function resolveMeteorViteConfig(
         prepareProductionServerProxyModule(userConfig.meteor.serverEntry);
         serverBuildConfig = {
             outDir: outDir.server,
+            manifest: false,
+            ssrManifest: false,
             minify: false,
             sourcemap: true,
             rollupOptions: {
