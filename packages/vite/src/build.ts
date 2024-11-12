@@ -40,6 +40,8 @@ class CompilerPlugin {
                 data: file.getContentsAsBuffer(),
                 sourcePath,
             });
+            
+            file.cacheable = true;
         })
     }
     protected _formatFilename(nameOrPath: string) {
