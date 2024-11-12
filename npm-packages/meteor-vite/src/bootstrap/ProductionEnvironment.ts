@@ -1,4 +1,4 @@
-export async function initializeViteProductionRuntime() {
+export async function initializeViteProductionEnvironment() {
     console.log('Fetching manifest...');
     console.log(await Assets.getTextAsync('manifest.json'));
     
