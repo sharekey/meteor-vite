@@ -2,14 +2,11 @@ import type * as _ from  'meteor/jorgenvatle:vite';
 import Path from 'path';
 import {
     createServer,
-    resolveConfig,
     type ViteDevServer,
-    createNodeDevEnvironment,
-    createServerHotChannel, createServerModuleRunner,
+    createServerModuleRunner,
 } from 'vite';
-import { meteorWorker } from '../plugin/Meteor';
-import type { ResolvedMeteorViteConfig } from '../VitePluginSettings';
 import { type WebApp as WebApp_, type WebAppInternals as WebAppInternals_ } from 'meteor/webapp';
+import { resolveMeteorViteConfig } from './Config';
 import Instance from './Instance';
 
 declare const WebApp: typeof WebApp_;
@@ -24,37 +21,13 @@ export async function initializeViteDevServer(): Promise<{ server: ViteDevServer
     Instance.printWelcomeMessage();
     Instance.logger.success('Initializing Vite Dev Server...');
     
-    const { packageJson, projectRoot } = globalThis.MeteorViteRuntimeConfig;
-    process.chdir(projectRoot);
-    let config: ResolvedMeteorViteConfig = await resolveConfig({
-        configFile: packageJson.meteor.vite?.configFile
+    const { projectRoot } = globalThis.MeteorViteRuntimeConfig;
+    const { config } = await resolveMeteorViteConfig({
+        mode: 'development',
     }, 'serve');
     
-    const server = await createServer({
-        base: '/vite',
-        appType: 'custom',
-        server: { middlewareMode: true, },
-        mode: 'development',
-        configFile: config.configFile,
-        plugins: [
-            meteorWorker({
-                meteorStubs: { packageJson }
-            })
-        ],
-        environments: {
-            node: {
-                dev: {
-                    createEnvironment(name, config) {
-                        return createNodeDevEnvironment(name, config, {
-                            hot: createServerHotChannel(),
-                        })
-                    }
-                }
-            }
-        }
-    });
+    const server = await createServer(config);
     
-    config = server.config;
     const modules = {
         clientEntry: Path.relative(projectRoot, config.meteor?.clientEntry || ''),
         serverEntry: config.meteor?.serverEntry && Path.resolve(config.meteor.serverEntry),
@@ -64,7 +37,7 @@ export async function initializeViteDevServer(): Promise<{ server: ViteDevServer
     
     // ⚡ [Server] Transform and load the Meteor main module using Vite.
     if (modules.serverEntry) {
-        const runner = createServerModuleRunner(server.environments.node);
+        const runner = createServerModuleRunner(server.environments.server);
         console.log(`Loading server entry: ${modules.serverEntry}`);
         
         // HMR listener to clean up side-effects from things like
