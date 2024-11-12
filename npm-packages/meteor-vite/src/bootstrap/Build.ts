@@ -50,7 +50,7 @@ export async function buildForProduction() {
     }
     
     fileNames['server']?.forEach((file) => {
-        if (!file.filePath.endsWith('js')) {
+        if (!file.originalFilePath.endsWith('js')) {
             return;
         }
         
