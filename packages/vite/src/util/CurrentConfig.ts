@@ -27,7 +27,3 @@ export const CurrentConfig = {
 } as const;
 
 globalThis.MeteorViteRuntimeConfig = CurrentConfig;
-
-console.debug({
-    CurrentConfig,
-})
