@@ -1,19 +1,16 @@
 import type * as _ from  'meteor/jorgenvatle:vite';
 import Path from 'path';
-import pc from 'picocolors';
 import {
     createServer,
     resolveConfig,
     type ViteDevServer,
-    version as viteVersion,
     createNodeDevEnvironment,
     createServerHotChannel, createServerModuleRunner,
 } from 'vite';
 import { meteorWorker } from '../plugin/Meteor';
-import { version } from '../utilities/Constants';
-import { BuildLogger, createSimpleLogger } from '../utilities/Logger';
 import type { ResolvedMeteorViteConfig } from '../VitePluginSettings';
 import { type WebApp as WebApp_, type WebAppInternals as WebAppInternals_ } from 'meteor/webapp';
+import Instance from './Instance';
 
 declare const WebApp: typeof WebApp_;
 declare const WebAppInternals: typeof WebAppInternals_;
@@ -24,13 +21,8 @@ declare const WebAppInternals: typeof WebAppInternals_;
  * starting Meteor in a development environment.
  */
 export async function initializeViteDevServer(): Promise<{ server: ViteDevServer, }> {
-    const logger = createSimpleLogger(pc.cyan('[DEV]'));
-    logger.success([
-        `Vite ${pc.cyan(`v${viteVersion}`)}`,
-        pc.dim(`(MeteorVite ${pc.cyan(`v${version}`)} - ${pc.cyan(Meteor.release)})`)
-    ].map((line) => pc.green(line)).join(' '));
-    logger.success('Initializing Vite Dev Server...');
-    const startTime = performance.now();
+    Instance.printWelcomeMessage();
+    Instance.logger.success('Initializing Vite Dev Server...');
     
     const { packageJson, projectRoot } = globalThis.MeteorViteRuntimeConfig;
     process.chdir(projectRoot);
@@ -99,19 +91,7 @@ export async function initializeViteDevServer(): Promise<{ server: ViteDevServer
         })
     }
     
+    Instance.printUrls(config);
     
-    const printUrl = (key: string, value: string) => [
-        pc.white(`> ${key}:`.padEnd(11, ' ')),
-        pc.cyan(value.replace(/(\d+)/, pc.bold(pc.cyanBright('$1')))),
-    ].join('')
-    
-    logger.success(`Successfully bound to Meteor's WebApp middleware`, [
-        '\n',
-        printUrl('Meteor', Meteor.absoluteUrl()),
-        printUrl('Vite', Meteor.absoluteUrl(config.base)),
-        '',
-        pc.cyan(`ready in ${Math.round(performance.now() - startTime).toLocaleString()}ms.`),
-        '',
-    ].join('\n    '));
     return { server }
 }
