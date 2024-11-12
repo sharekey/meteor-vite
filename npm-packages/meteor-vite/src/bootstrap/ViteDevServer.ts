@@ -5,11 +5,12 @@ import {
     createServer,
     resolveConfig,
     type ViteDevServer,
-    version,
+    version as viteVersion,
     createNodeDevEnvironment,
     createServerHotChannel, createServerModuleRunner,
 } from 'vite';
 import { meteorWorker } from '../plugin/Meteor';
+import { version } from '../utilities/Constants';
 import { BuildLogger, createSimpleLogger } from '../utilities/Logger';
 import type { ResolvedMeteorViteConfig } from '../VitePluginSettings';
 import { type WebApp as WebApp_, type WebAppInternals as WebAppInternals_ } from 'meteor/webapp';
@@ -24,7 +25,10 @@ declare const WebAppInternals: typeof WebAppInternals_;
  */
 export async function initializeViteDevServer(): Promise<{ server: ViteDevServer, }> {
     const logger = createSimpleLogger(pc.cyan('[DEV]'));
-    logger.success(`Vite ${pc.cyan(`v${version}`)}`);
+    logger.success([
+        `Vite ${pc.cyan(`v${viteVersion}`)}`,
+        pc.dim(`(MeteorVite ${pc.cyan(`v${version}`)})`)
+    ].map((line) => pc.green(line)).join(' '));
     logger.success('Initializing Vite Dev Server...');
     const startTime = performance.now();
     
