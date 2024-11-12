@@ -10,7 +10,7 @@ import { resolveMeteorViteConfig } from './Config';
 import Instance from './Instance';
 
 export async function buildForProduction() {
-    const { config } = await resolveMeteorViteConfig({ mode: 'production' }, 'build');
+    const { config, outDir } = await resolveMeteorViteConfig({ mode: 'production' }, 'build');
     const { logger } = Instance;
     logger.info(`Building with Vite v${version}...`);
     
@@ -56,7 +56,7 @@ export async function buildForProduction() {
     }
     
     fileNames['server']?.forEach((filename) => {
-        const importPath = Path.relative(Path.dirname(CurrentConfig.serverEntryModule), filename)
+        const importPath = Path.relative(Path.dirname(CurrentConfig.serverEntryModule), Path.join(outDir.server, filename));
         addServerEntryImport({ importPath, })
         logger.debug('Added import to server entry', {
             importPath,
@@ -71,10 +71,7 @@ export async function buildForProduction() {
             client: config.meteor.clientEntry,
             server: config.meteor.serverEntry,
         },
-        outDir: {
-            client: config.environments.client.build.outDir,
-            server: config.environments.server.build?.outDir,
-        }
+        outDir,
     }
 }
 
