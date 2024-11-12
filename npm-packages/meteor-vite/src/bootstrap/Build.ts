@@ -3,7 +3,7 @@ import { Meteor } from 'meteor/meteor';
 import Path from 'node:path';
 import pc from 'picocolors';
 import type { InputOption, RollupOutput, RollupWatcher } from 'rollup';
-import { createBuilder, version, type ViteBuilder } from 'vite';
+import { createBuilder, version } from 'vite';
 import { CurrentConfig } from '../../../../packages/vite/src/util/CurrentConfig';
 import { MeteorViteError } from '../error/MeteorViteError';
 import { resolveMeteorViteConfig } from './Config';
