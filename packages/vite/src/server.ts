@@ -1,3 +1,4 @@
+import { Meteor } from 'meteor/meteor';
 import { runBootstrapScript } from './util/Bootstrap';
 import { CurrentConfig } from './util/CurrentConfig';
 import Logger from './util/Logger';
@@ -9,6 +10,14 @@ if (CurrentConfig.mode !== 'production') {
     }  catch (error) {
         Logger.warn('Failed to start Vite dev server!');
         console.error(error);
+    }
+} else if (Meteor.isProduction) {
+    try {
+        await runBootstrapScript('initializeViteProductionEnvironment');
+        Logger.success('Production environment initialized');
+    } catch (error) {
+        Logger.warn('Failed to initialize production environment!');
+        throw error;
     }
 }
 
