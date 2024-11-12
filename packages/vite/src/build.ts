@@ -27,7 +27,7 @@ class CompilerPlugin {
             
             if (fileMeta.arch.startsWith('os') && fileMeta.basename.endsWith('js')) {
                 file.addJavaScript({
-                    path: fileMeta.relativePath,
+                    path: fileMeta.relativePath.replace(/\.js$/, '.mjs'),
                     data: file.getContentsAsBuffer(),
                     sourcePath,
                 });
