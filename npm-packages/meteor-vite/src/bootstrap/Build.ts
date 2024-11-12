@@ -1,4 +1,5 @@
 import FS from 'fs';
+import { Meteor } from 'meteor/meteor';
 import Path from 'node:path';
 import pc from 'picocolors';
 import type { InputOption } from 'rollup';
@@ -10,7 +11,7 @@ import { resolveMeteorViteConfig } from './Config';
 
 export async function buildForProduction() {
     Logger.info(`Building with Vite v${version}...`);
-    const { config, packageJson } = await resolveMeteorViteConfig({ mode: 'production' }, 'build');
+    const { config } = await resolveMeteorViteConfig({ mode: 'production' }, 'build');
     
     if (!config.meteor?.clientEntry) {
         throw new MeteorViteError('No client entrypoint specified in Vite config!')
@@ -54,9 +55,8 @@ export async function buildForProduction() {
     }
     
     fileNames['server']?.forEach((filename) => {
-        const sourceFile = packageJson.meteor.mainModule.server;
         addServerEntryImport({
-            importPath: Path.relative(sourceFile, filename)
+            importPath: Path.relative(Path.dirname(CurrentConfig.serverEntryModule), filename)
         })
     })
     
