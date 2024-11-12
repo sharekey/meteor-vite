@@ -6,6 +6,7 @@ import { EsbuildPluginMeteorStubs } from '../../tsup.config';
 export default defineConfig([
     // Internal entry points
     {
+        name: 'internals',
         entry: [
             './src/bin/worker.ts',
             './src/client/index.ts',
@@ -32,6 +33,7 @@ export default defineConfig([
     
     // Plugin entry
     {
+        name: 'plugin',
         entry: [
             './src/plugin/index.ts',
         ],
