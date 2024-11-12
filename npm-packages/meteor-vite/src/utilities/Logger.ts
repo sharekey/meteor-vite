@@ -54,7 +54,7 @@ export const BuildLogger = {
     warn: (message: string, ...params: DefaultParams) => console.warn(...formatMessage([pc.yellow(message), ...params])),
 }
 
-export function createSimpleLogger(label: string) {
+export function createSimpleLogger(label: string): SimpleLogger {
     const log = (log: typeof console.log, colorize: typeof pc.white) => {
         return (...params: unknown[]) => log(`⚡  ${label} ${colorize('%s')}`, ...params);
     }
@@ -70,3 +70,5 @@ export function createSimpleLogger(label: string) {
         )
     }
 }
+
+export type SimpleLogger = Record<'info' | 'success' | 'warn' | 'debug' | 'error', Function>;
