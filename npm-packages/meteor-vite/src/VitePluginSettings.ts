@@ -248,37 +248,3 @@ export type ResolvedPluginSettings = MakeRequired<
 export interface ResolvedMeteorViteConfig extends ResolvedConfig {
     meteor?: ResolvedPluginSettings;
 }
-
-
-export async function resolveMeteorViteConfig(
-    inlineConfig: InlineConfig,
-    command: 'build' | 'serve',
-    defaultMode?: string,
-    defaultNodeEnv?: string,
-    isPreview?: boolean
-): Promise<{
-    config: ResolvedMeteorViteConfig,
-    buildConfig: {
-        tempDir: string;
-        outDir: {
-            server: string;
-            client: string;
-        },
-    }
-}> {
-    const config: ResolvedMeteorViteConfig = await resolveConfig(inlineConfig, command, defaultMode, defaultNodeEnv, isPreview);
-    const tempDir = config.meteor?.tempDir || '_vite-bundle';
-    
-    const buildConfig = {
-        tempDir,
-        outDir: {
-            server: Path.join(tempDir, 'server', 'build'),
-            client: Path.join(tempDir, 'client', 'build'),
-        }
-    }
-    
-    return {
-        config,
-        buildConfig,
-    }
-}
