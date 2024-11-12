@@ -17,6 +17,11 @@ if (CurrentConfig.mode !== 'production') {
         Logger.success('Production environment initialized');
     } catch (error) {
         Logger.warn('Failed to initialize production environment!');
+        
+        // The current version of Meteor has a tendency to swallow errors thrown by
+        // modules using top-level-await. So we're logging as well as throwing for good measure.
+        console.error(error);
+        
         throw error;
     }
 }
