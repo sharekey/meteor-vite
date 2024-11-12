@@ -23,7 +23,10 @@ export default defineConfig(() => ({
 
 export const EsbuildPluginMeteorStubs = meteorImportStubs({
     'meteor': () => 'export const Meteor = PackageStub.Meteor || globalThis.Meteor',
-    'webapp': () => 'export const WebApp = PackageStub.WebApp || globalThis.WebApp',
+    'webapp': () => [
+        'export const WebApp = PackageStub.WebApp || globalThis.WebApp',
+        'export const WebAppInternals = PackageStub.WebAppInternals || globalThis.WebAppInternals',
+    ].join('\n'),
 })
 
 function meteorImportStubs(packages: {
