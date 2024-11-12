@@ -14,7 +14,7 @@ export default defineConfig({
     platform: 'node',
     sourcemap: true,
     format: 'esm',
-    plugins: [
+    esbuildPlugins: [
         meteorImportStubs({
             'meteor': () => 'export const Meteor = PackageStub.Meteor || globalThis.Meteor',
             'webapp': () => 'export const WebApp = PackageStub.WebApp || globalThis.WebApp',
