@@ -38,13 +38,15 @@ export async function buildForProduction() {
         result.forEach(({ output }) => {
             output.forEach((chunk) => {
                 const originalFilePath = Path.resolve(environment.config.build.outDir, chunk.fileName);
-                const filePath = originalFilePath + CurrentConfig.bundleFileExtension;
+                const ext = `.${CurrentConfig.bundleFileExtension}`;
+                const filePath = originalFilePath + ext;
                 
                 list.push({ filePath, originalFilePath });
                 
                 // Appending our own temporary file extension on output files
                 // to help Meteor identify files to be processed by our compiler plugin.
                 FS.renameSync(originalFilePath, filePath);
+                logger.debug(`Renamed file: ${filePath.replace(ext, pc.yellow(ext))}`);
             });
         });
     }
