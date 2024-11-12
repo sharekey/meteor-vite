@@ -1,6 +1,7 @@
 import pc from 'picocolors';
-import { defineConfig } from 'tsup';
-import type { Plugin } from 'esbuild';
+import { defineConfig, type Options } from 'tsup';
+
+type Plugin = Required<Options>['esbuildPlugins'][number];
 
 export default defineConfig({
     entry: {
@@ -51,5 +52,5 @@ function meteorImportStubs(packages: {
                 }
             })
         }
-    }
+    } satisfies Plugin;
 }
