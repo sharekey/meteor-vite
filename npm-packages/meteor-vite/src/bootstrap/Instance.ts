@@ -18,7 +18,7 @@ export default new class Instance {
         ].map((line) => pc.green(line)).join(' '));
     }
     
-    public printUrls(config: ResolvedMeteorViteConfig) {
+    public printUrls(config: Pick<ResolvedMeteorViteConfig, 'base'>) {
         const printUrl = (key: string, value: string) => [
             pc.white(`> ${key}:`.padEnd(11, ' ')),
             pc.cyan(value.replace(/(\d+)/, pc.bold(pc.cyanBright('$1')))),
