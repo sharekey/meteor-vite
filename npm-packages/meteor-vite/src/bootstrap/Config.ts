@@ -109,7 +109,7 @@ function prepareServerEntry() {
 function injectServerEntryImport() {
     const mainModule = CurrentConfig.serverMainModule;
     const originalContent = FS.readFileSync(mainModule, 'utf-8');
-    const importPath = Path.relative(mainModule, CurrentConfig.serverEntryModule);
+    const importPath = Path.relative(Path.dirname(mainModule), CurrentConfig.serverEntryModule);
     
     if (originalContent.includes(importPath)) {
         return;
