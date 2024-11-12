@@ -37,6 +37,7 @@ export async function resolveMeteorViteConfig(
     
     if (userConfig.meteor?.serverEntry) {
         injectServerEntryImport(packageJson.meteor.mainModule.server);
+        prepareProductionServerProxyModule(userConfig.meteor.serverEntry);
         serverBuildConfig = {
             outDir: outDir.server,
             ssrManifest: `manifest.ssr.json`,
@@ -154,6 +155,13 @@ function injectServerEntryImport(mainModule: string | undefined) {
         `import ${JSON.stringify(importPath)}`,
         '/** End of vite-bundler auto-imports **/',
         originalContent,
+    ].join('\n'));
+}
+
+function prepareProductionServerProxyModule(serverEntry: string) {
+    FS.writeFileSync(CurrentConfig.serverProductionProxyModule, [
+        `import "meteor-vite/bootstrap/ProductionEnvironment"`,
+        `import ${JSON.stringify(Path.resolve(CurrentConfig.projectRoot, serverEntry))}`,
     ].join('\n'));
 }
 

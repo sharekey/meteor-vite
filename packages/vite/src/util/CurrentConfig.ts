@@ -24,6 +24,7 @@ export const CurrentConfig = {
     bundleFileExtension,
     tempDir,
     serverEntryModule: Path.join(tempDir, 'server', '_entry.mjs'),
+    serverProductionProxyModule: Path.join(tempDir, 'server', '_env.mjs'),
 } as const;
 
 globalThis.MeteorViteRuntimeConfig = CurrentConfig;
