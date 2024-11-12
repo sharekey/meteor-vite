@@ -14,7 +14,7 @@ function guessCwd () {
 const projectRoot = guessCwd();
 const configFile = Path.resolve(Path.join(projectRoot, 'vite.config.ts'));
 const tempDir = Path.join(projectRoot, '_vite-bundle');
-const bundleFileExtension = '_vite-bundle.tmp';
+const bundleFileExtension = '_vite';
 
 process.env.METEOR_PROJECT_ROOT = projectRoot;
 
