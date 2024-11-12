@@ -12,6 +12,7 @@ export default defineConfig([
             './src/client/index.ts',
             './src/bootstrap/index.ts',
             './src/bootstrap/HMRServerCleanup.ts',
+            './src/bootstrap/ProductionEnvironment.ts',
         ],
         outDir: 'dist',
         format: 'esm',
