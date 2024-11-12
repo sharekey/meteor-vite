@@ -41,6 +41,8 @@ export async function resolveMeteorViteConfig(
             outDir: outDir.server,
             ssrManifest: `manifest.ssr.json`,
             manifest: `manifest.json`,
+            minify: false,
+            sourcemap: true,
             rollupOptions: {
                 input: userConfig.meteor.serverEntry,
                 output: {
