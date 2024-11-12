@@ -19,10 +19,21 @@ class CompilerPlugin {
                 basename: this._formatFilename(file.getBasename()),
                 path: this._formatFilename(file.getPathInPackage()),
                 relativePath: Path.relative(this.config.distDir, this._formatFilename(file.getPathInPackage())),
+                arch: file.getArch(),
             }
             const sourcePath = file.getPathInPackage();
             
             Logger.debug(`[${pc.yellow(file.getArch())}] Processing: ${fileMeta.basename}`, { fileMeta });
+            
+            if (fileMeta.arch.startsWith('os') && fileMeta.basename.endsWith('js')) {
+                file.addJavaScript({
+                    path: fileMeta.relativePath,
+                    data: file.getContentsAsBuffer(),
+                    sourcePath,
+                });
+                Logger.debug(`Added ${pc.yellow('JavaScript')} to ${pc.cyan(fileMeta.arch)}: ${fileMeta.basename}`);
+                return;
+            }
             
             file.addAsset({
                 path: fileMeta.relativePath,
