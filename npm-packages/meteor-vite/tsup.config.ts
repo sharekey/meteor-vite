@@ -1,6 +1,7 @@
 import FS from 'fs';
 import Path from 'path';
 import { defineConfig } from 'tsup';
+import { EsbuildPluginMeteorStubs } from '../../tsup.config';
 
 export default defineConfig([
     // Internal entry points
@@ -22,7 +23,11 @@ export default defineConfig([
             } catch (error) {
                 console.warn(error);
             }
-        }
+        },
+        noExternal: ['meteor'],
+        esbuildPlugins: [
+            EsbuildPluginMeteorStubs,
+        ]
     },
     
     // Plugin entry
