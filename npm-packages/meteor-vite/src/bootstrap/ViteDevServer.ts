@@ -96,7 +96,7 @@ export async function initializeViteDevServer(): Promise<{ server: ViteDevServer
     }
     
     
-    logger.success(`Attached to Meteor WebApp`, [
+    logger.success(`Successfully bound to Meteor's WebApp middleware`, [
         '\n',
         `${pc.white('> Meteor:'.padEnd(10, ' '))} ${pc.cyan(Meteor.absoluteUrl())}`,
         `${pc.white('> Vite:'.padEnd(10, ' '))} ${pc.cyan(Meteor.absoluteUrl(config.base))}`,
