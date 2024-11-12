@@ -41,7 +41,12 @@ export async function resolveMeteorViteConfig(
             outDir: outDir.server,
             rollupOptions: {
                 input: userConfig.meteor.serverEntry,
-            }
+                output: {
+                    // Unfortunately Meteor still doesn't support
+                    // ESM within the final server bundle.
+                    format: 'cjs',
+                }
+            },
         }
     }
     
