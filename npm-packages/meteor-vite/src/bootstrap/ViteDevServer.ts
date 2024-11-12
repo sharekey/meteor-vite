@@ -1,16 +1,13 @@
 import type * as _ from  'meteor/jorgenvatle:vite';
+import { WebApp, WebAppInternals } from 'meteor/webapp';
 import Path from 'path';
 import {
     createServer,
     type ViteDevServer,
     createServerModuleRunner,
 } from 'vite';
-import { type WebApp as WebApp_, type WebAppInternals as WebAppInternals_ } from 'meteor/webapp';
 import { resolveMeteorViteConfig } from './Config';
 import Instance from './Instance';
-
-declare const WebApp: typeof WebApp_;
-declare const WebAppInternals: typeof WebAppInternals_;
 
 /**
  * Helper function for Meteor to launch the Vite dev server within a virtual context.
