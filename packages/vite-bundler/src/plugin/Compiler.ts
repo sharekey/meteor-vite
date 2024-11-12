@@ -71,6 +71,7 @@ export interface BuildPluginFile {
     addStylesheet(data: FileData): void;
     addJavaScript(data: FileData): void;
     getArch(): string;
+    cacheable?: boolean;
 }
 interface FileData {
     path: string;
