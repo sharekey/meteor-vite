@@ -45,6 +45,10 @@ export async function buildForProduction() {
     }
     
     fileNames['server']?.forEach((file) => {
+        if (!file.filePath.endsWith('js')) {
+            return;
+        }
+        
         const summary = addServerEntryImport(file);
         logger.debug('Added import to server entry', summary);
     })
