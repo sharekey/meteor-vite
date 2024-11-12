@@ -35,10 +35,14 @@ export async function resolveMeteorViteConfig(
     
     prepareServerEntry();
     
+    const { bundleFileExtension: ext } = CurrentConfig;
+    
     if (userConfig.meteor?.serverEntry) {
         injectServerEntryImport(packageJson.meteor.mainModule.server);
         serverBuildConfig = {
             outDir: outDir.server,
+            ssrManifest: `manifest.ssr.json.${ext}`,
+            manifest: `manifest.json${ext}`,
             rollupOptions: {
                 input: userConfig.meteor.serverEntry,
                 output: {
@@ -50,7 +54,6 @@ export async function resolveMeteorViteConfig(
         }
     }
     
-    const { bundleFileExtension: ext } = CurrentConfig;
     const config = {
         ...inlineConfig,
         meteor: userConfig.meteor,
@@ -68,7 +71,7 @@ export async function resolveMeteorViteConfig(
                 output: {
                     assetFileNames: `assets/[name]-[hash][extname].${ext}`,
                     chunkFileNames: `chunk/[name]-[hash].js.${ext}`,
-                    entryFileNames: `entry/[name]-[hash].js.${ext}`
+                    entryFileNames: `entry/[name]-[hash].js.${ext}`,
                 }
             }
         },
