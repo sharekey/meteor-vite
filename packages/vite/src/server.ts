@@ -14,6 +14,7 @@ if (CurrentConfig.mode !== 'production') {
 } else if (Meteor.isProduction) {
     // Todo: Maybe this could just be injected into the production server bundle.
     try {
+        globalThis.Assets = Assets;
         await runBootstrapScript('initializeViteProductionEnvironment');
         Logger.success('Production environment initialized');
     } catch (error) {
