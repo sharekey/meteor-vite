@@ -56,13 +56,10 @@ export async function buildForProduction() {
     }
     
     fileNames['server']?.forEach((filename) => {
-        const importPath = Path.resolve(outDir.server, filename);
-        addServerEntryImport({ importPath })
-        logger.debug('Added import to server entry', {
-            importPath,
-            filename,
-            entry: CurrentConfig.serverEntryModule,
+        const summary = addServerEntryImport({
+            filePath: Path.resolve(outDir.server, filename)
         });
+        logger.debug('Added import to server entry', summary);
     })
     
     return {
@@ -76,12 +73,22 @@ export async function buildForProduction() {
 }
 
 
-function addServerEntryImport({ importPath }: {
-    importPath: string,
+function addServerEntryImport({ filePath }: {
+    filePath: string,
 }) {
-    const originalContent = FS.readFileSync(CurrentConfig.serverEntryModule, 'utf-8');
+    const { serverEntryModule } = CurrentConfig;
+    const originalContent = FS.readFileSync(serverEntryModule, 'utf-8');
+    const importPath = Path.relative(Path.dirname(serverEntryModule), filePath);
+    
     if (originalContent.includes(importPath)) {
         return;
     }
-    FS.writeFileSync(CurrentConfig.serverEntryModule, [`import ${JSON.stringify(importPath)}`, originalContent].join('\n'));
+    
+    FS.writeFileSync(serverEntryModule, [`import ${JSON.stringify(importPath)}`, originalContent].join('\n'));
+    
+    return {
+        importPath,
+        filePath,
+        serverEntryModule,
+    }
 }
