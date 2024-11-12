@@ -1,3 +1,4 @@
+import { Meteor } from 'meteor/meteor';
 import pc from 'picocolors';
 import { version as viteVersion } from 'vite';
 import { version } from '../utilities/Constants';
