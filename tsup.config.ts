@@ -3,7 +3,7 @@ import { defineConfig, type Options } from 'tsup';
 
 type Plugin = Required<Options>['esbuildPlugins'][number];
 
-export default defineConfig({
+export default defineConfig(() => ({
     entry: {
         server: './packages/vite/src/server.ts',
         build: './packages/vite/src/build.ts',
@@ -16,11 +16,13 @@ export default defineConfig({
     sourcemap: true,
     format: 'esm',
     esbuildPlugins: [
-        meteorImportStubs({
-            'meteor': () => 'export const Meteor = PackageStub.Meteor || globalThis.Meteor',
-            'webapp': () => 'export const WebApp = PackageStub.WebApp || globalThis.WebApp',
-        })
+        EsbuildPluginMeteorStubs
     ]
+}))
+
+export const EsbuildPluginMeteorStubs = meteorImportStubs({
+    'meteor': () => 'export const Meteor = PackageStub.Meteor || globalThis.Meteor',
+    'webapp': () => 'export const WebApp = PackageStub.WebApp || globalThis.WebApp',
 })
 
 function meteorImportStubs(packages: {
