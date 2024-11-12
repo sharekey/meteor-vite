@@ -21,15 +21,15 @@ export async function buildForProduction() {
     const builder = await createBuilder(config);
     const fileNames: Partial<Record<string, { filePath: string }[]>> = {};
     
-    for (const [name, environment] of Object.entries(builder.environments).reverse()) {
-        if (name.toLowerCase() === 'ssr') continue;
-        logger.info(`Preparing ${pc.yellow(name)} bundle...`);
+    for (const [context, environment] of Object.entries(builder.environments).reverse()) {
+        if (context.toLowerCase() === 'ssr') continue;
+        logger.info(`Preparing ${pc.yellow(context)} bundle...`);
         const output = normalizeBuildOutput(
             // @ts-expect-error Todo: correct configuration issue that causes mismatches between types imported at the root of node_modules
             await builder.build(environment)
         );
-        const list = fileNames[name] || [];
-        fileNames[name] = list;
+        const list = fileNames[context] || [];
+        fileNames[context] = list;
         
         output.forEach(({ output }) => {
             output.forEach((chunk) => {
@@ -40,7 +40,7 @@ export async function buildForProduction() {
                 // Appending our own temporary file extension on output files
                 // to help Meteor identify files to be processed by our compiler plugin.
                 FS.renameSync(filePath, filePath + CurrentConfig.bundleFileExtension);
-            })
+            });
         });
     }
     
