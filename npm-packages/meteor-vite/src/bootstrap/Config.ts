@@ -45,7 +45,7 @@ export async function resolveMeteorViteConfig(
             minify: false,
             sourcemap: true,
             rollupOptions: {
-                input: userConfig.meteor.serverEntry,
+                input: CurrentConfig.serverProductionProxyModule,
                 output: {
                     // Unfortunately Meteor still doesn't support
                     // ESM within the final server bundle.
