@@ -108,6 +108,6 @@ export async function initializeViteDevServer(): Promise<{ server: ViteDevServer
         '',
         pc.cyan(`ready in ${Math.round(performance.now() - startTime).toLocaleString()}ms.`),
         '',
-    ].join('\n   '));
+    ].join('\n    '));
     return { server }
 }
