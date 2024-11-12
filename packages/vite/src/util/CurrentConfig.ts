@@ -1,5 +1,3 @@
-import FS from 'fs';
-import type { ProjectJson } from 'meteor-vite/VitePluginSettings';
 import Path from 'path';
 
 function guessCwd () {
