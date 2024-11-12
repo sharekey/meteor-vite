@@ -96,10 +96,15 @@ export async function initializeViteDevServer(): Promise<{ server: ViteDevServer
     }
     
     
+    const printUrl = (key: string, value: string) => [
+        pc.white(`> ${key}:`.padEnd(11, ' ')),
+        pc.cyan(value.replace(/(\d+)/, pc.bold(pc.cyanBright('$1')))),
+    ].join('')
+    
     logger.success(`Successfully bound to Meteor's WebApp middleware`, [
         '\n',
-        `${pc.white('> Meteor:'.padEnd(10, ' '))} ${pc.cyan(Meteor.absoluteUrl())}`,
-        `${pc.white('> Vite:'.padEnd(10, ' '))} ${pc.cyan(Meteor.absoluteUrl(config.base))}`,
+        printUrl('Meteor', Meteor.absoluteUrl()),
+        printUrl('Vite', Meteor.absoluteUrl(config.base)),
         '',
         pc.cyan(`ready in ${Math.round(performance.now() - startTime).toLocaleString()}ms.`),
         '',
