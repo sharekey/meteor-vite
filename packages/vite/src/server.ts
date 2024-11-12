@@ -25,7 +25,7 @@ if (CurrentConfig.mode !== 'production') {
          *
          * To be as safe as possible, we're going to forcefully terminate the Meteor
          * process instead of throwing to avoid an unfortunate situation where a
-         * deployment might report Meteor as healthy when it really is not.
+         * deployment monitor might report Meteor as healthy when it really is not.
          */
         console.error(error);
         process.exit(1);
