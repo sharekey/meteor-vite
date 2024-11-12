@@ -1,4 +1,3 @@
-import { Meteor } from 'meteor/meteor';
 import { runBootstrapScript } from './util/Bootstrap';
 import { CurrentConfig } from './util/CurrentConfig';
 import Logger from './util/Logger';
