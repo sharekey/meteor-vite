@@ -18,22 +18,8 @@ export async function buildForProduction() {
         throw new MeteorViteError('No client entrypoint specified in Vite config!')
     }
     
-    const input: InputOption = {
-        client: config.meteor.clientEntry,
-    };
-    
-    
-    const tempDir = config.meteor.tempDir;
-    if (config.meteor.serverEntry) {
-        input.server = config.meteor.serverEntry;
-    }
-    
-    if (!tempDir) {
-        throw new Meteor.Error('no-output-directory', 'Missing output directory to build server and client to');
-    }
-    
     const builder = await createBuilder(config);
-    const fileNames: Partial<Record<string, string[]>> = {};
+    const fileNames: Partial<Record<string, { filePath: string }[]>> = {};
     
     for (const [name, environment] of Object.entries(builder.environments).reverse()) {
         if (name.toLowerCase() === 'ssr') continue;
@@ -46,14 +32,20 @@ export async function buildForProduction() {
         fileNames[name] = list;
         
         output.forEach(({ output }) => {
-            output.forEach((chunk) => list.push(chunk.fileName))
+            output.forEach((chunk) => {
+                const filePath = Path.resolve(environment.config.build.outDir, chunk.fileName);
+                
+                list.push({ filePath });
+                
+                // Appending our own temporary file extension on output files
+                // to help Meteor identify files to be processed by our compiler plugin.
+                FS.renameSync(filePath, filePath + CurrentConfig.bundleFileExtension);
+            })
         });
     }
     
-    fileNames['server']?.forEach((filename) => {
-        const summary = addServerEntryImport({
-            filePath: Path.resolve(outDir.server, filename)
-        });
+    fileNames['server']?.forEach((file) => {
+        const summary = addServerEntryImport(file);
         logger.debug('Added import to server entry', summary);
     })
     
