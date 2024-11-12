@@ -2,7 +2,7 @@ import FS from 'fs';
 import { Meteor } from 'meteor/meteor';
 import Path from 'node:path';
 import pc from 'picocolors';
-import type { InputOption } from 'rollup';
+import type { InputOption, RollupOutput, RollupWatcher } from 'rollup';
 import { createBuilder, version } from 'vite';
 import { CurrentConfig } from '../../../../packages/vite/src/util/CurrentConfig';
 import { MeteorViteError } from '../error/MeteorViteError';
@@ -38,19 +38,11 @@ export async function buildForProduction() {
     for (const [name, environment] of Object.entries(builder.environments).reverse()) {
         if (name.toLowerCase() === 'ssr') continue;
         logger.info(`Preparing ${pc.yellow(name)} bundle...`);
-        const result = await builder.build(environment);
-        if ('close' in result) {
-            throw new Error('Unexpected build output!');
-        }
+        const output = normalizeBuildOutput(await builder.build(environment));
         const list = fileNames[name] || [];
         fileNames[name] = list;
         
-        if (!Array.isArray(result)) {
-            result.output.forEach((chunk) => list.push(chunk.fileName));
-            continue;
-        }
-        
-        result.forEach(({ output }) => {
+        output.forEach(({ output }) => {
             output.forEach((chunk) => list.push(chunk.fileName))
         });
     }
@@ -70,6 +62,20 @@ export async function buildForProduction() {
         },
         outDir,
     }
+}
+
+function normalizeBuildOutput(output:  RollupOutput | RollupOutput[] | RollupWatcher): RollupOutput[] {
+    if ('close' in output) {
+        throw new MeteorViteError('Seems like build result yielded a watcher instance.', {
+            subtitle: `Make sure you don't have a hardcoded 'watch' setting defined in your Vite config.`
+        });
+    }
+    
+    if (Array.isArray(output)) {
+        return output;
+    }
+    
+    return [output];
 }
 
 
