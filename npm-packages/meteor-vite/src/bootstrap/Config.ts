@@ -28,10 +28,7 @@ export async function resolveMeteorViteConfig(
     process.chdir(projectRoot);
     const userConfig: ResolvedMeteorViteConfig = await resolveConfig(inlineConfig, command);
     let serverBuildConfig: BuildEnvironmentOptions | undefined = undefined;
-    const outDir = {
-        server: Path.join(CurrentConfig.tempDir, 'build', 'server'),
-        client: Path.join(CurrentConfig.tempDir, 'build', 'client'),
-    }
+    const outDir = Path.join(CurrentConfig.tempDir, 'dist');
     
     prepareServerEntry();
     
@@ -39,13 +36,14 @@ export async function resolveMeteorViteConfig(
         injectServerEntryImport(packageJson.meteor.mainModule.server);
         prepareProductionServerProxyModule(userConfig.meteor.serverEntry);
         serverBuildConfig = {
-            outDir: outDir.server,
             manifest: false,
             ssrManifest: false,
             minify: false,
             sourcemap: true,
             rollupOptions: {
-                input: CurrentConfig.serverProductionProxyModule,
+                input: {
+                    'server/main': userConfig.meteor.serverEntry,
+                },
                 output: {
                     // Unfortunately Meteor still doesn't support
                     // ESM within the final server bundle.
@@ -53,6 +51,10 @@ export async function resolveMeteorViteConfig(
                 }
             },
         }
+    }
+    
+    if (!userConfig.meteor?.clientEntry) {
+        throw new MeteorViteError('Cannot build application. You need to specify a clientEntry in your Vite config!');
     }
     
     const config = {
@@ -68,15 +70,18 @@ export async function resolveMeteorViteConfig(
             })
         ],
         build: {
-            outDir: outDir.client,
+            outDir,
+            emptyOutDir: false,
             ssrManifest: `ssr.manifest.json`,
             manifest: `client.manifest.json`,
             rollupOptions: {
-                input: userConfig.meteor?.clientEntry,
+                input: {
+                    'client/main': userConfig.meteor.clientEntry,
+                },
                 output: {
                     assetFileNames: `assets/[name]-[hash][extname]`,
                     chunkFileNames: `chunk/[name]-[hash].js`,
-                    entryFileNames: `entry/[name]-[hash].js`,
+                    entryFileNames: `entry/[name].js`,
                 }
             }
         },
