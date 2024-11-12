@@ -40,8 +40,6 @@ export async function resolveMeteorViteConfig(
         prepareProductionServerProxyModule(userConfig.meteor.serverEntry);
         serverBuildConfig = {
             outDir: outDir.server,
-            ssrManifest: `manifest.ssr.json`,
-            manifest: `manifest.json`,
             minify: false,
             sourcemap: true,
             rollupOptions: {
@@ -68,6 +66,8 @@ export async function resolveMeteorViteConfig(
             })
         ],
         build: {
+            ssrManifest: `ssr.manifest.json`,
+            manifest: `client.manifest.json`,
             rollupOptions: {
                 output: {
                     assetFileNames: `assets/[name]-[hash][extname]`,
