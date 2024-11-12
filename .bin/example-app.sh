@@ -27,6 +27,7 @@ METEOR_LOCAL_DIR_ORIGINAL="$APP_DIR/.meteor/local"
 METEOR_LOCAL_DIR_ROOT="/tmp/.meteor-local/meteor-vite/examples"
 METEOR_LOCAL_DIR="$METEOR_LOCAL_DIR_ROOT/$app"
 
+export SERVER_NODE_OPTIONS="--enable-source-maps"
 export METEOR_PACKAGE_DIRS="$PWD/packages:$PWD/test-packages/atmosphere"
 export METEOR_VITE_TSUP_BUILD_WATCHER="${METEOR_VITE_TSUP_BUILD_WATCHER:-true}"
 
