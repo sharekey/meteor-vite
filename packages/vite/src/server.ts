@@ -12,6 +12,7 @@ if (CurrentConfig.mode !== 'production') {
         console.error(error);
     }
 } else if (Meteor.isProduction) {
+    // Todo: Maybe this could just be injected into the production server bundle.
     try {
         await runBootstrapScript('initializeViteProductionEnvironment');
         Logger.success('Production environment initialized');
