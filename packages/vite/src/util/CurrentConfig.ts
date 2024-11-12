@@ -14,6 +14,7 @@ function guessCwd () {
 const projectRoot = guessCwd();
 const configFile = Path.resolve(Path.join(projectRoot, 'vite.config.ts'));
 const tempDir = Path.join(projectRoot, '_vite-bundle');
+const bundleFileExtension = '_vite-bundle.tmp';
 
 process.env.METEOR_PROJECT_ROOT = projectRoot;
 
@@ -22,9 +23,9 @@ export const CurrentConfig = {
     bootstrapEvalFilename: Path.join(projectRoot, '__meteor-vite-runtime-bootstrap__.ts'),
     configFile,
     mode: process.env.NODE_ENV || 'development',
-    bundleFileExtension: '_vite-bundle.tmp',
+    bundleFileExtension,
     tempDir,
-    serverEntryModule: Path.join(tempDir, 'server', '_server-entry.mjs'),
+    serverEntryModule: Path.join(tempDir, 'server', '_entry.mjs'),
 } as const;
 
 globalThis.MeteorViteRuntimeConfig = CurrentConfig;
