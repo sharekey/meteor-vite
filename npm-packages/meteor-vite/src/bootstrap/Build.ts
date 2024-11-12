@@ -6,12 +6,13 @@ import type { InputOption } from 'rollup';
 import { createBuilder, version } from 'vite';
 import { CurrentConfig } from '../../../../packages/vite/src/util/CurrentConfig';
 import { MeteorViteError } from '../error/MeteorViteError';
-import Logger, { BuildLogger } from '../utilities/Logger';
 import { resolveMeteorViteConfig } from './Config';
+import Instance from './Instance';
 
 export async function buildForProduction() {
-    Logger.info(`Building with Vite v${version}...`);
     const { config } = await resolveMeteorViteConfig({ mode: 'production' }, 'build');
+    const { logger } = Instance;
+    logger.info(`Building with Vite v${version}...`);
     
     if (!config.meteor?.clientEntry) {
         throw new MeteorViteError('No client entrypoint specified in Vite config!')
@@ -36,7 +37,7 @@ export async function buildForProduction() {
     
     for (const [name, environment] of Object.entries(builder.environments).reverse()) {
         if (name.toLowerCase() === 'ssr') continue;
-        BuildLogger.info(`Preparing ${pc.yellow(name)} bundle...`);
+        logger.info(`Preparing ${pc.yellow(name)} bundle...`);
         const result = await builder.build(environment);
         if ('close' in result) {
             throw new Error('Unexpected build output!');
