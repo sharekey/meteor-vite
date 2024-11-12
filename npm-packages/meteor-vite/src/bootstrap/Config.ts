@@ -1,5 +1,6 @@
 import FS from 'fs';
 import Path from 'path';
+import pc from 'picocolors';
 import {
     type BuildEnvironmentOptions,
     createNodeDevEnvironment,
@@ -8,9 +9,11 @@ import {
     resolveConfig,
 } from 'vite';
 import { CurrentConfig } from '../../../../packages/vite/src/util/CurrentConfig';
+import { MeteorViteError } from '../error/MeteorViteError';
 import { meteorWorker } from '../plugin/Meteor';
+import { homepage } from '../utilities/Constants';
 import Logger from '../utilities/Logger';
-import { type ResolvedMeteorViteConfig } from '../VitePluginSettings';
+import { type ProjectJson, type ResolvedMeteorViteConfig } from '../VitePluginSettings';
 import Instance from './Instance';
 
 export async function resolveMeteorViteConfig(
@@ -20,7 +23,8 @@ export async function resolveMeteorViteConfig(
     Instance.printWelcomeMessage();
     Instance.logger.info('Resolving Vite config...');
     
-    const { packageJson, projectRoot } = globalThis.MeteorViteRuntimeConfig;
+    const { projectRoot } = globalThis.MeteorViteRuntimeConfig;
+    const packageJson = parsePackageJson();
     process.chdir(projectRoot);
     const userConfig: ResolvedMeteorViteConfig = await resolveConfig(inlineConfig, command);
     let serverBuildConfig: BuildEnvironmentOptions | undefined = undefined;
@@ -28,7 +32,7 @@ export async function resolveMeteorViteConfig(
     prepareServerEntry();
     
     if (userConfig.meteor?.serverEntry) {
-        injectServerEntryImport();
+        injectServerEntryImport(packageJson.meteor.mainModule.server);
         serverBuildConfig = {
             outDir: Path.join(CurrentConfig.tempDir, 'build', 'server'),
             rollupOptions: {
@@ -107,8 +111,13 @@ function prepareServerEntry() {
  * creating a production build. Otherwise, the files emitted by Vite will be ignored by the
  * Meteor server.
  */
-function injectServerEntryImport() {
-    const mainModule = CurrentConfig.serverMainModule;
+function injectServerEntryImport(mainModule: string | undefined) {
+    if (!mainModule) {
+        throw new MeteorViteError('Could not find a server mainModule path in your package.json!', {
+            subtitle: `Visit ${pc.blue(homepage)} for more details`
+        })
+    }
+    
     const originalContent = FS.readFileSync(mainModule, 'utf-8');
     const importPath = Path.relative(Path.dirname(mainModule), CurrentConfig.serverEntryModule);
     
@@ -132,4 +141,15 @@ function injectServerEntryImport() {
         '/** End of vite-bundler auto-imports **/',
         originalContent,
     ].join('\n'));
+}
+
+function parsePackageJson(): ProjectJson {
+    const { projectRoot } = CurrentConfig;
+    const path = Path.join(projectRoot, 'package.json');
+    
+    if (!FS.existsSync(path)) {
+        throw new Error(`⚡ Could not resolve package.json for your project: ${projectRoot}`);
+    }
+    
+    return JSON.parse(FS.readFileSync(path, 'utf8'));
 }

@@ -11,18 +11,7 @@ function guessCwd () {
     return cwd
 }
 
-function parsePackageJson(): ProjectJson {
-    const path = Path.join(projectRoot, 'package.json');
-    
-    if (!FS.existsSync(path)) {
-        throw new Error(`⚡ Could not resolve package.json for your project: ${projectRoot}`);
-    }
-    
-    return JSON.parse(FS.readFileSync(path, 'utf8'));
-}
-
 const projectRoot = guessCwd();
-const packageJson = parsePackageJson();
 const configFile = Path.resolve(Path.join(projectRoot, 'vite.config.ts'));
 const tempDir = Path.join(projectRoot, '_vite-bundle');
 
@@ -31,13 +20,11 @@ process.env.METEOR_PROJECT_ROOT = projectRoot;
 export const CurrentConfig = {
     projectRoot,
     bootstrapEvalFilename: Path.join(projectRoot, '__meteor-vite-runtime-bootstrap__.ts'),
-    packageJson,
     configFile,
     mode: process.env.NODE_ENV || 'development',
     bundleFileExtension: '_vite-bundle.tmp',
     tempDir,
     serverEntryModule: Path.join(tempDir, 'server', '_server-entry.mjs'),
-    serverMainModule: Path.resolve(projectRoot, packageJson.meteor.mainModule.server || ''),
 } as const;
 
 globalThis.MeteorViteRuntimeConfig = CurrentConfig;
