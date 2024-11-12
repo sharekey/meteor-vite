@@ -10,7 +10,7 @@ import {
     createServerHotChannel, createServerModuleRunner,
 } from 'vite';
 import { meteorWorker } from '../plugin/Meteor';
-import Logger, { BuildLogger } from '../utilities/Logger';
+import { BuildLogger, createSimpleLogger } from '../utilities/Logger';
 import type { ResolvedMeteorViteConfig } from '../VitePluginSettings';
 import { type WebApp as WebApp_, type WebAppInternals as WebAppInternals_ } from 'meteor/webapp';
 
@@ -23,7 +23,10 @@ declare const WebAppInternals: typeof WebAppInternals_;
  * starting Meteor in a development environment.
  */
 export async function initializeViteDevServer(): Promise<{ server: ViteDevServer, }> {
-    BuildLogger.info(pc.green(`Vite version ${pc.cyan(version)} | Initializing Vite Dev Server...`));
+    const logger = createSimpleLogger(pc.cyan('[DEV]'));
+    logger.success(`Vite ${pc.cyan(`v${version}`)}`);
+    logger.success('Initializing Vite Dev Server...');
+    const startTime = performance.now();
     
     const { packageJson, projectRoot } = globalThis.MeteorViteRuntimeConfig;
     process.chdir(projectRoot);
@@ -92,5 +95,14 @@ export async function initializeViteDevServer(): Promise<{ server: ViteDevServer
         })
     }
     
+    
+    logger.success(`Attached to Meteor WebApp`, [
+        '\n',
+        `${pc.white('> Meteor:'.padEnd(10, ' '))} ${pc.cyan(Meteor.absoluteUrl())}`,
+        `${pc.white('> Vite:'.padEnd(10, ' '))} ${pc.cyan(Meteor.absoluteUrl(config.base))}`,
+        '',
+        pc.cyan(`ready in ${Math.round(performance.now() - startTime).toLocaleString()}ms.`),
+        '',
+    ].join('\n   '));
     return { server }
 }
