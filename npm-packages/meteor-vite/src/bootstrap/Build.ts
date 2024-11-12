@@ -1,5 +1,4 @@
 import FS from 'fs';
-import { type BuildPluginFile } from 'meteor/jorgenvatle:vite-bundler/plugin/Compiler';
 import Path from 'node:path';
 import pc from 'picocolors';
 import type { InputOption } from 'rollup';
@@ -7,7 +6,6 @@ import { createBuilder, version } from 'vite';
 import { CurrentConfig } from '../../../../packages/vite/src/util/CurrentConfig';
 import { MeteorViteError } from '../error/MeteorViteError';
 import Logger, { BuildLogger } from '../utilities/Logger';
-import type { ProjectJson } from '../VitePluginSettings';
 import { resolveMeteorViteConfig } from './Config';
 
 export async function buildForProduction() {
