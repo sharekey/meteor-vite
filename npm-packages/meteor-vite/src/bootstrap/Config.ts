@@ -68,9 +68,11 @@ export async function resolveMeteorViteConfig(
             })
         ],
         build: {
+            outDir: outDir.client,
             ssrManifest: `ssr.manifest.json`,
             manifest: `client.manifest.json`,
             rollupOptions: {
+                input: userConfig.meteor?.clientEntry,
                 output: {
                     assetFileNames: `assets/[name]-[hash][extname]`,
                     chunkFileNames: `chunk/[name]-[hash].js`,
@@ -89,14 +91,6 @@ export async function resolveMeteorViteConfig(
                 },
                 build: serverBuildConfig,
             },
-            client: {
-                build: {
-                    outDir: outDir.client,
-                    rollupOptions: {
-                        input: userConfig.meteor?.clientEntry,
-                    }
-                }
-            }
         },
     } satisfies InlineConfig & Pick<ResolvedMeteorViteConfig, 'meteor'>;
     
