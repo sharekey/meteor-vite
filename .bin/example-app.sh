@@ -148,7 +148,7 @@ start:production() {
   local PRODUCTION_SERVER="$this production:app $app"
   local MONGO_SERVER="$this start:mongo" # Use the Meteor dev server to run a local MongoDB instance
 
-  concurrently --names "PROD,MongoDB" --prefixColors "cyan,dim" "$PRODUCTION_SERVER" "$MONGO_SERVER"
+  concurrently -k --names "PROD,MongoDB" --prefixColors "cyan,dim" "$PRODUCTION_SERVER" "$MONGO_SERVER"
 }
 
 install:mongo() {
