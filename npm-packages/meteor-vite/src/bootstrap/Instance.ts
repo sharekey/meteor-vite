@@ -9,7 +9,7 @@ const startTime = performance.now();
 export default new class Instance {
     public readonly logger = Meteor.isDevelopment
                              ? createSimpleLogger(pc.cyan('[DEV]'))
-                             : createSimpleLogger('');
+                             : createSimpleLogger(pc.yellow(`[${process.env.NODE_ENV?.toUpperCase() || 'PROD'}]`));
     
     public printWelcomeMessage() {
         this.logger.success([
