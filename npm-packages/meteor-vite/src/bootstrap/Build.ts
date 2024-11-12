@@ -10,8 +10,7 @@ import { resolveMeteorViteConfig } from './Config';
 
 export async function buildForProduction() {
     Logger.info(`Building with Vite v${version}...`);
-    const { config } = await resolveMeteorViteConfig({ mode: 'production' }, 'build');
-    const { packageJson } = CurrentConfig;
+    const { config, packageJson } = await resolveMeteorViteConfig({ mode: 'production' }, 'build');
     
     if (!config.meteor?.clientEntry) {
         throw new MeteorViteError('No client entrypoint specified in Vite config!')

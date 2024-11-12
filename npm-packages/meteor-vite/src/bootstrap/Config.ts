@@ -87,6 +87,7 @@ export async function resolveMeteorViteConfig(
     
     return {
         config,
+        packageJson,
     }
 }
 
