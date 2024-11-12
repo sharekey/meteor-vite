@@ -7,6 +7,7 @@ import Logger from './util/Logger';
 
 class CompilerPlugin {
     constructor(public readonly config: { distDir: string }) {
+        Logger.info('Initializing Meteor Compiler Plugin...');
     }
     processFilesForTarget(files: BuildPluginFile[]) {
         files.forEach(file => {
