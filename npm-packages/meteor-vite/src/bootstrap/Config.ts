@@ -67,6 +67,7 @@ export async function resolveMeteorViteConfig(
         if (env === 'server') {
             template.assetFileNames.replace('[name]', 'server/[name]');
             template.chunkFileNames.replace('[name]', 'server/[name]');
+            template.entryFileNames.replace('entry-server', 'entry/server');
         }
         
         return template;
