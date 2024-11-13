@@ -36,10 +36,7 @@ class CompilerPlugin {
             file.addAsset({
                 path: fileMeta.path,
                 data: file.getContentsAsBuffer(),
-                cacheable: true,
             });
-            
-            file.cacheable = true;
         })
     }
     protected _formatFilename(nameOrPath: string) {
