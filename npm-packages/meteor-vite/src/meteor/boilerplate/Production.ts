@@ -10,7 +10,7 @@ import { ViteBoilerplate } from './Boilerplate';
 
 export class ViteProductionBoilerplate extends ViteBoilerplate {
     
-    constructor() {
+    constructor(public readonly viteManifest: TransformedViteManifest) {
         super();
     }
     
@@ -120,25 +120,6 @@ export class ViteProductionBoilerplate extends ViteBoilerplate {
         }
         
         return lines.join('\n');
-    }
-    
-    public get viteManifest(): TransformedViteManifest {
-        if (Meteor.settings.vite?.manifest) {
-            return Meteor.settings.vite.manifest;
-        }
-        
-        // Search Meteor's program.json file for Vite's manifest.json file
-        const viteManifestInfo = WebApp.clientPrograms['web.browser'].manifest.find(({ path }: MeteorProgramManifest) => path.endsWith('vite-manifest.json'));
-        if (!viteManifestInfo) {
-            throw new Error('Could not find Vite manifest in Meteor client program manifest');
-        }
-        
-        // Read and cache the contents of the vite manifest.json file.
-        const viteManifestPath = Path.join(__meteor_bootstrap__.serverDir, '..', 'web.browser', viteManifestInfo.path);
-        const manifest = JSON.parse(FS.readFileSync(viteManifestPath, 'utf8'));
-        Meteor.settings.vite = { manifest };
-        
-        return manifest;
     }
     
     /**
