@@ -2,6 +2,7 @@ import FS from 'fs';
 import Logger from 'meteor/jorgenvatle:vite-bundler/utility/Logger';
 import type { Boilerplate } from 'meteor/jorgenvatle:vite-bundler/vite-boilerplate/common';
 import { Meteor } from 'meteor/meteor';
+import { WebApp, WebAppInternals } from 'meteor/webapp';
 import Path from 'path';
 import Util from 'util';
 import type { TransformedViteManifest } from '../IPC/methods/build';
