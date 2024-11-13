@@ -20,7 +20,7 @@ export async function buildForProduction() {
     const builder = await createBuilder(config);
     const fileNames: Partial<Record<string, { filePath: string, originalFilePath: string }[]>> = {};
     
-    for (const [context, environment] of Object.entries(builder.environments).reverse()) {
+    for (const [context, environment] of Object.entries(builder.environments)) {
         if (context.toLowerCase() === 'ssr') {
             continue;
         }
