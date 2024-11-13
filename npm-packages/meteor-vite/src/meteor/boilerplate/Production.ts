@@ -1,10 +1,9 @@
-import type { Boilerplate } from 'meteor/jorgenvatle:vite-bundler/vite-boilerplate/common';
 import { Meteor } from 'meteor/meteor';
 import { WebAppInternals } from 'meteor/webapp';
 import Util from 'util';
 import Logger from '../../utilities/Logger';
 import type { TransformedViteManifest } from '../IPC/methods/build';
-import { ViteBoilerplate } from './Boilerplate';
+import { type Boilerplate, ViteBoilerplate } from './Boilerplate';
 
 export class ViteProductionBoilerplate extends ViteBoilerplate {
     
