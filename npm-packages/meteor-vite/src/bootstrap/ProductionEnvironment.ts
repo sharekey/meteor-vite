@@ -18,9 +18,7 @@ Meteor.startup(async () => {
     
     WebAppInternals.registerBoilerplateDataCallback('vite', async (req, data) => {
         try {
-            const { dynamicHead, dynamicBody } = boilerplate.getBoilerplate();
-            
-            console.log({ dynamicBody, dynamicHead });
+            Object.assign(data, boilerplate.getBoilerplate());
         } catch (error) {
             console.warn(error);
             throw error;
