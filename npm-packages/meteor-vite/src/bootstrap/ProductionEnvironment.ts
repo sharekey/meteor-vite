@@ -2,7 +2,7 @@ import { Meteor } from 'meteor/meteor';
 
 Meteor.startup(async () => {
     console.log('[Vite] Fetching manifest...');
-    console.log(await Assets.getTextAsync('server/manifest.json'));
+    console.log(await Assets.getTextAsync('vite/client.manifest.json'));
     
     
     // Todo:
