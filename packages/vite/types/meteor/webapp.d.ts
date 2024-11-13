@@ -1,8 +1,8 @@
 import type HTTP from 'http';
 import type * as Connect from 'connect';
+import { StaticFiles } from 'meteor/webapp';
 
 declare module 'meteor/webapp' {
-    import { StaticFiles } from 'meteor/webapp';
     namespace WebAppInternals {
         interface BoilerplateData {
             additionalStaticJs: [contents: string, pathname: string][];
@@ -38,5 +38,3 @@ declare module 'meteor/webapp' {
         const handlers: Connect.Server;
     }
 }
-
-export {}
