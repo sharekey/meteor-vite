@@ -1,5 +1,6 @@
 import Path from 'path';
 import pc from 'picocolors';
+import { inspect } from 'util';
 import type { BuildPluginFile } from '../../vite-bundler/src/plugin/Compiler';
 import { runBootstrapScript } from './util/Bootstrap';
 import { CurrentConfig } from './util/CurrentConfig';
@@ -21,7 +22,7 @@ class CompilerPlugin {
                 arch: file.getArch(),
             }
             
-            Logger.debug(`[${pc.yellow(file.getArch())}] Processing: ${fileMeta.basename}`, { fileMeta });
+            Logger.debug(`[${pc.yellow(file.getArch())}] Processing: ${fileMeta.basename}`, pc.dim(inspect({ fileMeta }, { colors: true })));
             
             if (fileMeta.arch.startsWith('os') && fileMeta.basename.endsWith('js')) {
                 file.addJavaScript({
