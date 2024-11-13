@@ -58,11 +58,18 @@ export async function resolveMeteorViteConfig(
     }
     
     function fileNameTemplates(env: 'server' | 'client') {
-        return {
-            assetFileNames: `assets/${env}/[name]-[hash][extname]`,
-            chunkFileNames: `chunk/${env}/[name]-[hash].js`,
-            entryFileNames: `entry/${env}/[name].entry.js`,
+        const template = {
+            assetFileNames: `assets/[name]-[hash][extname]`,
+            chunkFileNames: `chunk/[name]-[hash].js`,
+            entryFileNames: `entry-${env}/[name].entry.js`,
         }
+        
+        if (env === 'server') {
+            template.assetFileNames.replace('[name]', 'server/[name]');
+            template.chunkFileNames.replace('[name]', 'server/[name]');
+        }
+        
+        return template;
     }
     
     const config = {
