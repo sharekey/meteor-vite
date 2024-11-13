@@ -41,7 +41,7 @@ export async function resolveMeteorViteConfig(
             sourcemap: true,
             rollupOptions: {
                 input: {
-                    'server/main': prepareProductionServerProxyModule(userConfig.meteor.serverEntry),
+                    main: prepareProductionServerProxyModule(userConfig.meteor.serverEntry),
                 },
                 output: {
                     // Unfortunately Meteor still doesn't support
@@ -83,9 +83,10 @@ export async function resolveMeteorViteConfig(
             ssrManifest: `ssr.manifest.json`,
             manifest: `client.manifest.json`,
             rollupOptions: {
-                output: {
-                    ...fileNameTemplates('client'),
-                }
+                input: {
+                    main: userConfig.meteor.clientEntry,
+                },
+                output: fileNameTemplates('client'),
             }
         },
         environments: {
@@ -100,15 +101,6 @@ export async function resolveMeteorViteConfig(
                 },
                 build: serverBuildConfig,
             },
-            client: {
-                build: {
-                    rollupOptions: {
-                        input: {
-                            'client/main': userConfig.meteor.clientEntry,
-                        },
-                    }
-                }
-            }
         },
     } satisfies InlineConfig & Pick<ResolvedMeteorViteConfig, 'meteor'>;
     
