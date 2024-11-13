@@ -91,15 +91,11 @@ export async function resolveMeteorViteConfig(
             ssrManifest: `ssr.manifest.json`,
             manifest: `client.manifest.json`,
             rollupOptions: {
-                input: {
-                    main: userConfig.meteor.clientEntry,
-                },
                 output: fileNameTemplates('client'),
             }
         },
         environments: {
             server: {
-                consumer: 'server',
                 dev: {
                     createEnvironment(name, config) {
                         return createNodeDevEnvironment(name, config, {
@@ -109,6 +105,15 @@ export async function resolveMeteorViteConfig(
                 },
                 build: serverBuildConfig,
             },
+            client: {
+                build: {
+                    rollupOptions: {
+                        input: {
+                            main: userConfig.meteor.clientEntry,
+                        },
+                    }
+                }
+            }
         },
     } satisfies InlineConfig & Pick<ResolvedMeteorViteConfig, 'meteor'>;
     
