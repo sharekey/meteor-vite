@@ -17,7 +17,7 @@ class CompilerPlugin {
                     path: file.getPathInPackage(),
                 },
                 basename: this._formatFilename(file.getBasename()),
-                path: Path.join('vite', this._formatFilename(file.getPathInPackage())),
+                path: Path.join('vite', Path.relative(this.config.outDir, this._formatFilename(file.getPathInPackage()))),
                 arch: file.getArch(),
             }
             
