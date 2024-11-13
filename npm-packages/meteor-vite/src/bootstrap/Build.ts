@@ -17,7 +17,8 @@ export async function buildForProduction() {
         throw new MeteorViteError('No client entrypoint specified in Vite config!')
     }
     
-    FS.rmSync(config.build.outDir, { recursive: true });
+    // Todo: this can probably be migrated to proper ordering of environment configs.
+    FS.rmSync(config.build.outDir, { recursive: true, force: true });
     logger.debug(`Cleaned up old build output in ${pc.green(config.build.outDir)}`);
     
     const builder = await createBuilder(config);
