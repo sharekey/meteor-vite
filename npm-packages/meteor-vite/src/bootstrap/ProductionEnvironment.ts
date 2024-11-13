@@ -14,7 +14,9 @@ Meteor.startup(async () => {
         files,
     });
     
-    console.log(boilerplate.viteManifest);
+    // Todo: Instead of serving assets with Meteor's built-in static file handler,
+    //  add a custom asset route where we have better control over caching and CORS rules.
+    boilerplate.makeViteAssetsCacheable();
     
     WebAppInternals.registerBoilerplateDataCallback('vite', async (req, data) => {
         try {
