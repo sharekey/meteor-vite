@@ -46,7 +46,8 @@ class CompilerPlugin {
         return nameOrPath.replace(`.${CurrentConfig.bundleFileExtension}`, '');
     }
     protected _sourcemapPath(file: BuildPluginFile) {
-        return this._formatFilename(file.getPathInPackage()) + `.map.${CurrentConfig.bundleFileExtension}`;
+        const filename = this._formatFilename(file.getPathInPackage()) + `.map.${CurrentConfig.bundleFileExtension}`;
+        return Path.resolve(CurrentConfig.projectRoot, filename);
     }
 }
 
