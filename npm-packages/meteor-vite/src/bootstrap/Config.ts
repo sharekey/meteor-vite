@@ -34,7 +34,6 @@ export async function resolveMeteorViteConfig(
     
     if (userConfig.meteor?.serverEntry) {
         injectServerEntryImport(packageJson.meteor.mainModule.server);
-        prepareProductionServerProxyModule(userConfig.meteor.serverEntry);
         serverBuildConfig = {
             manifest: false,
             ssrManifest: false,
@@ -42,7 +41,7 @@ export async function resolveMeteorViteConfig(
             sourcemap: true,
             rollupOptions: {
                 input: {
-                    'server/main': userConfig.meteor.serverEntry,
+                    'server/main': prepareProductionServerProxyModule(userConfig.meteor.serverEntry),
                 },
                 output: {
                     // Unfortunately Meteor still doesn't support
@@ -171,6 +170,7 @@ function prepareProductionServerProxyModule(serverEntry: string) {
         `import "meteor-vite/bootstrap/ProductionEnvironment"`,
         `import ${JSON.stringify(Path.resolve(CurrentConfig.projectRoot, serverEntry))}`,
     ].join('\n'));
+    return CurrentConfig.serverProductionProxyModule;
 }
 
 function parsePackageJson(): ProjectJson {
