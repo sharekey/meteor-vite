@@ -18,7 +18,7 @@ export async function buildForProduction() {
     }
     
     const builder = await createBuilder(config);
-    const fileNames: Partial<Record<string, { filePath: string, originalFilePath: string }[]>> = {};
+    const fileNames: Partial<Record<string, { filePath: string, originalFilePath: string, isEntry?: boolean }[]>> = {};
     
     for (const [context, environment] of Object.entries(builder.environments)) {
         if (context.toLowerCase() === 'ssr') {
@@ -27,6 +27,7 @@ export async function buildForProduction() {
         
         logger.info(`Preparing ${pc.yellow(context)} bundle...`);
         const list = fileNames[context] || [];
+        
         
         const result = normalizeBuildOutput(
             // @ts-expect-error Todo: correct configuration issue that causes mismatches between types imported at the root of node_modules
@@ -41,7 +42,7 @@ export async function buildForProduction() {
                 const ext = `.${CurrentConfig.bundleFileExtension}`;
                 const filePath = originalFilePath + ext;
                 
-                list.push({ filePath, originalFilePath });
+                list.push({ filePath, originalFilePath, isEntry: chunk.isEntry });
                 
                 // Appending our own temporary file extension on output files
                 // to help Meteor identify files to be processed by our compiler plugin.
@@ -55,10 +56,13 @@ export async function buildForProduction() {
         if (!file.originalFilePath.endsWith('js')) {
             return;
         }
+        if (!file.isEntry) {
+            return;
+        }
         
         const summary = addServerEntryImport(file);
         logger.debug('Added import to server entry', summary);
-    })
+    });
     
     return {
         fileNames,
