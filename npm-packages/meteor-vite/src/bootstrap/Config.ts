@@ -84,6 +84,7 @@ export async function resolveMeteorViteConfig(
         },
         environments: {
             server: {
+                consumer: 'server',
                 dev: {
                     createEnvironment(name, config) {
                         return createNodeDevEnvironment(name, config, {
