@@ -24,7 +24,7 @@ class CompilerPlugin {
             
             Logger.debug(`[${pc.yellow(file.getArch())}] Processing: ${fileMeta.basename}`, pc.dim(inspect({ fileMeta }, { colors: true })));
             
-            if (fileMeta.arch.startsWith('os') && fileMeta.basename.endsWith('js')) {
+            if (fileMeta.arch.startsWith('os') && fileMeta.basename.endsWith('.entry.js')) {
                 file.addJavaScript({
                     path: fileMeta.path,
                     data: file.getContentsAsString(),
