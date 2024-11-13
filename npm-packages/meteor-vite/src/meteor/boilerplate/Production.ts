@@ -1,6 +1,6 @@
 import { Meteor } from 'meteor/meteor';
 import { WebAppInternals } from 'meteor/webapp';
-import Util from 'util';
+import { inspect } from 'node:util';
 import Logger from '../../utilities/Logger';
 import type { TransformedViteManifest } from '../IPC/methods/build';
 import { type Boilerplate, ViteBoilerplate } from './Boilerplate';
@@ -218,7 +218,7 @@ export class ViteProductionBoilerplate extends ViteBoilerplate {
             cssLazyPrefetch,
         }
         
-        Logger.debug('Parsed Vite manifest imports', Util.inspect({
+        Logger.debug('Parsed Vite manifest imports', inspect({
             imports,
             manifest,
             modules,
