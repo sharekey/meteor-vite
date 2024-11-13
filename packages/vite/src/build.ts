@@ -1,3 +1,4 @@
+import FS from 'node:fs';
 import Path from 'path';
 import pc from 'picocolors';
 import { inspect } from 'util';
@@ -19,6 +20,7 @@ class CompilerPlugin {
                 },
                 basename: this._formatFilename(file.getBasename()),
                 path: Path.join('vite', Path.relative(this.config.outDir, this._formatFilename(file.getPathInPackage()))),
+                sourceMapPath: this._sourcemapPath(file),
                 arch: file.getArch(),
             }
             
@@ -28,6 +30,7 @@ class CompilerPlugin {
                 file.addJavaScript({
                     path: fileMeta.path,
                     data: file.getContentsAsString(),
+                    sourceMap: FS.readFileSync(fileMeta.sourceMapPath, 'utf8'),
                 });
                 Logger.debug(`Added ${pc.yellow('JavaScript')} to ${pc.cyan(fileMeta.arch)}: ${fileMeta.basename}`);
                 return;
@@ -41,6 +44,9 @@ class CompilerPlugin {
     }
     protected _formatFilename(nameOrPath: string) {
         return nameOrPath.replace(`.${CurrentConfig.bundleFileExtension}`, '');
+    }
+    protected _sourcemapPath(file: BuildPluginFile) {
+        return this._formatFilename(file.getPathInPackage()) + `.map.${CurrentConfig.bundleFileExtension}`;
     }
 }
 
