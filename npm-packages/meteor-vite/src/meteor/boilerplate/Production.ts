@@ -7,6 +7,7 @@ import { type Boilerplate, ViteBoilerplate } from './Boilerplate';
 export class ViteProductionBoilerplate extends ViteBoilerplate {
     
     constructor(public readonly viteManifest: TransformedViteManifest) {
+        Meteor.settings.vite = { manifest: viteManifest };
         super();
     }
     
