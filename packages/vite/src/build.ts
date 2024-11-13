@@ -6,7 +6,7 @@ import { CurrentConfig } from './util/CurrentConfig';
 import Logger from './util/Logger';
 
 class CompilerPlugin {
-    constructor(public readonly config: { distDir: string }) {
+    constructor(public readonly config: { outDir: string }) {
         Logger.info('Initializing Meteor Compiler Plugin...');
     }
     processFilesForTarget(files: BuildPluginFile[]) {
@@ -17,10 +17,9 @@ class CompilerPlugin {
                     path: file.getPathInPackage(),
                 },
                 basename: this._formatFilename(file.getBasename()),
-                path: Path.relative(Path.join(Path.join(CurrentConfig.tempDir, 'build')), this._formatFilename(file.getPathInPackage())),
+                path: Path.join('vite', this._formatFilename(file.getPathInPackage())),
                 arch: file.getArch(),
             }
-            const sourcePath = file.getPathInPackage();
             
             Logger.debug(`[${pc.yellow(file.getArch())}] Processing: ${fileMeta.basename}`, { fileMeta });
             
@@ -53,7 +52,7 @@ if (CurrentConfig.mode === 'production') {
         Plugin.registerCompiler({
             filenames: [],
             extensions: [CurrentConfig.bundleFileExtension]
-        }, () => bundle.then((() => new CompilerPlugin({ distDir: '' }))));
+        }, () => bundle.then((({ outDir }) => new CompilerPlugin({ outDir }))));
     } catch (error) {
         Logger.error('build failed');
         console.error(error);
