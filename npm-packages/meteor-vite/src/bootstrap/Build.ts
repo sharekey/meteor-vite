@@ -111,5 +111,5 @@ function addServerEntryImport({ filePath }: {
 }
 
 function emptyOutDir(config: { build: { outDir: string } }) {
-    FS.rmdirSync(config.build.outDir);
+    FS.rmSync(config.build.outDir, { recursive: true });
 }
