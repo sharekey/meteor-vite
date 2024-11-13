@@ -61,7 +61,7 @@ export async function resolveMeteorViteConfig(
         return {
             assetFileNames: `assets/${env}/[name]-[hash][extname]`,
             chunkFileNames: `chunk/${env}/[name]-[hash].js`,
-            entryFileNames: `entry/${env}/[name].js`,
+            entryFileNames: `entry/${env}/[name].entry.js`,
         }
     }
     
