@@ -48,6 +48,10 @@ class CompilerPlugin {
     protected _sourcemap(file: BuildPluginFile) {
         const filename = this._formatFilename(file.getPathInPackage()) + `.map`;
         const path = Path.resolve(CurrentConfig.projectRoot, filename);
+        if (!FS.existsSync(path)) {
+            Logger.warn(`Could not resolve source map for ${pc.green(filename)}`);
+            return;
+        }
         return FS.readFileSync(path, 'utf8')
     }
 }
