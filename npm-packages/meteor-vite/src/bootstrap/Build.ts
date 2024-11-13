@@ -17,6 +17,7 @@ export async function buildForProduction() {
         throw new MeteorViteError('No client entrypoint specified in Vite config!')
     }
     
+    emptyOutDir(config);
     const builder = await createBuilder(config);
     const fileNames: Partial<Record<string, { filePath: string, originalFilePath: string, isEntry?: boolean }[]>> = {};
     
@@ -107,4 +108,8 @@ function addServerEntryImport({ filePath }: {
         filePath,
         serverEntryModule,
     }
+}
+
+function emptyOutDir(config: { build: { outDir: string } }) {
+    FS.rmdirSync(config.build.outDir);
 }
