@@ -20,7 +20,7 @@ Meteor.startup(async () => {
     
     WebAppInternals.registerBoilerplateDataCallback('vite', async (req, data) => {
         try {
-            const { dynamicBody, dynamicHead } = await boilerplate.getBoilerplate();
+            const { dynamicBody, dynamicHead } = boilerplate.getBoilerplate();
             
             if (dynamicHead) {
                 data.dynamicHead = `${data.dynamicHead || ''}\n${dynamicHead}`;
