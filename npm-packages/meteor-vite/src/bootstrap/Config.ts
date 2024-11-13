@@ -47,6 +47,7 @@ export async function resolveMeteorViteConfig(
                     // Unfortunately Meteor still doesn't support
                     // ESM within the final server bundle.
                     format: 'cjs',
+                    ...fileNameTemplates('server'),
                 }
             },
         }
@@ -54,6 +55,14 @@ export async function resolveMeteorViteConfig(
     
     if (!userConfig.meteor?.clientEntry) {
         throw new MeteorViteError('Cannot build application. You need to specify a clientEntry in your Vite config!');
+    }
+    
+    function fileNameTemplates(env: 'server' | 'client') {
+        return {
+            assetFileNames: `assets/${env}/[name]-[hash][extname]`,
+            chunkFileNames: `chunk/${env}/[name]-[hash].js`,
+            entryFileNames: `entry/${env}/[name].js`,
+        }
     }
     
     const config = {
@@ -75,9 +84,7 @@ export async function resolveMeteorViteConfig(
             manifest: `client.manifest.json`,
             rollupOptions: {
                 output: {
-                    assetFileNames: `assets/[name]-[hash][extname]`,
-                    chunkFileNames: `chunk/[name]-[hash].js`,
-                    entryFileNames: `entry/[name].js`,
+                    ...fileNameTemplates('client'),
                 }
             }
         },
