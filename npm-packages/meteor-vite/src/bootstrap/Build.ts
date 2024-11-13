@@ -66,6 +66,9 @@ export async function buildForProduction() {
         if (!file.isEntry) {
             return;
         }
+        if (file.filePath.includes('entry-client')) {
+            return;
+        }
         
         const summary = addServerEntryImport(file);
         logger.debug('Added import to server entry', summary);
