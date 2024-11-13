@@ -1,5 +1,4 @@
 import { Meteor } from 'meteor/meteor';
-import { WebAppInternals } from 'meteor/webapp';
 import { inspect } from 'node:util';
 import Logger from '../../utilities/Logger';
 import type { TransformedViteManifest } from '../IPC/methods/build';
@@ -118,38 +117,6 @@ export class ViteProductionBoilerplate extends ViteBoilerplate {
         
         return lines.join('\n');
     }
-    
-    /**
-     * Mark assets built by Vite as cacheable in Meteor's program.json file for both legacy and modern browsers.
-     * Because of the way Meteor handles non-cacheable assets, headers are added that make it tricky to cache with
-     * a standard reverse proxy config. You would have to explicitly override the caching headers for all files served
-     * by meteor at /vite-assets.
-     *
-     * The default behavior of Meteor would be to set a max-age header of 0. Which would of course result in a lot of
-     * load being put on both your clients and your server.
-     */
-    public makeViteAssetsCacheable() {
-        const archs = ['web.browser', 'web.browser.legacy'] as const;
-        
-        for (const arch of archs) {
-            const files = WebAppInternals.staticFilesByArch[arch] || {};
-            
-            // Override cacheable flag for any assets built by Vite.
-            // Meteor will by default set this to false for asset files.
-            Object.entries(files).forEach(([path, file]) => {
-                if (!path.startsWith(`${this.assetDir}/`)) {
-                    return;
-                }
-                if (path.endsWith('.js')) {
-                    file.cacheable = true;
-                }
-                if (path.endsWith('.css')) {
-                    file.cacheable = true;
-                }
-            })
-        }
-    }
-    
     
     protected get imports(): ManifestImports {
         if (Meteor.settings.vite?.imports) {
