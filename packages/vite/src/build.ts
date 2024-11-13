@@ -29,7 +29,7 @@ class CompilerPlugin {
                 file.addJavaScript({
                     path: fileMeta.path,
                     data: file.getContentsAsString(),
-                    sourceMap: FS.readFileSync(this._sourcemapPath(file), 'utf8'),
+                    sourceMap: this._sourcemap(file),
                 });
                 Logger.debug(`Added ${pc.yellow('JavaScript')} to ${pc.cyan(fileMeta.arch)}: ${fileMeta.basename}`);
                 return;
@@ -45,9 +45,10 @@ class CompilerPlugin {
         return nameOrPath.replace(`.${CurrentConfig.bundleFileExtension}`, '');
     }
     
-    protected _sourcemapPath(file: BuildPluginFile) {
+    protected _sourcemap(file: BuildPluginFile) {
         const filename = this._formatFilename(file.getPathInPackage()) + `.map`;
-        return Path.resolve(CurrentConfig.projectRoot, filename);
+        const path = Path.resolve(CurrentConfig.projectRoot, filename);
+        return FS.readFileSync(path, 'utf8')
     }
 }
 
