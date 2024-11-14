@@ -1,6 +1,6 @@
 import { Meteor } from 'meteor/meteor';
 import { WebAppInternals } from 'meteor/webapp';
-import { getConfig } from 'meteor/jorgenvatle:vite-bundler/loading/vite-connection-handler';
+import { getConfig } from 'meteor/jorgenvatle:vite-bundler/src/loading/vite-connection-handler';
 
 /**
  * Inject React Refresh snippet into HTML served by Meteor in development mode.
