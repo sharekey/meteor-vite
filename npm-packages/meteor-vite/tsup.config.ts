@@ -21,8 +21,9 @@ export default defineConfig([
         dts: false,
         onSuccess: async () => {
             try {
-                const atmospherePackageOutDir = Path.join(__dirname, '..', '..', 'packages', 'vite', 'dist');
-                FS.appendFileSync(Path.join(atmospherePackageOutDir, 'server.mjs'), '\n // Forcing reload');
+                const atmospherePackageOutDir = Path.join(__dirname, '..', '..', 'packages', 'vite', 'src');
+                FS.writeFileSync(Path.join(atmospherePackageOutDir, '.force-reload-watchfile.ts'), `
+ export default 'Forcing reload ${new Date()}'`);
             } catch (error) {
                 console.warn(error);
             }
