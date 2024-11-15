@@ -22,12 +22,11 @@ export async function resolveMeteorViteConfig(
     Instance.printWelcomeMessage();
     Instance.logger.info('Resolving Vite config...');
     
-    const { projectRoot } = globalThis.MeteorViteRuntimeConfig;
+    const { projectRoot, outDir } = CurrentConfig;
     const packageJson = parsePackageJson();
     process.chdir(projectRoot);
     const userConfig: ResolvedMeteorViteConfig = await resolveConfig(inlineConfig, command);
     let serverBuildConfig: BuildEnvironmentOptions | undefined = undefined;
-    const outDir = Path.join(CurrentConfig.tempDir, 'dist');
     
     if (userConfig.meteor?.serverEntry) {
         serverBuildConfig = {
