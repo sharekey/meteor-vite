@@ -54,7 +54,7 @@ PROD_MONGO_CONNECTION_URI="mongodb://127.0.0.1:$(($PROD_MONGO_METEOR_PORT + 1))/
 start() {
   if [[ "$METEOR_VITE_TSUP_BUILD_WATCHER" == 'true' ]]; then
      export METEOR_VITE_TSUP_BUILD_WATCHER="false"
-     npx concurrently -k -n "tsup,$app" -c dim,yellow "'npm:build:package -- -- --watch'" "'npm:start $app'"
+     npx concurrently -k -n "tsup,$app" -c dim,yellow "'npm:build:package -- -- --watch'" "'npm:start $app $*'"
   else
     cd "$APP_DIR" || exit 1
     $npm start -- "$@"
