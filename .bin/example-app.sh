@@ -107,6 +107,7 @@ prepare:npm-packages() {
 
 # Build an example app for production
 build() {
+    (prepare:npm-packages) || exit 1
     (link) || exit 1
     (cleanOutput) || exit 1
 
