@@ -35,7 +35,7 @@ export async function resolveMeteorViteConfig(
     if (userConfig.meteor?.serverEntry) {
         injectServerEntryImport(packageJson.meteor.mainModule.server);
         serverBuildConfig = {
-            target: 'node',
+            target: 'node20',
             manifest: false,
             ssrManifest: false,
             minify: false,
