@@ -37,6 +37,10 @@ export const MeteorStubs: () => Promise<Plugin> = setupPlugin(async () => {
                 await request.forceImport();
             }
             
+            if (globalThis?.MeteorViteRuntimeConfig?.productionPreview) {
+                return loadCachedStubTemplate(request);
+            }
+            
             const meteorPackage = await MeteorPackage.parse({
                 filePath: request.context.file.sourcePath,
                 fileContent: request.context.file.content,
@@ -56,7 +60,7 @@ export const MeteorStubs: () => Promise<Plugin> = setupPlugin(async () => {
                 'Request duration': `${Date.now() - timeStarted}ms`,
             });
             
-            if (request.context.pluginSettings.meteorStubs.debug) {
+            if (request.context.pluginSettings.meteorStubs.debug || globalThis?.MeteorViteRuntimeConfig?.productionPreview) {
                 await storeDebugSnippet({ request, stubTemplate: template, meteorPackage })
             }
             
@@ -70,10 +74,7 @@ async function storeDebugSnippet({ request, stubTemplate, meteorPackage }: {
     stubTemplate: string,
     meteorPackage: MeteorPackage,
 }) {
-    const baseDir = Path.join(request.context.pluginSettings.tempDir, 'stubs', request.context.file.packageId.replace(':', '_'));
-    const templatePath = Path.join(baseDir, request.context.file.importPath || '', 'template.js');
-    const packagePath = Path.join(baseDir, 'package.js');
-    const parserPath = Path.join(baseDir, 'parsed.json');
+    const { templatePath, parserPath, packagePath, baseDir } = request.cache;
     
     await FS.mkdir(Path.dirname(templatePath), { recursive: true });
     
@@ -86,6 +87,10 @@ async function storeDebugSnippet({ request, stubTemplate, meteorPackage }: {
     request.log.info('Stored debug snippets', {
         File: pc.cyan(baseDir),
     })
+}
+
+async function loadCachedStubTemplate(request: ViteLoadRequest) {
+    return FS.readFile(request.cache.templatePath, 'utf-8');
 }
 
 /**
@@ -110,12 +115,6 @@ function setupPlugin<Context extends ViteLoadRequest>(setup: () => Promise<{
         return {
             name: plugin.name,
             resolveId: plugin.resolveId,
-            apply: (config, { ssrBuild, }) => {
-                if (ssrBuild) {
-                    return false;
-                }
-                return true;
-            },
             async configResolved(resolvedConfig) {
                 const pluginSettings = (resolvedConfig as ResolvedMeteorViteConfig).meteor;
                 if (!pluginSettings) {
