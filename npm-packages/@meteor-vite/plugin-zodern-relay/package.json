@@ -5,9 +5,9 @@
   "main": "dist/Plugin.js",
   "exports": {
     ".": {
+      "types": "./dist/Plugin.d.ts",
       "require": "./dist/Plugin.js",
-      "import": "./dist/Plugin.mjs",
-      "types": "./dist/Plugin.d.ts"
+      "import": "./dist/Plugin.mjs"
     },
     "./stubs/*": [
       "./stubs/*.js"
