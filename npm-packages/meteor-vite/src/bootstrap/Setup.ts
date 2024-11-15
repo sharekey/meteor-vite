@@ -20,7 +20,7 @@ export function setupProject() {
  */
 function cleanupPreviousBuilds() {
     FS.rmSync(CurrentConfig.outDir, { recursive: true, force: true });
-    logger.debug(`Cleaned up old build output in ${pc.green(CurrentConfig.outDir)}`);
+    logger.info(`Cleaned up old build output in ${pc.green(CurrentConfig.outDir)}`);
 }
 
 
