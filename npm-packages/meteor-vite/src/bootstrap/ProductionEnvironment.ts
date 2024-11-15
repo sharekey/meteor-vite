@@ -6,6 +6,9 @@ import type { ViteManifestFile } from '../meteor/IPC/methods/build';
 import Logger from '../utilities/Logger';
 
 Meteor.startup(async () => {
+    if (!Meteor.isProduction) {
+        return;
+    }
     console.log('[Vite] Fetching manifest...');
     const manifest = await Assets.getTextAsync('vite/client.manifest.json');
     const files: Record<string, ViteManifestFile> = JSON.parse(manifest);
