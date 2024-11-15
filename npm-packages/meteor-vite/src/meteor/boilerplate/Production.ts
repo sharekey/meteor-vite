@@ -72,6 +72,8 @@ export class ViteProductionBoilerplate extends ViteBoilerplate {
             this.logger.warn('Found no Vite assets in Meteor client program manifest.')
             this.logger.warn('Static files served by Meteor have caching disabled by default, we were unable to override this setting.');
         }
+        
+        this.logger.info(`Marked ${cacheable.toLocaleString()} static Vite assets as cacheable`);
     }
     
     protected get dynamicHead() {
