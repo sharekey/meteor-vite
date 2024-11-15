@@ -45,6 +45,7 @@ export class ViteProductionBoilerplate extends ViteBoilerplate {
      */
     public makeViteAssetsCacheable() {
         const archs = ['web.browser', 'web.browser.legacy'] as const;
+        let cacheable = 0;
         
         for (const arch of archs) {
             const files = WebAppInternals.staticFilesByArch[arch] || {};
@@ -53,6 +54,7 @@ export class ViteProductionBoilerplate extends ViteBoilerplate {
             // Meteor will by default set this to false for asset files.
             Object.entries(files).forEach(([path, file]) => {
                 if (!path.startsWith(`${this.assetDir}/`)) {
+                    this.logger.debug(`Not a Vite asset: ${path}`)
                     return;
                 }
                 if (path.endsWith('.js')) {
@@ -61,7 +63,14 @@ export class ViteProductionBoilerplate extends ViteBoilerplate {
                 if (path.endsWith('.css')) {
                     file.cacheable = true;
                 }
+                this.logger.debug(`Marked as cacheable: ${path}`);
+                cacheable++
             })
+        }
+        
+        if (cacheable <= 0) {
+            this.logger.warn('Found no Vite assets in Meteor client program manifest.')
+            this.logger.warn('Static files served by Meteor have caching disabled by default, we were unable to override this setting.');
         }
     }
     
