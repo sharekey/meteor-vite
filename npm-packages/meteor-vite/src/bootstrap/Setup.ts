@@ -19,6 +19,9 @@ export function setupProject() {
  * Remaining build files can interfere with the dev server
  */
 function cleanupPreviousBuilds() {
+    if (CurrentConfig.productionPreview) {
+        return;
+    }
     FS.rmSync(CurrentConfig.outDir, { recursive: true, force: true });
     logger.info(`Cleaned up old build output in ${pc.green(CurrentConfig.outDir)}`);
 }
