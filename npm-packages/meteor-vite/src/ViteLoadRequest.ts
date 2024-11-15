@@ -146,8 +146,12 @@ export default class ViteLoadRequest {
          *
          * @type {Promise<string>}
          */
-        const content = FS.readFile(sourcePath, 'utf-8').catch((error: Error) => {
-            throw new MeteorViteStubRequestError(`Unable to read file content: ${error.message}`);
+        const content = FS.readFile(sourcePath, 'utf-8').catch((fsError: Error) => {
+            if (globalThis?.MeteorViteRuntimeConfig?.productionPreview) {
+                console.warn(`--production flag cannot update package stubs for: ${packageId}`);
+                return '// Run server once in dev mode to update package sources';
+            }
+            throw new MeteorViteStubRequestError(`Unable to read file content: ${fsError.message}`);
         });
         
         return {
