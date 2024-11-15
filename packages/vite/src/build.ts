@@ -56,6 +56,9 @@ class CompilerPlugin {
     }
 }
 
+// Cleanup temporary files from previous builds.
+await runBootstrapScript('setupProject');
+
 if (CurrentConfig.mode === 'production') {
     try {
         const bundle = runBootstrapScript('buildForProduction');
