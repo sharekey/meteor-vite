@@ -61,7 +61,12 @@ await runBootstrapScript('setupProject');
 
 if (CurrentConfig.mode === 'production') {
     try {
-        const bundle = runBootstrapScript('buildForProduction');
+        const bundle = runBootstrapScript('buildForProduction').catch((error) => {
+            if (CurrentConfig.productionPreview) {
+                return { outDir: CurrentConfig.outDir };
+            }
+            throw error;
+        });
         Plugin.registerCompiler({
             filenames: [],
             extensions: [CurrentConfig.bundleFileExtension]
