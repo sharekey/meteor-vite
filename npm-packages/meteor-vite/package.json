@@ -14,7 +14,7 @@
       ],
       "require": [
         "./dist/plugin/index.js"
-      ],
+      ]
     },
     "./bootstrap": "./dist/bootstrap/index.mjs",
     "./bootstrap/*": "./dist/bootstrap/*.mjs",
