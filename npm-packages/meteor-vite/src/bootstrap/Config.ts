@@ -106,6 +106,7 @@ export async function resolveMeteorViteConfig(
                 },
                 resolve: {
                     external: true,
+                    noExternal: ['meteor-vite']
                 },
                 build: serverBuildConfig,
             },
