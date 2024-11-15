@@ -1,15 +1,18 @@
 import { Meteor } from 'meteor/meteor';
 import { WebAppInternals } from 'meteor/webapp';
 import { inspect } from 'node:util';
-import Logger from '../../utilities/Logger';
+import Logger, { createSimpleLogger, type SimpleLogger } from '../../utilities/Logger';
 import type { TransformedViteManifest } from '../IPC/methods/build';
 import { type Boilerplate, ViteBoilerplate } from './Boilerplate';
 
 export class ViteProductionBoilerplate extends ViteBoilerplate {
     
+    protected readonly logger: SimpleLogger
+    
     constructor(public readonly viteManifest: TransformedViteManifest) {
         Meteor.settings.vite = { manifest: viteManifest };
         super();
+        this.logger = createSimpleLogger('HTML Boilerplate');
     }
     
     public get assetDir() {
