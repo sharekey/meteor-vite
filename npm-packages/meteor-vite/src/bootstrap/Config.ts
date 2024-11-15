@@ -8,13 +8,14 @@ import {
     type InlineConfig,
     resolveConfig,
 } from 'vite';
-import { CurrentConfig } from '../../../../packages/vite/src/util/CurrentConfig';
 import { MeteorViteError } from '../error/MeteorViteError';
 import { meteorWorker } from '../plugin/Meteor';
 import { homepage } from '../utilities/Constants';
 import Logger from '../utilities/Logger';
 import { type ProjectJson, type ResolvedMeteorViteConfig } from '../VitePluginSettings';
 import Instance from './Instance';
+
+export const CurrentConfig = globalThis.MeteorViteRuntimeConfig;
 
 export async function resolveMeteorViteConfig(
     inlineConfig: InlineConfig,
