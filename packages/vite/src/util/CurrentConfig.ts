@@ -23,6 +23,12 @@ export const CurrentConfig = {
     mode: process.env.NODE_ENV || 'development',
     bundleFileExtension,
     tempDir,
+    
+    // Vite bundle will be placed here when building for production.
+    // It's important to empty this directory when starting Meteor
+    // in development mode.
+    outDir: Path.join(tempDir, 'dist'),
+    
     serverEntryModule: Path.join(tempDir, 'server', '_entry.mjs'),
     serverProductionProxyModule: Path.join(tempDir, 'server', '_env.mjs'),
 } as const;
