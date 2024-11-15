@@ -13,6 +13,7 @@ const projectRoot = guessCwd();
 const configFile = Path.resolve(Path.join(projectRoot, 'vite.config.ts'));
 const tempDir = Path.join(projectRoot, '_vite-bundle');
 const bundleFileExtension = '_vite';
+const productionPreview = process.argv.includes('--production');
 
 process.env.METEOR_PROJECT_ROOT = projectRoot;
 
@@ -23,6 +24,7 @@ export const CurrentConfig = {
     mode: process.env.NODE_ENV || 'development',
     bundleFileExtension,
     tempDir,
+    productionPreview,
     
     // Vite bundle will be placed here when building for production.
     // It's important to empty this directory when starting Meteor
