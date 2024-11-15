@@ -104,6 +104,9 @@ export async function resolveMeteorViteConfig(
                         })
                     }
                 },
+                resolve: {
+                    external: true,
+                },
                 build: serverBuildConfig,
             },
             client: {
