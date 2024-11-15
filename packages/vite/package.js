@@ -14,10 +14,6 @@ Package.registerBuildPlugin({
     ],
 });
 
-Npm.depends({
-    vite: '6.0.0-alpha.24',
-})
-
 Package.onUse((api) => {
     api.versionsFrom(['3.0']);
     api.use([
