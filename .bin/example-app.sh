@@ -57,7 +57,7 @@ start() {
      npx concurrently -k -n "tsup,$app" -c dim,yellow "'npm:build:package -- -- --watch'" "'npm:start $app $*'"
   else
     cd "$APP_DIR" || exit 1
-    $npm start -- "$@"
+    $npm start -- "$@" $EXTRA_ARGS
   fi
 }
 
