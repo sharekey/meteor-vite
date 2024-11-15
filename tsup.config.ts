@@ -13,6 +13,7 @@ export default defineConfig(() => ({
     splitting: false,
     target: 'es2022',
     platform: 'node',
+    keepNames: true,
     sourcemap: true,
     format: 'esm',
     noExternal: ['meteor'],

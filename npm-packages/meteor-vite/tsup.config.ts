@@ -17,6 +17,7 @@ export default defineConfig([
         outDir: 'dist',
         format: 'esm',
         sourcemap: true,
+        keepNames: true,
         dts: false,
         onSuccess: async () => {
             try {
@@ -44,6 +45,7 @@ export default defineConfig([
             'esm',
         ],
         sourcemap: true,
+        keepNames: true,
         dts: true,
     },
 ]);
