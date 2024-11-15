@@ -3,9 +3,8 @@ import Path from 'node:path';
 import pc from 'picocolors';
 import type { RollupOutput, RollupWatcher } from 'rollup';
 import { createBuilder, version } from 'vite';
-import { CurrentConfig } from '../../../../packages/vite/src/util/CurrentConfig';
 import { MeteorViteError } from '../error/MeteorViteError';
-import { resolveMeteorViteConfig } from './Config';
+import { CurrentConfig, resolveMeteorViteConfig } from './Config';
 import Instance from './Instance';
 
 export async function buildForProduction() {
