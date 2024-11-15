@@ -15,10 +15,17 @@ Meteor.startup(async () => {
     
     // Todo: retrieve base and assets dir from build config/manifest file
     const boilerplate = new ViteProductionBoilerplate({
-        base: 'vite',
+        base: '/vite',
         assetsDir: 'vite',
         files,
     });
+    
+    WebApp.handlers.use(boilerplate.baseUrl, (req, res, next) => {
+        res.writeHead(404, 'Not found');
+        res.write('Vite asset could not be found');
+        Logger.warn(`Served 404 for unknown Vite asset: ${req.originalUrl}`);
+        res.end();
+    })
     
     // Todo: Instead of serving assets with Meteor's built-in static file handler,
     //  add a custom asset route where we have better control over caching and CORS rules.
@@ -40,12 +47,5 @@ Meteor.startup(async () => {
             throw error;
         }
     });
-    
-    WebApp.handlers.use(boilerplate.baseUrl, (req, res, next) => {
-        res.writeHead(404, 'Not found');
-        res.write('Vite asset could not be found');
-        Logger.warn(`Served 404 for unknown Vite asset: ${req.originalUrl}`);
-        res.end();
-    })
 })
 
