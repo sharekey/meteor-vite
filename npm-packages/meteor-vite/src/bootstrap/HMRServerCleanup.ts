@@ -2,6 +2,7 @@
 import { Meteor } from 'meteor/meteor';
 import pc from 'picocolors';
 import PackageJson from '../../package.json';
+import Logger, { createSimpleLogger } from '../utilities/Logger';
 
 
 
@@ -10,12 +11,13 @@ if (import.meta.hot) {
     // Todo: refactor to use stubs for tracking methods and publications created by the server entry.
     const method_handlers = {};
     const publish_handlers = {};
+    const logger = createSimpleLogger('HMR');
     
     await new Promise<void>((resolve) => {
         Meteor.startup(() => {
             Object.assign(method_handlers, Meteor.server.method_handlers)
             Object.assign(publish_handlers, Meteor.server.publish_handlers);
-            console.log({ method_handlers, publish_handlers })
+            logger.debug('Detected default Meteor API resources. These will not be altered on HMR', { method_handlers, publish_handlers })
             resolve()
         });
     })
