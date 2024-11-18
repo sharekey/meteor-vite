@@ -8,7 +8,7 @@ Package.describe({
 Package.registerBuildPlugin({
     name: 'vite',
     use: [
-        'ecmascript'
+        'ecmascript@0.16.9'
     ],
     sources: [
         'dist/build.mjs',
