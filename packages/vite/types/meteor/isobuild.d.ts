@@ -1,3 +1,9 @@
+/**
+ * This is not a real module that can be imported,
+ * we are just defining this as a module so we can more easily get
+ * type checking for Meteor's isobuild tool globals. Imports are
+ * stubbed out when building the package.
+ */
 declare module 'meteor/isobuild' {
     interface InputFile {
         getContentsAsString(): string;
