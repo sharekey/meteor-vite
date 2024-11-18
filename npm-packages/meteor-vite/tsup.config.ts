@@ -17,6 +17,7 @@ export default defineConfig([
         outDir: 'dist',
         format: 'esm',
         sourcemap: true,
+        target: 'node20',
         keepNames: true,
         dts: false,
         onSuccess: async () => {
