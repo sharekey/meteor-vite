@@ -2,9 +2,7 @@
 import { Meteor } from 'meteor/meteor';
 import pc from 'picocolors';
 import PackageJson from '../../package.json';
-import Logger, { createSimpleLogger } from '../utilities/Logger';
-
-
+import { createSimpleLogger } from '../utilities/Logger';
 
 if (import.meta.hot) {
     // Initial handles
