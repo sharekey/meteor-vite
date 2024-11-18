@@ -18,7 +18,7 @@ Package.registerBuildPlugin({
 Package.onUse((api) => {
     api.versionsFrom(['3.0']);
     api.use([
-        'isobuild:compiler-plugin',
+        'isobuild:compiler-plugin@1.0.0',
         'ecmascript'
     ]);
 
