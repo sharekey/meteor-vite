@@ -60,6 +60,7 @@ export async function MeteorServerBuilder({ packageJson, watch = true }: { packa
         platform: 'node',
         outDir: BUNDLE_OUT_DIR,
         config: false,
+        keepNames: true,
         noExternal,
         esbuildPlugins: [
             {
