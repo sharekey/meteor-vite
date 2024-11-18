@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "workspaces": [
+    "packages/vite",
     "packages/vite-bundler",
     "npm-packages/meteor-vite",
     "npm-packages/@meteor-vite/plugin-zodern-relay"
