@@ -13,7 +13,7 @@ export default defineConfig(() => ({
     splitting: false,
     target: 'es2022',
     platform: 'node',
-    keepNames: false,
+    keepNames: true,
     minify: false,
     sourcemap: true,
     format: 'esm',
