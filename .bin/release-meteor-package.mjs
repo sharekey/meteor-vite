@@ -8,10 +8,10 @@ const PACKAGE_NAME_REGEX = /name:\s*'(?<packageName>(?<author>[\w\-._]+):(?<name
 const PACKAGE_VERSION_REGEX = /version:\s*'(?<version>[\d\w.+-]+)'\s*,/;
 const CHANGESET_STATUS_FILE = 'changeset-status.json';
 const meteorPackage = {
-    releaseName: 'vite-bundler',
+    releaseName: 'vite',
     username: 'jorgenvatle',
-    packageJsPath: Path.join(repoPath, './packages/vite-bundler/package.js'),
-    packageJsonPath: Path.join(repoPath, './packages/vite-bundler/package.json'),
+    packageJsPath: Path.join(repoPath, './packages/vite/package.js'),
+    packageJsonPath: Path.join(repoPath, './packages/vite/package.json'),
 };
 const logger = {
     _history: [],
