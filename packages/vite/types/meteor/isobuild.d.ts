@@ -10,11 +10,20 @@ declare module 'meteor/isobuild' {
         getArch(): string;
         cacheable?: boolean;
     }
+    
     interface FileData {
         path: string;
         data: string | PluginFileBuffer;
         sourcePath?: string;
         sourceMap?: null | string;
     }
-    type PluginFileBuffer = ArrayBufferLike;
+    
+    namespace Plugin {
+        type CompilerPluginConfig = {
+            extensions: string[];
+            filenames: string[];
+        }
+        type FactoryFunction = () => { processFilesForTarget(): void };
+        function registerCompiler(config: CompilerPluginConfig, compilerFactory: FactoryFunction): void;
+    }
 }
