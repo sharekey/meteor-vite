@@ -1,6 +1,6 @@
-import { execSync, spawn, execFileSync } from 'child_process';
-import Path from 'path';
-import FS from 'fs/promises';
+import { execSync, spawn, execFileSync } from 'node:child_process';
+import Path from 'node:path';
+import FS from 'node:fs/promises';
 
 // Assuming this is launched from the repository root for now.
 const repoPath = process.cwd();
