@@ -29,7 +29,10 @@ declare module 'meteor/isobuild' {
             extensions: string[];
             filenames: string[];
         }
-        type FactoryFunction = () => { processFilesForTarget(): void };
+        interface CompilerPlugin {
+            processFilesForTarget(files: InputFile[]): void | Promise<void>;
+        }
+        type FactoryFunction = () => CompilerPlugin | Promise<CompilerPlugin>;
         function registerCompiler(config: CompilerPluginConfig, compilerFactory: FactoryFunction): void;
     }
 }
