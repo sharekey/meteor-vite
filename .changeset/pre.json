@@ -1,10 +1,10 @@
 {
   "mode": "pre",
-  "tag": "next",
+  "tag": "alpha",
   "initialVersions": {
-    "meteor-vite": "1.10.3",
+    "meteor-vite": "2.0.0-next.8",
     "@meteor-vite/plugin-zodern-relay": "1.0.2",
-    "vite-bundler": "2.0.1"
+    "vite-bundler": "3.0.0-next.23"
   },
   "changesets": [
     "chatty-years-love",
