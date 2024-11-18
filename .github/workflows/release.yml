@@ -11,7 +11,7 @@ on:
 
 env:
   METEOR_SESSION_FILE_PATH: /opt/meteor/.meteor_session.json
-  METEOR_RELEASE: 3.0-rc.2
+  METEOR_RELEASE: 3.0.4
 
 concurrency: ${{ github.workflow }}-${{ github.ref }}
 jobs:
