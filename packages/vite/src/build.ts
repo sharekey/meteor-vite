@@ -58,24 +58,31 @@ class CompilerPlugin {
     }
 }
 
-// Cleanup temporary files from previous builds.
-await runBootstrapScript('setupProject');
+if (process.env.VITE_METEOR_DISABLED) {
+    Logger.warn('MeteorVite build plugin disabled');
+}
 
-if (CurrentConfig.mode === 'production') {
-    try {
-        const bundle = runBootstrapScript('buildForProduction').catch((error) => {
-            if (CurrentConfig.productionPreview) {
-                return { outDir: CurrentConfig.outDir };
-            }
+else {
+    // Cleanup temporary files from previous builds.
+    await runBootstrapScript('setupProject');
+    
+    if (CurrentConfig.mode === 'production') {
+        try {
+            const bundle = runBootstrapScript('buildForProduction').catch((error) => {
+                if (CurrentConfig.productionPreview) {
+                    return { outDir: CurrentConfig.outDir };
+                }
+                throw error;
+            });
+            Plugin.registerCompiler({
+                filenames: [],
+                extensions: [CurrentConfig.bundleFileExtension]
+            }, () => bundle.then((({ outDir }) => new CompilerPlugin({ outDir }))));
+        } catch (error) {
+            Logger.error('build failed');
+            console.error(error);
             throw error;
-        });
-        Plugin.registerCompiler({
-            filenames: [],
-            extensions: [CurrentConfig.bundleFileExtension]
-        }, () => bundle.then((({ outDir }) => new CompilerPlugin({ outDir }))));
-    } catch (error) {
-        Logger.error('build failed');
-        console.error(error);
-        throw error;
+        }
     }
 }
+
