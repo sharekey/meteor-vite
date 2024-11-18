@@ -6,28 +6,5 @@
     "@meteor-vite/plugin-zodern-relay": "1.0.2",
     "vite-bundler": "3.0.0-next.23"
   },
-  "changesets": [
-    "chatty-years-love",
-    "cool-impalas-argue",
-    "curvy-roses-raise",
-    "cyan-actors-lie",
-    "friendly-years-type",
-    "great-dodos-smash",
-    "lemon-foxes-search",
-    "orange-students-sleep",
-    "plenty-cobras-collect",
-    "polite-wombats-decide",
-    "purple-carrots-drum",
-    "quick-pumpkins-drop",
-    "silly-bottles-pretend",
-    "sixty-birds-carry",
-    "slow-buses-invent",
-    "spicy-phones-smoke",
-    "tasty-pumas-invent",
-    "thin-sheep-nail",
-    "thirty-ducks-poke",
-    "tiny-tigers-divide",
-    "two-dolphins-sing",
-    "tiny-countries-sing"
-  ]
+  "changesets": []
 }
