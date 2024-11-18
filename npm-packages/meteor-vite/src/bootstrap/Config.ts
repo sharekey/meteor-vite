@@ -2,8 +2,7 @@ import FS from 'fs';
 import Path from 'path';
 import {
     type BuildEnvironmentOptions,
-    createNodeDevEnvironment,
-    createServerHotChannel,
+    createRunnableDevEnvironment,
     type InlineConfig,
     resolveConfig,
 } from 'vite';
@@ -97,9 +96,7 @@ export async function resolveMeteorViteConfig(
             server: {
                 dev: {
                     createEnvironment(name, config) {
-                        return createNodeDevEnvironment(name, config, {
-                            hot: createServerHotChannel(),
-                        })
+                        return createRunnableDevEnvironment(name, config);
                     }
                 },
                 resolve: {
