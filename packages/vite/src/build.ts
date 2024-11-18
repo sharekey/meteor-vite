@@ -1,8 +1,10 @@
+import type { InputFile } from 'meteor/isobuild';
+import { Plugin } from 'meteor/isobuild';
 import FS from 'node:fs';
 import Path from 'path';
 import pc from 'picocolors';
 import { inspect } from 'util';
-import type { BuildPluginFile } from '../../vite-bundler/src/plugin/Compiler';
+import type { BuildPluginFile } from 'vite-bundler/src/plugin/Compiler';
 import { runBootstrapScript } from './util/Bootstrap';
 import { CurrentConfig } from './util/CurrentConfig';
 import Logger from './util/Logger';
@@ -11,7 +13,7 @@ class CompilerPlugin {
     constructor(public readonly config: { outDir: string }) {
         Logger.info('Initializing Meteor Compiler Plugin...');
     }
-    processFilesForTarget(files: BuildPluginFile[]) {
+    processFilesForTarget(files: InputFile[]) {
         files.forEach(file => {
             const fileMeta = {
                 _original: {
