@@ -1,0 +1,8 @@
+{
+  "name": "jorgenvatle_vite",
+  "private": true,
+  "version": "1.0.0-next.0",
+  "scripts": {
+    "publish": "VITE_METEOR_DISABLED=true meteor publish"
+  }
+}
