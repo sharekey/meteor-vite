@@ -1,5 +1,11 @@
 # meteor-vite
 
+## 3.0.0-alpha.1
+
+### Patch Changes
+
+- 9f657993: Pre-release for Vite v6 rewrite. Adds lightning fast server-side HMR
+
 ## 2.0.0-next.8
 
 ### Patch Changes
