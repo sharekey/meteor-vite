@@ -1,14 +1,11 @@
 import FS from 'fs';
 import Path from 'path';
 import { RollupOutput } from 'rollup';
-import { build, InlineConfig, resolveConfig, BuildOptions as ViteBuildOptions } from 'vite';
+import { build, resolveConfig } from 'vite';
 import MeteorVitePackage from '../../../../package.json';
-import {
-    type ResolvedMeteorViteConfig,
-    type ProjectJson,
-    type MeteorStubsSettings,
-} from '../../../VitePluginSettings';
+import type { BuildOptions, ParsedConfig, TransformedViteManifest } from '../../../bootstrap/Build';
 import { meteorWorker } from '../../../plugin/Meteor';
+import { type ResolvedMeteorViteConfig } from '../../../VitePluginSettings';
 import { MeteorServerBuilder } from '../../ServerBuilder';
 import { defineIpcMethods } from '../interface';
 import { IPC } from '../transports/Transport';
@@ -137,35 +134,5 @@ function validateOutput(rollupResult?: BuildOutput | RollupOutput): asserts roll
     const message = 'Unexpected rollup result!';
     console.error(message, rollupResult);
     throw new Error(message);
-}
-
-export interface BuildOptions {
-    meteor: MeteorStubsSettings['meteor'];
-    packageJson: ProjectJson;
-}
-
-export type BuildResultChunk = {name?: string, type: string, fileName: string};
-
-type ParsedConfig = {
-    viteConfig: ResolvedMeteorViteConfig;
-    inlineBuildConfig: InlineConfig;
-    outDir: string;
-}
-
-export type TransformedViteManifest = {
-    base: string;
-    assetsDir: string;
-    files: Record<string, ViteManifestFile>;
-}
-
-export type ViteManifestFile = {
-    file: string;
-    src: string;
-    name?: string;
-    isDynamicEntry?: boolean;
-    isEntry?: boolean;
-    css?: string[];
-    imports?: string[];
-    dynamicImports?: string[];
 }
 

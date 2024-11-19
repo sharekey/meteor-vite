@@ -2,8 +2,9 @@ import FS from 'fs';
 import Path from 'node:path';
 import pc from 'picocolors';
 import type { RollupOutput, RollupWatcher } from 'rollup';
-import { createBuilder, version } from 'vite';
+import { createBuilder, type InlineConfig, version } from 'vite';
 import { MeteorViteError } from '../error/MeteorViteError';
+import type { MeteorStubsSettings, ProjectJson, ResolvedMeteorViteConfig } from '../VitePluginSettings';
 import { CurrentConfig, resolveMeteorViteConfig } from './Config';
 import Instance from './Instance';
 
@@ -112,4 +113,31 @@ function addServerEntryImport({ filePath }: {
         filePath,
         serverEntryModule,
     }
+}
+
+export interface BuildOptions {
+    meteor: MeteorStubsSettings['meteor'];
+    packageJson: ProjectJson;
+}
+
+export type BuildResultChunk = { name?: string, type: string, fileName: string };
+export type ParsedConfig = {
+    viteConfig: ResolvedMeteorViteConfig;
+    inlineBuildConfig: InlineConfig;
+    outDir: string;
+}
+export type TransformedViteManifest = {
+    base: string;
+    assetsDir: string;
+    files: Record<string, ViteManifestFile>;
+}
+export type ViteManifestFile = {
+    file: string;
+    src: string;
+    name?: string;
+    isDynamicEntry?: boolean;
+    isEntry?: boolean;
+    css?: string[];
+    imports?: string[];
+    dynamicImports?: string[];
 }

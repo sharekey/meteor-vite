@@ -1,5 +1,5 @@
 import FS from 'fs';
-import type { TransformedViteManifest } from 'meteor-vite/meteor/IPC/methods/build';
+import type { TransformedViteManifest } from 'meteor-vite/bootstrap/Build';
 import { Meteor } from 'meteor/meteor';
 import { WebApp, WebAppInternals } from 'meteor/webapp';
 import Path from 'path';
