@@ -55,6 +55,7 @@ jobs:
         run: timeout 30 npm start ${{ inputs.appBasename }}
         env:
           VITE_METEOR_DISABLED: true
+          MONGO_URL: mongodb://localhost
 
       - name: 'Build for production'
         run: meteor npm run build ${{ inputs.appBasename }}
