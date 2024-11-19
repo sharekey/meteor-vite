@@ -1,5 +1,11 @@
 # meteor-vite
 
+## 3.0.0-alpha.2
+
+### Patch Changes
+
+- 93bd49cb: Fall back to importing from package root if subpath import fails. This is a temporary fix to address server compatability as the package parser currently only scans for exports in web.browser.
+
 ## 3.0.0-alpha.1
 
 ### Patch Changes
