@@ -8,6 +8,7 @@ on:
       - release
       - meteor-v3
       - v3
+      - v3.1-vite-vms
   pull_request:
     branches:
       - main
