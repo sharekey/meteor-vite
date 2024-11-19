@@ -30,7 +30,6 @@ export async function buildForProduction() {
         
         
         const result = normalizeBuildOutput(
-            // @ts-expect-error Todo: correct configuration issue that causes mismatches between types imported at the root of node_modules
             await builder.build(environment)
         );
         
