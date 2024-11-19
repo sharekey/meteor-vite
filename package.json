@@ -22,6 +22,8 @@
     "start": "npm run example start",
     "launch": "npm run example launch",
     "build": "npm run example build",
+    "build:packages": "npm run build:vite && npm run build:package",
+    "prepare": "npm run build:packages || exit 0",
     "build:vite": "tsup",
     "link": "npm run example link",
     "release": "npm run publish:vite-bundler && changeset publish",
