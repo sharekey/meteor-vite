@@ -42,6 +42,9 @@ jobs:
         with:
           meteor-release: ${{ inputs.meteorRelease }}
 
+      - name: 'Install dependencies'
+        run: meteor npm i
+
       - name: 'Install and link dependencies for `examples/${{ inputs.appBasename }}`'
         run: meteor npm run example prepare ${{ inputs.appBasename }}
 
