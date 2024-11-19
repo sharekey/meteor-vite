@@ -44,7 +44,12 @@ ${serializedPackage.reExports.join('\n')}
 let ${METEOR_STUB_KEY};
 const require = Package.modules.meteorInstall({
   '__vite_stub${stubId}.js': (require, exports, module) => {
-      ${METEOR_STUB_KEY} = require('${fullImportPath}');
+      try {
+          ${METEOR_STUB_KEY} = require('${fullImportPath}');
+      } catch (error) {
+          console.warn('⚡ Import failed for ${fullImportPath}. Importing from main module instead (${packageId})');
+          ${METEOR_STUB_KEY} = require('${packageId}');
+      }
       
       ${stubValidation.validateStub}
   }
