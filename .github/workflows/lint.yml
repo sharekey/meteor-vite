@@ -17,7 +17,7 @@ jobs:
         uses: actions/setup-node@v3
       - name: 'Install dependencies'
         run: cd "$NPM_PACKAGE_PATH" && npm i
-      - name: 'Run tests'
+      - name: 'Run linter'
         run: cd "$NPM_PACKAGE_PATH" && npm run lint
 
 
