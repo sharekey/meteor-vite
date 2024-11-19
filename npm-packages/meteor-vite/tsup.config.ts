@@ -8,7 +8,6 @@ export default defineConfig([
     {
         name: 'internals',
         entry: [
-            './src/bin/worker.ts',
             './src/client/index.ts',
             './src/bootstrap/index.ts',
             './src/bootstrap/HMRServerCleanup.ts',
