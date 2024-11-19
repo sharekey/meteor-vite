@@ -52,7 +52,7 @@ jobs:
         run: meteor npm run link ${{ inputs.appBasename }}
 
       - name: 'Force-create dev bundle'
-        run: timeout 30 npm start ${{ inputs.appBasename }}
+        run: timeout 30 npm start ${{ inputs.appBasename }} --preserve-status
         env:
           VITE_METEOR_DISABLED: true
           MONGO_URL: mongodb://localhost
