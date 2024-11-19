@@ -53,6 +53,7 @@ jobs:
 
       - name: 'Force-create dev bundle'
         run: timeout 30 npm start ${{ inputs.appBasename }} --preserve-status
+        continue-on-error: true
         env:
           VITE_METEOR_DISABLED: true
           MONGO_URL: mongodb://localhost
