@@ -8,6 +8,7 @@
     "jorgenvatle_vite": "1.0.0-next.0"
   },
   "changesets": [
+    "fresh-fishes-grab",
     "thin-windows-leave"
   ]
 }
