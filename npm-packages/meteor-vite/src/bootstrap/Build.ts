@@ -41,7 +41,9 @@ export async function buildForProduction() {
                 const ext = `.${CurrentConfig.bundleFileExtension}`;
                 const filePath = originalFilePath + ext;
                 
-                list.push({ filePath, originalFilePath, isEntry: chunk.isEntry });
+                if ('isEntry' in chunk) {
+                    list.push({ filePath, originalFilePath, isEntry: chunk.isEntry });
+                }
                 
                 // Appending our own temporary file extension on output files
                 // to help Meteor identify files to be processed by our compiler plugin.
