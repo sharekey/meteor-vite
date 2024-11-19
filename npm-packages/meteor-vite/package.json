@@ -23,7 +23,7 @@
   "scripts": {
     "start": "ts-node-dev src/bin/debug/watch-mocks.ts",
     "watch": "tsup --watch --dts --sourcemap",
-    "build": "rm -rf ./dist && tsup-node",
+    "build": "rm -rf ./dist && tsup",
     "prepack": "npm run build",
     "test": "vitest"
   },
