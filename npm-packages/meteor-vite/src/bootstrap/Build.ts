@@ -25,6 +25,11 @@ export async function buildForProduction() {
             continue;
         }
         
+        if (context.toLowerCase() === 'server' && !config.meteor.serverEntry) {
+            logger.info(`Skipping ${pc.yellow(context)} build: no server entry configured`);
+            continue;
+        }
+        
         logger.info(`Preparing ${pc.yellow(context)} bundle...`);
         const list = fileNames[context] || [];
         
