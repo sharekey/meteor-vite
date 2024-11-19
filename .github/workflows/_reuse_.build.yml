@@ -51,6 +51,11 @@ jobs:
       - name: 'Link meteor-vite package'
         run: meteor npm run link ${{ inputs.appBasename }}
 
+      - name: 'Force-create dev bundle'
+        run: timeout 30 npm start ${{ inputs.appBasename }}
+        env:
+          VITE_METEOR_DISABLED: true
+
       - name: 'Build for production'
         run: meteor npm run build ${{ inputs.appBasename }}
 
