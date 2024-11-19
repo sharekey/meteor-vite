@@ -25,7 +25,8 @@
     "watch": "tsup --watch --dts --sourcemap",
     "build": "rm -rf ./dist && tsup",
     "prepack": "npm run build",
-    "test": "vitest"
+    "test": "vitest",
+    "lint": "tsc --noEmit"
   },
   "typesVersions": {
     "*": {
