@@ -49,7 +49,7 @@ COPY ./test-packages/atmosphere/ $METEOR_PACKAGES_FOLDER/
 COPY ./package*.json .
 
 # Prepare meteor-vite package for local reference when preparing npm dependencies.
-RUN meteor npm ci && cd $NPM_PACKAGES_FOLDER/meteor-vite && meteor npm link
+RUN meteor npm ci && npm run prepare && cd $NPM_PACKAGES_FOLDER/meteor-vite && meteor npm link
 
 WORKDIR $APP_SOURCE_FOLDER
 
