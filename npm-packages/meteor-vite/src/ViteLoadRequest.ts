@@ -127,7 +127,8 @@ export default class ViteLoadRequest {
         const packageName = packageId.replace(/^meteor\//, '');
         const sourceName = packageName.replace(':', '_');
         const sourceFile = `${sourceName}.js`;
-        const sourcePath = Path.join(meteorStubs.meteor.packagePath, sourceFile);
+        const sourceDirBasename = environment.name === 'server' ? 'server' : 'web.browser';
+        const sourcePath = Path.join(meteorStubs.meteor.buildProgramsPath, sourceDirBasename, 'packages', sourceFile);
         const resolverResultCache: ResolverResultCache = JSON.parse(NodeFS.readFileSync(Path.join(
             meteorStubs.meteor.isopackPath,
             '../resolver-result-cache.json',
