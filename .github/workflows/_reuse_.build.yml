@@ -48,9 +48,6 @@ jobs:
       - name: 'Install and link dependencies for `examples/${{ inputs.appBasename }}`'
         run: meteor npm run example prepare ${{ inputs.appBasename }}
 
-      - name: 'Link meteor-vite package'
-        run: meteor npm run link ${{ inputs.appBasename }}
-
       - name: 'Build for production'
         run: meteor npm run build ${{ inputs.appBasename }}
 
