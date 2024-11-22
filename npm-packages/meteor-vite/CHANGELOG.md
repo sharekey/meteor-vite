@@ -1,5 +1,12 @@
 # meteor-vite
 
+## 3.0.0-alpha.3
+
+### Patch Changes
+
+- f31a8202: Fix builds: disable incompatible Meteor build plugins on startup
+- bd1e74ac: Use global Package object as base for Meteor module stubs
+
 ## 3.0.0-alpha.2
 
 ### Patch Changes
