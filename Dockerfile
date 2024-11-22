@@ -51,7 +51,7 @@ COPY ./package*.json $ROOT_FOLDER/
 COPY ./tsup.config.ts $ROOT_FOLDER/
 
 # Prepare repository root-level npm dependencies
-RUN meteor npm ci && meteor npm run build:packages
+RUN cd $ROOT_FOLDER && meteor npm ci && meteor npm run build:packages
 
 # Prepare example app's npm dependencies
 RUN cd $NPM_PACKAGES_FOLDER/meteor-vite && meteor npm link
