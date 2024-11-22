@@ -110,6 +110,8 @@ const INCOMPATIBLE_PACKAGES: { startsWith: string, replaceWith: string }[] = [
 function disableIncompatibleBuildPlugins() {
     const packagesFileContent = FS.readFileSync(CurrentConfig.meteorPackagesFile, 'utf-8');
     const lines = packagesFileContent.split(/[\r\n]+/);
+    let disabledCount = 0;
+    const readmeLink = CurrentConfig.readmeLink('meteor-build-plugins');
     
     const newContent = lines.map((rawLine) => {
         const line = rawLine.trim();
@@ -118,17 +120,23 @@ function disableIncompatibleBuildPlugins() {
                 continue;
             }
             
-            // todo: print notice to console that an incompatible plugin was disabled.
+            const [packageName] = rawLine.split(/\s/);
+            Logger.warn(`Meteor package ${packageName} will be disabled as it is redundant or known to cause issues with Meteor-Vite`);
+            disabledCount++;
+            
             return [
                 '## Incompatible with MeteorVite',
                 '## Vite already provides similar functionality so these plugins will likely just slow down the build process unnecessarily',
-                `## More info: ${CurrentConfig.readmeLink('meteor-build-plugins')}`,
+                `## More info: ${readmeLink}`,
                 `${replaceWith} # ${line}`.trim()
             ].join('\n');
         }
         return line;
     }).join('\n');
     
+    if (disabledCount) {
+        Logger.info(`See the following link for more info on why some packages are disabled: ${readmeLink}`);
+    }
     
     FS.writeFileSync(CurrentConfig.meteorPackagesFile, newContent);
 }
