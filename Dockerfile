@@ -47,6 +47,7 @@ COPY ./packages $METEOR_PACKAGES_FOLDER
 COPY ./npm-packages $NPM_PACKAGES_FOLDER
 COPY ./test-packages/atmosphere/ $METEOR_PACKAGES_FOLDER/
 COPY ./package*.json .
+COPY ./tsup.config.ts .
 
 # Prepare repository root-level npm dependencies
 RUN meteor npm ci && meteor npm run prepare
