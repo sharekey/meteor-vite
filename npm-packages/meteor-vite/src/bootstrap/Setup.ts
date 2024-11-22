@@ -95,7 +95,7 @@ export function serverRollupInput(config: { meteorMainModule: string | undefined
 }
 
 const INCOMPATIBLE_PACKAGES: { startsWith: string, replaceWith: string, reason: string }[] = [
-    { startsWith: 'standard-minifier', replaceWith: '', reason: 'Minification is already performed by Vite' },
+    { startsWith: 'standard-minifier', replaceWith: '', reason: 'Minification is already handled and configurable through Vite' },
     { startsWith: 'refapp:meteor-typescript', replaceWith: 'typescript', reason: 'TypeScript is already handled by Vite' },
 ]
 
