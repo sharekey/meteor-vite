@@ -63,29 +63,37 @@ if (process.env.VITE_METEOR_DISABLED) {
 }
 
 else {
+    
     // Cleanup temporary files from previous builds.
-    await runBootstrapScript('setupProject');
+    const cleanup = runBootstrapScript('setupProject');
+   
     // todo: Verify Meteor packages file to warn users if there are active incompatible plugins.
     //  The standard-minifier plugins strip out sources that the export analyzer depends on, so
     //  with these plugins installed, builds will always fail.
     
     if (CurrentConfig.mode === 'production') {
-        try {
-            const bundle = runBootstrapScript('buildForProduction').catch((error) => {
-                if (CurrentConfig.productionPreview) {
-                    return { outDir: CurrentConfig.outDir };
-                }
+        Plugin.registerCompiler({
+            filenames: [],
+            extensions: [CurrentConfig.bundleFileExtension]
+        }, async () => {
+            try {
+                await cleanup;
+                const { outDir } = await runBootstrapScript('buildForProduction').catch((error) => {
+                    if (CurrentConfig.productionPreview) {
+                        return { outDir: CurrentConfig.outDir };
+                    }
+                    throw error;
+                });
+                
+                return new CompilerPlugin({ outDir });
+            } catch (error) {
+                Logger.error('build failed');
+                console.error(error);
                 throw error;
-            });
-            Plugin.registerCompiler({
-                filenames: [],
-                extensions: [CurrentConfig.bundleFileExtension]
-            }, () => bundle.then((({ outDir }) => new CompilerPlugin({ outDir }))));
-        } catch (error) {
-            Logger.error('build failed');
-            console.error(error);
-            throw error;
-        }
+            }
+        });
     }
+    
+   await cleanup;
 }
 
