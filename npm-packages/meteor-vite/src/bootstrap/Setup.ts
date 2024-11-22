@@ -109,7 +109,7 @@ const INCOMPATIBLE_PACKAGES: { startsWith: string, replaceWith: string }[] = [
  */
 function disableIncompatibleBuildPlugins() {
     const packagesFileContent = FS.readFileSync(CurrentConfig.meteorPackagesFile, 'utf-8');
-    const lines = packagesFileContent.split(/[\r\n]+/);
+    const lines = packagesFileContent.split(/[\r\n]/);
     let disabledCount = 0;
     const readmeLink = CurrentConfig.readmeLink('meteor-build-plugins');
     
@@ -131,7 +131,7 @@ function disableIncompatibleBuildPlugins() {
                 `${replaceWith} # ${line}`.trim()
             ].join('\n');
         }
-        return line;
+        return rawLine;
     }).join('\n');
     
     if (disabledCount) {
