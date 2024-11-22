@@ -3,7 +3,7 @@ import { execaSync } from 'execa';
 import Path from 'node:path';
 import pc from 'picocolors';
 import type { RollupOutput, RollupWatcher } from 'rollup';
-import { createBuilder, type InlineConfig, version } from 'vite';
+import { createBuilder, type InlineConfig, mergeConfig, version } from 'vite';
 import { MeteorViteError } from '../error/MeteorViteError';
 import Logger from '../utilities/Logger';
 import type { MeteorStubsSettings, ProjectJson, ResolvedMeteorViteConfig } from '../VitePluginSettings';
@@ -21,7 +21,7 @@ export async function buildForProduction() {
     
     preparePackagesForExportAnalyzer({ tempMeteorOutDir: CurrentConfig.packageAnalyzer.outDir });
     // todo: refactor into environment config
-    config.meteor.meteorStubs.meteor.packagePath = CurrentConfig.packageAnalyzer.packagePath('web.browser');
+    config.meteor.meteorStubs.meteor.buildProgramsPath = CurrentConfig.packageAnalyzer.buildProgramsDir;
     
     const builder = await createBuilder(config);
     const fileNames: Partial<Record<string, { filePath: string, originalFilePath: string, isEntry?: boolean }[]>> = {};
