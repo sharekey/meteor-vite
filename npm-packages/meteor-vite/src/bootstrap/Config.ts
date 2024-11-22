@@ -24,7 +24,9 @@ export async function resolveMeteorViteConfig(
     const { projectRoot, outDir } = CurrentConfig;
     const packageJson = parsePackageJson();
     process.chdir(projectRoot);
-    const userConfig: ResolvedMeteorViteConfig = await resolveConfig(inlineConfig, command);
+    const userConfig: ResolvedMeteorViteConfig = await resolveConfig(Object.assign({
+        configFile: packageJson.meteor.vite?.configFile,
+    }, inlineConfig), command);
     let serverBuildConfig: BuildEnvironmentOptions | undefined = undefined;
     
     if (userConfig.meteor?.serverEntry) {
