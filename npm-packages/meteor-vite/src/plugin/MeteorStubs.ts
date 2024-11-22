@@ -26,8 +26,8 @@ export const MeteorStubs: () => Promise<Plugin> = setupPlugin(async () => {
                 })
             }
         },
-        async setupContext(viteId, server, pluginSettings: ResolvedPluginConfig) {
-            return ViteLoadRequest.prepareContext({ id: viteId, pluginSettings, server, environment: this.environment });
+        async setupContext(viteId, server, pluginSettings: ResolvedPluginConfig, environment) {
+            return ViteLoadRequest.prepareContext({ id: viteId, pluginSettings, server, environment });
         },
         
         async load(request) {
