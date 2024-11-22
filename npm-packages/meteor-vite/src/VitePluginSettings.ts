@@ -134,8 +134,18 @@ export interface PluginSettings<
              * serving up the dev server.
              *
              * @example {@link /examples/vue/.meteor/local/build/programs/web.browser/packages}
+             * @deprecated
              */
             packagePath: string;
+            
+            /**
+             * Path to Meteor's internal package cache.
+             * This can change independently of the isopack path depending on whether we're building for production or
+             * serving up the dev server.
+             *
+             * @example {@link /examples/vue/.meteor/local/build/programs}
+             */
+            buildProgramsPath: string;
             
             /**
              * Path to Meteor's local Isopacks store. Used to determine where a package's mainModule is located and
