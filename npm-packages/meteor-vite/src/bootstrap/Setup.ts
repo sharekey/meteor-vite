@@ -132,11 +132,13 @@ function disableIncompatibleBuildPlugins() {
             ].join(`\n`));
             
             return [
+                '',
                 `## Incompatible with MeteorVite`,
                 '## Vite already provides similar functionality so these plugins will likely just slow down the build process unnecessarily',
                 `## Reason: ${reason}`,
                 `## More info: ${readmeLink}`,
-                `${replaceWith} # ${line}`.trim()
+                `${replaceWith} # ${line}`.trim(),
+                '',
             ].join('\n');
         }
         return rawLine;
