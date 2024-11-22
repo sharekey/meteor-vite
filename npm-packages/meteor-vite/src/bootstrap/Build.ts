@@ -20,8 +20,7 @@ export async function buildForProduction() {
         throw new MeteorViteError('No client entrypoint specified in Vite config!')
     }
     
-    const tempMeteorOutDir = Path.join(OS.tmpdir(), 'meteor-vite', Path.basename(CurrentConfig.projectRoot));
-    preparePackagesForExportAnalyzer({ tempMeteorOutDir });
+    preparePackagesForExportAnalyzer({ tempMeteorOutDir: CurrentConfig.packageAnalyzer.outDir });
     
     const builder = await createBuilder(config);
     const fileNames: Partial<Record<string, { filePath: string, originalFilePath: string, isEntry?: boolean }[]>> = {};
