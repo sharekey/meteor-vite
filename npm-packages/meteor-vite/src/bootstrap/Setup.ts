@@ -120,8 +120,8 @@ function disableIncompatibleBuildPlugins() {
                 continue;
             }
             
-            const [packageName] = rawLine.split(/\s/);
-            Logger.warn(`Meteor package ${packageName} will be disabled as it is redundant or known to cause issues with Meteor-Vite`);
+            const [packageName] = rawLine.split(/\s|@/);
+            Logger.warn(`Meteor package ${pc.underline(pc.yellow(packageName))} will be disabled as it is redundant or known to cause issues with Meteor-Vite`);
             disabledCount++;
             
             return [
