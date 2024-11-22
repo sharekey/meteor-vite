@@ -120,9 +120,14 @@ function disableIncompatibleBuildPlugins() {
                 continue;
             }
             
-            const [packageName] = rawLine.split(/\s|@/);
-            Logger.warn(`Meteor package ${pc.underline(pc.yellow(packageName))} will be disabled: ${pc.italic(reason)}`);
             disabledCount++;
+            const [packageName] = rawLine.split(/\s|@/);
+            
+            Logger.warn([
+                pc.blue(`Meteor package ${pc.underline(pc.yellow(packageName))} will be disabled`),
+                ` ${pc.dim('L')}  ${pc.green(reason)}`,
+                '',
+            ].join(`\n`));
             
             return [
                 `## Incompatible with MeteorVite`,
