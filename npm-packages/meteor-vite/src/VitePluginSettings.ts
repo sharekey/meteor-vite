@@ -260,7 +260,7 @@ export interface ResolvedMeteorViteConfig extends ResolvedConfig {
 }
 
 declare module 'vite' {
-    interface EnvironmentOptions {
-        meteor?: PluginSettings
+    interface ResolvedEnvironmentOptions {
+        meteor?: ResolvedPluginSettings
     }
 }
