@@ -1,5 +1,11 @@
 # @meteor-vite/plugin-zodern-relay
 
+## 1.1.0-alpha.0
+
+### Minor Changes
+
+- 92a56a16: Infer architecture from both Vite environment context and older Vite SSR flags
+
 ## 1.0.6
 
 ### Patch Changes
