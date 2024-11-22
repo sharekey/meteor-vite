@@ -94,6 +94,11 @@ export function serverRollupInput(config: { meteorMainModule: string | undefined
     return prepareProductionServerProxyModule(config.viteServerEntry);
 }
 
+const INCOMPATIBLE_PACKAGES: { startsWith: string, replaceWith: string }[] = [
+    { startsWith: 'standard-minifier', replaceWith: '' },
+    { startsWith: 'refapp:meteor-typescript', replaceWith: 'typescript' },
+]
+
 /**
  * Disable incompatible Meteor build plugins.
  * Build plugins like `standard-minifier-js` strip out package caches before we have the chance to
@@ -103,8 +108,27 @@ export function serverRollupInput(config: { meteorMainModule: string | undefined
  * to just disable them outright when loading a project with MeteorVite enabled
  */
 function disableIncompatibleBuildPlugins() {
-    // read .meteor/packages
-    // comment out minifier packages
-    // append additional comment explaining why they were disabled
-    // log message to console
+    const packagesFileContent = FS.readFileSync(CurrentConfig.meteorPackagesFile, 'utf-8');
+    const lines = packagesFileContent.split(/[\r\n]+/);
+    
+    const newContent = lines.map((rawLine) => {
+        const line = rawLine.trim();
+        for (const { startsWith, replaceWith } of INCOMPATIBLE_PACKAGES) {
+            if (!line.startsWith(startsWith)) {
+                continue;
+            }
+            
+            // todo: print notice to console that an incompatible plugin was disabled.
+            return [
+                '## Incompatible with MeteorVite',
+                '## Vite already provides similar functionality so these plugins will likely just slow down the build process unnecessarily',
+                `## More info: ${CurrentConfig.readmeLink('meteor-build-plugins')}`,
+                `${replaceWith} # ${line}`.trim()
+            ].join('\n');
+        }
+        return line;
+    }).join('\n');
+    
+    
+    FS.writeFileSync(CurrentConfig.meteorPackagesFile, newContent);
 }
