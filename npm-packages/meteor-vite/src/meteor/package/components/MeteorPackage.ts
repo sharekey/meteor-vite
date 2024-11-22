@@ -8,6 +8,12 @@ import type ModuleExport from './ModuleExport';
 import PackageExport from './PackageExport';
 import { PackageSubmodule } from './PackageSubmodule';
 
+interface MeteorPackageMetaOptions {
+    timeSpent: string;
+    ignoreDuplicateExportsInPackages?: string[],
+    viteEnv?: string;
+}
+
 export default class MeteorPackage implements Omit<ParsedPackage, 'packageScopeExports'> {
     
     public readonly name: string;
@@ -16,7 +22,7 @@ export default class MeteorPackage implements Omit<ParsedPackage, 'packageScopeE
     public readonly packageScopeExports: PackageExport[] = [];
     public readonly packageId: string;
     
-    constructor(public readonly parsedPackage: ParsedPackage, public readonly meta: { timeSpent: string; ignoreDuplicateExportsInPackages?: string[] }) {
+    constructor(public readonly parsedPackage: ParsedPackage, public readonly meta: MeteorPackageMetaOptions) {
         this.name = parsedPackage.name;
         this.modules = parsedPackage.modules;
         this.mainModulePath = parsedPackage.mainModulePath;
@@ -47,7 +53,7 @@ export default class MeteorPackage implements Omit<ParsedPackage, 'packageScopeE
         }, null, 2);
     }
     
-    public static async parse(parse: Parameters<typeof parseMeteorPackage>[0], options?: { ignoreDuplicateExportsInPackages?: string[] }) {
+    public static async parse(parse: Parameters<typeof parseMeteorPackage>[0], options?: Partial<MeteorPackageMetaOptions>) {
         const { result, timeSpent } = await parseMeteorPackage(parse);
         return new MeteorPackage(result, { timeSpent, ...options });
     }

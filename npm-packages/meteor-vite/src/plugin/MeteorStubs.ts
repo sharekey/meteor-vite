@@ -46,7 +46,8 @@ export const MeteorStubs: () => Promise<Plugin> = setupPlugin(async () => {
                 filePath: request.context.file.sourcePath,
                 fileContent: request.context.file.content,
             }, {
-                ignoreDuplicateExportsInPackages: request.context.pluginSettings.stubValidation.ignoreDuplicateExportsInPackages
+                ignoreDuplicateExportsInPackages: request.context.pluginSettings.stubValidation.ignoreDuplicateExportsInPackages,
+                viteEnv: request.context.environment.name,
             });
             
             const template = stubTemplate({
