@@ -51,7 +51,7 @@ export default async function zodernRelay(options?: Options): Promise<Plugin> {
             
             let arch = 'web.browser.vite';
             
-            if (fileOptions?.ssr) {
+            if (fileOptions?.ssr || this.environment.name === 'server') {
                 arch = 'os.vite.ssr';
             }
             
