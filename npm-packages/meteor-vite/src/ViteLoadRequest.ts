@@ -2,7 +2,7 @@ import NodeFS, { existsSync } from 'fs';
 import FS from 'fs/promises';
 import Path from 'path';
 import pc from 'picocolors';
-import { ViteDevServer } from 'vite';
+import { type Environment, ViteDevServer } from 'vite';
 import { MeteorViteError } from './error/MeteorViteError';
 import AutoImportQueue from './meteor/package/AutoImportQueue';
 import { isSameModulePath } from './meteor/package/components/MeteorPackage';
@@ -104,7 +104,7 @@ export default class ViteLoadRequest {
         return importPath.replace('meteor:', 'meteor/modules/node_modules/');
     }
 
-    protected static loadFileData({ id, pluginSettings: { meteorStubs } }: PreContextRequest) {
+    protected static loadFileData({ id, pluginSettings: { meteorStubs }, environment }: PreContextRequest) {
         let {
             /**
              * Base Atmosphere package import This is usually where we find the full package content, even for packages
@@ -134,10 +134,11 @@ export default class ViteLoadRequest {
         ), 'utf-8'));
         const packageVersion = resolverResultCache.lastOutput.answer[packageName];
         const globalMeteorPackagesDir = meteorStubs.meteor.globalMeteorPackagesDir || this.guessMeteorPackagePath();
+        const manifestFile = environment.name === 'server' ? 'os.json' : 'web.browser.json';
         
         const manifestPath = {
-            local: Path.join(meteorStubs.meteor.isopackPath, sourceName, 'web.browser.json'),
-            globalCache: Path.join(globalMeteorPackagesDir, sourceName, packageVersion, 'web.browser.json'),
+            local: Path.join(meteorStubs.meteor.isopackPath, sourceName, manifestFile),
+            globalCache: Path.join(globalMeteorPackagesDir, sourceName, packageVersion, manifestFile),
         };
         
         /**
@@ -159,6 +160,7 @@ export default class ViteLoadRequest {
             packageId,
             importPath,
             sourcePath,
+            environment,
             manifestPath: NodeFS.existsSync(manifestPath.local)
                           ? manifestPath.local
                           : manifestPath.globalCache,
@@ -259,6 +261,7 @@ interface PreContextRequest {
     id: string;
     pluginSettings: ResolvedPluginSettings;
     server: ViteDevServer;
+    environment: Environment;
 }
 
 export interface RequestContext extends PreContextRequest {
