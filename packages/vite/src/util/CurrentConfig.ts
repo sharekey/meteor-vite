@@ -42,6 +42,9 @@ export const CurrentConfig = {
      */
     packageAnalyzer: {
         outDir: Path.join(OS.tmpdir(), 'meteor-vite', Path.basename(projectRoot)),
+        packagePath(arch = 'web.browser') {
+            return Path.join(this.outDir, 'bundle', 'programs', arch, 'packages');
+        }
     },
     readmeLink: (section: 'meteor-build-plugins') => `https://github.com/JorgenVatle/meteor-vite#${section}`
 } as const;
