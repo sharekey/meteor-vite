@@ -250,7 +250,7 @@ export interface ResolvedMeteorViteConfig extends ResolvedConfig {
 }
 
 declare module 'vite' {
-    interface UserConfig {
+    interface EnvironmentOptions {
         meteor?: ResolvedPluginSettings
     }
 }
