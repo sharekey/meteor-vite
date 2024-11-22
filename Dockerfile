@@ -39,15 +39,16 @@ RUN test -n "$APP_BASENAME"
 
 ENV APP_BASENAME=$APP_BASENAME
 ENV APP_DIR=./examples/$APP_BASENAME
-ENV METEOR_PACKAGES_FOLDER=/root/packages
-ENV NPM_PACKAGES_FOLDER=/root/npm-packages
+ENV ROOT_FOLDER=/root
+ENV METEOR_PACKAGES_FOLDER=$ROOT_FOLDER/packages
+ENV NPM_PACKAGES_FOLDER=$ROOT_FOLDER/npm-packages
 ENV METEOR_PACKAGE_DIRS=$METEOR_PACKAGES_FOLDER
 
 COPY ./packages $METEOR_PACKAGES_FOLDER
 COPY ./npm-packages $NPM_PACKAGES_FOLDER
 COPY ./test-packages/atmosphere/ $METEOR_PACKAGES_FOLDER/
-COPY ./package*.json .
-COPY ./tsup.config.ts .
+COPY ./package*.json $ROOT_FOLDER/
+COPY ./tsup.config.ts $ROOT_FOLDER/
 
 # Prepare repository root-level npm dependencies
 RUN meteor npm ci && meteor npm run build:packages
