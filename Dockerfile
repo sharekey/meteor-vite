@@ -52,7 +52,7 @@ COPY ./package*.json .
 RUN meteor npm ci && meteor npm run prepare
 
 # Prepare example app's npm dependencies
-cd $NPM_PACKAGES_FOLDER/meteor-vite && meteor npm link
+RUN cd $NPM_PACKAGES_FOLDER/meteor-vite && meteor npm link
 
 WORKDIR $APP_SOURCE_FOLDER
 
