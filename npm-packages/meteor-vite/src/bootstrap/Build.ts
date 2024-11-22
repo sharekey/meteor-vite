@@ -1,9 +1,14 @@
 import FS from 'fs';
+import { cwd } from 'meteor/jorgenvatle:vite-bundler/workers';
+import { execFileSync } from 'node:child_process';
+import OS from 'node:os';
+import path from 'node:path';
 import Path from 'node:path';
 import pc from 'picocolors';
 import type { RollupOutput, RollupWatcher } from 'rollup';
 import { createBuilder, type InlineConfig, version } from 'vite';
 import { MeteorViteError } from '../error/MeteorViteError';
+import Logger from '../utilities/Logger';
 import type { MeteorStubsSettings, ProjectJson, ResolvedMeteorViteConfig } from '../VitePluginSettings';
 import { CurrentConfig, resolveMeteorViteConfig } from './Config';
 import Instance from './Instance';
@@ -16,6 +21,9 @@ export async function buildForProduction() {
     if (!config.meteor?.clientEntry) {
         throw new MeteorViteError('No client entrypoint specified in Vite config!')
     }
+    
+    const tempMeteorOutDir = Path.join(OS.tmpdir(), 'meteor-vite', Path.basename(CurrentConfig.projectRoot));
+    preparePackagesForExportAnalyzer({ tempMeteorOutDir });
     
     const builder = await createBuilder(config);
     const fileNames: Partial<Record<string, { filePath: string, originalFilePath: string, isEntry?: boolean }[]>> = {};
@@ -128,6 +136,35 @@ function addServerEntryImport({ filePath }: {
         filePath,
         serverEntryModule,
     }
+}
+
+
+/**
+ * Build a temporary Meteor project to generate package source files that
+ * can be analyzed for package export stubbing.
+ */
+function preparePackagesForExportAnalyzer({ tempMeteorOutDir }: { tempMeteorOutDir: string }) {
+    Logger.info('Building packages to make them available to export analyzer...')
+    Logger.debug(`Destination dir: ${tempMeteorOutDir}`);
+    const startTime = Date.now();
+    
+    execFileSync('meteor', [
+        'build',
+        tempMeteorOutDir,
+        '--directory',
+        // Ensure the temporary build doesn't abort for projects with mobile builds
+        // Since this is only a temporary build, it shouldn't impact the final production build for the developer.
+        '--server=http://localhost:3000',
+    ], {
+        cwd: CurrentConfig.projectRoot,
+        // stdio: ['inherit', 'inherit', 'inherit'],
+        env: {
+            FORCE_COLOR: '3',
+            VITE_METEOR_DISABLED: 'true',
+        },
+    })
+    
+    Logger.info(pc.green(`Packages built in ${Date.now() - startTime}ms`));
 }
 
 export interface BuildOptions {
