@@ -430,7 +430,24 @@ to put that.
 But do be careful with this - any code that's imported by both your Vite config's [`clientEntry`](#example-with-vue)
 and your Meteor `mainModule.client` may lead to the code being included twice in your final production bundle.
 
-## Compatability with [`zodern:relay`](https://github.com/zodern/meteor-relay#readme)
+## Meteor build plugins
+Meteor-Vite is more or less a replacement for Meteor's entire build system. Standard minifier packages and other 
+Meteor-ecosystem build plugins are no longer necessary, you can now lean on the much larger and widely adopted Vite
+ecosystem for configuring your app's build process.
+
+If there is functionality provided by a Meteor build plugin that you can't find a Vite-equivalent plugin for, please do
+open an issue, and we might be able to port it over for you if there is no other good alternative.
+
+### Standard Minifier Packages
+Meteor's standard minifier packages 
+([`standard-minifier-js`](https://github.com/meteor/meteor/tree/release-3.0/packages/standard-minifier-js),
+[`standard-minifier-css`](https://docs.meteor.com/packages/standard-minifier-css.html)) are disabled automatically by
+Meteor-Vite as they both negatively impact build times and cause issues with the module/package export analyzer.
+
+Minification is handled by Vite out of the box and can be configured through your 
+[Vite config](https://vite.dev/config/build-options.html) file.
+
+### Compatability with [`zodern:relay`](https://github.com/zodern/meteor-relay#readme)
 Since `zodern:relay` depends on a Babel plugin for processing your publication and methods on the client, we need some
 extra configuration to make that work with Vite.
 
