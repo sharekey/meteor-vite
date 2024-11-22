@@ -4,6 +4,7 @@ import { defineConfig, type Options } from 'tsup';
 type Plugin = Required<Options>['esbuildPlugins'][number];
 
 export default defineConfig(() => ({
+    name: 'jorgenvatle:vite',
     entry: {
         server: './packages/vite/src/server.ts',
         build: './packages/vite/src/build.ts',
