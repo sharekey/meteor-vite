@@ -21,6 +21,8 @@ export async function buildForProduction() {
     }
     
     preparePackagesForExportAnalyzer({ tempMeteorOutDir: CurrentConfig.packageAnalyzer.outDir });
+    // todo: refactor into environment config
+    config.meteor.meteorStubs.meteor.packagePath = CurrentConfig.packageAnalyzer.packagePath('web.browser');
     
     const builder = await createBuilder(config);
     const fileNames: Partial<Record<string, { filePath: string, originalFilePath: string, isEntry?: boolean }[]>> = {};
