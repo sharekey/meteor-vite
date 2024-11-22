@@ -65,6 +65,9 @@ if (process.env.VITE_METEOR_DISABLED) {
 else {
     // Cleanup temporary files from previous builds.
     await runBootstrapScript('setupProject');
+    // todo: Verify Meteor packages file to warn users if there are active incompatible plugins.
+    //  The standard-minifier plugins strip out sources that the export analyzer depends on, so
+    //  with these plugins installed, builds will always fail.
     
     if (CurrentConfig.mode === 'production') {
         try {
