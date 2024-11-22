@@ -1,3 +1,4 @@
+import OS from 'node:os';
 import Path from 'path';
 
 function guessCwd () {
@@ -34,6 +35,14 @@ export const CurrentConfig = {
     serverEntryModule: Path.join(tempDir, 'server', '_entry.mjs'),
     serverProductionProxyModule: Path.join(tempDir, 'server', '_env.mjs'),
     meteorPackagesFile: Path.join(projectRoot, '.meteor', 'packages'),
+    
+    /**
+     * Output directory for a minimal temporary Meteor bundle that can be used for export
+     * analysis when building for production.
+     */
+    packageAnalyzer: {
+        outDir: Path.join(OS.tmpdir(), 'meteor-vite', Path.basename(projectRoot)),
+    },
     readmeLink: (section: 'meteor-build-plugins') => `https://github.com/JorgenVatle/meteor-vite#${section}`
 } as const;
 
