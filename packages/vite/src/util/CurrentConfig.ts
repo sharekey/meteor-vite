@@ -34,6 +34,7 @@ export const CurrentConfig = {
     serverEntryModule: Path.join(tempDir, 'server', '_entry.mjs'),
     serverProductionProxyModule: Path.join(tempDir, 'server', '_env.mjs'),
     meteorPackagesFile: Path.join(projectRoot, '.meteor', 'packages'),
+    readmeLink: (section: 'meteor-build-plugins') => `https://github.com/JorgenVatle/meteor-vite#${section}`
 } as const;
 
 globalThis.MeteorViteRuntimeConfig = CurrentConfig;
