@@ -1,6 +1,5 @@
 import FS from 'fs';
 import { execaSync } from 'execa';
-import OS from 'node:os';
 import Path from 'node:path';
 import pc from 'picocolors';
 import type { RollupOutput, RollupWatcher } from 'rollup';
