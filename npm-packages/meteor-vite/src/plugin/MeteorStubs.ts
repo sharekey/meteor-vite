@@ -31,7 +31,6 @@ export const MeteorStubs: () => Promise<Plugin> = setupPlugin(async () => {
         },
         
         async load(request) {
-            console.log({ plugSettings: request.context.pluginSettings });
             const timeStarted = Date.now();
             
             if (request.isLazyLoaded) {
