@@ -92,3 +92,18 @@ export function serverRollupInput(config: { meteorMainModule: string | undefined
     injectServerEntryImport(config.meteorMainModule);
     return prepareProductionServerProxyModule(config.viteServerEntry);
 }
+
+/**
+ * Disable incompatible Meteor build plugins.
+ * Build plugins like `standard-minifier-js` strip out package caches before we have the chance to
+ * analyze them for exports.
+ *
+ * Since Vite more or less replaces the functionality provided by these plugins, it should be safe
+ * to just disable them outright when loading a project with MeteorVite enabled
+ */
+function disableIncompatibleBuildPlugins() {
+    // read .meteor/packages
+    // comment out minifier packages
+    // append additional comment explaining why they were disabled
+    // log message to console
+}
