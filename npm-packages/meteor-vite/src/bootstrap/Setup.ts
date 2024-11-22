@@ -124,7 +124,7 @@ function disableIncompatibleBuildPlugins() {
             const [packageName] = rawLine.split(/\s|@/);
             
             Logger.warn([
-                pc.blue(`Meteor package ${pc.underline(pc.yellow(packageName))} will be disabled`),
+                pc.yellow(`Meteor package ${pc.underline(packageName)} will be disabled`),
                 ` ${pc.dim('L')}  ${pc.green(reason)}`,
                 '',
             ].join(`\n`));
