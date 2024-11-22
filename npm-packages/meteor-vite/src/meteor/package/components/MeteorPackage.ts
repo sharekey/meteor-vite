@@ -1,4 +1,5 @@
 import Path from 'path';
+import pc from 'picocolors';
 import { MeteorViteError } from '../../../error/MeteorViteError';
 import Logger from '../../../utilities/Logger';
 import type { ModuleList, ParsedPackage } from '../../parser/Parser';
@@ -236,6 +237,6 @@ export function isSameModulePath(options: {
 
 class MeteorPackageError extends MeteorViteError {
     constructor(message: string, public readonly meteorPackage: MeteorPackage) {
-        super(message, { package: meteorPackage });
+        super(message + ` (${pc.yellow(meteorPackage.meta.viteEnv || 'common')})`, { package: meteorPackage });
     }
 }
