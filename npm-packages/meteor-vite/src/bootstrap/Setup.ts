@@ -11,6 +11,7 @@ const logger = createSimpleLogger('Setup');
 export function setupProject() {
     cleanupPreviousBuilds();
     prepareServerEntry();
+    disableIncompatibleBuildPlugins();
     // Create entry modules for the server.
 }
 
