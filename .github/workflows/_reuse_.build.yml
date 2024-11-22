@@ -46,7 +46,7 @@ jobs:
         run: meteor npm i
 
       - name: 'Build packages'
-        run: meteor npm run build:packages ${{ inputs.appBasename }}
+        run: meteor npm run build:packages
 
       - name: 'Build for production'
         run: meteor npm run build ${{ inputs.appBasename }}
