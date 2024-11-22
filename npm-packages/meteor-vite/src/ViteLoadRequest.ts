@@ -124,22 +124,30 @@ export default class ViteLoadRequest {
             /(?<packageId>(meteor\/)[\w\-. ]+(:[\w\-. ]+)?)(?<importPath>\/.+)?/,
         )?.groups || {} as { packageId: string, importPath?: string };
         
+        const arch = {
+            programsDir: 'web.browser',
+            manifestFile: 'web.browser.json',
+        };
+        
+        if (environment.name === 'server') {
+            arch.manifestFile = 'os.json';
+            arch.programsDir = 'server';
+        }
+        
         const packageName = packageId.replace(/^meteor\//, '');
         const sourceName = packageName.replace(':', '_');
         const sourceFile = `${sourceName}.js`;
-        const sourceDirBasename = environment.name === 'server' ? 'server' : 'web.browser';
-        const sourcePath = Path.join(meteorStubs.meteor.buildProgramsPath, sourceDirBasename, 'packages', sourceFile);
+        const sourcePath = Path.join(meteorStubs.meteor.buildProgramsPath, arch.programsDir, 'packages', sourceFile);
         const resolverResultCache: ResolverResultCache = JSON.parse(NodeFS.readFileSync(Path.join(
             meteorStubs.meteor.isopackPath,
             '../resolver-result-cache.json',
         ), 'utf-8'));
         const packageVersion = resolverResultCache.lastOutput.answer[packageName];
         const globalMeteorPackagesDir = meteorStubs.meteor.globalMeteorPackagesDir || this.guessMeteorPackagePath();
-        const manifestFile = environment.name === 'server' ? 'os.json' : 'web.browser.json';
         
         const manifestPath = {
-            local: Path.join(meteorStubs.meteor.isopackPath, sourceName, manifestFile),
-            globalCache: Path.join(globalMeteorPackagesDir, sourceName, packageVersion, manifestFile),
+            local: Path.join(meteorStubs.meteor.isopackPath, sourceName, arch.manifestFile),
+            globalCache: Path.join(globalMeteorPackagesDir, sourceName, packageVersion, arch.manifestFile),
         };
         
         /**
