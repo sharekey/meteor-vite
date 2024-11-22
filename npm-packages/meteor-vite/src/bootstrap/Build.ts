@@ -1,5 +1,5 @@
 import FS from 'fs';
-import { execFileSync } from 'node:child_process';
+import { execaSync } from 'execa';
 import OS from 'node:os';
 import Path from 'node:path';
 import pc from 'picocolors';
@@ -146,7 +146,7 @@ function preparePackagesForExportAnalyzer({ tempMeteorOutDir }: { tempMeteorOutD
     Logger.debug(`Destination dir: ${tempMeteorOutDir}`);
     const startTime = Date.now();
     
-    execFileSync('meteor', [
+    execaSync('meteor', [
         'build',
         tempMeteorOutDir,
         '--directory',
