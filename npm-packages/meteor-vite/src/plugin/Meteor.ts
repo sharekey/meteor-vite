@@ -67,7 +67,13 @@ export function meteorWorker(config: PartialPluginOptions): PluginOption {
                     meteorStubs: {
                         packageJsonPath: 'package.json',
                         meteor: {
+                            /**
+                             * Client package cache
+                             * @deprecated Use {@link buildProgramsPath} instead
+                             */
                             packagePath: Path.join(METEOR_LOCAL_DIR, 'build', 'programs', 'web.browser', 'packages'),
+                            
+                            buildProgramsPath: Path.join(METEOR_LOCAL_DIR, 'build', 'programs'),
                             isopackPath: Path.join(METEOR_LOCAL_DIR, 'isopacks'),
                         }
                     },
