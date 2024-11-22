@@ -144,9 +144,10 @@ function disableIncompatibleBuildPlugins() {
         return rawLine;
     }).join('\n');
     
-    if (disabledCount) {
-        Logger.info(`See the following link for more info on why some packages are disabled: ${readmeLink}`);
+    if (!disabledCount) {
+        return;
     }
     
+    Logger.info(`See the following link for more info on why some packages are disabled: ${readmeLink}`);
     FS.writeFileSync(CurrentConfig.meteorPackagesFile, newContent);
 }
