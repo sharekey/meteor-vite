@@ -94,9 +94,9 @@ export function serverRollupInput(config: { meteorMainModule: string | undefined
     return prepareProductionServerProxyModule(config.viteServerEntry);
 }
 
-const INCOMPATIBLE_PACKAGES: { startsWith: string, replaceWith: string }[] = [
-    { startsWith: 'standard-minifier', replaceWith: '' },
-    { startsWith: 'refapp:meteor-typescript', replaceWith: 'typescript' },
+const INCOMPATIBLE_PACKAGES: { startsWith: string, replaceWith: string, reason: string }[] = [
+    { startsWith: 'standard-minifier', replaceWith: '', reason: 'Minification is already performed by Vite' },
+    { startsWith: 'refapp:meteor-typescript', replaceWith: 'typescript', reason: 'TypeScript is already handled by Vite' },
 ]
 
 /**
@@ -115,18 +115,19 @@ function disableIncompatibleBuildPlugins() {
     
     const newContent = lines.map((rawLine) => {
         const line = rawLine.trim();
-        for (const { startsWith, replaceWith } of INCOMPATIBLE_PACKAGES) {
+        for (const { startsWith, replaceWith, reason } of INCOMPATIBLE_PACKAGES) {
             if (!line.startsWith(startsWith)) {
                 continue;
             }
             
             const [packageName] = rawLine.split(/\s|@/);
-            Logger.warn(`Meteor package ${pc.underline(pc.yellow(packageName))} will be disabled as it is redundant or known to cause issues with Meteor-Vite`);
+            Logger.warn(`Meteor package ${pc.underline(pc.yellow(packageName))} will be disabled: ${pc.italic(reason)}`);
             disabledCount++;
             
             return [
-                '## Incompatible with MeteorVite',
+                `## Incompatible with MeteorVite`,
                 '## Vite already provides similar functionality so these plugins will likely just slow down the build process unnecessarily',
+                `## Reason: ${reason}`,
                 `## More info: ${readmeLink}`,
                 `${replaceWith} # ${line}`.trim()
             ].join('\n');
