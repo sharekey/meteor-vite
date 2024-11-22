@@ -153,8 +153,6 @@ export default class ViteLoadRequest {
         /**
          * Raw file content for the current file request.
          * We don't want to await it here to keep things snappy until the content is actually needed.
-         *
-         * @type {Promise<string>}
          */
         const content = FS.readFile(sourcePath, 'utf-8').catch((fsError: Error) => {
             if (globalThis?.MeteorViteRuntimeConfig?.productionPreview) {
