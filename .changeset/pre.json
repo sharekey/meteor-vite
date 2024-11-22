@@ -8,7 +8,10 @@
     "jorgenvatle_vite": "1.0.0-next.0"
   },
   "changesets": [
+    "cold-taxis-dance",
     "fresh-fishes-grab",
+    "giant-mayflies-hear",
+    "gold-parrots-repeat",
     "thin-windows-leave"
   ]
 }
