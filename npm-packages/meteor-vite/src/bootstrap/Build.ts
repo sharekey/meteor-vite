@@ -1,8 +1,6 @@
 import FS from 'fs';
-import { cwd } from 'meteor/jorgenvatle:vite-bundler/workers';
 import { execFileSync } from 'node:child_process';
 import OS from 'node:os';
-import path from 'node:path';
 import Path from 'node:path';
 import pc from 'picocolors';
 import type { RollupOutput, RollupWatcher } from 'rollup';
