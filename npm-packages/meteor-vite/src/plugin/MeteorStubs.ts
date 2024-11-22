@@ -1,7 +1,7 @@
 import FS from 'fs/promises';
 import Path from 'path';
 import pc from 'picocolors';
-import type { Plugin, ViteDevServer } from 'vite';
+import type { Environment, Plugin, ViteDevServer } from 'vite';
 import PackageJSON from '../../package.json';
 import { createErrorHandler } from '../error/ErrorHandler';
 import { MeteorViteError } from '../error/MeteorViteError';
@@ -27,10 +27,11 @@ export const MeteorStubs: () => Promise<Plugin> = setupPlugin(async () => {
             }
         },
         async setupContext(viteId, server, pluginSettings: ResolvedPluginConfig) {
-            return ViteLoadRequest.prepareContext({ id: viteId, pluginSettings, server });
+            return ViteLoadRequest.prepareContext({ id: viteId, pluginSettings, server, environment: this.environment });
         },
         
         async load(request) {
+            console.log({ plugSettings: request.context.pluginSettings });
             const timeStarted = Date.now();
             
             if (request.isLazyLoaded) {
@@ -102,7 +103,7 @@ function setupPlugin<Context extends ViteLoadRequest>(setup: () => Promise<{
     name: string;
     load(request: Context): Promise<string>;
     validateConfig(settings: PluginSettings): Promise<void>,
-    setupContext(viteId: string, server: ViteDevServer, settings: PluginSettings): Promise<Context>;
+    setupContext(viteId: string, server: ViteDevServer, settings: PluginSettings, environment: Environment): Promise<Context>;
     shouldProcess(viteId: string): boolean;
     resolveId(viteId: string): string | undefined;
 }>): () => Promise<Plugin> {
@@ -137,7 +138,7 @@ function setupPlugin<Context extends ViteLoadRequest>(setup: () => Promise<{
                     return;
                 }
                 
-                const request = await plugin.setupContext(viteId, server, settings);
+                const request = await plugin.setupContext(viteId, server, settings, this.environment);
                 
                 return plugin.load.apply(this, [request]).catch(
                     createErrorHandler('Could not parse Meteor package', request)
