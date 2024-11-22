@@ -248,3 +248,9 @@ export type ResolvedPluginSettings = MakeRequired<
 export interface ResolvedMeteorViteConfig extends ResolvedConfig {
     meteor?: ResolvedPluginSettings;
 }
+
+declare module 'vite' {
+    interface UserConfig {
+        meteor?: ResolvedPluginSettings
+    }
+}
