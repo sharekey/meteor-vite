@@ -35,7 +35,7 @@ export async function initializeViteDevServer(): Promise<{ server: ViteDevServer
     // ⚡ [Server] Transform and load the Meteor main module using Vite.
     if (modules.serverEntry) {
         const runner = createServerModuleRunner(server.environments.server);
-        console.log(`Loading server entry: ${modules.serverEntry}`);
+        Instance.logger.info(`Loading server entry: ${modules.serverEntry}`);
         
         // HMR listener to clean up side-effects from things like
         // Meteor.publish(), new Mongo.Collection(), etc. on server-side hot reload.
