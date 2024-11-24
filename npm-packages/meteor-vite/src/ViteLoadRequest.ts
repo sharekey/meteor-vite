@@ -242,7 +242,7 @@ export default class ViteLoadRequest {
     }
     
     public get cache() {
-        const baseDir = Path.join(this.context.pluginSettings.tempDir, 'stubs', this.context.file.packageId.replace(':', '_'));
+        const baseDir = Path.join(this.context.pluginSettings.tempDir, 'stubs', this.context.environment.name, this.context.file.packageId.replace(':', '_'));
         const templatePath = Path.join(baseDir, this.context.file.importPath || '', 'template.js');
         const packagePath = Path.join(baseDir, 'package.js');
         const parserPath = Path.join(baseDir, 'parsed.json');
