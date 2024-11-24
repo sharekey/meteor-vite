@@ -46,7 +46,7 @@ export async function initializeViteDevServer(): Promise<{ server: ViteDevServer
     
     // ⚡ [Client] Inject module import scripts into the Meteor WebApp boilerplate.
     {
-       
+       Instance.logger.info('Registering boilerplate data callback...');
         const scriptTags = [
             Path.join(config.base, '@vite/client'),
             Path.join(config.base, modules.clientEntry)
