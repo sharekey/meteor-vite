@@ -59,7 +59,7 @@ export class PackageModule {
         const calleeMethod = callee.property.name;
         
         if (!KnownModuleMethodNames.includes(calleeMethod as ModuleMethodName)) {
-            Logger.warn(`Meteor module.${calleeMethod}(...) is not recognized by Meteor-Vite! Please open an issue to get this resolved! 🙏`);
+            Logger.warn(`Meteor module.${calleeMethod}(...) is not recognized by Meteor-Vite! Please open an issue to get this resolved! 🙏 (Found in ${this.path})`);
             return false;
         }
         
