@@ -51,7 +51,7 @@ export const MeteorStubs: () => Promise<Plugin> = setupPlugin(async () => {
             
             const template = stubTemplate({
                 requestId: request.context.id,
-                importPath: request.requestedModulePath,
+                importPath: request.context.file.importPath,
                 stubValidation: request.context.pluginSettings.stubValidation,
                 meteorPackage,
             })
