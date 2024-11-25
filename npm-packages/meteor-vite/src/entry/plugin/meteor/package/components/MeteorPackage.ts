@@ -150,9 +150,13 @@ export default class MeteorPackage implements Omit<ParsedPackage, 'packageScopeE
     /**
      * Converts all exports parsed for the package into an array of JavaScript stub-related import/export lines.
      */
-    public serialize({ importPath }: { importPath?: string }) {
+    public serialize(config: { importPath?: string, mainModule?: string }) {
+        const importPath = config.importPath;
+        const mainModule = config.mainModule || this.mainModulePath;
+        
         const store = new SerializationStore();
-        let submodule = this.getModule({ importPath: this.mainModulePath });
+        let submodule = this.getModule({ importPath: mainModule });
+        
         
         if (importPath) {
             submodule = this.getModule({ importPath });
