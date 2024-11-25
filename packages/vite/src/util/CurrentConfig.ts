@@ -41,8 +41,8 @@ export const CurrentConfig = {
      * analysis when building for production.
      */
     packageAnalyzer: {
-        inDir: Path.join(OS.tmpdir(), 'meteor-vite', 'in', Path.basename(projectRoot)),
-        outDir: Path.join(OS.tmpdir(), 'meteor-vite', 'out', Path.basename(projectRoot)),
+        inDir: Path.join(OS.tmpdir(), 'meteor-vite', 'in'),
+        outDir: Path.join(OS.tmpdir(), 'meteor-vite', 'out'),
         get buildProgramsDir() {
             return Path.join(this.outDir, 'bundle', 'programs');
         }
