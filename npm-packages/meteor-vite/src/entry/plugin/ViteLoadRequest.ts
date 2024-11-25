@@ -3,12 +3,12 @@ import FS from 'fs/promises';
 import Path from 'path';
 import pc from 'picocolors';
 import { type Environment, ViteDevServer } from 'vite';
-import { MeteorViteError } from './error/MeteorViteError';
-import AutoImportQueue from './entry/plugin/meteor/package/AutoImportQueue';
-import { isSameModulePath } from './entry/plugin/meteor/package/components/MeteorPackage';
-import type { ResolvedPluginSettings } from './entry/plugin/Settings';
+import { MeteorViteError } from '../../error/MeteorViteError';
+import AutoImportQueue from './meteor/package/AutoImportQueue';
+import { isSameModulePath } from './meteor/package/components/MeteorPackage';
+import type { ResolvedPluginSettings } from './Settings';
 
-import { createLabelledLogger, LabelLogger } from './utilities/Logger';
+import { createLabelledLogger, LabelLogger } from '../../utilities/Logger';
 
 export default class ViteLoadRequest {
     
