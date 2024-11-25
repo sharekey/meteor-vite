@@ -6,7 +6,7 @@ import {
     type ViteDevServer,
     createServerModuleRunner,
 } from 'vite';
-import { resolveMeteorViteConfig } from '../../../bootstrap/Config';
+import { resolveMeteorViteConfig } from '../lib/Config';
 import Instance from '../../../bootstrap/Instance';
 
 /**

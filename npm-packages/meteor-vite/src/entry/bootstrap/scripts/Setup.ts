@@ -4,7 +4,7 @@ import { MeteorViteError } from '../../../error/MeteorViteError';
 import { homepage } from '../../../utilities/Constants';
 import Logger, { createSimpleLogger } from '../../../utilities/Logger';
 import pc from 'picocolors';
-import { CurrentConfig } from '../../../bootstrap/Config';
+import { CurrentConfig } from '../lib/Config';
 
 const logger = createSimpleLogger('Setup');
 

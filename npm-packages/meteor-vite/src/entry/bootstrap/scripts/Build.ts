@@ -7,7 +7,7 @@ import { createBuilder, type InlineConfig, mergeConfig, version } from 'vite';
 import { MeteorViteError } from '../../../error/MeteorViteError';
 import Logger from '../../../utilities/Logger';
 import type { MeteorStubsSettings, ProjectJson, ResolvedMeteorViteConfig } from '../../plugin/Settings';
-import { CurrentConfig, resolveMeteorViteConfig } from '../../../bootstrap/Config';
+import { CurrentConfig, resolveMeteorViteConfig } from '../lib/Config';
 import Instance from '../../../bootstrap/Instance';
 
 export async function buildForProduction() {

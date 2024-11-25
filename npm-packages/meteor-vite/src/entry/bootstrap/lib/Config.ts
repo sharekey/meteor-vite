@@ -6,11 +6,11 @@ import {
     type InlineConfig,
     resolveConfig,
 } from 'vite';
-import { MeteorViteError } from '../error/MeteorViteError';
-import { meteorWorker } from '../entry/plugin/Meteor';
-import { type ProjectJson, type ResolvedMeteorViteConfig } from '../entry/plugin/Settings';
-import Instance from './Instance';
-import { serverRollupInput } from '../entry/bootstrap/scripts/Setup';
+import { MeteorViteError } from '../../../error/MeteorViteError';
+import { meteorWorker } from '../../plugin/Meteor';
+import { type ProjectJson, type ResolvedMeteorViteConfig } from '../../plugin/Settings';
+import Instance from '../../../bootstrap/Instance';
+import { serverRollupInput } from '../scripts/Setup';
 
 export const CurrentConfig = globalThis.MeteorViteRuntimeConfig;
 
