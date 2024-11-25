@@ -152,7 +152,11 @@ export default class MeteorPackage implements Omit<ParsedPackage, 'packageScopeE
      */
     public serialize({ importPath }: { importPath?: string }) {
         const store = new SerializationStore();
-        const submodule = this.getModule({ importPath });
+        let submodule = this.getModule({ importPath: this.mainModulePath });
+        
+        if (importPath) {
+            submodule = this.getModule({ importPath });
+        }
         
         const addEntry = (entry: ModuleExport | PackageExport) => {
             try {
