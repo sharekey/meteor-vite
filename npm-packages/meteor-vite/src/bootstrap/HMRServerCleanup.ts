@@ -12,12 +12,11 @@ if (import.meta.hot) {
     const logger = createSimpleLogger('HMR');
     
     await new Promise<void>((resolve) => {
-        Meteor.startup(() => {
-            Object.assign(method_handlers, Meteor.server.method_handlers)
-            Object.assign(publish_handlers, Meteor.server.publish_handlers);
-            logger.debug('Detected default Meteor API resources. These will not be altered on HMR', { method_handlers, publish_handlers })
-            resolve()
-        });
+        // Todo: Wrap in Meteor.startup() block that runs BEFORE the server entrypoint but AFTER all other Meteor packages
+        Object.assign(method_handlers, Meteor.server.method_handlers)
+        Object.assign(publish_handlers, Meteor.server.publish_handlers);
+        logger.debug('Detected default Meteor API resources. These will not be altered on HMR', { method_handlers, publish_handlers })
+        resolve()
     })
     
     import.meta.hot.on('vite:beforeFullReload', () => {
