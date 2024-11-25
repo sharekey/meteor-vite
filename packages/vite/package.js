@@ -11,7 +11,7 @@ Package.registerBuildPlugin({
         'ecmascript@0.16.9'
     ],
     sources: [
-        'dist/entry/build-build.mjs',
+        'dist/entry/build-plugin.mjs',
     ],
 });
 
