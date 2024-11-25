@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="JavaScriptLibraryMappings">
+    <excludedPredefinedLibrary name="meteor-vite/examples/meteor-v3-vue/node_modules" />
+    <excludedPredefinedLibrary name="meteor-vite/examples/react/node_modules" />
+    <excludedPredefinedLibrary name="meteor-vite/examples/solid/node_modules" />
+    <excludedPredefinedLibrary name="meteor-vite/examples/svelte/node_modules" />
+    <excludedPredefinedLibrary name="meteor-vite/npm-packages/@meteor-vite/plugin-zodern-relay/node_modules" />
+  </component>
+</project>
