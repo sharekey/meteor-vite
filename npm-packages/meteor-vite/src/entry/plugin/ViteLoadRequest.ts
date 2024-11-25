@@ -38,6 +38,23 @@ export default class ViteLoadRequest {
         });
     };
     
+    /**
+     * Relative path (for the current package) for the module to yield stubs for.
+     *
+     * @example formatting
+     * this.context.id  // meteor/ostrio:cookies -> index.js (tries to detect mainModule)
+     *
+     * this.context.id // meteor/ostorio:cookies/some-file -> some-file.js
+     * this.context.id // meteor/ostorio:cookies/dir/some-other-file -> dir/some-other-file.js
+     */
+    public get requestedModulePath() {
+        if (!this.context.file.importPath) {
+            return this.mainModulePath;
+        }
+        
+        return this.context.file.importPath;
+    }
+    
     public static resolveId(id: string) {
         if (id.startsWith('meteor/') || id.startsWith('meteor:')) {
             return `\0${id}`;
