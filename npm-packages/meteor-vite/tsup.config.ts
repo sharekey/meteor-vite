@@ -10,7 +10,7 @@ export default defineConfig([
         entry: [
             './src/client/index.ts',
             './src/bootstrap/index.ts',
-            './src/bootstrap/HMRServerCleanup.ts',
+            './src/bootstrap/DevServerHMR.ts',
             './src/bootstrap/ProductionEnvironment.ts',
         ],
         outDir: 'dist',
