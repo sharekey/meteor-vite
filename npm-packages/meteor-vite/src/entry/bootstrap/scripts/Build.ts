@@ -246,7 +246,7 @@ function preparePackagesForExportAnalyzer({ mainModule }: { mainModule: { client
         // Since this is only a temporary build, it shouldn't impact the final production build for the developer.
         '--server=http://localhost:3000',
     ], {
-        cwd: CurrentConfig.projectRoot,
+        cwd: inDir,
         // stdio: ['inherit', 'inherit', 'inherit'],
         env: {
             FORCE_COLOR: '3',
