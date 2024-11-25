@@ -46,7 +46,7 @@ jobs:
     uses: ./.github/workflows/_reuse_.build.yml
     with:
       # Todo: rename directory and project to Vue + zodern:relay
-      appBasename: 'meteor-v3-vue'
+      appBasename: 'vue-zodern-relay'
 
   vue-ssr:
     name: 'Vue + SSR'

@@ -45,7 +45,7 @@ jobs:
     uses: ./.github/workflows/_reuse_.deploy.yml
     secrets: inherit
     with:
-      appBasename: 'meteor-v3-vue'
+      appBasename: 'vue-zodern-relay'
       nodeVersion: '20-alpine'
 
   vue-ssr:
