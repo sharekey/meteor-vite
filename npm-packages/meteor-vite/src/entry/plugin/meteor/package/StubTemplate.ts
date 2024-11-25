@@ -17,6 +17,7 @@ export function stubTemplate({ requestId, meteorPackage, importPath, stubValidat
     stubValidation?: StubValidationSettings,
     meteorPackage: MeteorPackage;
     importPath?: string;
+    mainModule?: string;
 }) {
     const stubId = getStubId();
     const { packageId } = meteorPackage;
