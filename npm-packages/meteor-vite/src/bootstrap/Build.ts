@@ -11,7 +11,7 @@ import { CurrentConfig, resolveMeteorViteConfig } from './Config';
 import Instance from './Instance';
 
 export async function buildForProduction() {
-    const { config, outDir } = await resolveMeteorViteConfig({ mode: 'production' }, 'build');
+    const { config, outDir, packageJson } = await resolveMeteorViteConfig({ mode: 'production' }, 'build');
     const { logger } = Instance;
     logger.info(`Building with Vite v${version}...`);
     
@@ -19,7 +19,9 @@ export async function buildForProduction() {
         throw new MeteorViteError('No client entrypoint specified in Vite config!')
     }
     
-    preparePackagesForExportAnalyzer({ tempMeteorOutDir: CurrentConfig.packageAnalyzer.outDir });
+    preparePackagesForExportAnalyzer({ 
+        mainModule: packageJson.meteor.mainModule
+    });
     // todo: refactor into environment config
     config.meteor.meteorStubs.meteor.buildProgramsPath = CurrentConfig.packageAnalyzer.buildProgramsDir;
     
@@ -141,14 +143,104 @@ function addServerEntryImport({ filePath }: {
  * Build a temporary Meteor project to generate package source files that
  * can be analyzed for package export stubbing.
  */
-function preparePackagesForExportAnalyzer({ tempMeteorOutDir }: { tempMeteorOutDir: string }) {
+function preparePackagesForExportAnalyzer({ mainModule }: { mainModule: { client: string } }) {
+    const inDir = CurrentConfig.packageAnalyzer.inDir;
+    const outDir = CurrentConfig.packageAnalyzer.outDir;
+    
     Logger.info('Building packages to make them available to export analyzer...')
-    Logger.debug(`Destination dir: ${tempMeteorOutDir}`);
+    Logger.debug(`Destination dir: ${outDir}`);
+    
     const startTime = Date.now();
+    const filesToCopy = [
+        Path.join('.meteor', '.finished-upgraders'),
+        Path.join('.meteor', '.id'),
+        Path.join('.meteor', 'packages'),
+        Path.join('.meteor', 'platforms'),
+        Path.join('.meteor', 'release'),
+        Path.join('.meteor', 'versions'),
+        Path.join('.meteor', 'local', 'resolver-result-cache.json'),
+        'package.json',
+        mainModule.client,
+    ]
+    const directoriesToCopy = [
+        'node_modules',
+        'packages',
+    ];
+    const replaceMeteorPackages = [
+        { startsWith: 'standard-minifier', replaceWith: '' },
+        { startsWith: 'refapp:meteor-typescript', replaceWith: 'typescript' },
+        // todo: implement replacePackages config option from package.json
+    ]
+    
+    // Copy files from `.meteor`
+    for (const file of filesToCopy) {
+        const from = Path.join(CurrentConfig.projectRoot, file)
+        const to = Path.join(inDir, file)
+        FS.mkdirSync(Path.dirname(to), { recursive: true });
+        FS.copyFileSync(from, to)
+    }
+    
+    // Symlink to source project's `packages` and `node_modules` folders
+    for (const dir of directoriesToCopy) {
+        const from = Path.join(CurrentConfig.projectRoot, dir);
+        const to = Path.join(inDir, dir);
+        
+        if (!FS.existsSync(from)) continue;
+        if (FS.existsSync(to)) continue;
+        
+        FS.symlinkSync(from, to);
+    }
+    
+    // Remove/replace conflicting Atmosphere packages
+    {
+        const file = Path.join(inDir, '.meteor', 'packages')
+        let content = FS.readFileSync(file, 'utf8')
+        for (const pack of replaceMeteorPackages) {
+            const lines = content.split('\n')
+            content = lines.map(line => {
+                if (!line.startsWith(pack.startsWith)) {
+                    return line;
+                }
+                Logger.debug(`Removed ${line} from intermediary Meteor packages`);
+                return pack.replaceWith || '';
+            }).join('\n')
+        }
+        FS.writeFileSync(file, content)
+    }
+    // Remove server entry
+    {
+        const file = Path.join(inDir, 'package.json')
+        const data = JSON.parse(FS.readFileSync(file, 'utf8'))
+        data.meteor = {
+            mainModule: {
+                client: data.meteor.mainModule.client,
+            },
+        }
+        FS.writeFileSync(file, JSON.stringify(data, null, 2))
+    }
+    // Only keep meteor and npm package imports to enable lazy packages
+    {
+        const file = Path.join(inDir, mainModule.client)
+        const lines = FS.readFileSync(file, 'utf8').split('\n');
+        const imports = lines.filter(line => {
+            if (!line.startsWith('import')) return false;
+            if (line.includes('meteor/')) {
+                Logger.debug('Keeping meteor import line:', line);
+                return true;
+            }
+            if (!line.match(/["'`]\./)) {
+                Logger.debug('Keeping non-meteor import line', line);
+                return true;
+            }
+            Logger.debug('Stripped import line from intermediary build:', line);
+            return false;
+        })
+        FS.writeFileSync(file, imports.join('\n'))
+    }
     
     execaSync('meteor', [
         'build',
-        tempMeteorOutDir,
+        outDir,
         '--directory',
         // Ensure the temporary build doesn't abort for projects with mobile builds
         // Since this is only a temporary build, it shouldn't impact the final production build for the developer.
