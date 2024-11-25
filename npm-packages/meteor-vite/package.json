@@ -16,9 +16,18 @@
         "./dist/plugin/index.js"
       ]
     },
-    "./bootstrap": "./dist/bootstrap/index.mjs",
-    "./bootstrap/*": "./dist/bootstrap/*.mjs",
-    "./client": "./dist/client/index.mjs"
+    "./bootstrap/scripts": {
+      "types": "./dist/bootstrap/scripts/index.d.ts",
+      "import":"./dist/bootstrap/scripts/index.mjs"
+    },
+    "./bootstrap/*": {
+      "types": "./dist/bootstrap/*.d.ts",
+      "import": "./dist/bootstrap/*.mjs"
+    },
+    "./client": {
+      "types": "./dist/client/index.d.ts",
+      "import": "./dist/client/index.mjs"
+    }
   },
   "scripts": {
     "start": "ts-node-dev src/bin/debug/watch-mocks.ts",
@@ -27,17 +36,6 @@
     "prepack": "npm run build",
     "test": "vitest",
     "lint": "tsc --noEmit"
-  },
-  "typesVersions": {
-    "*": {
-      "plugin": [
-        "./dist/plugin/index.d.mts",
-        "./dist/plugin/index.d.ts"
-      ],
-      "client": [
-        "./dist/client/index.d.mts"
-      ]
-    }
   },
   "keywords": [
     "meteor",

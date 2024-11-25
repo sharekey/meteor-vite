@@ -5,10 +5,10 @@ type Plugin = Required<Options>['esbuildPlugins'][number];
 
 export default defineConfig(() => ({
     name: 'jorgenvatle:vite',
-    entry: {
-        server: './packages/vite/src/server.ts',
-        build: './packages/vite/src/build.ts',
-    },
+    entry: [
+        './packages/vite/src/entry/package-runtime.ts',
+        './packages/vite/src/entry/build-plugin.ts'
+    ],
     outDir: './packages/vite/dist',
     skipNodeModulesBundle: true,
     splitting: false,

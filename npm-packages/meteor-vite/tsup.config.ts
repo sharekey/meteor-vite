@@ -8,10 +8,11 @@ export default defineConfig([
     {
         name: 'meteor-vite/internals',
         entry: [
-            './src/client/index.ts',
-            './src/bootstrap/index.ts',
-            './src/bootstrap/HMRServerCleanup.ts',
-            './src/bootstrap/ProductionEnvironment.ts',
+            './src/entry/client/index.ts',
+            './src/entry/bootstrap/index.ts',
+            './src/entry/bootstrap/RuntimeHMR.ts',
+            './src/entry/bootstrap/scripts/index.ts',
+            './src/entry/bootstrap/ProductionEnvironment.ts',
         ],
         outDir: 'dist',
         format: 'esm',
@@ -38,7 +39,7 @@ export default defineConfig([
     {
         name: 'meteor-vite/internals',
         entry: [
-            './src/plugin/index.ts',
+            './src/entry/plugin/index.ts',
         ],
         outDir: 'dist/plugin',
         format: [
