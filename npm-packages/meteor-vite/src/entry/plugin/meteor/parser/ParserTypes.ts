@@ -101,6 +101,10 @@ export namespace ModuleMethod {
      * Todo: Add expected argument types.
      */
     export type RunModuleSetters = ModuleMethodCall<'runModuleSetters', []>
+    
+    // todo: complete type definitions
+    export type UseNode = ModuleMethodCall<'useNode', []>
+    export type WrapAsync = ModuleMethodCall<'wrapAsync', []>;
 
     export type MethodMap = {
         export: Export;
@@ -108,8 +112,8 @@ export namespace ModuleMethod {
         exportDefault: ExportDefault;
         runSetters: RunSetters;
         runModuleSetters: RunModuleSetters,
-        useNode: unknown;
-        wrapAsync: unknown;
+        useNode: UseNode;
+        wrapAsync: WrapAsync;
     }
 
     /**
