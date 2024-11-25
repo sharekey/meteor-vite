@@ -1,20 +1,10 @@
-import type * as _ from 'meteor/jorgenvatle:vite';
 import { WebApp, WebAppInternals } from 'meteor/webapp';
 import Path from 'path';
-import {
-    createServer,
-    type ViteDevServer,
-    createServerModuleRunner,
-} from 'vite';
-import { resolveMeteorViteConfig } from '../lib/Config';
-import Instance from '../lib/Instance';
+import { createServer, createServerModuleRunner } from 'vite';
+import { resolveMeteorViteConfig } from './lib/Config';
+import Instance from './lib/Instance';
 
-/**
- * Helper function for Meteor to launch the Vite dev server within a virtual context.
- * This is called internally by the jorgenvatle:vite package when
- * starting Meteor in a development environment.
- */
-export async function initializeViteDevServer(): Promise<{ server: ViteDevServer, }> {
+Meteor.startup(async () => {
     Instance.printWelcomeMessage();
     Instance.logger.success('Initializing Vite Dev Server...');
     
@@ -46,7 +36,7 @@ export async function initializeViteDevServer(): Promise<{ server: ViteDevServer
     
     // ⚡ [Client] Inject module import scripts into the Meteor WebApp boilerplate.
     {
-       Instance.logger.info('Registering boilerplate data callback...');
+        Instance.logger.info('Registering boilerplate data callback...');
         const scriptTags = [
             Path.join(config.base, '@vite/client'),
             Path.join(config.base, modules.clientEntry)
@@ -62,6 +52,4 @@ export async function initializeViteDevServer(): Promise<{ server: ViteDevServer
     }
     
     Instance.printUrls(config);
-    
-    return { server }
-}
+})
