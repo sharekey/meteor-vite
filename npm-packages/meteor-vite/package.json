@@ -16,7 +16,7 @@
         "./dist/plugin/index.js"
       ]
     },
-    "./bootstrap": "./dist/bootstrap/index.mjs",
+    "./bootstrap/scripts": "./dist/bootstrap/scripts/index.mjs",
     "./bootstrap/*": "./dist/bootstrap/*.mjs",
     "./client": "./dist/client/index.mjs"
   },

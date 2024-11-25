@@ -1,4 +1,4 @@
-import type * as BootstrapScripts from 'meteor-vite/bootstrap';
+import type * as BootstrapScripts from 'meteor-vite/bootstrap/scripts';
 import { CurrentConfig } from './CurrentConfig';
 import { Script, constants } from 'node:vm';
 

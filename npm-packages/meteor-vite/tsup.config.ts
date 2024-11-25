@@ -11,6 +11,7 @@ export default defineConfig([
             './src/entry/client/index.ts',
             './src/entry/bootstrap/index.ts',
             './src/entry/bootstrap/RuntimeHMR.ts',
+            './src/entry/bootstrap/scripts/index.ts',
             './src/entry/bootstrap/ProductionEnvironment.ts',
         ],
         outDir: 'dist',
