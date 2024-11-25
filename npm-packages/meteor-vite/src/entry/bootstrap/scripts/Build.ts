@@ -154,7 +154,6 @@ function preparePackagesForExportAnalyzer({ mainModule }: { mainModule: { client
     const filesToCopy = [
         Path.join('.meteor', '.finished-upgraders'),
         Path.join('.meteor', '.id'),
-        Path.join('.meteor', 'packages'),
         Path.join('.meteor', 'platforms'),
         Path.join('.meteor', 'release'),
         Path.join('.meteor', 'versions'),
@@ -254,6 +253,7 @@ function preparePackagesForExportAnalyzer({ mainModule }: { mainModule: { client
         env: {
             FORCE_COLOR: '3',
             VITE_METEOR_DISABLED: 'true',
+            METEOR_PACKAGE_DIRS: Path.join(CurrentConfig.projectRoot, 'packages')
         },
     })
     
