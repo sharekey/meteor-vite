@@ -16,9 +16,18 @@
         "./dist/plugin/index.js"
       ]
     },
-    "./bootstrap/scripts": "./dist/bootstrap/scripts/index.mjs",
-    "./bootstrap/*": "./dist/bootstrap/*.mjs",
-    "./client": "./dist/client/index.mjs"
+    "./bootstrap/scripts": {
+      "types": "./dist/bootstrap/scripts/index.d.ts",
+      "import":"./dist/bootstrap/scripts/index.mjs"
+    },
+    "./bootstrap/*": {
+      "types": "./dist/bootstrap/*.d.ts",
+      "import": "./dist/bootstrap/*.mjs"
+    },
+    "./client": {
+      "types": "./dist/client/index.d.ts",
+      "import": "./dist/client/index.mjs"
+    }
   },
   "scripts": {
     "start": "ts-node-dev src/bin/debug/watch-mocks.ts",
