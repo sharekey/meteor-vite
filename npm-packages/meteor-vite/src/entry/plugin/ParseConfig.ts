@@ -1,5 +1,5 @@
 import { mergeConfig, ResolvedConfig, UserConfig } from 'vite';
-import type { PluginSettings } from '../VitePluginSettings';
+import type { PluginSettings } from '../../VitePluginSettings';
 
 export function mergeWithTypes<
     TDefaults extends Record<string, any>,

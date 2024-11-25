@@ -1,9 +1,9 @@
 import Path from 'path';
 import pc from 'picocolors';
 import type { Plugin, PluginOption, ResolvedConfig, UserConfig } from 'vite';
-import PackageJSON from '../../package.json';
-import { FatalMeteorViteError } from '../error/MeteorViteError';
-import type { PartialPluginOptions, PluginOptions, PluginSettings } from '../VitePluginSettings';
+import PackageJSON from '../../../package.json';
+import { FatalMeteorViteError } from '../../error/MeteorViteError';
+import type { PartialPluginOptions, PluginOptions, PluginSettings } from '../../VitePluginSettings';
 import { MeteorStubs } from './MeteorStubs';
 import { mergeWithTypes, parseConfig } from './ParseConfig';
 

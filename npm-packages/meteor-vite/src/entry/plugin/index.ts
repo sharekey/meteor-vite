@@ -1,1 +1,1 @@
-export { default as meteor } from '../../plugin/Meteor';
+export { default as meteor } from './Meteor';
