@@ -1,5 +1,5 @@
-import PackageJson from '../../package.json';
-import type { StubValidationSettings } from '../entry/plugin/Settings';
+import PackageJson from '../../../package.json';
+import type { StubValidationSettings } from '../plugin/Settings';
 
 
 /**
