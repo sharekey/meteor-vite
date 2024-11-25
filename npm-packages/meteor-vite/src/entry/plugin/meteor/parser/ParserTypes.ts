@@ -108,6 +108,8 @@ export namespace ModuleMethod {
         exportDefault: ExportDefault;
         runSetters: RunSetters;
         runModuleSetters: RunModuleSetters,
+        useNode: unknown;
+        wrapAsync: unknown;
     }
 
     /**
