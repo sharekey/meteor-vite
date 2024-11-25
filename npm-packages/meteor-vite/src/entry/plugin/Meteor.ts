@@ -75,7 +75,8 @@ export function meteorWorker(config: PartialPluginOptions): PluginOption {
                             
                             buildProgramsPath: Path.join(METEOR_LOCAL_DIR, 'build', 'programs'),
                             isopackPath: Path.join(METEOR_LOCAL_DIR, 'isopacks'),
-                        }
+                        },
+                        debug: !!process.env.METEOR_STUBS_DEBUG
                     },
                     tempDir: Path.join(METEOR_LOCAL_DIR, 'vite'),
                     stubValidation: {
