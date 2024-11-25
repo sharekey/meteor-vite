@@ -9,7 +9,7 @@ import {
 import { MeteorViteError } from '../../../error/MeteorViteError';
 import { meteorWorker } from '../../plugin/Meteor';
 import { type ProjectJson, type ResolvedMeteorViteConfig } from '../../plugin/Settings';
-import Instance from '../../../bootstrap/Instance';
+import Instance from './Instance';
 import { serverRollupInput } from '../scripts/Setup';
 
 export const CurrentConfig = globalThis.MeteorViteRuntimeConfig;

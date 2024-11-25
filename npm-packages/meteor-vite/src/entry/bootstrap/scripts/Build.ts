@@ -8,7 +8,7 @@ import { MeteorViteError } from '../../../error/MeteorViteError';
 import Logger from '../../../utilities/Logger';
 import type { MeteorStubsSettings, ProjectJson, ResolvedMeteorViteConfig } from '../../plugin/Settings';
 import { CurrentConfig, resolveMeteorViteConfig } from '../lib/Config';
-import Instance from '../../../bootstrap/Instance';
+import Instance from '../lib/Instance';
 
 export async function buildForProduction() {
     const { config, outDir, packageJson } = await resolveMeteorViteConfig({ mode: 'production' }, 'build');

@@ -7,7 +7,7 @@ import {
     createServerModuleRunner,
 } from 'vite';
 import { resolveMeteorViteConfig } from '../lib/Config';
-import Instance from '../../../bootstrap/Instance';
+import Instance from '../lib/Instance';
 
 /**
  * Helper function for Meteor to launch the Vite dev server within a virtual context.
