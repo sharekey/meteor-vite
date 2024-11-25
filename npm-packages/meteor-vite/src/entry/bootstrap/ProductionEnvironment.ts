@@ -1,9 +1,9 @@
-import type * as _ from  'meteor/jorgenvatle:vite';
+import type * as _ from 'meteor/jorgenvatle:vite';
 import { Meteor } from 'meteor/meteor';
 import { WebAppInternals, WebApp } from 'meteor/webapp';
-import { ViteProductionBoilerplate } from '../entry/plugin/meteor/boilerplate/Production';
-import Logger from '../utilities/Logger';
-import type { ViteManifestFile } from '../entry/bootstrap/scripts/Build';
+import { ViteProductionBoilerplate } from '../plugin/meteor/boilerplate/Production';
+import Logger from '../../utilities/Logger';
+import type { ViteManifestFile } from './scripts/Build';
 
 Meteor.startup(async () => {
     if (!Meteor.isProduction) {
