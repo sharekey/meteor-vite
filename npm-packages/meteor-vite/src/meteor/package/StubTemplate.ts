@@ -20,6 +20,7 @@ export function stubTemplate({ requestId, meteorPackage, importPath, stubValidat
 }) {
     const stubId = getStubId();
     const { packageId } = meteorPackage;
+    // Todo: combine package-level exports with exports from mainModule when imported without a subpath
     const submodule = meteorPackage.getModule({ importPath });
     const serializedPackage = meteorPackage.serialize({ importPath });
     const fullImportPath = submodule?.fullImportPath || packageId;
