@@ -52,6 +52,7 @@ export const BuildLogger = {
     success: (message: string, ...params: DefaultParams) => console.log(...formatMessage([pc.green(message), ...params])),
     error: (message: string, ...params: DefaultParams) => console.error(...formatMessage([pc.red(message), ...params])),
     warn: (message: string, ...params: DefaultParams) => console.warn(...formatMessage([pc.yellow(message), ...params])),
+    debug: (message: string, ...params: DefaultParams) => process.env.ENABLE_DEBUG_LOGS && console.debug(...formatMessage([pc.dim(message), ...params])),
 }
 
 export function createSimpleLogger(label: string): SimpleLogger {
