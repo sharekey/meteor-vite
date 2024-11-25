@@ -8,7 +8,7 @@ import {
 } from 'vite';
 import { MeteorViteError } from '../error/MeteorViteError';
 import { meteorWorker } from '../entry/plugin/Meteor';
-import { type ProjectJson, type ResolvedMeteorViteConfig } from '../VitePluginSettings';
+import { type ProjectJson, type ResolvedMeteorViteConfig } from '../entry/plugin/Settings';
 import Instance from './Instance';
 import { serverRollupInput } from './Setup';
 

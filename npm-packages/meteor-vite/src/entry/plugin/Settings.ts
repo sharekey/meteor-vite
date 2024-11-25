@@ -1,7 +1,7 @@
 import Path from 'path';
 import type { OutputOptions } from 'rollup';
 import { type InlineConfig, resolveConfig, type ResolvedConfig } from 'vite';
-import type { DeepPartial, MakeOptional, MakeRequired } from './utilities/GenericTypes';
+import type { DeepPartial, MakeOptional, MakeRequired } from '../../utilities/GenericTypes';
 
 export interface PluginSettings<
     TChunkFileNames extends OutputOptions['chunkFileNames'] = undefined

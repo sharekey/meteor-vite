@@ -8,7 +8,7 @@ import { MeteorViteError } from '../../error/MeteorViteError';
 import MeteorPackage from './meteor/package/components/MeteorPackage';
 import { stubTemplate } from './meteor/package/StubTemplate';
 import ViteLoadRequest from '../../ViteLoadRequest';
-import { type PluginSettings, ResolvedMeteorViteConfig } from '../../VitePluginSettings';
+import { type PluginSettings, ResolvedMeteorViteConfig } from './Settings';
 
 export const MeteorStubs: () => Promise<Plugin> = setupPlugin(async () => {
     return {

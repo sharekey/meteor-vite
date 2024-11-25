@@ -6,7 +6,7 @@ import type { RollupOutput, RollupWatcher } from 'rollup';
 import { createBuilder, type InlineConfig, mergeConfig, version } from 'vite';
 import { MeteorViteError } from '../error/MeteorViteError';
 import Logger from '../utilities/Logger';
-import type { MeteorStubsSettings, ProjectJson, ResolvedMeteorViteConfig } from '../VitePluginSettings';
+import type { MeteorStubsSettings, ProjectJson, ResolvedMeteorViteConfig } from '../entry/plugin/Settings';
 import { CurrentConfig, resolveMeteorViteConfig } from './Config';
 import Instance from './Instance';
 
