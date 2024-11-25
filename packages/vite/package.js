@@ -11,7 +11,7 @@ Package.registerBuildPlugin({
         'ecmascript@0.16.9'
     ],
     sources: [
-        'dist/entry/build-plugin.mjs',
+        'dist/build-plugin.mjs',
     ],
 });
 
@@ -22,5 +22,5 @@ Package.onUse((api) => {
         'ecmascript'
     ]);
 
-    api.mainModule('dist/entry/package-runtime.mjs', ['server'], { bare: false });
+    api.mainModule('dist/package-runtime.mjs', ['server'], { bare: false });
 });
