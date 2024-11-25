@@ -1,3 +1,3 @@
-export { initializeViteDevServer } from '../../../bootstrap/ViteDevServer';
-export { buildForProduction } from '../../../bootstrap/Build';
-export { setupProject } from '../../../bootstrap/Setup';
+export { initializeViteDevServer } from './ViteDevServer';
+export { buildForProduction } from './Build';
+export { setupProject } from './Setup';

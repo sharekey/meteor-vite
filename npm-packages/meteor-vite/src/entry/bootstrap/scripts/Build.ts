@@ -4,11 +4,11 @@ import Path from 'node:path';
 import pc from 'picocolors';
 import type { RollupOutput, RollupWatcher } from 'rollup';
 import { createBuilder, type InlineConfig, mergeConfig, version } from 'vite';
-import { MeteorViteError } from '../error/MeteorViteError';
-import Logger from '../utilities/Logger';
-import type { MeteorStubsSettings, ProjectJson, ResolvedMeteorViteConfig } from '../entry/plugin/Settings';
-import { CurrentConfig, resolveMeteorViteConfig } from './Config';
-import Instance from './Instance';
+import { MeteorViteError } from '../../../error/MeteorViteError';
+import Logger from '../../../utilities/Logger';
+import type { MeteorStubsSettings, ProjectJson, ResolvedMeteorViteConfig } from '../../plugin/Settings';
+import { CurrentConfig, resolveMeteorViteConfig } from '../../../bootstrap/Config';
+import Instance from '../../../bootstrap/Instance';
 
 export async function buildForProduction() {
     const { config, outDir, packageJson } = await resolveMeteorViteConfig({ mode: 'production' }, 'build');

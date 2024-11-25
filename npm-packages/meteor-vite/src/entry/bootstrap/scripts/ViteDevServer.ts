@@ -1,4 +1,4 @@
-import type * as _ from  'meteor/jorgenvatle:vite';
+import type * as _ from 'meteor/jorgenvatle:vite';
 import { WebApp, WebAppInternals } from 'meteor/webapp';
 import Path from 'path';
 import {
@@ -6,8 +6,8 @@ import {
     type ViteDevServer,
     createServerModuleRunner,
 } from 'vite';
-import { resolveMeteorViteConfig } from './Config';
-import Instance from './Instance';
+import { resolveMeteorViteConfig } from '../../../bootstrap/Config';
+import Instance from '../../../bootstrap/Instance';
 
 /**
  * Helper function for Meteor to launch the Vite dev server within a virtual context.

@@ -1,10 +1,10 @@
 import FS from 'node:fs';
 import Path from 'node:path';
-import { MeteorViteError } from '../error/MeteorViteError';
-import { homepage } from '../utilities/Constants';
-import Logger, { createSimpleLogger } from '../utilities/Logger';
+import { MeteorViteError } from '../../../error/MeteorViteError';
+import { homepage } from '../../../utilities/Constants';
+import Logger, { createSimpleLogger } from '../../../utilities/Logger';
 import pc from 'picocolors';
-import { CurrentConfig } from './Config';
+import { CurrentConfig } from '../../../bootstrap/Config';
 
 const logger = createSimpleLogger('Setup');
 
