@@ -5,7 +5,7 @@ import pc from 'picocolors';
 import type { RollupOutput, RollupWatcher } from 'rollup';
 import { createBuilder, type InlineConfig, mergeConfig, version } from 'vite';
 import { MeteorViteError } from '../../../error/MeteorViteError';
-import Logger from '../../../utilities/Logger';
+import Logger, { BuildLogger } from '../../../utilities/Logger';
 import type { MeteorStubsSettings, ProjectJson, ResolvedMeteorViteConfig } from '../../plugin/Settings';
 import { CurrentConfig, resolveMeteorViteConfig } from '../lib/Config';
 import Instance from '../lib/Instance';
@@ -147,8 +147,8 @@ function preparePackagesForExportAnalyzer({ mainModule }: { mainModule: { client
     const inDir = CurrentConfig.packageAnalyzer.inDir;
     const outDir = CurrentConfig.packageAnalyzer.outDir;
     
-    Logger.info('Building packages to make them available to export analyzer...')
-    Logger.debug(`Destination dir: ${outDir}`);
+    BuildLogger.info('Building packages to make them available to export analyzer...')
+    BuildLogger.debug(`Destination dir: ${outDir}`);
     
     const startTime = Date.now();
     const filesToCopy = [
@@ -225,14 +225,14 @@ function preparePackagesForExportAnalyzer({ mainModule }: { mainModule: { client
         const imports = lines.filter(line => {
             if (!line.startsWith('import')) return false;
             if (line.includes('meteor/')) {
-                Logger.debug('Keeping meteor import line:', line);
+                BuildLogger.debug('Keeping meteor import line:', line);
                 return true;
             }
             if (!line.match(/["'`]\./)) {
-                Logger.debug('Keeping non-meteor import line', line);
+                BuildLogger.debug('Keeping non-meteor import line', line);
                 return true;
             }
-            Logger.debug('Stripped import line from intermediary build:', line);
+            BuildLogger.debug('Stripped import line from intermediary build:', line);
             return false;
         })
         FS.writeFileSync(file, imports.join('\n'))
@@ -254,7 +254,7 @@ function preparePackagesForExportAnalyzer({ mainModule }: { mainModule: { client
         },
     })
     
-    Logger.info(pc.green(`Packages built in ${Date.now() - startTime}ms`));
+    BuildLogger.info(pc.green(`Packages built in ${Date.now() - startTime}ms`));
 }
 
 export interface BuildOptions {
