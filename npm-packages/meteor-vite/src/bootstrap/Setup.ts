@@ -11,7 +11,6 @@ const logger = createSimpleLogger('Setup');
 export function setupProject() {
     cleanupPreviousBuilds();
     prepareServerEntry();
-    disableIncompatibleBuildPlugins();
     // Create entry modules for the server.
 }
 
@@ -92,62 +91,4 @@ function prepareProductionServerProxyModule(serverEntry: string) {
 export function serverRollupInput(config: { meteorMainModule: string | undefined, viteServerEntry: string }) {
     injectServerEntryImport(config.meteorMainModule);
     return prepareProductionServerProxyModule(config.viteServerEntry);
-}
-
-const INCOMPATIBLE_PACKAGES: { startsWith: string, replaceWith: string, reason: string }[] = [
-    { startsWith: 'standard-minifier', replaceWith: '', reason: 'Minification is already handled and configurable through Vite' },
-    { startsWith: 'refapp:meteor-typescript', replaceWith: 'typescript', reason: 'TypeScript is already handled by Vite' },
-]
-
-/**
- * Disable incompatible Meteor build plugins.
- * Build plugins like `standard-minifier-js` strip out package caches before we have the chance to
- * analyze them for exports.
- *
- * Since Vite more or less replaces the functionality provided by these plugins, it should be safe
- * to just disable them outright when loading a project with MeteorVite enabled
- */
-function disableIncompatibleBuildPlugins() {
-    const packagesFileContent = FS.readFileSync(CurrentConfig.meteorPackagesFile, 'utf-8');
-    const lines = packagesFileContent.split(/[\r\n]{1,2}/);
-    let disabledCount = 0;
-    const readmeLink = CurrentConfig.readmeLink('meteor-build-plugins');
-    
-    const newContent = lines.map((rawLine) => {
-        const line = rawLine.trim();
-        for (const { startsWith, replaceWith, reason } of INCOMPATIBLE_PACKAGES) {
-            if (!line.startsWith(startsWith)) {
-                continue;
-            }
-            
-            disabledCount++;
-            const [packageName] = rawLine.split(/\s|@/);
-            const labelPadding = 9;
-            
-            Logger.warn([
-                pc.yellow(`Meteor package '${pc.underline(packageName)}' will be disabled`),
-                ` ${pc.dim('L Reason:'.padEnd(labelPadding, ' '))}  ${pc.green(reason)}`,
-                ` ${pc.dim('L Info:'.padEnd(labelPadding, ' '))}  ${pc.blue(readmeLink)}`,
-                '',
-            ].join(`\n`));
-            
-            return [
-                '',
-                `## Incompatible with MeteorVite`,
-                '## Vite already provides similar functionality so these plugins will likely just slow down the build process unnecessarily',
-                `## Reason: ${reason}`,
-                `## More info: ${readmeLink}`,
-                `${replaceWith} # ${line}`.trim(),
-                '',
-            ].join('\n');
-        }
-        return rawLine;
-    }).join('\n');
-    
-    if (!disabledCount) {
-        return;
-    }
-    
-    Logger.info(`See the following link for more info on why some packages are disabled: ${readmeLink}`);
-    FS.writeFileSync(CurrentConfig.meteorPackagesFile, newContent);
 }
