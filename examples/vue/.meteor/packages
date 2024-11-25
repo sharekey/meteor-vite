@@ -36,3 +36,4 @@ test:ts-modules
 test:stub-validation
 test:duplicate-npm-dependencies
 jorgenvatle:vite
+accounts-base
