@@ -1,5 +1,5 @@
 import { describe, expect, it, test } from 'vitest';
-import AutoImportQueue, { wait } from '../src/meteor/package/AutoImportQueue';
+import AutoImportQueue, { wait } from '../src/entry/plugin/meteor/package/AutoImportQueue';
 import { RefreshNeeded } from '../src/ViteLoadRequest';
 import { AutoImportMock } from './__mocks';
 

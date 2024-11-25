@@ -5,8 +5,8 @@ import type { Environment, Plugin, ViteDevServer } from 'vite';
 import PackageJSON from '../../package.json';
 import { createErrorHandler } from '../error/ErrorHandler';
 import { MeteorViteError } from '../error/MeteorViteError';
-import MeteorPackage from '../meteor/package/components/MeteorPackage';
-import { stubTemplate } from '../meteor/package/StubTemplate';
+import MeteorPackage from '../entry/plugin/meteor/package/components/MeteorPackage';
+import { stubTemplate } from '../entry/plugin/meteor/package/StubTemplate';
 import ViteLoadRequest from '../ViteLoadRequest';
 import { type PluginSettings, ResolvedMeteorViteConfig } from '../VitePluginSettings';
 

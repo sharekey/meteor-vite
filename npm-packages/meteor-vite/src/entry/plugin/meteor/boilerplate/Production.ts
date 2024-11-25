@@ -1,8 +1,8 @@
 import { Meteor } from 'meteor/meteor';
 import { WebAppInternals } from 'meteor/webapp';
 import { inspect } from 'node:util';
-import type { TransformedViteManifest } from '../../bootstrap/Build';
-import Logger, { createSimpleLogger, type SimpleLogger } from '../../utilities/Logger';
+import type { TransformedViteManifest } from '../../../../bootstrap/Build';
+import Logger, { createSimpleLogger, type SimpleLogger } from '../../../../utilities/Logger';
 import { type Boilerplate, ViteBoilerplate } from './Boilerplate';
 
 export class ViteProductionBoilerplate extends ViteBoilerplate {

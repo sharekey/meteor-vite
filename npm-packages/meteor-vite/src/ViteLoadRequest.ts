@@ -4,8 +4,8 @@ import Path from 'path';
 import pc from 'picocolors';
 import { type Environment, ViteDevServer } from 'vite';
 import { MeteorViteError } from './error/MeteorViteError';
-import AutoImportQueue from './meteor/package/AutoImportQueue';
-import { isSameModulePath } from './meteor/package/components/MeteorPackage';
+import AutoImportQueue from './entry/plugin/meteor/package/AutoImportQueue';
+import { isSameModulePath } from './entry/plugin/meteor/package/components/MeteorPackage';
 import type { ResolvedPluginSettings } from './VitePluginSettings';
 
 import { createLabelledLogger, LabelLogger } from './utilities/Logger';

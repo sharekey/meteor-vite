@@ -11,7 +11,7 @@ import {
     ObjectExpression,
     StringLiteral,
 } from '@babel/types';
-import Logger from '../../utilities/Logger';
+import Logger from '../../../../utilities/Logger';
 import { ModuleExportData, propParser } from './Parser';
 import { ModuleExportsError } from './ParserError';
 import { KnownModuleMethodNames, ModuleMethod, ModuleMethodName } from './ParserTypes';

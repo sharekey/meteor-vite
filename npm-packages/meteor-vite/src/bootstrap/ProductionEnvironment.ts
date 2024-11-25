@@ -1,7 +1,7 @@
 import type * as _ from  'meteor/jorgenvatle:vite';
 import { Meteor } from 'meteor/meteor';
 import { WebAppInternals, WebApp } from 'meteor/webapp';
-import { ViteProductionBoilerplate } from '../meteor/boilerplate/Production';
+import { ViteProductionBoilerplate } from '../entry/plugin/meteor/boilerplate/Production';
 import Logger from '../utilities/Logger';
 import type { ViteManifestFile } from './Build';
 
