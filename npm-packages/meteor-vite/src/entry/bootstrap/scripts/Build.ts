@@ -159,15 +159,15 @@ function preparePackagesForExportAnalyzer({ mainModule }: { mainModule: { client
         Path.join('.meteor', 'release'),
         Path.join('.meteor', 'versions'),
         Path.join('.meteor', 'local', 'resolver-result-cache.json'),
-        Path.join('.meteor', 'local', 'dev_bundle'),
-        Path.join('.meteor', 'local', 'plugin-cache'),
-        Path.join('.meteor', 'local', 'bundler-cache'),
         'package.json',
         mainModule.client,
     ]
     const directoriesToCopy = [
         'node_modules',
         'packages',
+        Path.join('.meteor', 'local', 'dev_bundle'),
+        Path.join('.meteor', 'local', 'plugin-cache'),
+        Path.join('.meteor', 'local', 'bundler-cache'),
     ];
     const replaceMeteorPackages = [
         { startsWith: 'standard-minifier', replaceWith: '' },
