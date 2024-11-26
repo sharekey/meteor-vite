@@ -1,10 +1,10 @@
 import FS from 'fs/promises';
 import Path from 'path';
-import pc from 'picocolors';
 import type { Environment, Plugin, ViteDevServer } from 'vite';
 import PackageJSON from '../../../package.json';
 import { createErrorHandler } from '../../error/ErrorHandler';
 import { MeteorViteError } from '../../error/MeteorViteError';
+import { Colorize } from '../../utilities/Constants';
 import MeteorPackage from './meteor/package/components/MeteorPackage';
 import { stubTemplate } from './meteor/package/StubTemplate';
 import ViteLoadRequest from './ViteLoadRequest';
@@ -87,7 +87,7 @@ async function storeDebugSnippet({ request, stubTemplate, meteorPackage }: {
     ]);
     
     request.log.info('Stored debug snippets', {
-        File: pc.cyan(baseDir),
+        File: Colorize.filepath(baseDir),
     })
 }
 
