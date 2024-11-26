@@ -100,6 +100,10 @@ function parseSource(code: string) {
                     result.name = result.name || packageScope.name;
                     result.packageScopeExports[packageScope.name] = packageScope.exports;
                 }
+                
+                if (packageScope?.mainModulePath) {
+                    result.mainModulePath = packageScope.mainModulePath;
+                }
             }
         });
         
@@ -133,7 +137,7 @@ function readMainModulePath(node: Node) {
  *   Mongo: Mongo
  * });
  */
-function parsePackageScope(node: Node) {
+function parsePackageScope(node: Node): undefined | { name: string, exports: string[], mainModulePath?: string } {
     function meteorV2(node: Node) {
         if (node.type !== 'CallExpression') return;
         if (node.callee.type !== 'MemberExpression') return;
