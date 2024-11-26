@@ -4,7 +4,8 @@ import type { Environment, Plugin, ViteDevServer } from 'vite';
 import PackageJSON from '../../../package.json';
 import { createErrorHandler } from '../../error/ErrorHandler';
 import { MeteorViteError } from '../../error/MeteorViteError';
-import { Colorize } from '../../utilities/Constants';
+
+import { Colorize } from '../../utilities/Formatting';
 import MeteorPackage from './meteor/package/components/MeteorPackage';
 import { stubTemplate } from './meteor/package/StubTemplate';
 import ViteLoadRequest from './ViteLoadRequest';
