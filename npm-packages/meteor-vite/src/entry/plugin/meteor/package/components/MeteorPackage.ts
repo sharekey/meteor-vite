@@ -57,6 +57,17 @@ export default class MeteorPackage implements Omit<ParsedPackage, 'packageScopeE
         }, null, 2);
     }
     
+    /**
+     * Mock template for the current package.
+     * Used for quickly generating source files to use as tests in meteor-vite.
+     */
+    public toMock() {
+        return [
+            'import { prepareMock } from "@/test/lib"',
+            `export default prepareMock(${this.toJson()})`,
+        ].join('\n');
+    }
+    
     public static async parse(parse: Parameters<typeof parseMeteorPackage>[0], options?: Partial<MeteorPackageMetaOptions>) {
         const { result, timeSpent } = await parseMeteorPackage(parse);
         return new MeteorPackage(result, { timeSpent, ...options });
