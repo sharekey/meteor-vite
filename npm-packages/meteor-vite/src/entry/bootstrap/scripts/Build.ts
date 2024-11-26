@@ -267,7 +267,7 @@ function preparePackagesForExportAnalyzer({ mainModule }: { mainModule: { client
         },
     })
     
-    BuildLogger.info(pc.green(`Packages built in ${(Date.now() - startTime).toLocaleString()}ms`));
+    BuildLogger.success(`Packages built in ${(Date.now() - startTime).toLocaleString()}ms`);
 }
 
 export interface BuildOptions {
