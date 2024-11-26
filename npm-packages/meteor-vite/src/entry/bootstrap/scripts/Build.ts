@@ -5,6 +5,7 @@ import pc from 'picocolors';
 import type { RollupOutput, RollupWatcher } from 'rollup';
 import { createBuilder, type InlineConfig, mergeConfig, version } from 'vite';
 import { MeteorViteError } from '../../../error/MeteorViteError';
+import { Colorize } from '../../../utilities/Constants';
 import Logger, { BuildLogger } from '../../../utilities/Logger';
 import type { MeteorStubsSettings, ProjectJson, ResolvedMeteorViteConfig } from '../../plugin/Settings';
 import { CurrentConfig, resolveMeteorViteConfig } from '../lib/Config';
@@ -35,7 +36,7 @@ export async function buildForProduction() {
         
         if (context.toLowerCase() === 'server') {
             if (!config.meteor.serverEntry) {
-                logger.info(`Skipping ${pc.yellow(context)} build: no server entry configured`);
+                logger.info(`Skipping ${Colorize.arch(context)} build: no server entry configured`);
                 continue;
             }
             if (!config.meteor.enableExperimentalFeatures) {
@@ -47,7 +48,7 @@ export async function buildForProduction() {
             }
         }
         
-        logger.info(`Preparing ${pc.yellow(context)} bundle...`);
+        logger.info(`Preparing ${Colorize.arch(context)} bundle...`);
         const list = fileNames[context] || [];
         
         
@@ -204,7 +205,7 @@ function preparePackagesForExportAnalyzer({ mainModule }: { mainModule: { client
                 if (!line.startsWith(pack.startsWith)) {
                     return line;
                 }
-                Logger.debug(`Removed from intermediary Meteor packages:\n L ${pc.cyan(line)}`);
+                Logger.debug(`Removed from intermediary Meteor packages:\n L ${Colorize.textSnippet(line)}`);
                 return pack.replaceWith || '';
             }).join('\n')
         }
