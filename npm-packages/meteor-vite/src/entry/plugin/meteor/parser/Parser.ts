@@ -1,7 +1,7 @@
 import { parse } from '@babel/parser';
 import {
     type FunctionExpression,
-    is,
+    is, isArrayExpression,
     isCallExpression,
     isFunctionExpression,
     isIdentifier,
@@ -114,6 +114,7 @@ function parseSource(code: string) {
  * var exports = require("/node_modules/meteor/test:ts-modules/index.ts");
  */
 function readMainModulePath(node: Node) {
+    // (Meteor v2)
     if (node.type !== 'VariableDeclarator') return;
     if (!is('Identifier', node.id, { name: 'exports' })) return;
     if (node.init?.type !== 'CallExpression') return;
@@ -217,18 +218,27 @@ function parsePackageScope(node: Node) {
             if (!isObjectExpression(node.argument)) continue;
             for (const property of node.argument.properties) {
                 if (!isObjectProperty(property)) continue;
-                if (!isIdentifier(property.key, { name: 'export' })) continue;
-                if (!isFunctionExpression(property.value)) continue;
-                const exportBody = property.value.body.body;
-                for (const node of exportBody) {
-                    if (!isReturnStatement(node)) continue;
-                    if (!isObjectExpression(node.argument)) continue;
-                    node.argument.properties.forEach((node) => {
-                        if (!isObjectProperty(node)) return;
-                        if (!isIdentifier(node.key)) return;
-                        exports.push(node.key.name);
-                    });
-                    
+                
+                // Parse package-level exports
+                if (isIdentifier(property.key, { name: 'export' })) {
+                    if (!isFunctionExpression(property.value)) continue;
+                    const exportBody = property.value.body.body;
+                    for (const node of exportBody) {
+                        if (!isReturnStatement(node)) continue;
+                        if (!isObjectExpression(node.argument)) continue;
+                        node.argument.properties.forEach((node) => {
+                            if (!isObjectProperty(node)) return;
+                            if (!isIdentifier(node.key)) return;
+                            exports.push(node.key.name);
+                        });
+                    }
+                    continue;
+                }
+                
+                // Parse mainModulePath
+                if (isIdentifier(property.key, { name: 'mainModulePath' })) {
+                    if (!isStringLiteral(property.value)) continue;
+                    // todo: emit main module path
                 }
             }
         }
