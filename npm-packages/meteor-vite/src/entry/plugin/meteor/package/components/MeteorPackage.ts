@@ -47,7 +47,7 @@ export default class MeteorPackage implements Omit<ParsedPackage, 'packageScopeE
             modules,
             packageScopeExports: packageScopeExports.map(({ packageName, key }) => ({ packageName, key })),
             packageId,
-            mainModulePath,
+            mainModulePath: mainModulePath || null,
             serialized: {
                 mainModule: this.serialize({}),
             }
