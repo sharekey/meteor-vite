@@ -103,12 +103,12 @@ function parseSource(code: string) {
                 }
                 
                 if (packageScope?.mainModulePath) {
-                    result.mainModulePathAbsolute = packageScope.mainModulePath;
+                    result.mainModulePathFull = packageScope.mainModulePath;
                 }
             }
         });
         
-        result.mainModulePath = result.mainModulePath || result.mainModulePathAbsolute?.replace(`/node_modules/${result.packageId}/`, '')
+        result.mainModulePath = result.mainModulePath || result.mainModulePathFull?.replace(`/node_modules/${result.packageId}/`, '')
         resolve(result);
     })
 }
@@ -339,7 +339,7 @@ export interface ParsedPackage {
      * @example
      * '/node_modules/meteor/ostrio:cookies/main.js'
      */
-    mainModulePathAbsolute?: string | null;
+    mainModulePathFull?: string | null;
     
     /**
      * Meteor package-level exports.
