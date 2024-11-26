@@ -197,6 +197,7 @@ function parsePackageScope(node: Node) {
         
         const packageName = node.arguments[0].value;
         let packageClosure: FunctionExpression | null = null;
+        let mainModulePath: string | null = null;
         const exports: string[] = [];
         
         // Meteor V3 (Release Candidate)
@@ -238,12 +239,12 @@ function parsePackageScope(node: Node) {
                 // Parse mainModulePath
                 if (isIdentifier(property.key, { name: 'mainModulePath' })) {
                     if (!isStringLiteral(property.value)) continue;
-                    // todo: emit main module path
+                    mainModulePath = property.value.value;
                 }
             }
         }
         
-        return { name: packageName, exports };
+        return { name: packageName, exports, mainModulePath };
     }
     
     return meteorV2(node) || meteorV3(node);
