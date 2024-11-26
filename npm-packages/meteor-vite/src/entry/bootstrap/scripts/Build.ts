@@ -154,6 +154,7 @@ function preparePackagesForExportAnalyzer({ mainModule }: { mainModule: { client
     const filesToCopy = [
         Path.join('.meteor', '.finished-upgraders'),
         Path.join('.meteor', '.id'),
+        Path.join('.meteor', 'packages'),
         Path.join('.meteor', 'platforms'),
         Path.join('.meteor', 'release'),
         Path.join('.meteor', 'versions'),
