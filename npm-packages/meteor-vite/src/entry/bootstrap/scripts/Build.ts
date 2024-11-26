@@ -253,7 +253,10 @@ function preparePackagesForExportAnalyzer({ mainModule }: { mainModule: { client
         env: {
             FORCE_COLOR: '3',
             VITE_METEOR_DISABLED: 'true',
-            METEOR_PACKAGE_DIRS: Path.join(CurrentConfig.projectRoot, 'packages')
+            METEOR_PACKAGE_DIRS: [
+                Path.join(CurrentConfig.projectRoot, 'packages'),
+                ...[process.env.METEOR_PACKAGE_DIRS] || []
+            ].join(':')
         },
     })
     
