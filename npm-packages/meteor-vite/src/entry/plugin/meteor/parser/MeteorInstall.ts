@@ -15,7 +15,7 @@ export class MeteorInstall {
     public readonly type: 'atmosphere' | 'npm';
     public packageId: string;
     public name: string;
-    public mainModulePath?: string;
+    public mainModulePath?: string | null;
     public packageJson?: {
         name: string,
         version: string,
