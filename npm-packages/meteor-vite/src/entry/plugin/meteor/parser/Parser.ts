@@ -313,7 +313,7 @@ export interface ParsedPackage {
      * Path to the package's mainModule as defined with `api.mainModule(...)`
      * {@link https://docs.meteor.com/api/packagejs.html}
      */
-    mainModulePath?: string;
+    mainModulePath?: string | null;
     
     /**
      * Meteor package-level exports.

@@ -19,14 +19,14 @@ export default class MeteorPackage implements Omit<ParsedPackage, 'packageScopeE
     
     public readonly name: string;
     public readonly modules: ModuleList;
-    public readonly mainModulePath?: string;
+    public readonly mainModulePath: string | null;
     public readonly packageScopeExports: PackageExport[] = [];
     public readonly packageId: string;
     
     constructor(public readonly parsedPackage: ParsedPackage, public readonly meta: MeteorPackageMetaOptions) {
         this.name = parsedPackage.name;
         this.modules = parsedPackage.modules;
-        this.mainModulePath = parsedPackage.mainModulePath;
+        this.mainModulePath = parsedPackage.mainModulePath || null;
         this.packageId = parsedPackage.packageId;
         
         Object.entries(parsedPackage.packageScopeExports).forEach(([packageName, exports]) => {
@@ -47,7 +47,7 @@ export default class MeteorPackage implements Omit<ParsedPackage, 'packageScopeE
             modules,
             packageScopeExports: packageScopeExports.map(({ packageName, key }) => ({ packageName, key })),
             packageId,
-            mainModulePath: mainModulePath || null,
+            mainModulePath,
             serialized: {
                 mainModule: this.serialize({}),
             }
@@ -59,7 +59,7 @@ export default class MeteorPackage implements Omit<ParsedPackage, 'packageScopeE
         return new MeteorPackage(result, { timeSpent, ...options });
     }
     
-    public getModule({ importPath }: { importPath?: string }): PackageSubmodule | undefined {
+    public getModule({ importPath }: { importPath?: string | null }): PackageSubmodule | undefined {
         if (!importPath) {
             return this.mainModule;
         }
