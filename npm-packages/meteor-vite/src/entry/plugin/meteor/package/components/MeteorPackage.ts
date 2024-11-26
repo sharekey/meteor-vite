@@ -20,6 +20,7 @@ export default class MeteorPackage implements Omit<ParsedPackage, 'packageScopeE
     public readonly name: string;
     public readonly modules: ModuleList;
     public readonly mainModulePath: string | null;
+    public readonly mainModulePathAbsolute?: string | null;
     public readonly packageScopeExports: PackageExport[] = [];
     public readonly packageId: string;
     
@@ -41,13 +42,14 @@ export default class MeteorPackage implements Omit<ParsedPackage, 'packageScopeE
     }
     
     public toJson() {
-        const { name, modules, mainModulePath, packageScopeExports, packageId } = this;
+        const { name, modules, mainModulePath, mainModulePathAbsolute, packageScopeExports, packageId } = this;
         return JSON.stringify({
             name,
             modules,
             packageScopeExports: packageScopeExports.map(({ packageName, key }) => ({ packageName, key })),
             packageId,
             mainModulePath,
+            mainModulePathAbsolute,
             serialized: {
                 mainModule: this.serialize({}),
             }

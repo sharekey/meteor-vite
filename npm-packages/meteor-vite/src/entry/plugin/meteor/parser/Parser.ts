@@ -103,11 +103,12 @@ function parseSource(code: string) {
                 }
                 
                 if (packageScope?.mainModulePath) {
-                    result.mainModulePath = packageScope.mainModulePath;
+                    result.mainModulePathAbsolute = packageScope.mainModulePath;
                 }
             }
         });
         
+        result.mainModulePath = result.mainModulePath || result.mainModulePathAbsolute?.replace(`/node_modules/${result.packageId}/`, '')
         resolve(result);
     })
 }
@@ -330,6 +331,15 @@ export interface ParsedPackage {
      * {@link https://docs.meteor.com/api/packagejs.html}
      */
     mainModulePath?: string | null;
+    
+    /**
+     * Full, non-relative mainModule path within Meteor's reify module tree
+     * Format: node_modules/meteor/<author>:<packageName>/<mainModule>
+     *
+     * @example
+     * '/node_modules/meteor/ostrio:cookies/main.js'
+     */
+    mainModulePathAbsolute?: string | null;
     
     /**
      * Meteor package-level exports.
