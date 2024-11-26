@@ -164,9 +164,6 @@ function preparePackagesForExportAnalyzer({ mainModule }: { mainModule: { client
         mainModule.client,
     ]
     const directoriesToCopy = [
-        Path.join('.meteor', 'local', 'dev_bundle'),
-        Path.join('.meteor', 'local', 'plugin-cache'),
-        Path.join('.meteor', 'local', 'bundler-cache'),
         'node_modules',
         'packages',
     ];
