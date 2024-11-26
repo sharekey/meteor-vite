@@ -204,7 +204,7 @@ function preparePackagesForExportAnalyzer({ mainModule }: { mainModule: { client
                 if (!line.startsWith(pack.startsWith)) {
                     return line;
                 }
-                Logger.debug(`Removed ${line} from intermediary Meteor packages`);
+                Logger.debug(`Removed from intermediary Meteor packages:\n L ${pc.blue(line)}`);
                 return pack.replaceWith || '';
             }).join('\n')
         }
