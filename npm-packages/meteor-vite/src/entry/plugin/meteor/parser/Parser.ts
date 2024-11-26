@@ -89,6 +89,7 @@ function parseSource(code: string) {
                 result.mainModulePath = readMainModulePath(node) || result.mainModulePath;
                 
                 if (atmosphere) {
+                    atmosphere.mainModulePath = atmosphere.mainModulePath || result.mainModulePath;
                     Object.assign(result, atmosphere)
                 }
                 
