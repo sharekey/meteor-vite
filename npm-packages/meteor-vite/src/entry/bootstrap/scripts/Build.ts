@@ -240,6 +240,14 @@ function preparePackagesForExportAnalyzer({ mainModule }: { mainModule: { client
         FS.writeFileSync(file, imports.join('\n'))
     }
     
+    const METEOR_PACKAGE_DIRS = [
+        Path.join(CurrentConfig.projectRoot, 'packages'),
+    ]
+    
+    if (process.env.METEOR_PACKAGE_DIRS) {
+        METEOR_PACKAGE_DIRS.push(process.env.METEOR_PACKAGE_DIRS);
+    }
+    
     execaSync('meteor', [
         'build',
         outDir,
@@ -253,10 +261,7 @@ function preparePackagesForExportAnalyzer({ mainModule }: { mainModule: { client
         env: {
             FORCE_COLOR: '3',
             VITE_METEOR_DISABLED: 'true',
-            METEOR_PACKAGE_DIRS: [
-                Path.join(CurrentConfig.projectRoot, 'packages'),
-                ...[process.env.METEOR_PACKAGE_DIRS] || []
-            ].join(':')
+            METEOR_PACKAGE_DIRS: METEOR_PACKAGE_DIRS.join(':'),
         },
     })
     
