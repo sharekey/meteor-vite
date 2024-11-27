@@ -94,9 +94,10 @@ export default class MeteorPackage implements Omit<ParsedPackage, 'packageScopeE
             const [modulePath, exports] = file;
             
             return new PackageSubmodule({
-                modulePath: module._isMain ? '' : modulePath,
+                modulePath: modulePath,
                 exports,
-                meteorPackage: this
+                meteorPackage: this,
+                isMainModule: module._isMain,
             });
         }
         

@@ -24,16 +24,22 @@ export class PackageSubmodule {
      */
     public readonly meteorPackage: MeteorPackage;
     
+    public readonly isMainModule?: boolean;
+    
     /**
      * Full import path for the package's requested module.
      * @example
      * 'meteor/ostrio:cookies/cookie-store.js'
      */
     public get fullImportPath() {
+        if (this.isMainModule) {
+            return this.meteorPackage.packageId;
+        }
         return `${this.meteorPackage.packageId}${this.modulePath ? `/${this.modulePath}` : ''}`
     };
     
-    constructor({ meteorPackage, modulePath, exports }: PackageSubmoduleOptions) {
+    constructor({ meteorPackage, modulePath, exports, isMainModule }: PackageSubmoduleOptions) {
+        this.isMainModule = isMainModule;
         this.modulePath = modulePath;
         this.meteorPackage = meteorPackage;
         this.exports = exports.map((data) => new ModuleExport({ data, parentModule: this }));
@@ -62,4 +68,6 @@ interface PackageSubmoduleOptions {
      * Instance of the Meteor package this submodule belongs to.
      */
     meteorPackage: MeteorPackage;
+    
+    isMainModule?: boolean;
 }
