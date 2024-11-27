@@ -45,6 +45,9 @@ export const CurrentConfig = {
         outDir: Path.join(OS.tmpdir(), 'meteor-vite', 'out', Path.basename(projectRoot)),
         get buildProgramsDir() {
             return Path.join(this.outDir, 'bundle', 'programs');
+        },
+        get isopackPath() {
+            return Path.join(this.inDir, '.meteor', 'local', 'isopacks');
         }
     },
     readmeLink: (section: 'meteor-build-plugins') => `https://github.com/JorgenVatle/meteor-vite#${section}`
