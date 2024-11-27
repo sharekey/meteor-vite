@@ -70,7 +70,9 @@ export default class MeteorPackage implements Omit<ParsedPackage, 'packageScopeE
         return new MeteorPackage(result, { timeSpent, ...options });
     }
     
-    public getModule({ importPath }: { importPath?: string | null }): PackageSubmodule | undefined {
+    public getModule(module: { importPath?: string | null }): PackageSubmodule | undefined {
+        const importPath = module.importPath?.replace(`/node_modules/${this.packageId}/`, '');
+        
         if (!importPath) {
             return this.mainModule;
         }
@@ -136,7 +138,7 @@ export default class MeteorPackage implements Omit<ParsedPackage, 'packageScopeE
         }
         
         return this.getModule({
-            importPath: this.mainModulePath.replace(`/node_modules/${this.packageId}/`, '')
+            importPath: this.mainModulePath,
         });
     }
     
