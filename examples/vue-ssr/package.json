@@ -25,7 +25,7 @@
   },
   "devDependencies": {
     "@types/meteor": "^2.9.8",
-    "@vitejs/plugin-vue": "^5.1.4",
+    "@vitejs/plugin-vue": "^5.2.1",
     "autoprefixer": "^10.4.16",
     "meteor-vite": "^1.11.2",
     "postcss": "^8.4.31",
