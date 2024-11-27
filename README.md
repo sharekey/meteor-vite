@@ -476,10 +476,10 @@ The Vite integration comes with two dependencies that work together to enable co
     - [x] Migrate bundler from Fibers to Async/Await
     - [x] Update Meteor bundle parser to support new format introduced in v3.
 - [x] Code-splitting/Dynamic imports
-- [ ] Migrate intermediary production-build transpile step from Babel to esbuild.
-- [ ] Automatically detect and inject React preamble into app markup.
-- [ ] Add support for Vite v5
-- [ ] Serve Vite bundle directly from Meteor, bypassing Meteor's build process.
+- [x] ~~Migrate intermediary production-build transpile step from Babel to esbuild.~~
+  - [x] Builds are now be handled entirely by Vite
+- [x] Automatically detect and inject React preamble into app markup.
+- [x] Serve Vite bundle directly from Meteor, bypassing Meteor's build process.
   - [ ] Inject Vite module preload polyfill into the Vite client entrypoint.
   - [ ] Server-side multi-page/multi-entrypoint support.
   - [ ] Handle parsing bundle manifest when using the `--production` flag.
