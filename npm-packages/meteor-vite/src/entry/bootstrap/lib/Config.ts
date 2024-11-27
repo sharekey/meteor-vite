@@ -34,7 +34,7 @@ export async function resolveMeteorViteConfig(
     
     if (userConfig.meteor?.serverEntry) {
         serverBuildConfig = {
-            target: 'node20',
+            target: 'node21',
             manifest: false,
             ssrManifest: false,
             minify: false,
