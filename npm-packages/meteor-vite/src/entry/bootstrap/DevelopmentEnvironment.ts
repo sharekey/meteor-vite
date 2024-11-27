@@ -29,7 +29,7 @@ Meteor.startup(async () => {
         
         // HMR listener to clean up side-effects from things like
         // Meteor.publish(), new Mongo.Collection(), etc. on server-side hot reload.
-        await runner.import('meteor-vite/bootstrap/HMRServerCleanup');
+        await runner.import('meteor-vite/bootstrap/RuntimeHMR');
         
         await runner.import(modules.serverEntry);
     }
