@@ -80,6 +80,7 @@ async function storeDebugSnippet({ request, stubTemplate, meteorPackage }: {
     const { templatePath, parserPath, packagePath, baseDir, mock } = request.cache;
     
     await FS.mkdir(Path.dirname(templatePath), { recursive: true });
+    await FS.mkdir(Path.dirname(mock.index), { recursive: true });
     
     await Promise.all([
         FS.writeFile(templatePath, stubTemplate),
