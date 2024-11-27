@@ -13,6 +13,7 @@ interface MeteorPackageMetaOptions {
     timeSpent: string;
     ignoreDuplicateExportsInPackages?: string[],
     viteEnv?: string;
+    lazyMainModulePath?: string;
 }
 
 export default class MeteorPackage implements Omit<ParsedPackage, 'packageScopeExports'> {
@@ -20,6 +21,7 @@ export default class MeteorPackage implements Omit<ParsedPackage, 'packageScopeE
     public readonly name: string;
     public readonly modules: ModuleList;
     public readonly mainModulePath: string | null;
+    public readonly lazyMainModulePath: string | null;
     public readonly packageScopeExports: PackageExport[] = [];
     public readonly packageId: string;
     
@@ -27,6 +29,7 @@ export default class MeteorPackage implements Omit<ParsedPackage, 'packageScopeE
         this.name = parsedPackage.name;
         this.modules = parsedPackage.modules;
         this.mainModulePath = parsedPackage.mainModulePath || null;
+        this.lazyMainModulePath = meta.lazyMainModulePath || null;
         this.packageId = parsedPackage.packageId;
         
         Object.entries(parsedPackage.packageScopeExports).forEach(([packageName, exports]) => {
