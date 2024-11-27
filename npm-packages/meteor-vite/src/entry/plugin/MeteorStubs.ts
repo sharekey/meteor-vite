@@ -48,6 +48,7 @@ export const MeteorStubs: () => Promise<Plugin> = setupPlugin(async () => {
             }, {
                 ignoreDuplicateExportsInPackages: request.context.pluginSettings.stubValidation.ignoreDuplicateExportsInPackages,
                 viteEnv: request.context.environment.name,
+                lazyMainModulePath: request.lazyMainModulePath,
             });
             
             const template = stubTemplate({
@@ -55,7 +56,7 @@ export const MeteorStubs: () => Promise<Plugin> = setupPlugin(async () => {
                 importPath: request.context.file.importPath,
                 stubValidation: request.context.pluginSettings.stubValidation,
                 meteorPackage,
-                mainModule: request.mainModulePath,
+                mainModule: request.lazyMainModulePath,
             })
             
             request.log.debug(`Meteor stub created`, {
