@@ -88,7 +88,7 @@ async function storeDebugSnippet({ request, stubTemplate, meteorPackage }: {
         FS.writeFile(parserPath, meteorPackage.toJson()),
         FS.writeFile(mock.bundleSource, await request.context.file.content),
         FS.writeFile(mock.index, meteorPackage.toMock()),
-        FS.writeFile(manifestPath, JSON.stringify(request.context.manifest)),
+        FS.writeFile(manifestPath, JSON.stringify(request.context.manifest, null, 2)),
     ]);
     
     request.log.info('Stored debug snippets', {
