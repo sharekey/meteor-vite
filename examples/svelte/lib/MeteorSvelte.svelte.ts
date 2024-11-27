@@ -18,6 +18,8 @@ export function useTracker<TType>(handle: () => TType): TType {
 export function useSubscribe(publication: string, ...params: unknown[]) {
     return useTracker(() => {
         const handle = Meteor.subscribe(publication, ...params);
-        return handle.ready();
+        const ready = handle.ready();
+        console.debug({ publication, handle, ready });
+        return ready;
     });
 }
