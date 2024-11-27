@@ -2,4 +2,4 @@
 "jorgenvatle_vite": minor
 ---
 
-Use non-pre-release tag
+Bump pre-release tag to avoid accidentally published v1 release from taking precedence 
