@@ -16,7 +16,8 @@
     "@vitejs/plugin-react": "^4.0.4",
     "meteor-node-stubs": "^1.2.5",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react-dom": "^18.2.0",
+    "vite": "^6.0.0"
   },
   "meteor": {
     "mainModule": {

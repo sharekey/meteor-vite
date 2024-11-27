@@ -10,7 +10,8 @@
   "dependencies": {
     "@babel/runtime": "^7.17.9",
     "meteor-node-stubs": "^1.2.1",
-    "solid-js": "^1.5.4"
+    "solid-js": "^1.5.4",
+    "vite": "^6.0.0"
   },
   "meteor": {
     "mainModule": {
