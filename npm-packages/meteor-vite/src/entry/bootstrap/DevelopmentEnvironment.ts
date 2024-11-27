@@ -1,3 +1,4 @@
+import { Meteor } from 'meteor/meteor';
 import { WebApp, WebAppInternals } from 'meteor/webapp';
 import Path from 'path';
 import { createServer, createServerModuleRunner } from 'vite';
@@ -9,7 +10,7 @@ Meteor.startup(async () => {
     Instance.logger.success('Initializing Vite Dev Server...');
     
     const { projectRoot } = globalThis.MeteorViteRuntimeConfig;
-    const { config } = await resolveMeteorViteConfig({
+    const { config, needsReactPreamble } = await resolveMeteorViteConfig({
         mode: 'development',
     }, 'serve');
     
@@ -32,6 +33,22 @@ Meteor.startup(async () => {
         await runner.import('meteor-vite/bootstrap/RuntimeHMR');
         
         await runner.import(modules.serverEntry);
+    }
+    
+    // ⚡[Client/React] Add React HMR preamble
+    if (needsReactPreamble) {
+        WebAppInternals.registerBoilerplateDataCallback('react-preamble', (req, data) => {
+            data.dynamicHead = data.dynamicHead || '';
+            
+            // language=js
+            data.dynamicHead += `
+                import RefreshRuntime from "${Meteor.absoluteUrl(Path.join(config.base, '@react-refresh'))}"
+                RefreshRuntime.injectIntoGlobalHook(window)
+                window.$RefreshReg$ = () => {}
+                window.$RefreshSig$ = () => (type) => type
+                window.__vite_plugin_react_preamble_installed__ = true
+            `;
+        })
     }
     
     // ⚡ [Client] Inject module import scripts into the Meteor WebApp boilerplate.
