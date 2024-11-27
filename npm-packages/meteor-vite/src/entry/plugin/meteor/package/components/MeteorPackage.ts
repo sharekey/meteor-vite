@@ -135,7 +135,9 @@ export default class MeteorPackage implements Omit<ParsedPackage, 'packageScopeE
             })
         }
         
-        return this.getModule({ importPath: this.mainModulePath });
+        return this.getModule({
+            importPath: this.mainModulePath.replace(`/node_modules/${this.packageId}/`, '')
+        });
     }
     
     
