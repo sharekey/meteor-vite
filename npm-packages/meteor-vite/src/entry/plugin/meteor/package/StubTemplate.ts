@@ -12,18 +12,17 @@ export const TEMPLATE_GLOBAL_KEY = 'g';
  * Used to bridge imports for Meteor code that Vite doesn't have access to, to the below template that acts as a
  * proxy between Vite and Meteor's modules.
  */
-export function stubTemplate({ requestId, meteorPackage, importPath, stubValidation: validationSettings, mainModule }: {
+export function stubTemplate({ requestId, meteorPackage, importPath, stubValidation: validationSettings }: {
     requestId: string;
     stubValidation?: StubValidationSettings,
     meteorPackage: MeteorPackage;
     importPath?: string;
-    mainModule?: string;
 }) {
     const stubId = getStubId();
     const { packageId } = meteorPackage;
     // Todo: combine package-level exports with exports from mainModule when imported without a subpath
     const submodule = meteorPackage.getModule({ importPath });
-    const serializedPackage = meteorPackage.serialize({ importPath, mainModule });
+    const serializedPackage = meteorPackage.serialize({ importPath });
     const fullImportPath = submodule?.fullImportPath || packageId;
     
     const stubValidation = stubValidationTemplate({
