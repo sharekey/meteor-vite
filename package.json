@@ -15,8 +15,7 @@
     "@types/meteor": "^2.9.8",
     "@types/node": "^22.9.0",
     "concurrently": "^8.2.2",
-    "tsup": "^8.3.5",
-    "vite": "^6.0.0-alpha.24"
+    "tsup": "^8.3.5"
   },
   "scripts": {
     "start": "npm run example start",
