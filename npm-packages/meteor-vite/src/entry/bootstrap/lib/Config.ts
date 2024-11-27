@@ -49,7 +49,7 @@ export async function resolveMeteorViteConfig(
                 output: {
                     // Unfortunately Meteor still doesn't support
                     // ESM within the final server bundle.
-                    format: 'cjs',
+                    format: 'module',
                     ...fileNameTemplates('server'),
                 }
             },
