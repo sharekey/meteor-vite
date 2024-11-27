@@ -19,6 +19,7 @@
   const clicks = useTracker(() => RuntimeCollection.findOne({ _id: 'clicks' }))
   const serverTime = useTracker(() => RuntimeCollection.findOne({ _id: 'time' }));
   const linksReady = useSubscribe('links.all');
+  const runtimeReady = useSubscribe('runtime');
 
   const reverseTitle = (linkId) => {
     Meteor.call('links.reverse-title', linkId)
@@ -34,7 +35,7 @@
   <p>
     You've pressed the button {myClickCount} times. In total, it has been clicked
     <span>
-      {#if !$linksReady}
+      {#if !$runtimeReady}
         (loading...)
       {:else}
         {$clicks?.value.toLocaleString() || 0}
