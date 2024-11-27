@@ -25,9 +25,6 @@
     "svelte-preprocess": "^5.0.4",
     "typescript": "^5.1.6"
   },
-  "overrides": {
-    "vite": "^6.0.0-beta.10"
-  },
   "meteor": {
     "mainModule": {
       "client": "client/main.ts",
