@@ -1,18 +1,17 @@
 import { Meteor } from 'meteor/meteor';
 import { Tracker } from 'meteor/tracker';
-import { onDestroy } from 'svelte';
+import { onDestroy, tick } from 'svelte';
+import { type Readable, readable } from 'svelte/store';
 
 
-export function useTracker<TType>(handle: () => TType): TType {
-    let state: TType = $state(handle());
-    
-    const computation = Tracker.autorun(() => {
-        state = handle();
+export function useTracker<TType>(handle: () => TType): Readable<TType> {
+    return readable(handle(), (set) => {
+        const computation = Tracker.autorun(() => {
+            set(handle());
+        });
+        
+        onDestroy(() => computation.stop());
     });
-    
-    onDestroy(() => computation.stop());
-    
-    return state;
 }
 
 export function useSubscribe(publication: string, ...params: unknown[]) {
