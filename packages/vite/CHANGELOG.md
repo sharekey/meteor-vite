@@ -1,5 +1,11 @@
 # jorgenvatle_vite
 
+## 1.1.0-alpha.1
+
+### Patch Changes
+
+- e80538d2: Disable 'keepNames' feature from ESBuild - it appears to cause issues with downstream Meteor builds
+
 ## 1.1.0-alpha.0
 
 ### Minor Changes
