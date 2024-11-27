@@ -1,5 +1,11 @@
 # jorgenvatle_vite
 
+## 1.1.0-alpha.0
+
+### Minor Changes
+
+- d45e887c: Bump pre-release tag to avoid accidentally published v1 release from taking precedence
+
 ## 1.0.0-alpha.3
 
 ### Patch Changes
