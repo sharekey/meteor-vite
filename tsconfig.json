@@ -112,6 +112,5 @@
 
   "include": [
     "./packages/vite/**/*.ts",
-    "./packages/vite-bundler/src/types/*.ts"
   ]
 }

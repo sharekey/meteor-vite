@@ -4,7 +4,6 @@
   "initialVersions": {
     "meteor-vite": "2.0.0-next.8",
     "@meteor-vite/plugin-zodern-relay": "1.0.2",
-    "vite-bundler": "3.0.0-next.23",
     "jorgenvatle_vite": "1.0.1"
   },
   "changesets": [

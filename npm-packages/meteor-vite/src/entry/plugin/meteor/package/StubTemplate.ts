@@ -81,14 +81,14 @@ export function viteAutoImportBlock({ content, id }: { content: string, id: stri
     }
     
     return `/**
- * These modules are automatically imported by jorgenvatle:vite-bundler.
+ * These modules are automatically imported by jorgenvatle:vite.
  * You can commit these to your project or move them elsewhere if you'd like,
  * but they must be imported somewhere in your Meteor entrypoint file.
  *
  * More info: https://github.com/JorgenVatle/meteor-vite#lazy-loaded-meteor-packages
 **/
 ${imports}
-/** End of vite-bundler auto-imports **/
+/** End of vite auto-imports **/
 
 ${content}`;
 }

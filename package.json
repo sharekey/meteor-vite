@@ -4,7 +4,6 @@
   "private": true,
   "workspaces": [
     "packages/vite",
-    "packages/vite-bundler",
     "npm-packages/meteor-vite",
     "npm-packages/@meteor-vite/plugin-zodern-relay"
   ],
@@ -26,11 +25,11 @@
     "prepare": "npm run build:packages || exit 0",
     "build:vite": "tsup",
     "link": "npm run example link",
-    "release": "npm run publish:vite-bundler && changeset publish",
-    "version": "(npm run version:vite-bundler || exit 1) && changeset version",
+    "release": "npm run publish:vite && changeset publish",
+    "version": "(npm run version:vite || exit 1) && changeset version",
     "example": ".bin/example-app.sh",
-    "version:vite-bundler": "meteor node .bin/release-meteor-package.mjs version",
-    "publish:vite-bundler": "meteor node .bin/release-meteor-package.mjs publish",
+    "version:vite": "meteor node .bin/release-meteor-package.mjs version",
+    "publish:vite": "meteor node .bin/release-meteor-package.mjs publish",
     "start:vue": "npm start vue",
     "start:react": "npm start react",
     "start:<example app>": "npm start <example app>",

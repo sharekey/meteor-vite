@@ -4,7 +4,6 @@ import FS from 'node:fs';
 import Path from 'path';
 import pc from 'picocolors';
 import { inspect } from 'util';
-import type { BuildPluginFile } from 'vite-bundler/src/plugin/Compiler';
 import { runBootstrapScript } from '../util/Bootstrap';
 import { CurrentConfig } from '../util/CurrentConfig';
 import Logger from '../util/Logger';
