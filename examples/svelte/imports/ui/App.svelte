@@ -1,6 +1,6 @@
 <script lang="ts">
   import RuntimeCollection from '/imports/api/runtime';
-  import { useTracker } from '/lib/MeteorSvelte.svelte';
+  import { useSubscribe, useTracker } from '/lib/MeteorSvelte.svelte';
   import { Meteor } from "meteor/meteor";
   import { LinksCollection } from '../api/links';
 
@@ -15,9 +15,10 @@
     })
   }
 
-  $: links = LinksCollection.find({});
-  $: clicks = useTracker(() => RuntimeCollection.findOne({ _id: 'clicks' }))
-  $: serverTime = useTracker(() => RuntimeCollection.findOne({ _id: 'time' }));
+  const links = useTracker(() => LinksCollection.find({}).fetch());
+  const clicks = useTracker(() => RuntimeCollection.findOne({ _id: 'clicks' }))
+  const serverTime = useTracker(() => RuntimeCollection.findOne({ _id: 'time' }));
+  const linksReady = useSubscribe('links.all');
 
   const reverseTitle = (linkId) => {
     Meteor.call('links.reverse-title', linkId)
@@ -33,19 +34,19 @@
   <p>
     You've pressed the button {myClickCount} times. In total, it has been clicked
     <span>
-      {#await Meteor.subscribe('runtime')}
+      {#if !$linksReady}
         (loading...)
-      {:then}
-        {$clicks?.value.toLocaleString()}
-      {/await}
+      {:else}
+        {$clicks?.value.toLocaleString() || 0}
+      {/if}
     </span>
     times.
   </p>
 
   <h2>Learn Meteor!</h2>
-  {#await Meteor.subscribe('links.all')}
+  {#if !$linksReady}
     <div>Waiting on links...</div>
-  {:then}
+  {:else}
     <ul>
       {#each $links as link (link._id)}
         <li>
@@ -54,7 +55,7 @@
         </li>
       {/each}
     </ul>
-  {/await}
+  {/if}
 
   <h2>Typescript ready</h2>
   <p>Just add lang="ts" to .svelte components.</p>
