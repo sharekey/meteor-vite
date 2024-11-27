@@ -40,13 +40,15 @@ Meteor.startup(async () => {
         WebAppInternals.registerBoilerplateDataCallback('react-preamble', (req, data) => {
             data.dynamicHead = data.dynamicHead || '';
             
-            // language=js
+            // language=html
             data.dynamicHead += `
-                import RefreshRuntime from "${Meteor.absoluteUrl(Path.join(config.base, '@react-refresh'))}"
-                RefreshRuntime.injectIntoGlobalHook(window)
-                window.$RefreshReg$ = () => {}
-                window.$RefreshSig$ = () => (type) => type
-                window.__vite_plugin_react_preamble_installed__ = true
+                <script type="module">
+                    import RefreshRuntime from "${Meteor.absoluteUrl(Path.join(config.base, '@react-refresh'))}"
+                    RefreshRuntime.injectIntoGlobalHook(window)
+                    window.$RefreshReg$ = () => {}
+                    window.$RefreshSig$ = () => (type) => type
+                    window.__vite_plugin_react_preamble_installed__ = true
+                </script>
             `;
         })
     }
