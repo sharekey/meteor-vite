@@ -77,7 +77,7 @@ async function storeDebugSnippet({ request, stubTemplate, meteorPackage }: {
     stubTemplate: string,
     meteorPackage: MeteorPackage,
 }) {
-    const { templatePath, parserPath, packagePath, baseDir, mock } = request.cache;
+    const { templatePath, parserPath, packagePath, baseDir, mock, manifestPath } = request.cache;
     
     await FS.mkdir(Path.dirname(templatePath), { recursive: true });
     await FS.mkdir(Path.dirname(mock.index), { recursive: true });
@@ -88,6 +88,7 @@ async function storeDebugSnippet({ request, stubTemplate, meteorPackage }: {
         FS.writeFile(parserPath, meteorPackage.toJson()),
         FS.writeFile(mock.bundleSource, await request.context.file.content),
         FS.writeFile(mock.index, meteorPackage.toMock()),
+        FS.writeFile(manifestPath, JSON.stringify(request.context.manifest)),
     ]);
     
     request.log.info('Stored debug snippets', {

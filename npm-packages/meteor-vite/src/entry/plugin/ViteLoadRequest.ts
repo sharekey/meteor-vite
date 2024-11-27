@@ -230,6 +230,7 @@ export default class ViteLoadRequest {
         const templatePath = Path.join(baseDir, this.context.file.importPath || '', 'template.js');
         const packagePath = Path.join(baseDir, 'package.js');
         const parserPath = Path.join(baseDir, 'parsed.json');
+        const manifestPath = Path.join(baseDir, 'isopack.json');
         
         // Mock files that can be dropped into meteor-vite's test directory.
         const mock = {
@@ -243,6 +244,7 @@ export default class ViteLoadRequest {
             packagePath,
             parserPath,
             mock,
+            manifestPath,
         }
     }
     
