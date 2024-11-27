@@ -64,7 +64,11 @@ export async function buildForProduction() {
             output.forEach((chunk) => {
                 const originalFilePath = Path.resolve(environment.config.build.outDir, chunk.fileName);
                 const ext = `.${CurrentConfig.bundleFileExtension}`;
-                const filePath = originalFilePath + ext;
+                let filePath = originalFilePath + ext;
+                
+                if (environment.name === 'server') {
+                    filePath = originalFilePath;
+                }
                 
                 if ('isEntry' in chunk) {
                     list.push({ filePath, originalFilePath, isEntry: chunk.isEntry });
