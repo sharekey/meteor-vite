@@ -18,7 +18,7 @@
     },
     "./bootstrap/scripts": {
       "types": "./dist/bootstrap/scripts/index.d.ts",
-      "import":"./dist/bootstrap/scripts/index.mjs"
+      "import": "./dist/bootstrap/scripts/index.mjs"
     },
     "./bootstrap/*": {
       "types": "./dist/bootstrap/*.d.ts",
@@ -62,7 +62,7 @@
     "@types/node": "^20.3.3",
     "tsup": "^8.3.5",
     "typescript": "^5.1.6",
-    "vite": "^6.0.0-beta.10",
+    "vite": "^6.0.0",
     "vitest": "^0.32.2"
   },
   "peerDependencies": {
