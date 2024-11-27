@@ -225,7 +225,7 @@ export default class ViteLoadRequest {
     }
     
     public get cache() {
-        const [meteor, packageBasename] = this.context.file.packageId.replace(':', '_');
+        const [meteor, packageBasename] = this.context.file.packageId.replace(':', '_').split('/');
         const baseDir = Path.resolve(Path.join(this.context.pluginSettings.tempDir, 'stubs', this.context.environment.name, packageBasename));
         const templatePath = Path.join(baseDir, this.context.file.importPath || '', 'template.js');
         const packagePath = Path.join(baseDir, 'package.js');
