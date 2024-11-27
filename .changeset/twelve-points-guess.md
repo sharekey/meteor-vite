@@ -2,4 +2,4 @@
 "jorgenvatle_vite": patch
 ---
 
-Correct pre-release tag
+Use non-pre-release tag for releases
