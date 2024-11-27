@@ -46,7 +46,7 @@ class CompilerPlugin {
         return nameOrPath.replace(`.${CurrentConfig.bundleFileExtension}`, '');
     }
     
-    protected _sourcemap(file: BuildPluginFile) {
+    protected _sourcemap(file: InputFile) {
         const filename = this._formatFilename(file.getPathInPackage()) + `.map`;
         const path = Path.resolve(CurrentConfig.projectRoot, filename);
         if (!FS.existsSync(path)) {
