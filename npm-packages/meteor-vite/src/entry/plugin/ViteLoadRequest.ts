@@ -225,16 +225,16 @@ export default class ViteLoadRequest {
     }
     
     public get cache() {
-        const packageIdBasename = this.context.file.packageId.replace(':', '_');
-        const baseDir = Path.resolve(Path.join(this.context.pluginSettings.tempDir, 'stubs', this.context.environment.name, packageIdBasename));
+        const [meteor, packageBasename] = this.context.file.packageId.replace(':', '_');
+        const baseDir = Path.resolve(Path.join(this.context.pluginSettings.tempDir, 'stubs', this.context.environment.name, packageBasename));
         const templatePath = Path.join(baseDir, this.context.file.importPath || '', 'template.js');
         const packagePath = Path.join(baseDir, 'package.js');
         const parserPath = Path.join(baseDir, 'parsed.json');
         
         // Mock files that can be dropped into meteor-vite's test directory.
         const mock = {
-            bundleSource: Path.join(baseDir, '_mock', packageIdBasename + `.js.bundle`),
-            index: Path.join(baseDir, '_mock', packageIdBasename + `.mock.ts`)
+            bundleSource: Path.join(baseDir, '_mock', packageBasename + `.js.bundle`),
+            index: Path.join(baseDir, '_mock', packageBasename + `.mock.ts`)
         }
         
         return {
