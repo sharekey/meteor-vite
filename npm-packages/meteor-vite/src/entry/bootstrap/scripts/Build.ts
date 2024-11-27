@@ -245,7 +245,7 @@ function preparePackagesForExportAnalyzer({ mainModule }: { mainModule: { client
     ]
     
     if (process.env.METEOR_PACKAGE_DIRS) {
-        METEOR_PACKAGE_DIRS.push(process.env.METEOR_PACKAGE_DIRS);
+        METEOR_PACKAGE_DIRS.push(Path.resolve(process.env.METEOR_PACKAGE_DIRS));
     }
     
     execaSync('meteor', [
