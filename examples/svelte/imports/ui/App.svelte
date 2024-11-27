@@ -1,6 +1,6 @@
 <script lang="ts">
   import RuntimeCollection from '/imports/api/runtime';
-  import { useTracker } from 'meteor/rdb:svelte-meteor-data'
+  import { useTracker } from '/lib/MeteorSvelte.svelte';
   import { Meteor } from "meteor/meteor";
   import { LinksCollection } from '../api/links';
 
