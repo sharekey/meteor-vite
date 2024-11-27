@@ -18,7 +18,7 @@ export default defineConfig([
         format: 'esm',
         sourcemap: true,
         target: 'node20',
-        keepNames: true,
+        keepNames: false,
         dts: false,
         onSuccess: async () => {
             try {
@@ -47,7 +47,7 @@ export default defineConfig([
             'esm',
         ],
         sourcemap: true,
-        keepNames: true,
+        keepNames: false,
         dts: true,
     },
 ]);
