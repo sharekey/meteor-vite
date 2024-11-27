@@ -233,8 +233,8 @@ export default class ViteLoadRequest {
         
         // Mock files that can be dropped into meteor-vite's test directory.
         const mock = {
-            bundleSource: Path.join(baseDir, '_mock', packageBasename + `.js.bundle`),
-            index: Path.join(baseDir, '_mock', packageBasename + `.mock.ts`)
+            bundleSource: Path.join(baseDir, '_mock', packageBasename, `source.js.bundle`),
+            index: Path.join(baseDir, '_mock', packageBasename, `index.ts`)
         }
         
         return {
