@@ -12,7 +12,7 @@ import { createLabelledLogger, LabelLogger } from '../../utilities/Logger';
 
 export default class ViteLoadRequest {
     
-    public mainModulePath?: string;
+    public lazyMainModulePath?: string;
     public isLazyLoaded: boolean;
     public log: LabelLogger;
     
@@ -23,7 +23,7 @@ export default class ViteLoadRequest {
         context.manifest?.resources.forEach((resource) => {
             const isMainModule = resource.fileOptions?.mainModule;
             if (isMainModule) {
-                this.mainModulePath = resource.path;
+                this.lazyMainModulePath = resource.path;
             }
             if (!this.context.file.importPath && isMainModule) {
                 this.isLazyLoaded = resource.fileOptions?.lazy || false;
