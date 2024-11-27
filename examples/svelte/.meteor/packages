@@ -20,6 +20,5 @@ static-html@1.4.0             # Define static page content in .html files
 hot-module-replacement@0.5.4  # Update client in development without reloading the page
 zodern:types                  # Enable types from meteor/atmosphere packages
 jorgenvatle:vite      # ⚡ Replaces Meteor's client bundler with Vite
-rdb:svelte-meteor-data
 session@1.2.2
 tmeasday:check-npm-versions
