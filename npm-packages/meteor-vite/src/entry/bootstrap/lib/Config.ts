@@ -40,6 +40,7 @@ export async function resolveMeteorViteConfig(
             minify: false,
             sourcemap: true,
             rollupOptions: {
+                external: [/^meteor\//],
                 input: {
                     main: serverRollupInput({
                         meteorMainModule: packageJson.meteor.mainModule.server,
