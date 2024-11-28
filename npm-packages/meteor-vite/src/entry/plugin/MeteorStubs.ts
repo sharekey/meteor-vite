@@ -134,6 +134,15 @@ function setupPlugin<Context extends ViteLoadRequest>(setup: () => Promise<{
                     await handleError(error);
                 }
             },
+            applyToEnvironment(environment) {
+                if (environment.name !== 'server') {
+                    return true;
+                }
+                if (environment.config.command === 'serve') {
+                    return true;
+                }
+                return false;
+            },
             configureServer(viteDevServer) {
                 server = viteDevServer;
             },
