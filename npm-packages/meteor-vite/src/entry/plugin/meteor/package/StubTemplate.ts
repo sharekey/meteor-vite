@@ -46,7 +46,7 @@ ${serializedPackage.reExports.join('\n')}
 let ${METEOR_STUB_KEY} = Package[${JSON.stringify(meteorPackage.name)}];
 
 const require = Package.modules.meteorInstall({
-  '__vite_stub${stubId}.js': function(require, exports, module) {
+  '__vite_stub${stubId}.js': (require, exports, module) => {
       ${METEOR_STUB_KEY} = require('${fullImportPath}');
       
       ${stubValidation.validateStub}
