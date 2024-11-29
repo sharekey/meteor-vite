@@ -11,6 +11,8 @@ if (import.meta.hot) {
     const publish_handlers = {};
     const logger = createSimpleLogger('HMR');
     
+    // Todo: Implement HMR handling for custom EJSON types
+    
     await new Promise<void>((resolve) => {
         // Todo: Wrap in Meteor.startup() block that runs BEFORE the server entrypoint but AFTER all other Meteor packages
         Object.assign(method_handlers, Meteor.server.method_handlers)
