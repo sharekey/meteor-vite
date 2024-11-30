@@ -1,5 +1,11 @@
 # meteor-vite
 
+## 3.0.0-alpha.9
+
+### Patch Changes
+
+- dbff7d86: Include hash in entry module filenames. Addresses a critical issue where older entry modules would be kept (almost) indefinitely by client and edge caches.
+
 ## 3.0.0-alpha.8
 
 ### Patch Changes
