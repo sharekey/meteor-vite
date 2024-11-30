@@ -65,7 +65,7 @@ export async function resolveMeteorViteConfig(
         const template = {
             assetFileNames: `assets/[name]-[hash][extname]`,
             chunkFileNames: `chunk/[name]-[hash].js`,
-            entryFileNames: `entry-${env}/[name].entry.js`,
+            entryFileNames: `entry-${env}/[name]-[hash].entry.js`,
         }
         
         if (env === 'server') {
