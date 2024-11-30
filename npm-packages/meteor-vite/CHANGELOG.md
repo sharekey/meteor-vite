@@ -1,5 +1,11 @@
 # meteor-vite
 
+## 3.0.0-alpha.7
+
+### Patch Changes
+
+- 86c0474c: Fix call order for production Vite asset 404 middleware
+
 ## 3.0.0-alpha.6
 
 ### Minor Changes
