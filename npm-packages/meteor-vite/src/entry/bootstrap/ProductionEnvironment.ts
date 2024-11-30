@@ -21,11 +21,11 @@ Meteor.startup(async () => {
     });
     
     WebApp.handlers.use(boilerplate.baseUrl, (req, res, next) => {
-        res.writeHead(404, 'Not found');
         res.setHeader('Cache-Control', 'no-store');
         res.write('Vite asset could not be found');
-        Logger.warn(`Served 404 for unknown Vite asset: ${req.originalUrl}`);
+        res.writeHead(404, 'Not found');
         res.end();
+        Logger.warn(`Served 404 for unknown Vite asset: ${req.originalUrl}`);
     })
     
     // Todo: Instead of serving assets with Meteor's built-in static file handler,
