@@ -4,6 +4,12 @@ import { ViteProductionBoilerplate } from './boilerplate/Production';
 import Logger from '../../utilities/Logger';
 import type { ViteManifestFile } from './scripts/Build';
 
+WebApp.handlers.use('/vite', (req, res, next) => {
+    console.log('we got el hittus', req.originalUrl);
+    
+    next();
+})
+
 Meteor.startup(async () => {
     if (!Meteor.isProduction) {
         return;
@@ -21,8 +27,9 @@ Meteor.startup(async () => {
     
     WebApp.handlers.use(boilerplate.baseUrl, (req, res, next) => {
         res.setHeader('Cache-Control', 'no-store');
-        res.write('Vite asset could not be found');
+        res.setHeader('Content-Type', 'text/plain');
         res.writeHead(404, 'Not found');
+        res.write('Vite asset not found');
         res.end();
         Logger.warn(`Served 404 for unknown Vite asset: ${req.originalUrl}`);
     })
