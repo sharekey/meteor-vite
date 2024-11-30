@@ -1,4 +1,3 @@
-import type * as _ from 'meteor/jorgenvatle:vite';
 import { Meteor } from 'meteor/meteor';
 import { WebAppInternals, WebApp } from 'meteor/webapp';
 import { ViteProductionBoilerplate } from './boilerplate/Production';
