@@ -1,5 +1,11 @@
 # meteor-vite
 
+## 3.0.0-alpha.8
+
+### Patch Changes
+
+- 12398cb3: Hotfix WebApp handler response call order and set an explicit content-type header for invalid Vite asset requests
+
 ## 3.0.0-alpha.7
 
 ### Patch Changes
