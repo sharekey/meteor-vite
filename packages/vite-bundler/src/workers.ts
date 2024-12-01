@@ -245,7 +245,7 @@ function validateNpmDependencies() {
         }
         
         console.warn([
-            `⚡ Looks like ${pc.cyan('meteor-node-stubs')} is missing from your dependencies`,
+            `⚡  Looks like ${pc.cyan('meteor-node-stubs')} is missing from your ${pc.italic('package.json')} dependencies`,
             `   Please install it: ` + pc.yellow(`${pc.dim('$')} meteor npm i meteor-node-stubs`),
         ].join('\n'));
     }
