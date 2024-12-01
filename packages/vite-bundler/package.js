@@ -27,6 +27,7 @@ Package.registerBuildPlugin({
         execa: '6.1.0',
         'fs-extra': '10.1.0',
         'picocolors': '1.0.0',
+        'semver': '7.6.3'
     },
 });
 
