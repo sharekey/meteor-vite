@@ -4,41 +4,22 @@
       "releases": [
         {
           "name": "vite-bundler",
-          "type": "minor"
-        }
-      ],
-      "summary": "Use any available IPC interface for workers instead of relying on one transport strategy\n\n- Automatically include React preamble in apps that depend on `@vitejs/plugin-react`. You no longer need to manually modify your Meteor HTML to inject this yourself. See migration steps below.\n- Use `semver` package instead of a custom parser when determining whether `meteor-vite` is out of date.\n- Use `package-lock.json` instead of `package.json` when determining whether `meteor-vite` is out of date.\n- Added a check to warn you if your app is missing `meteor-node-stubs`. Addresses some potentially confusing runtime errors: #239\n\n## Migration steps\n\nIf your app is using `@vitejs/plugin-react` and was created using the [Meteor-Vite React example app](https://github.com/JorgenVatle/meteor-vite/tree/d3633cb015206cb61168fa135c33b89331afeb04/examples/react), \nmake sure you remove the [`server/react-refresh.js`](https://github.com/JorgenVatle/meteor-vite/blob/d3633cb015206cb61168fa135c33b89331afeb04/examples/react/server/react-refresh.js) compatability module from your app. \n\n```diff\n// server/react-refresh.js\n- /**\n-  * Inject React Refresh snippet into HTML served by Meteor in development mode.\n-  * Without this snippet, React HMR will not work with Meteor-Vite.\n-  *\n-  * {@link https://github.com/JorgenVatle/meteor-vite/issues/29}\n-  * {@link https://github.com/vitejs/vite-plugin-react/issues/11#discussion_r430879201}\n-  */\n- if (Meteor.isDevelopment) {\n-     WebAppInternals.registerBoilerplateDataCallback('react-preamble', async (request, data) => {\n-         const { host, port } = await getConfig();\n-         data.dynamicHead = data.dynamicHead || '';\n-         data.dynamicHead += `\n- <script type=\"module\">\n-   import RefreshRuntime from \"http://${host}:${port}/@react-refresh\"\n-   RefreshRuntime.injectIntoGlobalHook(window)\n-   window.$RefreshReg$ = () => {}\n-   window.$RefreshSig$ = () => (type) => type\n-   window.__vite_plugin_react_preamble_installed__ = true\n- </script>\n-     `\n-     })\n- }\n```\n\nThe boilerplate is now added automatically by Meteor-Vite when `@vitejs/plugin-react` is detected as a dependency.",
-      "id": "chatty-teachers-build"
-    },
-    {
-      "releases": [
-        {
-          "name": "meteor-vite",
           "type": "patch"
         }
       ],
-      "summary": "Use any available IPC interface for workers instead of relying on one transport strategy",
-      "id": "orange-students-sleep"
+      "summary": "Update package version requirements to allow packages from Meteor v2.16 and v3.1.\n- Emit a warning message to the console when using a Vite version incompatible with the current Meteor release.",
+      "id": "great-peas-thank"
     }
   ],
   "releases": [
     {
       "name": "vite-bundler",
-      "type": "minor",
-      "oldVersion": "2.2.0",
-      "changesets": [
-        "chatty-teachers-build"
-      ],
-      "newVersion": "2.3.0"
-    },
-    {
-      "name": "meteor-vite",
       "type": "patch",
-      "oldVersion": "1.12.0",
+      "oldVersion": "2.3.0",
       "changesets": [
-        "orange-students-sleep"
+        "great-peas-thank"
       ],
-      "newVersion": "1.12.1"
+      "newVersion": "2.3.1"
     }
   ]
 }
