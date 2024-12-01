@@ -7,7 +7,6 @@ import pc from 'picocolors';
 import type { WorkerMethod, WorkerResponse, WorkerResponseHooks, MeteorIPCMessage, ProjectJson } from 'meteor-vite';
 import type { DDP_IPC } from './api/DDP-IPC';
 import { getMeteorRuntimeConfig } from './utility/Helpers';
-import Semver from 'semver';
 
 // Use a worker to skip reify and Fibers
 // Use a child process instead of worker to avoid WASM/archived threads error
@@ -203,6 +202,7 @@ export const MIN_METEOR_VITE_NPM_VERSION = '1.12.1';
 export const MIN_METEOR_VITE_NPM_VERSION_RANGE = `^${MIN_METEOR_VITE_NPM_VERSION}`;
 
 function validateNpmDependencies() {
+    const Semver = require('semver');
     const packageJson = getProjectPackageJson();
     const packageLock = getProjectPackageJson('package-lock.json');
     const dependencies = packageLock.packages || packageLock.dependencies || {};
