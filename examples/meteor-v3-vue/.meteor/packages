@@ -16,6 +16,6 @@ server-render@0.4.2           # Support for server-side rendering
 hot-module-replacement@0.5.4  # Rebuilds the client if there is a change on the client without restarting the server
 mongo@2.0.0
 
-jorgenvatle:vite-bundler
+jorgenvatle:vite-bundler@3.0.0
 zodern:relay
 typescript
