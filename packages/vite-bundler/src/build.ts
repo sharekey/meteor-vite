@@ -1,10 +1,13 @@
 import fs from 'fs-extra';
-import { Meteor } from 'meteor/meteor';
+import pc from 'picocolors';
 import path from 'node:path';
+import Logger from './utility/Logger';
+import Semver from 'semver';
 import Compiler, { BUNDLE_FILE_EXTENSION } from './plugin/Compiler';
+import { Meteor } from 'meteor/meteor';
 import { prepareViteBundle, ViteBundleOutput } from './plugin/IntermediaryMeteorProject';
 import { getBuildConfig } from './utility/Helpers';
-import Logger from './utility/Logger';
+import { getProjectPackageJson } from './workers';
 
 const {
   isSimulatedProduction,
@@ -14,6 +17,7 @@ const {
 
 // Empty stubs from any previous builds
 if (pluginEnabled) {
+  validateNpmDependencies();
   fs.ensureDirSync(viteOutSrcDir);
   fs.writeFileSync(path.join(path.dirname(viteOutSrcDir), '.gitignore'), '*');
   fs.writeFileSync(
@@ -89,4 +93,85 @@ function copyViteBundle({ payload }: Pick<ViteBundleOutput, 'payload'>) {
   }
   
   profile.complete('Assets copied successfully');
+}
+
+function validateNpmDependencies() {
+  const MIN_METEOR_VITE_NPM_VERSION = '1.12.1';
+  const MIN_METEOR_VITE_NPM_VERSION_RANGE = `^${MIN_METEOR_VITE_NPM_VERSION}`;
+  const packageJson = getProjectPackageJson();
+  const packageLock = getProjectPackageJson('package-lock.json');
+  const dependencies = packageLock.packages || packageLock.dependencies || {};
+  
+  // Check that the minimum compatible version of meteor-vite is installed.
+  function meteorVite() {
+    const version = dependencies['meteor-vite']?.version || dependencies['node_modules/meteor-vite']?.version;
+    const minVersion = Semver.parse(MIN_METEOR_VITE_NPM_VERSION)
+    
+    if (!minVersion) {
+      console.error(new Error('⚡  Unable to determine minimum required version of meteor-vite'));
+      return;
+    }
+    
+    const installCommand = pc.yellow(`${pc.dim('$')} meteor npm i meteor-vite@${minVersion.major}.${minVersion.minor}`);
+    
+    if (!version) {
+      console.error([
+        `⚡  Missing ${pc.cyan('meteor-vite')} in your dependencies!`,
+        `   Please install it: ${installCommand}`,
+      ].join('\n'))
+      return;
+    }
+    
+    if (Semver.satisfies(version, MIN_METEOR_VITE_NPM_VERSION_RANGE)) {
+      return;
+    }
+    
+    
+    console.error([
+      `⚡  You are using ${pc.cyan(`meteor-vite v${version}`)} which is not supported by the currently installed version of ${pc.cyan('jorgenvatle:vite-bundler')}`,
+      `   Please update it: ${installCommand}`
+    ].join('\n'))
+  }
+  
+  // Warn users if `meteor-node-stubs` is missing from project dependencies
+  function meteorNodeStubs() {
+    if ('meteor-node-stubs' in packageJson.dependencies) {
+      return;
+    }
+    
+    console.warn([
+      `⚡  Looks like ${pc.cyan('meteor-node-stubs')} is missing from your ${pc.italic('package.json')} dependencies`,
+      `   Please install it: ` + pc.yellow(`${pc.dim('$')} meteor npm i meteor-node-stubs`),
+    ].join('\n'));
+  }
+  
+  function vite() {
+    if (Meteor.isFibersDisabled === true) {
+      // Meteor v3 should work with all Vite versions
+      return;
+    }
+    
+    const version = (dependencies['vite'] || dependencies['node_modules/vite'])?.version;
+    const installCommand = pc.yellow(`${pc.dim('$')} meteor npm i vite@4`);
+    if (!version) {
+      console.warn([
+        `⚡  Unable to determine currently installed ${pc.cyan('vite')} version`,
+        `    Make sure to install it: ${installCommand}`
+      ].join('\n'))
+      return;
+    }
+    
+    if (Semver.satisfies(version, '^4.0.0 || ^3.0.0')) {
+      return;
+    }
+    
+    console.warn([
+      `⚡  You are using ${pc.cyan(`vite v${version}`)} which is not compatible with your current Meteor version`,
+      `   Please install a compatible release: ${installCommand}`
+    ].join('\n'))
+  }
+  
+  vite();
+  meteorVite();
+  meteorNodeStubs();
 }

@@ -1,5 +1,62 @@
 # vite-bundler
 
+## 2.3.2
+
+### Patch Changes
+
+- 8af5523c: Add missing 'semver' dependency to build plugin npm dependencies
+
+## 2.3.1
+
+### Patch Changes
+
+- d3c4bfa4: Update package version requirements to allow packages from Meteor v2.16 and v3.1.
+  - Emit a warning message to the console when using a Vite version incompatible with the current Meteor release.
+
+## 2.3.0
+
+### Minor Changes
+
+- 6900bcfd: Use any available IPC interface for workers instead of relying on one transport strategy
+
+  - Automatically include React preamble in apps that depend on `@vitejs/plugin-react`. You no longer need to manually modify your Meteor HTML to inject this yourself. See migration steps below.
+  - Use `semver` package instead of a custom parser when determining whether `meteor-vite` is out of date.
+  - Use `package-lock.json` instead of `package.json` when determining whether `meteor-vite` is out of date.
+  - Added a check to warn you if your app is missing `meteor-node-stubs`. Addresses some potentially confusing runtime errors: #239
+
+  ## Migration steps
+
+  If your app is using `@vitejs/plugin-react` and was created using the [Meteor-Vite React example app](https://github.com/JorgenVatle/meteor-vite/tree/d3633cb015206cb61168fa135c33b89331afeb04/examples/react),
+  make sure you remove the [`server/react-refresh.js`](https://github.com/JorgenVatle/meteor-vite/blob/d3633cb015206cb61168fa135c33b89331afeb04/examples/react/server/react-refresh.js) compatability module from your app.
+
+  ```diff
+  // server/react-refresh.js
+  - /**
+  -  * Inject React Refresh snippet into HTML served by Meteor in development mode.
+  -  * Without this snippet, React HMR will not work with Meteor-Vite.
+  -  *
+  -  * {@link https://github.com/JorgenVatle/meteor-vite/issues/29}
+  -  * {@link https://github.com/vitejs/vite-plugin-react/issues/11#discussion_r430879201}
+  -  */
+  - if (Meteor.isDevelopment) {
+  -     WebAppInternals.registerBoilerplateDataCallback('react-preamble', async (request, data) => {
+  -         const { host, port } = await getConfig();
+  -         data.dynamicHead = data.dynamicHead || '';
+  -         data.dynamicHead += `
+  - <script type="module">
+  -   import RefreshRuntime from "http://${host}:${port}/@react-refresh"
+  -   RefreshRuntime.injectIntoGlobalHook(window)
+  -   window.$RefreshReg$ = () => {}
+  -   window.$RefreshSig$ = () => (type) => type
+  -   window.__vite_plugin_react_preamble_installed__ = true
+  - </script>
+  -     `
+  -     })
+  - }
+  ```
+
+  The boilerplate is now added automatically by Meteor-Vite when `@vitejs/plugin-react` is detected as a dependency.
+
 ## 3.0.0-next.27
 
 ### Patch Changes
@@ -23,7 +80,7 @@
 ### Patch Changes
 
 - ff6eee0f: Unref child processes running in detached mode
-  - Allow disabling the Vite dev server through setting `METEOR_VITE_DISABLED` to any value.
+    - Allow disabling the Vite dev server through setting `METEOR_VITE_DISABLED` to any value.
 
 ## 3.0.0-next.23
 
@@ -50,6 +107,40 @@
 - 5e669858: Update serverEntry config option to use Vite SSR build internally
 
 ## 3.0.0-next.17
+
+### Minor Changes
+
+- ab461a9a: Prefetch all Vite assets asynchronously in the background after initial page load.
+
+## 3.0.0-next.16
+
+### Patch Changes
+
+- 531bacbf: Fix issue where global meteor runtime variable would be accessed before being defined
+
+## 3.0.0-next.15
+
+### Patch Changes
+
+- 4d92b722: Allow Vite dev server to run without a DDP connection.
+    - Fix Meteor DDP URL parsing from Meteor runtime environment. Falls back to using `MOBILE_DDP_URL`.
+    - Fix #208
+
+## 3.0.0-next.13
+
+### Patch Changes
+
+- b8f34bbd: Correct path to dev server splash screen HTML asset
+
+## 3.0.0-next.12
+
+### Minor Changes
+
+- f2e0e9d2: - Add Vite config option for bundling the Meteor server
+    - Use DDP instead of Node IPC for managing Vite Dev server status
+    - Prefetch all Vite production assets in the background using the lowest available link priority.
+
+## 2.2.0
 
 ### Minor Changes
 
