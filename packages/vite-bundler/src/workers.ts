@@ -22,7 +22,8 @@ export function createWorkerFork(hooks: Partial<WorkerResponseHooks>, options?: 
             `$  ${pc.yellow('npm i -D meteor-vite')}`
         ])
     }
-    validateNpmVersion();
+    
+    validateNpmDependencies();
     
     const child = fork(workerPath, ['--enable-source-maps'], {
         stdio: ['inherit', 'inherit', 'inherit', 'ipc'],
@@ -201,34 +202,54 @@ function prepareWorkerEnv({ ipcOverDdp = false }) {
 export const MIN_METEOR_VITE_NPM_VERSION = '1.12.1';
 export const MIN_METEOR_VITE_NPM_VERSION_RANGE = `^${MIN_METEOR_VITE_NPM_VERSION}`;
 
-function validateNpmVersion() {
-    const packageLock = getProjectPackageJson('package-lock.json');
-    const dependencies = packageLock.packages || packageLock.dependencies || {};
-    const version = dependencies['meteor-vite']?.version || dependencies['node_modules/meteor-vite']?.version;
-    const minVersion = Semver.parse(MIN_METEOR_VITE_NPM_VERSION)
+function validateNpmDependencies() {
+    const packageJson = getProjectPackageJson();
     
-    if (!minVersion) {
-        console.error(new Error('⚡  Unable to determine minimum required version of meteor-vite'));
-        return;
-    }
-    
-    const installCommand = pc.yellow(`${pc.dim('$')} meteor npm i meteor-vite@${minVersion.major}.${minVersion.minor}`);
-    
-    if (!version) {
+    // Check that the minimum compatible version of meteor-vite is installed.
+    function meteorVite() {
+        const packageLock = getProjectPackageJson('package-lock.json');
+        const dependencies = packageLock.packages || packageLock.dependencies || {};
+        const version = dependencies['meteor-vite']?.version || dependencies['node_modules/meteor-vite']?.version;
+        const minVersion = Semver.parse(MIN_METEOR_VITE_NPM_VERSION)
+        
+        if (!minVersion) {
+            console.error(new Error('⚡  Unable to determine minimum required version of meteor-vite'));
+            return;
+        }
+        
+        const installCommand = pc.yellow(`${pc.dim('$')} meteor npm i meteor-vite@${minVersion.major}.${minVersion.minor}`);
+        
+        if (!version) {
+            console.error([
+                `⚡  Missing ${pc.cyan('meteor-vite')} in your dependencies!`,
+                `   Please install it: ${installCommand}`,
+            ].join('\n'))
+            return;
+        }
+        
+        if (Semver.satisfies(version, MIN_METEOR_VITE_NPM_VERSION_RANGE)) {
+            return;
+        }
+        
+        
         console.error([
-            `⚡  Missing ${pc.cyan('meteor-vite')} in your dependencies!`,
-            `   Please install it: ${installCommand}`,
+            `⚡  You are using ${pc.cyan(`meteor-vite v${version}`)} which is not supported by ${pc.cyan('jorgenvatle:vite-bundler')}`,
+            `   Please update it: ${installCommand}`
         ].join('\n'))
-        return;
     }
     
-    if (Semver.satisfies(version, MIN_METEOR_VITE_NPM_VERSION_RANGE)) {
-        return;
+    // Warn users if `meteor-node-stubs` is missing from project dependencies
+    function meteorNodeStubs() {
+        if ('meteor-node-stubs' in packageJson) {
+            return;
+        }
+        
+        console.warn([
+            `⚡ Looks like ${pc.cyan('meteor-node-stubs')} is missing from your dependencies`,
+            `   Please install it: ` + pc.yellow(`${pc.dim('$')} meteor npm i meteor-node-stubs`),
+        ].join('\n'));
     }
     
-    
-    console.error([
-        `⚡  You are using ${pc.cyan(`meteor-vite v${version}`)} which is not supported by ${pc.cyan('jorgenvatle:vite-bundler')}`,
-        `   Please update it: ${installCommand}`
-    ].join('\n'))
+    meteorVite();
+    meteorNodeStubs();
 }
