@@ -1,5 +1,11 @@
 # vite-bundler
 
+## 2.3.2
+
+### Patch Changes
+
+- 8af5523c: Add missing 'semver' dependency to build plugin npm dependencies
+
 ## 2.3.1
 
 ### Patch Changes
