@@ -51,7 +51,7 @@ Package.onUse(function (api) {
         'isobuild:compiler-plugin@1.0.0',
     ]);
     api.use([
-        'zodern:types@1.0.9',
+        'zodern:types@1.0.13',
     ], {
         weak: true,
     });
