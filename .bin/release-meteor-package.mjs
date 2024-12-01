@@ -189,6 +189,11 @@ async function isPublished(version) {
         return;
     }
 
+    if (action === 'version') {
+        await applyVersion();
+        return;
+    }
+
     throw new Error(`The provided argument is not recognized: "${action}"`);
 
 })().catch((error) => {
