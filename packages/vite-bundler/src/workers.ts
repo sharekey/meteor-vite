@@ -265,12 +265,15 @@ function validateNpmDependencies() {
             ].join('\n'))
             return;
         }
+        
         if (Semver.satisfies(version, '^4.0.0 || ^3.0.0')) {
-            console.warn([
-                `⚡  You are using ${pc.cyan(`vite v${version}`)} which is not compatible with your current Meteor version`,
-                `    Please install a compatible release: ${installCommand}`
-            ])
+            return;
         }
+        
+        console.warn([
+            `⚡  You are using ${pc.cyan(`vite v${version}`)} which is not compatible with your current Meteor version`,
+            `    Please install a compatible release: ${installCommand}`
+        ])
     }
     
     vite();
