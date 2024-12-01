@@ -9,11 +9,13 @@ import pc from 'picocolors';
 
 export function getConfig() {
     throw new MeteorViteError([
-       'Module has moved:' + pc.yellow('jorgenvatle:vite-bundler/loading/vite-connection-handler'),
-       '',
-       `You're likely seeing this because your app is generating a React preamble for your Vite dev server`,
-       'This is no longer needed and you can safely remove the boilerplate used to achieve this.',
-       '',
-       'Remove the following module if it exists in your app: https://github.com/JorgenVatle/meteor-vite/blob/d3633cb015206cb61168fa135c33b89331afeb04/examples/react/server/react-refresh.js'
+        'Module has moved: ' + pc.yellow('jorgenvatle:vite-bundler/loading/vite-connection-handler'),
+        '',
+        `You're likely seeing this because your app is generating a React preamble for your Vite dev server`,
+        'This is no longer needed and you can safely remove the boilerplate used to achieve this.',
+        '',
+        'Remove the following module/code if it exists in your app:',
+        pc.dim(`${pc.yellow('react-refresh.js')}: https://github.com/JorgenVatle/meteor-vite/blob/d3633cb015206cb61168fa135c33b89331afeb04/examples/react/server/react-refresh.js`),
+        '',
     ].join('\n'))
 }
