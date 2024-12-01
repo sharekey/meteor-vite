@@ -208,8 +208,8 @@ function validateNpmVersion() {
     
     if (!version) {
         console.error([
-            '⚡  Missing `meteor-vite` in your dependencies! You can install it with the following command:',
-            pc.dim(' $ meteor npm i meteor-vite '),
+            `⚡  Missing ${pc.yellow('meteor-vite')} in your dependencies! Make sure you install it:`,
+            pc.dim('$ ') + pc.yellow(`meteor npm i meteor-vite \n`),
         ].join('\n'))
         return;
     }
