@@ -96,7 +96,7 @@ function copyViteBundle({ payload }: Pick<ViteBundleOutput, 'payload'>) {
 }
 
 function validateNpmDependencies() {
-  const MIN_METEOR_VITE_NPM_VERSION = '1.12.1';
+  const MIN_METEOR_VITE_NPM_VERSION = '2.0.0';
   const MIN_METEOR_VITE_NPM_VERSION_RANGE = `^${MIN_METEOR_VITE_NPM_VERSION}`;
   const packageJson = getProjectPackageJson();
   const packageLock = getProjectPackageJson('package-lock.json');
