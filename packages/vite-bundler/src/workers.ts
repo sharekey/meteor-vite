@@ -228,7 +228,7 @@ function validateNpmVersion() {
     
     
     console.error([
-        `⚡  You are using ${pc.cyan(`meteor-vite v${version}`)} which is too outdated for ${pc.cyan('jorgenvatle:vite-bundler')}`,
+        `⚡  You are using ${pc.cyan(`meteor-vite v${version}`)} which is not supported by ${pc.cyan('jorgenvatle:vite-bundler')}`,
         `   Please update it: ${installCommand}`
     ].join('\n'))
 }
