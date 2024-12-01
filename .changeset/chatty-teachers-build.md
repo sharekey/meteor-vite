@@ -4,6 +4,7 @@
 
 Use any available IPC interface for workers instead of relying on one transport strategy
 - Automatically include React preamble in apps that depend on `@vitejs/plugin-react`. You no longer need to manually modify your Meteor HTML to inject this yourself. See migration steps below.
+- Added a check to warn you if your app is missing `meteor-node-stubs`. Addresses some potentially confusing runtime errors (#239)
 
 ### Migration steps
 If your app is using `@vitejs/plugin-react` and was created using the 
