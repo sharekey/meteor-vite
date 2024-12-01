@@ -140,7 +140,11 @@ export function getProjectPackageJson<
     'package.json': ProjectJson;
     'package-lock.json': {
         name: string;
-        packages: Partial<Record<string, { version: string }>>
+        // lockfile v3
+        packages?: Partial<Record<string, { version: string }>>
+        
+        // lockfile v1
+        dependencies?: Partial<Record<string, { version: string }>>;
     }
 }[TFile] {
     const path = Path.join(cwd, file);
@@ -199,7 +203,8 @@ export const MIN_METEOR_VITE_NPM_VERSION_RANGE = `^${MIN_METEOR_VITE_NPM_VERSION
 
 function validateNpmVersion() {
     const packageLock = getProjectPackageJson('package-lock.json');
-    const version = packageLock.packages['meteor-vite']?.version;
+    const dependencies = packageLock.packages || packageLock.dependencies || {};
+    const version = dependencies['meteor-vite']?.version;
     
     if (!version) {
         console.error([
