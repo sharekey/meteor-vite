@@ -205,11 +205,19 @@ function validateNpmVersion() {
     const packageLock = getProjectPackageJson('package-lock.json');
     const dependencies = packageLock.packages || packageLock.dependencies || {};
     const version = dependencies['meteor-vite']?.version || dependencies['node_modules/meteor-vite']?.version;
+    const minVersion = Semver.parse(MIN_METEOR_VITE_NPM_VERSION)
+    
+    if (!minVersion) {
+        console.error(new Error('⚡  Unable to determine minimum required version of meteor-vite'));
+        return;
+    }
+    
+    const installCommand = pc.yellow(`${pc.dim('$')} meteor npm i meteor-vite@${minVersion.major}.${minVersion.minor}`);
     
     if (!version) {
         console.error([
-            `⚡  Missing ${pc.yellow('meteor-vite')} in your dependencies! Make sure you install it:`,
-            pc.dim('$ ') + pc.yellow(`meteor npm i meteor-vite \n`),
+            `⚡  Missing ${pc.cyan('meteor-vite')} in your dependencies!`,
+            `   Please install it: ${installCommand}`,
         ].join('\n'))
         return;
     }
@@ -218,15 +226,9 @@ function validateNpmVersion() {
         return;
     }
     
-    const minVersion = Semver.parse(MIN_METEOR_VITE_NPM_VERSION)
-    
-    if (!minVersion) {
-        console.error(new Error('⚡  Unable to determine minimum required version of meteor-vite'));
-        return;
-    }
     
     console.error([
-        `⚡  You are using an out of date version of ${pc.yellow('meteor-vite')} (${pc.cyan(`v${version}`)})`,
-        `   Please update it: ${pc.dim(`$ meteor npm i meteor-vite@${minVersion.major}.${minVersion.minor}`)}`
+        `⚡  You are using ${pc.cyan(`meteor-vite v${version}`)} which is too outdated for ${pc.cyan('jorgenvatle:vite-bundler')}`,
+        `   Please update it: ${installCommand}`
     ].join('\n'))
 }
