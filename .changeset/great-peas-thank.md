@@ -3,3 +3,4 @@
 ---
 
 Update package version requirements to allow packages from Meteor v2.16 and v3.1.
+- Emit a warning message to the console when using a Vite version incompatible with the current Meteor release. 
