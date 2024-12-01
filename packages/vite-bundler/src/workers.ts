@@ -134,12 +134,20 @@ class MeteorViteError extends Error {
 
 export const cwd = process.env.METEOR_VITE_CWD ?? guessCwd();
 export const workerPath = Path.join(cwd, 'node_modules/meteor-vite/dist/bin/worker.mjs');
-export function getProjectPackageJson(): ProjectJson {
-    const path = Path.join(cwd, 'package.json');
+export function getProjectPackageJson<
+    TFile extends 'package.json' | 'package-lock.json' = 'package.json'
+>(file: TFile = 'package.json' as TFile): {
+    'package.json': ProjectJson;
+    'package-lock.json': {
+        name: string;
+        packages: Partial<Record<string, { version: string }>>
+    }
+}[TFile] {
+    const path = Path.join(cwd, file);
     
     if (!FS.existsSync(path)) {
         throw new MeteorViteError([
-            `Unable to locate package.json for your project in ${pc.yellow(path)}`,
+            `Unable to locate ${pc.yellow(file)} for your project in ${pc.yellow(path)}`,
             `Make sure you run Meteor commands from the root of your project directory.`,
             `Alternatively, you can supply a superficial CWD for Meteor-Vite to use:`,
             `$  cross-env METEOR_VITE_CWD="./projects/my-meteor-project/" meteor run`
@@ -148,6 +156,7 @@ export function getProjectPackageJson(): ProjectJson {
     
     return JSON.parse(FS.readFileSync(path, 'utf-8'));
 }
+
 function guessCwd () {
     let cwd = process.env.PWD ?? process.cwd()
     const index = cwd.indexOf('.meteor')
@@ -189,8 +198,8 @@ export const MIN_METEOR_VITE_NPM_VERSION = '1.12.1';
 export const MIN_METEOR_VITE_NPM_VERSION_RANGE = `^${MIN_METEOR_VITE_NPM_VERSION}`;
 
 function validateNpmVersion() {
-    const packageJson = getProjectPackageJson(); // Todo: use lockfile instead of package.json
-    const version = packageJson.dependencies['meteor-vite'] || packageJson.devDependencies['meteor-vite'];
+    const packageLock = getProjectPackageJson('package-lock.json');
+    const version = packageLock.packages['meteor-vite']?.version;
     
     if (!version) {
         console.error([
