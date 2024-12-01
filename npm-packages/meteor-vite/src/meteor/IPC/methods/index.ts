@@ -23,6 +23,7 @@ export interface WorkerReplies {
     viteConfig: ViteRuntimeConfig
     refreshNeeded: void,
     workerConfig: WorkerRuntimeConfig & { listening: boolean }
+    startSSRWatcher: { serverEntry: string }
 }
 
 export type WorkerResponse<TName extends WorkerReplyKind = WorkerReplyKind> = {

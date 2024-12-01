@@ -22,7 +22,6 @@ export function createWorkerFork(hooks: Partial<WorkerResponseHooks>, options?: 
             `$  ${pc.yellow('npm i -D meteor-vite')}`
         ])
     }
-    validateNpmVersion();
     
     const child = fork(workerPath, ['--enable-source-maps'], {
         stdio: ['inherit', 'inherit', 'inherit', 'ipc'],
@@ -148,15 +147,26 @@ class MeteorViteError extends Error {
     }
 }
 
-export const MIN_METEOR_VITE_NPM_VERSION = { major: 2, minor: 0, patch: 0 };
 export const cwd = process.env.METEOR_VITE_CWD ?? guessCwd();
 export const workerPath = Path.join(cwd, 'node_modules/meteor-vite/dist/bin/worker.mjs');
-export function getProjectPackageJson(): ProjectJson {
-    const path = Path.join(cwd, 'package.json');
+export function getProjectPackageJson<
+    TFile extends 'package.json' | 'package-lock.json' = 'package.json'
+>(file: TFile = 'package.json' as TFile): {
+    'package.json': ProjectJson;
+    'package-lock.json': {
+        name: string;
+        // lockfile v3
+        packages?: Partial<Record<string, { version: string }>>
+        
+        // lockfile v1
+        dependencies?: Partial<Record<string, { version: string }>>;
+    }
+}[TFile] {
+    const path = Path.join(cwd, file);
     
     if (!FS.existsSync(path)) {
         throw new MeteorViteError([
-            `Unable to locate package.json for your project in ${pc.yellow(path)}`,
+            `Unable to locate ${pc.yellow(file)} for your project in ${pc.yellow(path)}`,
             `Make sure you run Meteor commands from the root of your project directory.`,
             `Alternatively, you can supply a superficial CWD for Meteor-Vite to use:`,
             `$  cross-env METEOR_VITE_CWD="./projects/my-meteor-project/" meteor run`
@@ -165,6 +175,7 @@ export function getProjectPackageJson(): ProjectJson {
     
     return JSON.parse(FS.readFileSync(path, 'utf-8'));
 }
+
 function guessCwd () {
     let cwd = process.env.PWD ?? process.cwd()
     const index = cwd.indexOf('.meteor')
@@ -201,60 +212,4 @@ function prepareWorkerEnv({ ipcOverDdp = false }) {
         env[unPrefixedKey] = value;
     })
     return env;
-}
-
-function validateNpmVersion() {
-    const packageJson = getProjectPackageJson();
-    const version = packageJson.dependencies['meteor-vite'] || packageJson.devDependencies['meteor-vite'];
-    const SEMVER_PARSE_REGEX = /(?<major>\d+)\.(?<minor>\d+)\.(?<patch>\d+)/;
-    
-    if (!version) {
-        console.error([
-            '⚡  Missing `meteor-vite` in your dependencies! You can install it with the following command:',
-            pc.dim(' $ meteor npm i meteor-vite '),
-        ].join('\n'))
-        return;
-    }
-    
-    let { minor, patch, major } = version.match(SEMVER_PARSE_REGEX)?.groups || {} as Record<'major' | 'minor' | 'patch', number | string | undefined>;
-    function logVersionRequirement() {
-        const { major, minor, patch } = MIN_METEOR_VITE_NPM_VERSION;
-        console.error([
-            '⚡  You are using an out of date version of `meteor-vite`.',
-            `   Please update it: ${pc.dim(`$ meteor npm i meteor-vite@${major}.${minor}`)}`
-        ].join('\n'))
-    }
-    
-    if (!major || !minor || !patch) {
-        console.warn('⚡  Unrecognized version of the `meteor-vite` npm package.');
-        return;
-    }
-    major = parseInt(major.toString());
-    minor = parseInt(minor.toString());
-    patch = parseInt(patch.toString());
-    
-    if (major > MIN_METEOR_VITE_NPM_VERSION.major) {
-        return;
-    }
-    
-    if (major < MIN_METEOR_VITE_NPM_VERSION.major) {
-        logVersionRequirement();
-        return;
-    }
-    
-    if (minor > MIN_METEOR_VITE_NPM_VERSION.minor) {
-        return;
-    }
-    
-    if (minor < MIN_METEOR_VITE_NPM_VERSION.minor) {
-        logVersionRequirement();
-    }
-    
-    if (patch > MIN_METEOR_VITE_NPM_VERSION.patch) {
-        return;
-    }
-    
-    if (patch < MIN_METEOR_VITE_NPM_VERSION.patch) {
-        logVersionRequirement();
-    }
 }

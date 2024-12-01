@@ -2,6 +2,7 @@ import { WorkerResponseData } from 'meteor-vite';
 import { Meteor } from 'meteor/meteor';
 import { Mongo } from 'meteor/mongo';
 import '../api/Endpoints';
+import { getProjectPackageJson } from '../workers';
 
 export type RuntimeConfig = WorkerResponseData<'viteConfig'> & { ready: boolean, lastUpdate: number, baseUrl: string };
 export let MeteorViteConfig: Mongo.Collection<RuntimeConfig>;
@@ -9,6 +10,7 @@ export const VITE_ENTRYPOINT_SCRIPT_ID = 'meteor-vite-entrypoint-script';
 export const VITE_CLIENT_SCRIPT_ID = 'meteor-vite-client';
 export class ViteDevScripts {
     public readonly urls;
+    public readonly needsReactPreamble: boolean;
     constructor(public readonly config: RuntimeConfig) {
         const { baseUrl } = config;
         
@@ -16,23 +18,58 @@ export class ViteDevScripts {
             baseUrl,
             entrypointUrl: `${baseUrl}/${config.entryFile}`,
             viteClientUrl: `${baseUrl}/@vite/client`,
+            reactRefresh: `${baseUrl}/@react-refresh`,
+        }
+        
+        /**
+         * Determine whether to inject React Refresh snippet into HTML served by Meteor.
+         * Without this snippet, React HMR will not work with Meteor-Vite.
+         *
+         * {@link https://github.com/JorgenVatle/meteor-vite/issues/29}
+         * {@link https://github.com/vitejs/vite-plugin-react/issues/11#discussion_r430879201}
+         */
+        {
+            const packageJson = getProjectPackageJson();
+            this.needsReactPreamble = false;
+            
+            if ('@vitejs/plugin-react' in packageJson.dependencies) {
+                this.needsReactPreamble = true;
+            }
+            if ('@vitejs/plugin-react' in packageJson.devDependencies) {
+                this.needsReactPreamble = true;
+            }
         }
     }
 
     public async stringTemplate(): Promise<string> {
         const { viteClientUrl, entrypointUrl } = this.urls;
-        const viteClient = `<script src="${viteClientUrl}" type="module" id="${VITE_CLIENT_SCRIPT_ID}"></script>`;
-        const viteEntrypoint = `<script src="${entrypointUrl}" type="module" id="${VITE_ENTRYPOINT_SCRIPT_ID}"></script>`;
         
-        if (this.config.ready) {
-            return `${viteClient}\n${viteEntrypoint}`;
+        if (!this.config.ready) {
+            if ('getTextAsync' in Assets) {
+                return Assets.getTextAsync('src/loading/dev-server-splash.html');
+            }
+            
+            return Assets.getText('src/loading/dev-server-splash.html')!;
         }
         
-        if ('getTextAsync' in Assets) {
-            return Assets.getTextAsync('src/loading/dev-server-splash.html');
+        const moduleLines = [
+            `<script src="${viteClientUrl}" type="module" id="${VITE_CLIENT_SCRIPT_ID}"></script>`,
+            `<script src="${entrypointUrl}" type="module" id="${VITE_ENTRYPOINT_SCRIPT_ID}"></script>`
+        ]
+        
+        if (this.needsReactPreamble) {
+            moduleLines.unshift(`
+                <script type="module">
+                  import RefreshRuntime from "${this.urls.reactRefresh}";
+                  RefreshRuntime.injectIntoGlobalHook(window)
+                  window.$RefreshReg$ = () => {}
+                  window.$RefreshSig$ = () => (type) => type
+                  window.__vite_plugin_react_preamble_installed__ = true
+                </script>
+            `)
         }
         
-        return Assets.getText('src/loading/dev-server-splash.html')!;
+        return moduleLines.join('\n');
     }
     
     public injectScriptsInDOM() {
