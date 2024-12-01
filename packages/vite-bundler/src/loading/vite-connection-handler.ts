@@ -2,6 +2,7 @@ import { WorkerResponseData } from 'meteor-vite';
 import { Meteor } from 'meteor/meteor';
 import { Mongo } from 'meteor/mongo';
 import '../api/Endpoints';
+import { getProjectPackageJson } from '../workers';
 
 export type RuntimeConfig = WorkerResponseData<'viteConfig'> & { ready: boolean, lastUpdate: number, baseUrl: string };
 export let MeteorViteConfig: Mongo.Collection<RuntimeConfig>;
@@ -9,6 +10,7 @@ export const VITE_ENTRYPOINT_SCRIPT_ID = 'meteor-vite-entrypoint-script';
 export const VITE_CLIENT_SCRIPT_ID = 'meteor-vite-client';
 export class ViteDevScripts {
     public readonly urls;
+    public readonly needsReactPreamble: boolean;
     constructor(public readonly config: RuntimeConfig) {
         const { baseUrl } = config;
         
@@ -17,6 +19,25 @@ export class ViteDevScripts {
             entrypointUrl: `${baseUrl}/${config.entryFile}`,
             viteClientUrl: `${baseUrl}/@vite/client`,
             reactRefresh: `${baseUrl}/@react-refresh`,
+        }
+        
+        /**
+         * Determine whether to inject React Refresh snippet into HTML served by Meteor.
+         * Without this snippet, React HMR will not work with Meteor-Vite.
+         *
+         * {@link https://github.com/JorgenVatle/meteor-vite/issues/29}
+         * {@link https://github.com/vitejs/vite-plugin-react/issues/11#discussion_r430879201}
+         */
+        {
+            const packageJson = getProjectPackageJson();
+            this.needsReactPreamble = false;
+            
+            if ('@vitejs/plugin-react' in packageJson.dependencies) {
+                this.needsReactPreamble = true;
+            }
+            if ('@vitejs/plugin-react' in packageJson.devDependencies) {
+                this.needsReactPreamble = true;
+            }
         }
     }
 
@@ -36,7 +57,7 @@ export class ViteDevScripts {
             `<script src="${entrypointUrl}" type="module" id="${VITE_ENTRYPOINT_SCRIPT_ID}"></script>`
         ]
         
-        if (this.config.needsReactPreamble) {
+        if (this.needsReactPreamble) {
             moduleLines.unshift(`
                 <script type="module">
                   import RefreshRuntime from "${this.urls.reactRefresh}";
