@@ -1,5 +1,12 @@
 # vite-bundler
 
+## 2.3.1
+
+### Patch Changes
+
+- d3c4bfa4: Update package version requirements to allow packages from Meteor v2.16 and v3.1.
+  - Emit a warning message to the console when using a Vite version incompatible with the current Meteor release.
+
 ## 2.3.0
 
 ### Minor Changes
