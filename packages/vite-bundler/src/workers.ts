@@ -272,8 +272,8 @@ function validateNpmDependencies() {
         
         console.warn([
             `⚡  You are using ${pc.cyan(`vite v${version}`)} which is not compatible with your current Meteor version`,
-            `    Please install a compatible release: ${installCommand}`
-        ])
+            `   Please install a compatible release: ${installCommand}`
+        ].join('\n'))
     }
     
     vite();
