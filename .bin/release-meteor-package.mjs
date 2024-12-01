@@ -99,7 +99,8 @@ async function publish() {
     }
 
 
-    logger.info('✨  Publishing to Atmosphere with Meteor %s release...', execSync('meteor --version').toString().trim());
+    const release = execSync('meteor --version').toString().trim();
+    logger.info(`✨  Publishing to Atmosphere with Meteor ${release} release...`);
     await setVersion(version);
 
     await shell(`meteor publish`, {
