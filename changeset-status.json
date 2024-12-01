@@ -7,19 +7,35 @@
           "type": "patch"
         }
       ],
-      "summary": "Add missing 'semver' dependency to build plugin npm dependencies",
-      "id": "tough-numbers-trade"
+      "summary": "Fix release process",
+      "id": "polite-wombats-decide"
     }
   ],
   "releases": [
     {
       "name": "vite-bundler",
       "type": "patch",
-      "oldVersion": "2.3.1",
+      "oldVersion": "3.0.0-next.4",
       "changesets": [
-        "tough-numbers-trade"
+        "polite-wombats-decide"
       ],
-      "newVersion": "2.3.2"
+      "newVersion": "3.0.0-next.5"
     }
-  ]
+  ],
+  "preState": {
+    "mode": "pre",
+    "tag": "next",
+    "initialVersions": {
+      "meteor-vite": "1.10.3",
+      "@meteor-vite/plugin-zodern-relay": "1.0.2",
+      "vite-bundler": "2.0.1"
+    },
+    "changesets": [
+      "friendly-years-type",
+      "polite-wombats-decide",
+      "purple-carrots-drum",
+      "tasty-pumas-invent",
+      "two-dolphins-sing"
+    ]
+  }
 }

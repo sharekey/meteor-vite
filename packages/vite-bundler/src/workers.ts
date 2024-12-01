@@ -1,3 +1,4 @@
+import type { ChildProcess } from 'concurrently/dist/src/command';
 import { fork } from 'node:child_process';
 import { Meteor } from 'meteor/meteor';
 import { Random } from 'meteor/random';
@@ -28,6 +29,10 @@ export function createWorkerFork(hooks: Partial<WorkerResponseHooks>, options?: 
         detached: options?.detached ?? false,
         env: prepareWorkerEnv({ ipcOverDdp: !!options?.ipc?.active }),
     });
+    
+    if (options?.detached) {
+        child.unref();
+    }
     
     const hookMethods = Object.keys(hooks) as (keyof typeof hooks)[];
     hookMethods.forEach((method) => {
@@ -74,6 +79,9 @@ export function createWorkerFork(hooks: Partial<WorkerResponseHooks>, options?: 
     
     child.on('error', (error) => {
         console.error('Meteor: Worker process error:', error);
+        if (!child.connected) {
+            throw new MeteorViteError('Lost connection to Vite worker process');
+        }
     });
     
     child.on('disconnect', () => {
@@ -90,16 +98,25 @@ export function createWorkerFork(hooks: Partial<WorkerResponseHooks>, options?: 
                 params,
             } as WorkerMethod;
             
-            if (options?.ipc?.active) {
-                options.ipc.call(message);
-            } else if (!child.connected) {
+            if (!options?.ipc?.active && !child.connected) {
                 throw new MeteorViteError(`Oops worker process is not connected! Tried to send message to worker: ${method}`);
             }
             
-            child.send(message);
+            if (options?.ipc?.active) {
+                options.ipc.call(message);
+            }
+            
+            if (child.connected) {
+                child.send(message);
+            }
         },
         child,
     }
+}
+
+export type WorkerInstance = {
+    call(method: Omit<WorkerMethod, 'replies'>): void;
+    child: ChildProcess;
 }
 
 export function isMeteorIPCMessage<
@@ -175,6 +192,7 @@ function prepareWorkerEnv({ ipcOverDdp = false }) {
         ENABLE_DEBUG_LOGS: process.env.ENABLE_DEBUG_LOGS,
         METEOR_LOCAL_DIR: process.env.METEOR_LOCAL_DIR,
         STARTED_AT: Date.now().toString(),
+        NODE_ENV: process.env.NODE_ENV,
     }
     if (ipcOverDdp) {
         const METEOR_RUNTIME = getMeteorRuntimeConfig()

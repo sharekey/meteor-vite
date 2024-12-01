@@ -100,7 +100,7 @@ export function getBuildConfig() {
     const tempDir = getTempDir();
     
     // Not in a project (publishing the package or in temporary Meteor build)
-    const pluginEnabled = !process.env.VITE_METEOR_DISABLED;
+    const pluginEnabled = !process.env.VITE_METEOR_DISABLED && !process.env.METEOR_VITE_DISABLED;
     
     /**
      * Meteor client mainModule as specified in the package.json file. This is where we will push the final Vite bundle.

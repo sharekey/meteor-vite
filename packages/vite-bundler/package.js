@@ -1,6 +1,6 @@
 Package.describe({
   name: 'jorgenvatle:vite-bundler',
-  version: '2.3.2',
+  version: '3.0.0-next.14',
   summary: 'Integrate the Vite.js bundler with Meteor',
   git: 'https://github.com/JorgenVatle/meteor-vite',
   documentation: 'README.md',
@@ -19,7 +19,7 @@ Package.registerBuildPlugin({
         'src/workers.ts',
         'src/plugin/Compiler.ts',
         'src/plugin/IntermediaryMeteorProject.ts',
-        'src/utility/BuildLogger.ts',
+        'src/utility/Logger.ts',
         'src/utility/Helpers.ts',
         'src/utility/Errors.ts'
     ],
@@ -51,6 +51,6 @@ Package.onUse(function (api) {
     });
     api.addAssets(['src/loading/dev-server-splash.html'], 'server');
     api.mainModule('src/client.ts', 'client');
-    api.mainModule('src/vite-server.ts', 'server');
+    api.mainModule('src/server.ts', 'server');
 });
 

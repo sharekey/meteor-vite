@@ -1,6 +1,8 @@
 import FS from 'fs/promises';
 import Path from 'path';
-import { build, resolveConfig } from 'vite';
+import { OutputChunk } from 'rollup';
+import { build } from 'tsup';
+import { build as viteBuild, resolveConfig } from 'vite';
 import { MeteorViteError } from '../error/MeteorViteError';
 import Logger from '../utilities/Logger';
 import { type ProjectJson, ResolvedMeteorViteConfig } from '../VitePluginSettings';
@@ -12,7 +14,7 @@ export async function MeteorServerBuilder({ packageJson, watch = true }: { packa
         configFile: packageJson?.meteor?.vite?.configFile
             // Fallback for deprecated config format
             ?? packageJson?.meteor?.viteConfig,
-    }, 'serve');
+    }, 'build');
     
     if (!viteConfig.meteor?.serverEntry) {
         return;
@@ -35,30 +37,109 @@ export async function MeteorServerBuilder({ packageJson, watch = true }: { packa
         throw new MeteorViteError('You need to specify a Meteor server mainModule in your package.json file!')
     }
     
-    await build({
-        mode: watch ? 'development' : 'production',
-        configFile: viteConfig.configFile,
-        ssr: {
-            target: 'node',
-        },
-        build: {
-            watch: watch ? {} : null,
-            ssr: viteConfig.meteor.serverEntry,
-            outDir: BUNDLE_OUT_DIR,
-            minify: false,
-            sourcemap: true,
-            emptyOutDir: false,
-            rollupOptions: {
-                external: (id) => {
-                    if (id.startsWith('meteor/')) {
-                        return true;
-                    }
-                }
-            }
-        }
-    });
+    const noExternal: (string | RegExp)[] = [];
+    
+    if (Array.isArray(viteConfig.ssr.noExternal)) {
+        viteConfig.ssr.noExternal.forEach((entry) => {
+            if (!entry) return;
+            noExternal.push(entry);
+        });
+    }
     
     const { name } = Path.parse(viteConfig.meteor.serverEntry);
+    
+    await build({
+        watch,
+        entry: [viteConfig.meteor.serverEntry],
+        sourcemap: true,
+        skipNodeModulesBundle: true,
+        name,
+        minify: false,
+        clean: false,
+        target: 'es2022',
+        platform: 'node',
+        outDir: BUNDLE_OUT_DIR,
+        config: false,
+        keepNames: true,
+        noExternal,
+        esbuildPlugins: [
+            {
+                name: 'vite',
+                async setup(build) {
+                    let output: null | Promise<OutputChunk> = null;
+                    
+                    function matchesModulePath(paths: { vite: string, esbuild: string }) {
+                        const esbuildImport = Path.relative('', Path.join(process.cwd(), paths.esbuild));
+                        const viteImport = Path.relative(process.cwd(), paths.vite.replace(/\?.*/, ''));
+                        
+                        return esbuildImport === viteImport;
+                    }
+                    
+                    
+                    build.onResolve({ filter: /\.(vue|svelte)$/i }, (args) => {
+                        if (!output) {
+                            output = viteBuild({
+                                configFile: viteConfig.configFile,
+                                mode: 'production',
+                                build: {
+                                    ssr: viteConfig.meteor?.serverEntry,
+                                    ssrEmitAssets: false,
+                                    write: false,
+                                    rollupOptions: {
+                                        external: (id) => id.startsWith('meteor'),
+                                    },
+                                }
+                            }).then((output) => {
+                                // Todo: Refactor to handle multiple chunks
+                                if ('output' in output) {
+                                    return output.output[0];
+                                }
+                                
+                                throw new Error('Unable to parse Vite build output');
+                            });
+                        }
+                        return {
+                            path: args.path,
+                            namespace: 'vite',
+                        }
+                    });
+                    
+                    build.onLoad({ filter: /.*/, namespace: 'vite' }, async (args) => {
+                        const mainChunk = await output;
+                        if (!mainChunk) {
+                            throw new Error('Missing primary chunk from Vite build output!')
+                        }
+                        
+                        for (const [vitePath, module] of Object.entries(mainChunk.modules)) {
+                            if (matchesModulePath({ vite: vitePath, esbuild: args.path })) {
+                                return {
+                                    contents: module.code || '',
+                                    loader: 'js',
+                                }
+                            }
+                        }
+                        return {
+                            loader: 'empty',
+                            contents: '',
+                        }
+                    })
+
+                    
+                },
+            },
+            {
+                name: 'external-meteor',
+                setup(build) {
+                    build.onResolve({ filter: /^meteor\// }, (args) => ({
+                        path: args.path,
+                        namespace: 'meteor',
+                        external: true,
+                    }));
+                }
+            }
+        ]
+    });
+    
     await prepareServerEntry({
         meteorMainModule: Path.resolve(packageJson.meteor.mainModule.server),
         staticEntryFile: Path.resolve(

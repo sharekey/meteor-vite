@@ -2,7 +2,6 @@ import type { MeteorRuntimeConfig } from 'meteor/jorgenvatle:vite-bundler/utilit
 import { createServer, resolveConfig, type ResolvedServerUrls, ViteDevServer } from 'vite';
 import { meteorWorker } from '../../../plugin/Meteor';
 import Logger from '../../../utilities/Logger';
-import { fork } from 'node:child_process';
 import { RefreshNeeded } from '../../../ViteLoadRequest';
 import { type ProjectJson, ResolvedMeteorViteConfig } from '../../../VitePluginSettings';
 import { MeteorServerBuilder } from '../../ServerBuilder';
@@ -11,7 +10,6 @@ import { DDPConnection } from '../DDP';
 import { defineIpcMethods } from '../interface';
 import MeteorEvents from '../MeteorEvents';
 import { IPC } from '../transports/Transport';
-import type { IPCMethods, WorkerMethod } from './index';
 
 let viteDevServer: ViteDevServer & { config: ResolvedMeteorViteConfig };
 let viteConfig: ResolvedMeteorViteConfig;
@@ -33,10 +31,6 @@ export interface DevServerOptions {
 export default defineIpcMethods({
     async 'vite.server.getConfig'() {
         await sendViteConfig();
-    },
-    
-    async 'vite.watch.ssr'({ packageJson }: Pick<DevServerOptions, 'packageJson'>) {
-        await MeteorServerBuilder({ packageJson });
     },
     
     async 'vite.server.start'({ packageJson, meteorParentPid, meteorConfig }: DevServerOptions) {
@@ -100,10 +94,6 @@ async function createViteServer({
             ?? packageJson?.meteor?.viteConfig,
     }, 'serve');
     
-    if (viteConfig.meteor?.serverEntry) {
-        createSSRWatcher({ packageJson })
-    }
-    
     viteDevServer = await createServer({
         mode: 'development',
         configFile: viteConfig.configFile,
@@ -137,6 +127,10 @@ async function createViteServer({
         ],
     });
     
+    if (viteConfig.meteor?.serverEntry) {
+        await MeteorServerBuilder({ packageJson, watch: true });
+    }
+    
     process.on('warning', (warning) => {
         if (warning.name !== RefreshNeeded.name) {
             return;
@@ -145,22 +139,6 @@ async function createViteServer({
     })
     
     return viteDevServer;
-}
-
-function createSSRWatcher(options: Pick<DevServerOptions, 'packageJson'>) {
-    const child = fork(process.argv[1], {
-        stdio: ['inherit', 'inherit', 'inherit', 'ipc'],
-        detached: false,
-    });
-    
-    child.on('error', (error) => Logger.error(error));
-    child.send({
-        id: Math.random().toString(),
-        method: 'vite.watch.ssr',
-        params: [options],
-    } satisfies WorkerMethod);
-    
-    return child;
 }
 
 async function sendViteConfig() {
