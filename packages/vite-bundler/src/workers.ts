@@ -204,7 +204,7 @@ export const MIN_METEOR_VITE_NPM_VERSION_RANGE = `^${MIN_METEOR_VITE_NPM_VERSION
 function validateNpmVersion() {
     const packageLock = getProjectPackageJson('package-lock.json');
     const dependencies = packageLock.packages || packageLock.dependencies || {};
-    const version = dependencies['meteor-vite']?.version;
+    const version = dependencies['meteor-vite']?.version || dependencies['node_modules/meteor-vite']?.version;
     
     if (!version) {
         console.error([
