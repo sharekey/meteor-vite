@@ -240,7 +240,7 @@ function validateNpmDependencies() {
     
     // Warn users if `meteor-node-stubs` is missing from project dependencies
     function meteorNodeStubs() {
-        if ('meteor-node-stubs' in packageJson) {
+        if ('meteor-node-stubs' in packageJson.dependencies) {
             return;
         }
         
