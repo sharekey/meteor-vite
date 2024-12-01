@@ -27,6 +27,17 @@ export function posixPath(filePath: string) {
     return filePath.split(Path.sep).join('/')
 }
 
+export function needsReactPreamble() {
+    const packageJson = getProjectPackageJson();
+    if ('@vitejs/plugin-react' in packageJson.dependencies) {
+        return true;
+    }
+    if ('@vitejs/plugin-react' in packageJson.devDependencies) {
+        return true;
+    }
+    return false;
+}
+
 export function getTempDir() {
     const packageJson = getProjectPackageJson();
     const tempRootDir = packageJson?.meteor?.vite?.tempBuildDir || OS.tmpdir();
