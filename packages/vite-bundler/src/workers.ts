@@ -7,6 +7,7 @@ import pc from 'picocolors';
 import type { WorkerMethod, WorkerResponse, WorkerResponseHooks, MeteorIPCMessage, ProjectJson } from 'meteor-vite';
 import type { DDP_IPC } from './api/DDP-IPC';
 import { getMeteorRuntimeConfig } from './utility/Helpers';
+import Semver from 'semver';
 
 // Use a worker to skip reify and Fibers
 // Use a child process instead of worker to avoid WASM/archived threads error
@@ -131,7 +132,6 @@ class MeteorViteError extends Error {
     }
 }
 
-export const MIN_METEOR_VITE_NPM_VERSION = { major: 1, minor: 11, patch: 1 };
 export const cwd = process.env.METEOR_VITE_CWD ?? guessCwd();
 export const workerPath = Path.join(cwd, 'node_modules/meteor-vite/dist/bin/worker.mjs');
 export function getProjectPackageJson(): ProjectJson {
@@ -185,10 +185,12 @@ function prepareWorkerEnv({ ipcOverDdp = false }) {
     return env;
 }
 
+export const MIN_METEOR_VITE_NPM_VERSION = '1.12.1';
+export const MIN_METEOR_VITE_NPM_VERSION_RANGE = `^${MIN_METEOR_VITE_NPM_VERSION}`;
+
 function validateNpmVersion() {
-    const packageJson = getProjectPackageJson();
+    const packageJson = getProjectPackageJson(); // Todo: use lockfile instead of package.json
     const version = packageJson.dependencies['meteor-vite'] || packageJson.devDependencies['meteor-vite'];
-    const SEMVER_PARSE_REGEX = /(?<major>\d+)\.(?<minor>\d+)\.(?<patch>\d+)/;
     
     if (!version) {
         console.error([
@@ -198,45 +200,19 @@ function validateNpmVersion() {
         return;
     }
     
-    let { minor, patch, major } = version.match(SEMVER_PARSE_REGEX)?.groups || {} as Record<'major' | 'minor' | 'patch', number | string | undefined>;
-    function logVersionRequirement() {
-        const { major, minor, patch } = MIN_METEOR_VITE_NPM_VERSION;
-        console.error([
-            '⚡  You are using an out of date version of `meteor-vite`.',
-            `   Please update it: ${pc.dim(`$ meteor npm i meteor-vite@${major}.${minor}`)}`
-        ].join('\n'))
-    }
-    
-    if (!major || !minor || !patch) {
-        console.warn('⚡  Unrecognized version of the `meteor-vite` npm package.');
-        return;
-    }
-    major = parseInt(major.toString());
-    minor = parseInt(minor.toString());
-    patch = parseInt(patch.toString());
-    
-    if (major > MIN_METEOR_VITE_NPM_VERSION.major) {
+    if (Semver.satisfies(version, MIN_METEOR_VITE_NPM_VERSION_RANGE)) {
         return;
     }
     
-    if (major < MIN_METEOR_VITE_NPM_VERSION.major) {
-        logVersionRequirement();
+    const minVersion = Semver.parse(MIN_METEOR_VITE_NPM_VERSION)
+    
+    if (!minVersion) {
+        console.error(new Error('⚡  Unable to determine minimum required version of meteor-vite'));
         return;
     }
     
-    if (minor > MIN_METEOR_VITE_NPM_VERSION.minor) {
-        return;
-    }
-    
-    if (minor < MIN_METEOR_VITE_NPM_VERSION.minor) {
-        logVersionRequirement();
-    }
-    
-    if (patch > MIN_METEOR_VITE_NPM_VERSION.patch) {
-        return;
-    }
-    
-    if (patch < MIN_METEOR_VITE_NPM_VERSION.patch) {
-        logVersionRequirement();
-    }
+    console.error([
+        `⚡  You are using an out of date version of ${pc.yellow('meteor-vite')} (${pc.cyan(`v${version}`)})`,
+        `   Please update it: ${pc.dim(`$ meteor npm i meteor-vite@${minVersion.major}.${minVersion.minor}`)}`
+    ].join('\n'))
 }
