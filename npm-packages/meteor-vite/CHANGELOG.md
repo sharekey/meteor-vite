@@ -1,5 +1,34 @@
 # meteor-vite
 
+## 2.0.0
+
+### Major Changes
+
+- 8010d5c1a: Serve Vite bundle directly as static assets in production.
+  Skipping the Meteor bundling/transpilation steps for significantly faster build and client load times. ⚡
+
+  Upgrading to `v3` shouldn't require any changes to your application. But there are some changes that could potentially impact your users.
+
+  - Most of your application assets will be served from `/vite-assets/<chunkFileName>.<css | js>`
+    - If you're using a CDN and serve your app under multiple hostnames, you might want to load those assets from one host instead of relative to the current host. This can be done by setting `assetsBaseUrl` in your `meteor-vite` plugin config.
+    - Static assets served by Meteor does not have any CORS headers. You will have to apply these on your web server or use a CloudFlare transform rule if you're using a static host for your assets.
+  - [Browser support for ESM](https://caniuse.com/?search=ESM) is required. Global support is around 97% at the time of writing.
+
+### Minor Changes
+
+- f2e0e9d2: - Add Vite config option for bundling the Meteor server
+  - Use DDP instead of Node IPC for managing Vite Dev server status
+  - Prefetch all Vite production assets in the background using the lowest available link priority.
+- 436fd5bc: Use ESBuild instead of Vite's SSR bundler for Meteor server bundle.
+
+### Patch Changes
+
+- f597f099: Fix environment passthrough to Vite
+- e743310e: Use any available IPC interface for workers instead of relying on one transport strategy
+- 5e669858: Update serverEntry config option to use Vite SSR build internally
+- 079d1d7c6: Use Vite plugin configuration instead of build-time environment variables for setting the base path and URL for assets
+- 8499c6a6: Loosen peer dependency requirement for Vite to allow for use with Vite v5
+
 ## 1.12.1
 
 ### Patch Changes
