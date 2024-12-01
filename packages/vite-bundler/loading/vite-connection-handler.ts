@@ -15,7 +15,7 @@ export function getConfig() {
         'This is no longer needed and you can safely remove the boilerplate used to achieve this.',
         '',
         'Remove the following module/code if it exists in your app:',
-        pc.dim(`${pc.yellow('react-refresh.js')}: https://github.com/JorgenVatle/meteor-vite/blob/d3633cb015206cb61168fa135c33b89331afeb04/examples/react/server/react-refresh.js`),
+        `${pc.yellow('react-refresh.js')}: https://github.com/JorgenVatle/meteor-vite/blob/d3633cb015206cb61168fa135c33b89331afeb04/examples/react/server/react-refresh.js`,
         '',
     ].join('\n'))
 }
