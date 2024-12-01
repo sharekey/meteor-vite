@@ -16,23 +16,39 @@ export class ViteDevScripts {
             baseUrl,
             entrypointUrl: `${baseUrl}/${config.entryFile}`,
             viteClientUrl: `${baseUrl}/@vite/client`,
+            reactRefresh: `${baseUrl}/@react-refresh`,
         }
     }
 
     public async stringTemplate(): Promise<string> {
         const { viteClientUrl, entrypointUrl } = this.urls;
-        const viteClient = `<script src="${viteClientUrl}" type="module" id="${VITE_CLIENT_SCRIPT_ID}"></script>`;
-        const viteEntrypoint = `<script src="${entrypointUrl}" type="module" id="${VITE_ENTRYPOINT_SCRIPT_ID}"></script>`;
         
-        if (this.config.ready) {
-            return `${viteClient}\n${viteEntrypoint}`;
+        if (!this.config.ready) {
+            if ('getTextAsync' in Assets) {
+                return Assets.getTextAsync('src/loading/dev-server-splash.html');
+            }
+            
+            return Assets.getText('src/loading/dev-server-splash.html')!;
         }
         
-        if ('getTextAsync' in Assets) {
-            return Assets.getTextAsync('src/loading/dev-server-splash.html');
+        const moduleLines = [
+            `<script src="${viteClientUrl}" type="module" id="${VITE_CLIENT_SCRIPT_ID}"></script>`,
+            `<script src="${entrypointUrl}" type="module" id="${VITE_ENTRYPOINT_SCRIPT_ID}"></script>`
+        ]
+        
+        if (this.config.needsReactPreamble) {
+            moduleLines.unshift(`
+                <script type="module">
+                  import RefreshRuntime from "${this.urls.reactRefresh}";
+                  RefreshRuntime.injectIntoGlobalHook(window)
+                  window.$RefreshReg$ = () => {}
+                  window.$RefreshSig$ = () => (type) => type
+                  window.__vite_plugin_react_preamble_installed__ = true
+                </script>
+            `)
         }
         
-        return Assets.getText('src/loading/dev-server-splash.html')!;
+        return moduleLines.join('\n');
     }
     
     public injectScriptsInDOM() {
