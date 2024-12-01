@@ -16,6 +16,7 @@ import type { IPCMethods, WorkerMethod } from './index';
 let viteDevServer: ViteDevServer & { config: ResolvedMeteorViteConfig };
 let viteConfig: ResolvedMeteorViteConfig;
 let listening = false;
+let needsReactPreamble = false;
 
 export type ViteRuntimeConfig = {
     host?: string | boolean;
@@ -23,6 +24,7 @@ export type ViteRuntimeConfig = {
     resolvedUrls?: ResolvedServerUrls,
     entryFile?: string
     backgroundWorker?: WorkerRuntimeConfig;
+    needsReactPreamble?: boolean;
 }
 export interface DevServerOptions {
     packageJson: ProjectJson,
@@ -104,6 +106,16 @@ async function createViteServer({
         createSSRWatcher({ packageJson })
     }
     
+    const dependencyList = [
+        Object.keys(packageJson.dependencies),
+        Object.keys(packageJson.devDependencies)
+    ].flat();
+    
+    if (dependencyList.includes('@vitejs/plugin-react')) {
+        needsReactPreamble = true;
+    }
+    
+    
     viteDevServer = await createServer({
         mode: 'development',
         configFile: viteConfig.configFile,
@@ -177,6 +189,7 @@ async function sendViteConfig() {
         port: config.server?.port,
         entryFile: config.meteor?.clientEntry,
         resolvedUrls: viteDevServer.resolvedUrls!,
+        needsReactPreamble,
     });
     
     await IPC.reply({
