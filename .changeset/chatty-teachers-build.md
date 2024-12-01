@@ -4,7 +4,6 @@
 
 Use any available IPC interface for workers instead of relying on one transport strategy
 
-
 - Automatically include React preamble in apps that depend on `@vitejs/plugin-react`. You no longer need to manually modify your Meteor HTML to inject this yourself. See migration steps below.
 - Use `semver` package instead of a custom parser when determining whether `meteor-vite` is out of date.
 - Use `package-lock.json` instead of `package.json` when determining whether `meteor-vite` is out of date.
