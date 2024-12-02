@@ -5,7 +5,7 @@
 
 Upgrade to Vite v6
 
-##### ⚡ Added lightning fast server-side HMR through Vite's new Environments API
+#### ⚡ Added lightning fast server-side HMR through Vite's new Environments API
 
 - Vite can now take over the entire build process for the your Meteor server code. This is an improved iteration of the `serverEntry` option introduced in [`jorgenvatle:vite-bundler@2.1.0`](https://github.com/JorgenVatle/meteor-vite/releases/tag/vite-bundler%402.1.2)
     - It does not require any intermediary pre-bundling step and is done at runtime.
