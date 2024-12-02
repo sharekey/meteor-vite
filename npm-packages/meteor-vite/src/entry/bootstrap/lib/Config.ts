@@ -10,7 +10,7 @@ import { MeteorViteError } from '../../../error/MeteorViteError';
 import { meteorWorker } from '../../plugin/Meteor';
 import { type ProjectJson, type ResolvedMeteorViteConfig } from '../../plugin/Settings';
 import Instance from './Instance';
-import { serverRollupInput } from '../scripts/Setup';
+import { serverMainModule } from '../scripts/Setup';
 
 export const CurrentConfig = globalThis.MeteorViteRuntimeConfig;
 
@@ -42,9 +42,9 @@ export async function resolveMeteorViteConfig(
             rollupOptions: {
                 external: [/^meteor\//],
                 input: {
-                    main: serverRollupInput({
+                    main: serverMainModule({
                         meteorMainModule: packageJson.meteor.mainModule.server,
-                        viteServerEntry: userConfig.meteor.serverEntry,
+                        viteMainModule: userConfig.meteor.serverEntry,
                     }),
                 },
                 output: {
