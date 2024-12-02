@@ -41,6 +41,9 @@
     "meteor",
     "vite"
   ],
+  "engines": {
+    "node": ">=20.0.0"
+  },
   "author": "",
   "bugs": {
     "url": "https://github.com/JorgenVatle/meteor-vite/issues"
