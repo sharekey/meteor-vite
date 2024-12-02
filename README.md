@@ -44,8 +44,9 @@ meteor add jorgenvatle:vite
 ```
 
 ### Meteor v2
-If you are using Meteor v2 you need to make sure you install Vite v4 and `jorgenvatle:vite-bundler` instead.
 - [Release branch](https://github.com/JorgenVatle/meteor-vite/tree/v3)
+
+If you are using Meteor v2 you need to make sure you install Vite v4 and `jorgenvatle:vite-bundler` instead.
 
 ```sh
 meteor npm i -D vite@4
