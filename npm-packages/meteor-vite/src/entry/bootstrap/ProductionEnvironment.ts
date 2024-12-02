@@ -4,12 +4,6 @@ import { ViteProductionBoilerplate } from './boilerplate/Production';
 import Logger from '../../utilities/Logger';
 import type { ViteManifestFile } from './scripts/Build';
 
-WebApp.handlers.use('/vite', (req, res, next) => {
-    console.log('we got el hittus', req.originalUrl);
-    
-    next();
-})
-
 Meteor.startup(async () => {
     if (!Meteor.isProduction) {
         return;

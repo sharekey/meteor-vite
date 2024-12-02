@@ -173,7 +173,7 @@ link() {
     log:success "Added npm link for $package"
   done
 
-  (cd "$APP_DIR" && npm link --force "${npmPackages[@]}") || exit 1
+  (cd "$APP_DIR" && npm link "${npmPackages[@]}") || exit 1
 
   log:success "Linked ${npmPackages[*]} to $app"
 }
