@@ -1,5 +1,11 @@
 # jorgenvatle_vite
 
+## 1.0.1
+
+### Patch Changes
+
+- 930ca173: Hotfix for previous major release published using an out-of-date build plugin version
+
 ## 1.0.0
 
 ### Major Changes
