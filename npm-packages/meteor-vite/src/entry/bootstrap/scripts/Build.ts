@@ -36,20 +36,6 @@ export async function buildForProduction() {
             continue;
         }
         
-        if (context.toLowerCase() === 'server') {
-            if (!config.meteor.serverEntry) {
-                logger.info(`Skipping ${Colorize.arch(context)} build: no server entry configured`);
-                continue;
-            }
-            if (!config.meteor.enableExperimentalFeatures) {
-                logger.warn(
-                    'To enable server bundling, you need to set "enableExperimentalFeatures" to true in your Vite' +
-                    ' config. To disable these warnings, just remove the "serverEntry" field in your Vite config.'
-                );
-                continue;
-            }
-        }
-        
         logger.info(`Preparing ${Colorize.arch(context)} bundle...`);
         const list = fileNames[context] || [];
         
