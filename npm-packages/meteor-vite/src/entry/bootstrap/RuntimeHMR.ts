@@ -9,30 +9,59 @@ declare global {
         initialHmrState: undefined | {
             method_handlers: Record<string, Function>;
             publish_handlers: Record<string, Function>;
+            packages: PackageState;
         }
     }
     namespace globalThis {
-        interface Packages extends Record<string, Record<string, unknown>> {
-        
+        namespace Package {
+            const ejson: undefined | {
+                EJSON: {
+                    _getTypes(original: boolean): Map<string, Function> | Record<string, Function>;
+                    _getTypes(original: true): Map<string, Function>;
+                    _getTypes(original: false): Record<string, Function>;
+                }
+            }
         }
+        
         namespace SyncedCron {
             const _entries: Record<string, Function>
         }
     }
 }
 
+interface PackageState {
+    EJSON?: {
+        types: Map<string, Function>;
+    };
+}
+
+function createInitialState(): Required<MeteorViteRuntimeConfig['initialHmrState']> {
+    if (globalThis.MeteorViteRuntimeConfig.initialHmrState) {
+        return globalThis.MeteorViteRuntimeConfig.initialHmrState;
+    }
+    
+    const packages: PackageState = {};
+    
+    if (globalThis.Package.ejson) {
+        packages.EJSON = {
+            types: new Map(globalThis.Package.ejson.EJSON._getTypes(true).entries())
+        }
+    }
+    
+    return {
+        method_handlers: { ...Meteor.server.method_handlers },
+        publish_handlers: { ...Meteor.server.publish_handlers },
+        packages,
+    }
+}
+
 if (import.meta.hot) {
     // Initial handles
     // Todo: refactor to use stubs for tracking methods and publications created by the server entry.
-    const initialState: Required<MeteorViteRuntimeConfig['initialHmrState']> = globalThis.MeteorViteRuntimeConfig.initialHmrState ??= {
-        method_handlers: Meteor.server.method_handlers,
-        publish_handlers: Meteor.server.publish_handlers,
-    }
-    const { method_handlers, publish_handlers } = initialState;
+    const initialState = globalThis.MeteorViteRuntimeConfig.initialHmrState ??= createInitialState();
+    const { method_handlers, publish_handlers, packages } = initialState;
     
     const logger = createSimpleLogger('HMR');
-    
-    // Todo: Implement HMR handling for custom EJSON types
     
     await new Promise<void>((resolve) => {
         // Todo: Wrap in Meteor.startup() block that runs BEFORE the server entrypoint but AFTER all other Meteor packages
@@ -74,6 +103,13 @@ if (import.meta.hot) {
             Object.assign(globalThis.SyncedCron, {
                 _entries: {}
             });
+        }
+        if (Package.ejson) {
+            const types = globalThis.Package.ejson?.EJSON._getTypes(true)!;
+            types.clear();
+            for (const [key, value] of packages.EJSON.types.entries()) {
+                types.set(key, value);
+            }
         }
     })
 }
