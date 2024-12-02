@@ -80,18 +80,18 @@ function injectServerEntryImport(mainModule: string | undefined) {
     ].join('\n'));
 }
 
-export function serverRollupInput({ meteorMainModule, viteServerEntry }: {
+export function serverMainModule({ meteorMainModule, viteMainModule }: {
     meteorMainModule: string | undefined,
-    viteServerEntry?: string
+    viteMainModule?: string | undefined;
 }) {
     injectServerEntryImport(meteorMainModule);
     const importLines = [
         `import "meteor-vite/bootstrap/ProductionEnvironment"`,
     ];
     
-    if (viteServerEntry) {
+    if (viteMainModule) {
         importLines.push(
-            `import ${JSON.stringify(Path.resolve(CurrentConfig.projectRoot, viteServerEntry))}`,
+            `import ${JSON.stringify(Path.resolve(CurrentConfig.projectRoot, viteMainModule))}`,
         )
     }
     
