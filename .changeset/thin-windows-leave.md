@@ -25,8 +25,9 @@ If you run into issues, you can always just comment out the `serverEntry` field 
 `jorgenvatle:vite-bundler` has been renamed to `jorgenvatle:vite`.
 
 ```sh
-# Upgrade to Vite v6
+# Upgrade Vite and Meteor-Vite
 meteor npm i vite@6
+meteor npm i meteor-vite@3
 
 # Upgrade Meteor build plugin
 meteor remove jorgenvatle:vite-bundler
