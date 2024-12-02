@@ -19,7 +19,7 @@ on:
         default: ghcr.io
       meteorBaseImage:
         type: string
-        default: jorgenvatle/meteor-base
+        default: geoffreybooth/meteor-base
     outputs:
       deploymentImage:
         value: ${{ jobs.docker.outputs.deploymentImage }}
@@ -42,11 +42,11 @@ jobs:
         with:
           meteor-release: ${{ inputs.meteorRelease }}
 
-      - name: 'Install and link dependencies for `examples/${{ inputs.appBasename }}`'
-        run: meteor npm run example prepare ${{ inputs.appBasename }}
+      - name: 'Install dependencies'
+        run: meteor npm i
 
-      - name: 'Link meteor-vite package'
-        run: meteor npm run link ${{ inputs.appBasename }}
+      - name: 'Build packages'
+        run: meteor npm run build:packages
 
       - name: 'Build for production'
         run: meteor npm run build ${{ inputs.appBasename }}

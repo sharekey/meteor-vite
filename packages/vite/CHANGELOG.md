@@ -1,0 +1,82 @@
+# jorgenvatle_vite
+
+## 1.0.0
+
+### Major Changes
+
+- 9f6579934: Upgrade to Vite v6
+
+  ### ⚡ Added lightning fast server-side HMR through Vite's new Environments API
+
+  - Vite can now take over the entire build process for the your Meteor server code. This is an improved iteration of the `serverEntry` option introduced in [`jorgenvatle:vite-bundler@2.1.0`](https://github.com/JorgenVatle/meteor-vite/releases/tag/vite-bundler%402.1.2)
+    - It does not require any intermediary pre-bundling step and is done at runtime.
+    - Changes you make to server code benefit from the same near-instant HMR that you get on the client.
+    - Your Meteor server no longer needs to restart in-between changes you make changes to it.
+  - Vite now runs as a part of the Meteor runtime.
+    - HMR and assets are served through Meteor's own web server, dropping the need to manage more than one host in development. Should make things a lot easier to deal with if you need to expose the dev server to the local network, particularly for Cordova.
+  - In production, the same changes from https://github.com/JorgenVatle/meteor-vite/pull/173 apply. Your assets are built and served as static files without the need for pushing them through Meteor's build system.
+  - Client assets benefit from code splitting. What's not immediately required on first page load will be prefetched quietly in the background by the browser.
+
+  ### Server HMR
+
+  Building the Meteor server with Vite is still in its experimental phase. To provide HMR for the server, modules with side-effects need to be cleaned up between changes. Currently we clear out your method and publication handlers between updates to prevent `Mongo.Collection` from yelling at you for defining/instantiating them twice. But there likely is a list of other things that might be other things that need to be cleaned up between reloads. Looking forward to any feedback on this.
+
+  If you run into issues, you can always just comment out the `serverEntry` field in your Vite config and it should behave just like previous versions of Meteor Vite.
+
+  ## Migration steps
+
+  `jorgenvatle:vite-bundler` has been renamed to `jorgenvatle:vite`.
+
+  ```sh
+  # Upgrade Vite and Meteor-Vite
+  meteor npm i vite@6
+  meteor npm i meteor-vite@3
+
+  # Upgrade Meteor build plugin
+  meteor remove jorgenvatle:vite-bundler
+  meteor add jorgenvatle:vite
+  ```
+
+  ## Breaking changes
+
+  - Since Vite v5, support for Node.js v14 was dropped. Since this release depends on Vite v6, Meteor v2 support is no longer possible.
+
+### Minor Changes
+
+- d45e887c: Bump pre-release tag to avoid accidentally published v1 release from taking precedence
+
+### Patch Changes
+
+- f31a8202: Fix builds: disable incompatible Meteor build plugins on startup
+- 60c83997: Wrap dev server bootstrapper around Meteor.startup hook. Workaround for issue where changes to Meteor.settings.public aren't sent to clients. Ref: https://github.com/meteor/meteor/issues/13489
+- e80538d2: Disable 'keepNames' feature from ESBuild - it appears to cause issues with downstream Meteor builds
+
+## 1.1.0-alpha.1
+
+### Patch Changes
+
+- e80538d2: Disable 'keepNames' feature from ESBuild - it appears to cause issues with downstream Meteor builds
+
+## 1.1.0-alpha.0
+
+### Minor Changes
+
+- d45e887c: Bump pre-release tag to avoid accidentally published v1 release from taking precedence
+
+## 1.0.0-alpha.3
+
+### Patch Changes
+
+- 60c83997: Wrap dev server bootstrapper around Meteor.startup hook. Workaround for issue where changes to Meteor.settings.public aren't sent to clients. Ref: https://github.com/meteor/meteor/issues/13489
+
+## 1.0.0-alpha.2
+
+### Patch Changes
+
+- f31a8202: Fix builds: disable incompatible Meteor build plugins on startup
+
+## 1.0.0-alpha.1
+
+### Patch Changes
+
+- 9f657993: Pre-release for Vite v6 rewrite. Adds lightning fast server-side HMR

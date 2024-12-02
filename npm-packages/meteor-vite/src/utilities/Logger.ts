@@ -46,3 +46,30 @@ export const createLabelledLogger = (label: string) => createLogger((
 export type LabelLogger = ReturnType<typeof createLabelledLogger>
 
 export default createLogger((...params: DefaultParams) => params);
+
+export const BuildLogger = {
+    info: (message: string, ...params: DefaultParams) => console.info(...formatMessage([pc.blue(message), ...params])),
+    success: (message: string, ...params: DefaultParams) => console.log(...formatMessage([pc.green(message), ...params])),
+    error: (message: string, ...params: DefaultParams) => console.error(...formatMessage([pc.red(message), ...params])),
+    warn: (message: string, ...params: DefaultParams) => console.warn(...formatMessage([pc.yellow(message), ...params])),
+    debug: (message: string, ...params: DefaultParams) => process.env.ENABLE_DEBUG_LOGS && console.debug(...formatMessage([pc.dim(message), ...params])),
+}
+
+export function createSimpleLogger(label: string): SimpleLogger {
+    const log = (log: typeof console.log, colorize: typeof pc.white) => {
+        return (...params: unknown[]) => log(`⚡  ${label} ${colorize('%s')}`, ...params);
+    }
+    
+    return {
+        info: log(console.info, pc.blue),
+        success: log(console.info, pc.green),
+        error: log(console.error, pc.red),
+        warn: log(console.warn, pc.yellow),
+        debug: log(
+            process.env.ENABLE_DEBUG_LOGS ? console.debug : () => {},
+            pc.dim
+        )
+    }
+}
+
+export type SimpleLogger = Record<'info' | 'success' | 'warn' | 'debug' | 'error', Function>;

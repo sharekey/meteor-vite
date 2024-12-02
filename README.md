@@ -23,8 +23,8 @@ Use [Vite](https://vitejs.dev) in your Meteor app! ⚡️
   - [**Solid.js**](https://www.solidjs.com/)
     - [Example Project](/examples/solid)
     - [Preview](https://solid--meteor-vite.wcaserver.com)
-  - [**Meteor v3**](https://v3-migration-docs.meteor.com/)
-    - [Example Project](/examples/meteor-v3-vue)
+  - [**Vue + `zodern:relay`**](https://meteor-v3-vue--meteor-vite.wcaserver.com/)
+    - [Example Project](/examples/vue-zodern-relay)
     - [Preview](https://meteor-v3-vue--meteor-vite.wcaserver.com)
   - [**Vue 3 + SSR**](https://vuejs.org/)
     - [Example Project](/examples/vue-ssr)
@@ -33,20 +33,25 @@ Use [Vite](https://vitejs.dev) in your Meteor app! ⚡️
 
 ## Installation
 
+### Meteor v3
 ```sh
 # Install Meteor-Vite and Vite with npm
 meteor npm i meteor-vite
 meteor npm i -D vite 
 
-# Add the Meteor-Vite build plugin to your Meteor dependencies.
-meteor add jorgenvatle:vite-bundler
+# Install the Meteor build plugin
+meteor add jorgenvatle:vite
 ```
 
-If you are using Meteor v2, you need to make sure you install Vite v4 instead.
+### Meteor v2
+If you are using Meteor v2 you need to make sure you install Vite v4 and `jorgenvatle:vite-bundler` instead.
 
 ```sh
 meteor npm i -D vite@4
+meteor npm i meteor-vite@2
+meteor add jorgenvatle:vite-bundler
 ```
+- [Release branch](https://github.com/JorgenVatle/meteor-vite/tree/v3)
 
 #### Application structure
 You can structure your app just like you would with a typical Meteor application. The key difference is the addition of 
@@ -193,7 +198,7 @@ export default defineConfig({
 })
 ```
 
-If your project depends on [`react-meteor-data`](https://github.com/meteor/react-packages) it might be worthwhile to 
+If your project depends on [`meteor/react-meteor-data`](https://github.com/meteor/react-packages) it might be worthwhile to 
 replace it with our npm-published fork [`@meteor-vite/react-meteor-data`](https://github.com/JorgenVatle/react-packages).
 
 The fork simply publishes the package over npm instead of Atmosphere. This has a few benefits. Primarily, Meteor 
@@ -428,7 +433,15 @@ to put that.
 But do be careful with this - any code that's imported by both your Vite config's [`clientEntry`](#example-with-vue)
 and your Meteor `mainModule.client` may lead to the code being included twice in your final production bundle.
 
-## Compatability with [`zodern:relay`](https://github.com/zodern/meteor-relay#readme)
+## Meteor build plugins
+Meteor-Vite is more or less a replacement for Meteor's entire build system. Standard minifier packages and other 
+Meteor-ecosystem build plugins are no longer necessary, you can now lean on the much larger and widely adopted Vite
+ecosystem for configuring your app's build process.
+
+If there is functionality provided by a Meteor build plugin that you can't find a Vite-equivalent plugin for, please do
+open an issue, and we might be able to port it over for you if there is no other good alternative.
+
+### Compatability with [`zodern:relay`](https://github.com/zodern/meteor-relay#readme)
 Since `zodern:relay` depends on a Babel plugin for processing your publication and methods on the client, we need some
 extra configuration to make that work with Vite.
 
@@ -445,10 +458,10 @@ The Vite integration comes with two dependencies that work together to enable co
     - [View changelog](/npm-packages/meteor-vite/CHANGELOG.md)
     - [View on npm](https://www.npmjs.com/package/meteor-vite)
 
-- [`jorgenvatle:vite-bundler`](/packages/vite-bundler/) - Meteor build plugin for launching Vite workers and compiling production bundles from Vite and Meteor.
-    - [View changelog](/packages/vite-bundler/CHANGELOG.md)
-    - [View on Atmosphere](https://atmospherejs.com/jorgenvatle/vite-bundler)
-    - [View on Packosphere](https://packosphere.com/jorgenvatle/vite-bundler)
+- [`jorgenvatle:vite`](/packages/vite/) - Meteor build plugin for launching Vite workers and compiling production bundles from Vite and Meteor.
+    - [View changelog](/packages/vite/CHANGELOG.md)
+    - [View on Atmosphere](https://atmospherejs.com/jorgenvatle/vite)
+    - [View on Packosphere](https://packosphere.com/jorgenvatle/vite)
 
 
 ## Roadmap

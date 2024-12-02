@@ -6,3 +6,5 @@ examples/*/vite
 examples/*/_vite-bundle
 examples/*/.meteor/local
 dist/
+packages/*/dist
+.force-reload-watchfile.ts

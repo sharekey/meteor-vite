@@ -4,7 +4,7 @@
 ARG NODE_VERSION="20-alpine"
 
 # Meteor release (Needs to match the release in .meteor/release)
-ARG METEOR_RELEASE="3.0-rc.2"
+ARG METEOR_RELEASE="3.0.4"
 
 # Meteor base image name
 ARG METEOR_BASE_IMAGE="jorgenvatle/meteor-base"
@@ -39,17 +39,22 @@ RUN test -n "$APP_BASENAME"
 
 ENV APP_BASENAME=$APP_BASENAME
 ENV APP_DIR=./examples/$APP_BASENAME
-ENV METEOR_PACKAGES_FOLDER=/root/packages
-ENV NPM_PACKAGES_FOLDER=/root/npm-packages
+ENV ROOT_FOLDER=/root
+ENV METEOR_PACKAGES_FOLDER=$ROOT_FOLDER/packages
+ENV NPM_PACKAGES_FOLDER=$ROOT_FOLDER/npm-packages
 ENV METEOR_PACKAGE_DIRS=$METEOR_PACKAGES_FOLDER
 
 COPY ./packages $METEOR_PACKAGES_FOLDER
 COPY ./npm-packages $NPM_PACKAGES_FOLDER
 COPY ./test-packages/atmosphere/ $METEOR_PACKAGES_FOLDER/
-COPY ./package*.json /root
+COPY ./package*.json $ROOT_FOLDER/
+COPY ./tsup.config.ts $ROOT_FOLDER/
 
-# Prepare meteor-vite package for local reference when preparing npm dependencies.
-RUN cd $NPM_PACKAGES_FOLDER/meteor-vite && meteor npm ci && meteor npm link
+# Prepare repository root-level npm dependencies
+RUN cd $ROOT_FOLDER && meteor npm ci && meteor npm run build:packages
+
+# Prepare example app's npm dependencies
+RUN cd $NPM_PACKAGES_FOLDER/meteor-vite && meteor npm link
 
 WORKDIR $APP_SOURCE_FOLDER
 

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="SharedFileColors">
+    <fileColor scope="jorgenvatle:vite" color="2d0c1a" />
     <fileColor scope="@meteor-vite/zodern-relay" color="Blue" />
     <fileColor scope="Solid (example)" color="Violet" />
     <fileColor scope="Vue Meteor v3 (example)" color="Blue" />

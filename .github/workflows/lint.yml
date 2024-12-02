@@ -1,0 +1,23 @@
+name: 'Lint'
+run-name: '🔬 Lint: ${{ github.event.head_commit.message }}'
+on:
+  push:
+
+env:
+  NPM_PACKAGE_PATH: ./npm-packages/meteor-vite
+
+jobs:
+  meteor-vite:
+    name: 'npm: meteor-vite'
+    runs-on: ubuntu-latest
+    steps:
+      - name: 'Checkout'
+        uses: actions/checkout@v3
+      - name: 'Setup Node'
+        uses: actions/setup-node@v3
+      - name: 'Install dependencies'
+        run: cd "$NPM_PACKAGE_PATH" && npm i
+      - name: 'Run linter'
+        run: cd "$NPM_PACKAGE_PATH" && npm run lint
+
+

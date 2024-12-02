@@ -1,1 +1,0 @@
-console.log(`[${module.id}] Meteor client entrypoint loaded!`);

@@ -1,6 +1,6 @@
 {
   "name": "meteor-vite",
-  "version": "2.0.0",
+  "version": "3.0.0",
   "description": "",
   "files": [
     "dist"
@@ -8,6 +8,7 @@
   "main": "",
   "exports": {
     "./plugin": {
+      "types": "./dist/plugin/index.d.ts",
       "import": [
         "./dist/plugin/index.mjs"
       ],
@@ -15,54 +16,34 @@
         "./dist/plugin/index.js"
       ]
     },
-    "./client": "./dist/client/index.mjs"
+    "./bootstrap/scripts": {
+      "types": "./dist/bootstrap/scripts/index.d.ts",
+      "import": "./dist/bootstrap/scripts/index.mjs"
+    },
+    "./bootstrap/*": {
+      "types": "./dist/bootstrap/*.d.ts",
+      "import": "./dist/bootstrap/*.mjs"
+    },
+    "./client": {
+      "types": "./dist/client/index.d.ts",
+      "import": "./dist/client/index.mjs"
+    }
   },
   "scripts": {
     "start": "ts-node-dev src/bin/debug/watch-mocks.ts",
     "watch": "tsup --watch --dts --sourcemap",
-    "build": "rm -rf ./dist && tsup-node",
-    "prepare": "npm run build",
-    "test": "vitest"
-  },
-  "tsup": [
-    {
-      "entry": [
-        "./src/bin/worker.ts",
-        "./src/client/index.ts"
-      ],
-      "outDir": "dist",
-      "format": "esm",
-      "sourcemap": true,
-      "dts": false
-    },
-    {
-      "entry": [
-        "./src/plugin/index.ts"
-      ],
-      "outDir": "dist/plugin",
-      "format": [
-        "cjs",
-        "esm"
-      ],
-      "sourcemap": true,
-      "dts": true
-    }
-  ],
-  "typesVersions": {
-    "*": {
-      "plugin": [
-        "./dist/plugin/index.d.mts",
-        "./dist/plugin/index.d.ts"
-      ],
-      "client": [
-        "./dist/client/index.d.mts"
-      ]
-    }
+    "build": "rm -rf ./dist && tsup",
+    "prepack": "npm run build",
+    "test": "vitest",
+    "lint": "tsc --noEmit"
   },
   "keywords": [
     "meteor",
     "vite"
   ],
+  "engines": {
+    "node": ">=20.0.0"
+  },
   "author": "",
   "bugs": {
     "url": "https://github.com/JorgenVatle/meteor-vite/issues"
@@ -72,31 +53,22 @@
   "dependencies": {
     "@babel/parser": "^7.22.5",
     "@babel/traverse": "^7.22.5",
+    "execa": "^9.5.1",
     "p-limit": "^3.1.0",
-    "picocolors": "^1.0.0",
-    "simpleddp": "^2.2.4",
-    "ws": "^8.18.0"
-  },
-  "peerDependencies": {
-    "vite": ">=3.0.0",
-    "tsup": ">=7.1.0"
-  },
-  "peerDependenciesMeta": {
-    "tsup": {
-      "optional": true
-    }
+    "picocolors": "^1.0.0"
   },
   "devDependencies": {
     "@babel/generator": "^7.23.6",
     "@babel/types": "^7.22.5",
-    "@sveltejs/vite-plugin-svelte": "^2.4.2",
     "@types/babel__generator": "^7.6.8",
+    "@types/meteor": "^2.9.8",
     "@types/node": "^20.3.3",
-    "@types/simpleddp": "^2.2.4",
-    "@types/ws": "^8.5.12",
-    "ts-node-dev": "^2.0.0",
+    "tsup": "^8.3.5",
     "typescript": "^5.1.6",
-    "vite": "^4.5.5",
-    "vitest": "^0.32.2"
+    "vite": "^6.0.0",
+    "vitest": "^2.1.6"
+  },
+  "peerDependencies": {
+    "vite": "^6.0.0"
   }
 }

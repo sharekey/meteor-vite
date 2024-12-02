@@ -11,8 +11,8 @@ export interface Link {
 export const LinksCollection = new Mongo.Collection<Link>('links')
 
 Meteor.methods({
-  'links.insert'(title: string, url: string) {
-    LinksCollection.insert({
+  async 'links.insert'(title: string, url: string) {
+    await LinksCollection.insertAsync({
       title,
       url,
       createdAt: new Date(),

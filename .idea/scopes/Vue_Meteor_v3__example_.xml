@@ -1,3 +1,3 @@
 <component name="DependencyValidationManager">
-  <scope name="Vue Meteor v3 (example)" pattern="file[meteor-vite]:examples/meteor-v3-vue//*" />
+  <scope name="Vue Meteor v3 (example)" pattern="file[meteor-vite]:examples/vue-zodern-relay//*" />
 </component>
