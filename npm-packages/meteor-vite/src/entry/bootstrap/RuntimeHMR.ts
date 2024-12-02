@@ -4,11 +4,32 @@ import pc from 'picocolors';
 import PackageJson from '../../../package.json';
 import { createSimpleLogger } from '../../utilities/Logger';
 
+declare global {
+    interface MeteorViteRuntimeConfig {
+        initialHmrState: undefined | {
+            method_handlers: Record<string, Function>;
+            publish_handlers: Record<string, Function>;
+        }
+    }
+    namespace globalThis {
+        interface Packages extends Record<string, Record<string, unknown>> {
+        
+        }
+        namespace SyncedCron {
+            const _entries: Record<string, Function>
+        }
+    }
+}
+
 if (import.meta.hot) {
     // Initial handles
     // Todo: refactor to use stubs for tracking methods and publications created by the server entry.
-    const method_handlers = {};
-    const publish_handlers = {};
+    const initialState: Required<MeteorViteRuntimeConfig['initialHmrState']> = globalThis.MeteorViteRuntimeConfig.initialHmrState ??= {
+        method_handlers: Meteor.server.method_handlers,
+        publish_handlers: Meteor.server.publish_handlers,
+    }
+    const { method_handlers, publish_handlers } = initialState;
+    
     const logger = createSimpleLogger('HMR');
     
     // Todo: Implement HMR handling for custom EJSON types
@@ -47,5 +68,12 @@ if (import.meta.hot) {
             `🐛  ${pc.blue(PackageJson.bugs.url)}`
             
         ].flat().join('\n') + '\n\n');
+        
+        if (globalThis.SyncedCron) {
+            logger.info('Reset job entries for SyncedCron');
+            Object.assign(globalThis.SyncedCron, {
+                _entries: {}
+            });
+        }
     })
 }
