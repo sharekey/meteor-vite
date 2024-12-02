@@ -26,6 +26,7 @@ export async function resolveMeteorViteConfig(
     process.chdir(projectRoot);
     
     const needsReactPreamble = Object.keys(packageJson?.devDependencies).includes('@vitejs/plugin-react') || Object.keys(packageJson.dependencies).includes('@vitejs/plugin-react');
+    let viteServerMainModule: undefined | string = undefined;
     
     const userConfig: ResolvedMeteorViteConfig = await resolveConfig(Object.assign({
         configFile: packageJson.meteor.vite?.configFile,
@@ -49,6 +50,17 @@ export async function resolveMeteorViteConfig(
         }
         
         return template;
+    }
+    
+    if (userConfig.meteor.serverEntry) {
+        if (userConfig.meteor.enableExperimentalFeatures) {
+            viteServerMainModule = userConfig.meteor.serverEntry;
+        } else {
+            Instance.logger.warn(
+                'To enable server bundling, you need to set "enableExperimentalFeatures" to true in your Vite' +
+                ' config. To disable these warnings, just remove the "serverEntry" field in your Vite config.'
+            );
+        }
     }
     
     const config = {
@@ -94,7 +106,7 @@ export async function resolveMeteorViteConfig(
                         input: {
                             main: serverMainModule({
                                 meteorMainModule: packageJson.meteor.mainModule.server,
-                                viteMainModule: userConfig.meteor.serverEntry,
+                                viteMainModule: viteServerMainModule,
                             }),
                         },
                         output: {
@@ -123,6 +135,7 @@ export async function resolveMeteorViteConfig(
         packageJson,
         outDir,
         needsReactPreamble,
+        viteServerMainModule
     }
 }
 
