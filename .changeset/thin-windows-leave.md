@@ -16,8 +16,10 @@ Upgrade to Vite v6
 - In production, the same changes from https://github.com/JorgenVatle/meteor-vite/pull/173 apply. Your assets are built and served as static files without the need for pushing them through Meteor's build system.
 - Client assets benefit from code splitting. What's not immediately required on first page load will be prefetched quietly in the background by the browser.
 
+### Server HMR
 Building the Meteor server with Vite is still in its experimental phase. To provide HMR for the server, modules with side-effects need to be cleaned up between changes. Currently we clear out your method and publication handlers between updates to prevent `Mongo.Collection` from yelling at you for defining/instantiating them twice. But there likely is a list of other things that might be other things that need to be cleaned up between reloads. Looking forward to any feedback on this.
-- If you run into issues, you can always just comment out the `serverEntry` field in your Vite config and it should behave just like previous versions of Meteor Vite.
+
+If you run into issues, you can always just comment out the `serverEntry` field in your Vite config and it should behave just like previous versions of Meteor Vite.
 
 ## Migration steps
 `jorgenvatle:vite-bundler` has been renamed to `jorgenvatle:vite`.
