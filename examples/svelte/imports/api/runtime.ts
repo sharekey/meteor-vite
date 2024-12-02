@@ -1,7 +1,7 @@
 import { Mongo } from 'meteor/mongo';
 import { Meteor } from 'meteor/meteor';
 
-const RuntimeCollection = new Mongo.Collection<RuntimeDocument>('runtime');
+export const RuntimeCollection = new Mongo.Collection<RuntimeDocument>('runtime');
 
 
 Meteor.methods({
@@ -18,8 +18,6 @@ export type RuntimeDocument = {
     _id: 'time';
     value: Date;
 }
-
-export default RuntimeCollection;
 
 Meteor.startup(() => {
     if (!Meteor.isServer) {

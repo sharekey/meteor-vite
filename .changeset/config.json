@@ -9,7 +9,7 @@
     "version": true,
     "tag": true
   },
-  "baseBranch": "release",
+  "baseBranch": "v3.1-vite-vms",
   "updateInternalDependencies": "patch",
   "ignore": []
 }

@@ -1,5 +1,5 @@
-name: 'Test build'
-run-name: '🗃️ Test build: ${{ github.event.head_commit.message || github.event.pull_request.title }}'
+name: 'Test build examples'
+run-name: '📟 Test build examples: ${{ github.event.head_commit.message || github.event.pull_request.title }}'
 
 on:
   push:
@@ -8,6 +8,7 @@ on:
       - release
       - meteor-v3
       - v3
+      - v3.1-vite-vms
   pull_request:
     branches:
       - main
@@ -20,6 +21,7 @@ jobs:
     uses: ./.github/workflows/_reuse_.build.yml
     with:
       appBasename: 'vue'
+      meteorBaseImage: jorgenvatle/meteor-base
 
   svelte:
     name: 'Svelte'
@@ -39,11 +41,12 @@ jobs:
     with:
       appBasename: 'solid'
 
-  vue-meteor-v3:
-    name: 'Meteor v3'
+  vue-zodern-relay:
+    name: 'Vue + zodern:relay'
     uses: ./.github/workflows/_reuse_.build.yml
     with:
-      appBasename: 'meteor-v3-vue'
+      # Todo: rename directory and project to Vue + zodern:relay
+      appBasename: 'vue-zodern-relay'
 
   vue-ssr:
     name: 'Vue + SSR'

@@ -7,10 +7,11 @@ on:
       - release
       - meteor-v3
       - v3
+      - v3.1-vite-vms
 
 env:
   METEOR_SESSION_FILE_PATH: /opt/meteor/.meteor_session.json
-  METEOR_RELEASE: 3.0-rc.2
+  METEOR_RELEASE: 3.0.4
 
 concurrency: ${{ github.workflow }}-${{ github.ref }}
 jobs:
@@ -39,7 +40,7 @@ jobs:
       - name: 'Setup Meteor'
         uses: meteorengineer/setup-meteor@v1
         with:
-          meteor-release: '3.0'
+          meteor-release: 3.0.4
 
       - name: 'Install Dependencies'
         run: |
@@ -47,8 +48,9 @@ jobs:
           meteor npm run install:package
           npm i -w npm-packages/@meteor-vite/plugin-zodern-relay
 
-      - name: 'Build package'
-        run: | 
+      - name: 'Build packages'
+        run: |
+          npm run build:vite
           meteor npm run build:package
 
       - name: 'Create Release'

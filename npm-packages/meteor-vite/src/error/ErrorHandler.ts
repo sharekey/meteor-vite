@@ -1,4 +1,4 @@
-import ViteLoadRequest, { RefreshNeeded } from '../ViteLoadRequest';
+import ViteLoadRequest, { RefreshNeeded } from '../entry/plugin/ViteLoadRequest';
 import { FatalMeteorViteError, MeteorViteError } from './MeteorViteError';
 
 export function createErrorHandler(fallbackDescription: string, request?: ViteLoadRequest) {

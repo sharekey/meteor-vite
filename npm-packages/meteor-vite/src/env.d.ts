@@ -1,0 +1,1 @@
+/// <reference types="meteor/jorgenvatle:vite" />

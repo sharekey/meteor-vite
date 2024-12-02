@@ -27,6 +27,7 @@ METEOR_LOCAL_DIR_ORIGINAL="$APP_DIR/.meteor/local"
 METEOR_LOCAL_DIR_ROOT="/tmp/.meteor-local/meteor-vite/examples"
 METEOR_LOCAL_DIR="$METEOR_LOCAL_DIR_ROOT/$app"
 
+export SERVER_NODE_OPTIONS="--enable-source-maps"
 export METEOR_PACKAGE_DIRS="$PWD/packages:$PWD/test-packages/atmosphere"
 export METEOR_VITE_TSUP_BUILD_WATCHER="${METEOR_VITE_TSUP_BUILD_WATCHER:-true}"
 
@@ -56,7 +57,7 @@ start() {
      npx concurrently -k -n "tsup,$app" -c dim,yellow "'npm:build:package -- -- --watch'" "'npm:start $app'"
   else
     cd "$APP_DIR" || exit 1
-    $npm start -- "$@"
+    $npm start -- "$@" $EXTRA_ARGS
   fi
 }
 
@@ -106,6 +107,7 @@ prepare:npm-packages() {
 
 # Build an example app for production
 build() {
+    (prepare:npm-packages) || exit 1
     (link) || exit 1
     (cleanOutput) || exit 1
 
@@ -147,7 +149,7 @@ start:production() {
   local PRODUCTION_SERVER="$this production:app $app"
   local MONGO_SERVER="$this start:mongo" # Use the Meteor dev server to run a local MongoDB instance
 
-  concurrently --names "PROD,MongoDB" --prefixColors "cyan,dim" "$PRODUCTION_SERVER" "$MONGO_SERVER"
+  concurrently -k --names "PROD,MongoDB" --prefixColors "cyan,dim" "$PRODUCTION_SERVER" "$MONGO_SERVER"
 }
 
 install:mongo() {
@@ -167,7 +169,7 @@ cleanOutput() {
 
 link() {
   for package in "${npmPackages[@]}"; do
-    (npmPackage "$package" link) || exit 1
+    (npmPackage "$package" link --ws false) || exit 1
     log:success "Added npm link for $package"
   done
 
