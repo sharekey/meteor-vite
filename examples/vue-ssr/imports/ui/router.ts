@@ -1,5 +1,5 @@
-import Links from '/imports/ui/pages/Links.vue';
 import { type RouteRecordRaw } from 'vue-router';
+import Links from './pages/Links.vue';
 import About from './pages/About.vue';
 import Home from './pages/Home.vue';
 
