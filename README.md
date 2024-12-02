@@ -33,19 +33,22 @@ Use [Vite](https://vitejs.dev) in your Meteor app! ⚡️
 
 ## Installation
 
+### Meteor v3
 ```sh
 # Install Meteor-Vite and Vite with npm
 meteor npm i meteor-vite
 meteor npm i -D vite 
 
-# Add the Meteor-Vite build plugin to your Meteor dependencies.
+# Install the Meteor build plugin
 meteor add jorgenvatle:vite
 ```
 
-If you are using Meteor v2, you need to make sure you install Vite v4 and `jorgenvatle:vite-bundler` instead.
+### Meteor v2
+If you are using Meteor v2 you need to make sure you install Vite v4 and `jorgenvatle:vite-bundler` instead.
 
 ```sh
 meteor npm i -D vite@4
+meteor npm i meteor-vite@2
 meteor add jorgenvatle:vite-bundler
 ```
 
