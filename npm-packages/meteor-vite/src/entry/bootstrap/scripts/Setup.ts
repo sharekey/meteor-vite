@@ -80,15 +80,21 @@ function injectServerEntryImport(mainModule: string | undefined) {
     ].join('\n'));
 }
 
-function prepareProductionServerProxyModule(serverEntry: string) {
-    FS.writeFileSync(CurrentConfig.serverProductionProxyModule, [
+export function serverRollupInput({ meteorMainModule, viteServerEntry }: {
+    meteorMainModule: string | undefined,
+    viteServerEntry?: string
+}) {
+    injectServerEntryImport(meteorMainModule);
+    const importLines = [
         `import "meteor-vite/bootstrap/ProductionEnvironment"`,
-        `import ${JSON.stringify(Path.resolve(CurrentConfig.projectRoot, serverEntry))}`,
-    ].join('\n'));
+    ];
+    
+    if (viteServerEntry) {
+        importLines.push(
+            `import ${JSON.stringify(Path.resolve(CurrentConfig.projectRoot, viteServerEntry))}`,
+        )
+    }
+    
+    FS.writeFileSync(CurrentConfig.serverProductionProxyModule, importLines.join('\n'));
     return CurrentConfig.serverProductionProxyModule;
-}
-
-export function serverRollupInput(config: { meteorMainModule: string | undefined, viteServerEntry: string }) {
-    injectServerEntryImport(config.meteorMainModule);
-    return prepareProductionServerProxyModule(config.viteServerEntry);
 }
