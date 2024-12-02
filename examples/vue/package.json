@@ -4,14 +4,9 @@
   "scripts": {
     "start": "meteor run",
     "build": "meteor build ../output/vue --directory",
-    "start:production-build": "(cd ../output/vue/bundle && (cd programs/server && meteor npm install) && PORT=4040 ROOT_URL=http://localhost:4040 MONGO_URL=mongodb://127.0.0.1:3001/meteor meteor node main.js)",
-    "start:new-build": "rm -rf ../output/vue && meteor npm run build && concurrently \"meteor npm run dev\" \"meteor npm run start\"",
     "test": "meteor test --once --driver-package meteortesting:mocha",
     "test-app": "TEST_WATCH=1 meteor test --full-app --driver-package meteortesting:mocha",
-    "visualize": "meteor --production --extra-packages bundle-visualizer",
-    "meteor-vite-internal:setup-env": "cross-env-shell METEOR_PACKAGE_DIRS=\"../../packages/\" BUILD_METEOR_VITE_DEPENDENCY='true'",
-    "meteor-vite-internal:start": "npm run meteor-vite-internal:setup-env meteor npm start",
-    "meteor-vite-internal:build": "npm run meteor-vite-internal:setup-env meteor npm run build"
+    "visualize": "meteor --production --extra-packages bundle-visualizer"
   },
   "type": "module",
   "dependencies": {
