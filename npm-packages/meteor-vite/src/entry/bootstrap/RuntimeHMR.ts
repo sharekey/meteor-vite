@@ -6,11 +6,7 @@ import { createSimpleLogger } from '../../utilities/Logger';
 
 declare global {
     interface MeteorViteRuntimeConfig {
-        initialHmrState: undefined | {
-            method_handlers: Record<string, Function>;
-            publish_handlers: Record<string, Function>;
-            packages: PackageState;
-        }
+        initialHmrState: undefined | InitialHmrState;
     }
     namespace globalThis {
         namespace Package {
@@ -29,13 +25,19 @@ declare global {
     }
 }
 
+interface InitialHmrState {
+    method_handlers: Record<string, Function>;
+    publish_handlers: Record<string, Function>;
+    packages: PackageState;
+}
+
 interface PackageState {
     EJSON?: {
         types: Map<string, Function>;
     };
 }
 
-function createInitialState(): Required<MeteorViteRuntimeConfig['initialHmrState']> {
+function createInitialState(): InitialHmrState {
     if (globalThis.MeteorViteRuntimeConfig.initialHmrState) {
         return globalThis.MeteorViteRuntimeConfig.initialHmrState;
     }
