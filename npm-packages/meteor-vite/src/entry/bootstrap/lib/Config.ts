@@ -30,32 +30,6 @@ export async function resolveMeteorViteConfig(
     const userConfig: ResolvedMeteorViteConfig = await resolveConfig(Object.assign({
         configFile: packageJson.meteor.vite?.configFile,
     }, inlineConfig), command);
-    let serverBuildConfig: BuildEnvironmentOptions | undefined = undefined;
-    
-    if (userConfig.meteor?.serverEntry) {
-        serverBuildConfig = {
-            target: 'node21',
-            manifest: false,
-            ssrManifest: false,
-            minify: false,
-            sourcemap: true,
-            rollupOptions: {
-                external: [/^meteor\//],
-                input: {
-                    main: serverMainModule({
-                        meteorMainModule: packageJson.meteor.mainModule.server,
-                        viteMainModule: userConfig.meteor.serverEntry,
-                    }),
-                },
-                output: {
-                    // Unfortunately Meteor still doesn't support
-                    // ESM within the final server bundle.
-                    format: 'module',
-                    ...fileNameTemplates('server'),
-                }
-            },
-        }
-    }
     
     if (!userConfig.meteor?.clientEntry) {
         throw new MeteorViteError('Cannot build application. You need to specify a clientEntry in your Vite config!');
@@ -109,7 +83,28 @@ export async function resolveMeteorViteConfig(
                     external: true,
                     noExternal: ['meteor-vite']
                 },
-                build: serverBuildConfig,
+                build: {
+                    target: 'node21',
+                    manifest: false,
+                    ssrManifest: false,
+                    minify: false,
+                    sourcemap: true,
+                    rollupOptions: {
+                        external: [/^meteor\//],
+                        input: {
+                            main: serverMainModule({
+                                meteorMainModule: packageJson.meteor.mainModule.server,
+                                viteMainModule: userConfig.meteor.serverEntry,
+                            }),
+                        },
+                        output: {
+                            // Unfortunately Meteor still doesn't support
+                            // ESM within the final server bundle.
+                            format: 'module',
+                            ...fileNameTemplates('server'),
+                        }
+                    },
+                },
             },
             client: {
                 build: {
