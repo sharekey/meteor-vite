@@ -198,7 +198,7 @@ export default defineConfig({
 })
 ```
 
-If your project depends on [`react-meteor-data`](https://github.com/meteor/react-packages) it might be worthwhile to 
+If your project depends on [`meteor/react-meteor-data`](https://github.com/meteor/react-packages) it might be worthwhile to 
 replace it with our npm-published fork [`@meteor-vite/react-meteor-data`](https://github.com/JorgenVatle/react-packages).
 
 The fork simply publishes the package over npm instead of Atmosphere. This has a few benefits. Primarily, Meteor 
