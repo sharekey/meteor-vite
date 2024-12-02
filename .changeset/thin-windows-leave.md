@@ -1,5 +1,5 @@
 ---
-"jorgenvatle_vite": major
+"jorgenvatle_vite": 1.0.1
 "meteor-vite": major
 ---
 
