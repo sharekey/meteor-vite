@@ -104,8 +104,9 @@ if (import.meta.hot) {
                 _entries: {}
             });
         }
-        if (Package.ejson) {
+        if (globalThis.Package.ejson) {
             const types = globalThis.Package.ejson?.EJSON._getTypes(true)!;
+            logger.info(`Reset custom EJSON entries:`, types.entries());
             types.clear();
             for (const [key, value] of packages.EJSON.types.entries()) {
                 types.set(key, value);
