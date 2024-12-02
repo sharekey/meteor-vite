@@ -6,7 +6,7 @@ import { createSimpleLogger } from '../../utilities/Logger';
 
 declare global {
     interface MeteorViteRuntimeConfig {
-        initialHmrState: undefined | InitialHmrState;
+        initialHmrState?: InitialHmrState;
     }
     namespace globalThis {
         namespace Package {

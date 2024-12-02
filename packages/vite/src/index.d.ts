@@ -1,11 +1,11 @@
 import type { CurrentConfig } from './util/CurrentConfig';
 
 declare global {
-    interface MeteorViteRuntimeConfig extends (typeof CurrentConfig) {
+    interface MeteorViteRuntimeConfig {
     
     }
     
     namespace globalThis {
-        var MeteorViteRuntimeConfig: MeteorViteRuntimeConfig;
+        var MeteorViteRuntimeConfig: (typeof CurrentConfig) & MeteorViteRuntimeConfig;
     }
 }
