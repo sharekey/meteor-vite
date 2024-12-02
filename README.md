@@ -44,8 +44,6 @@ meteor add jorgenvatle:vite
 ```
 
 ### Meteor v2
-- [Release branch](https://github.com/JorgenVatle/meteor-vite/tree/v3)
-
 If you are using Meteor v2 you need to make sure you install Vite v4 and `jorgenvatle:vite-bundler` instead.
 
 ```sh
@@ -53,6 +51,7 @@ meteor npm i -D vite@4
 meteor npm i meteor-vite@2
 meteor add jorgenvatle:vite-bundler
 ```
+- [Release branch](https://github.com/JorgenVatle/meteor-vite/tree/v3)
 
 #### Application structure
 You can structure your app just like you would with a typical Meteor application. The key difference is the addition of 
