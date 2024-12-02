@@ -1,6 +1,6 @@
-import { execSync, spawn, execFileSync } from 'node:child_process';
-import Path from 'node:path';
-import FS from 'node:fs/promises';
+import { execSync, spawn, execFileSync } from 'child_process';
+import Path from 'path';
+import FS from 'fs/promises';
 
 // Assuming this is launched from the repository root for now.
 const repoPath = process.cwd();
@@ -8,10 +8,10 @@ const PACKAGE_NAME_REGEX = /name:\s*'(?<packageName>(?<author>[\w\-._]+):(?<name
 const PACKAGE_VERSION_REGEX = /version:\s*'(?<version>[\d\w.+-]+)'\s*,/;
 const CHANGESET_STATUS_FILE = 'changeset-status.json';
 const meteorPackage = {
-    releaseName: 'vite',
+    releaseName: 'vite-bundler',
     username: 'jorgenvatle',
-    packageJsPath: Path.join(repoPath, './packages/vite/package.js'),
-    packageJsonPath: Path.join(repoPath, './packages/vite/package.json'),
+    packageJsPath: Path.join(repoPath, './packages/vite-bundler/package.js'),
+    packageJsonPath: Path.join(repoPath, './packages/vite-bundler/package.json'),
 };
 const logger = {
     _history: [],
@@ -89,39 +89,32 @@ async function setVersion(newVersion) {
 }
 
 async function publish() {
-    const meteorReleases = ['3.0.3'];
-    const { version: currentVersion } = await parsePackageJson();
+    const { version } = await parsePackageJson();
 
     logger.info(`⚡  Publishing ${meteorPackage.releaseName}...`);
 
-    for (const release of meteorReleases) {
-        const command = `meteor publish --release ${release}`;
-        const meteorVersion = release.split('.')[0];
-        const newVersion = currentVersion.replace('next.', `meteor${meteorVersion}.next.`);
-
-        if (await isPublished(newVersion)) {
-            logger.info(`⚠️  Version ${newVersion} is already published to Atmosphere. Skipping...`);
-            continue;
-        }
-
-        logger.info('✨  Publishing to Atmosphere with Meteor %s release...', release);
-        await setVersion(newVersion);
-
-        await shell(command, {
-            async: true,
-            cwd: Path.dirname(meteorPackage.packageJsPath),
-            env: {
-                METEOR_SESSION_FILE: process.env.METEOR_SESSION_FILE, // Authenticate using auth token stored as file.
-                VITE_METEOR_DISABLED: 'true', // Prevents vite:bundler from trying to compile itself on publish
-                ...process.env,
-                METEOR_RELEASE: release,
-            },
-        });
-
-        logger.info(`🚀  Published to Atmosphere: `)
-        logger.info(` L ${meteorPackage.username}:${meteorPackage.releaseName}@${newVersion}`)
+    if (await isPublished(version)) {
+        logger.info(`⚠️  Version ${version} is already published to Atmosphere. Skipping...`);
+        return;
     }
 
+
+    const release = execSync('meteor --version').toString().trim();
+    logger.info(`✨  Publishing to Atmosphere with Meteor ${release} release...`);
+    await setVersion(version);
+
+    await shell(`meteor publish`, {
+        async: true,
+        cwd: Path.dirname(meteorPackage.packageJsPath),
+        env: {
+            METEOR_SESSION_FILE: process.env.METEOR_SESSION_FILE, // Authenticate using auth token stored as file.
+            VITE_METEOR_DISABLED: 'true', // Prevents vite:bundler from trying to compile itself on publish
+            ...process.env,
+        },
+    });
+
+    logger.info(`🚀  Published to Atmosphere: `)
+    logger.info(` L ${meteorPackage.username}:${meteorPackage.releaseName}@${version}`)
 }
 
 function shell(command, options) {
@@ -186,6 +179,11 @@ async function isPublished(version) {
 
     if (action === 'publish') {
         await publish();
+        return;
+    }
+
+    if (action === 'version') {
+        await applyVersion();
         return;
     }
 

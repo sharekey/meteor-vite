@@ -7,16 +7,20 @@ if (!Meteor.isServer) {
     throw new Meteor.Error('server-only', 'UI server module can only be accessed by the Meteor server!');
 }
 
-WebAppInternals.registerBoilerplateDataCallback('vue-ssr', async (req, data) => {
-    const { app, router } = createApp();
+Meteor.startup(() => {
+    WebAppInternals.registerBoilerplateDataCallback('vue-ssr', async (req, data) => {
+        const { app, router } = createApp();
+        
+        await router.push(req.url || '/');
+        const context = {};
+        
+        const html = await renderToString(app, context);
+        
+        data.dynamicBody = [
+            data.dynamicBody || '',
+            `<div id="app">${html}</div>`,
+        ].join('\n')
+    });
     
-    await router.push(req.url || '/');
-    const context = {};
-    
-    const html = await renderToString(app, context);
-    
-    data.dynamicBody = [
-        data.dynamicBody || '',
-        `<div id="app">${html}</div>`,
-    ].join('\n')
+    console.log('Initialized SSR Boilerplate callback');
 })
