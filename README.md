@@ -34,20 +34,19 @@ Use [Vite](https://vitejs.dev) in your Meteor app! ⚡️
 ## Installation
 
 ```sh
-# Add meteor-vite to your npm dependencies
+# Install Meteor-Vite and Vite with npm
 meteor npm i meteor-vite
+meteor npm i -D vite 
 
-# Install the latest version of Vite (Meteor v3+)
-npm i -D vite 
-
-# Then add the Meteor Vite build plugin to your Meteor project.
+# Add the Meteor-Vite build plugin to your Meteor dependencies.
 meteor add jorgenvatle:vite
 ```
 
-If you are using Meteor v2, you need to make sure you install Vite v4 instead.
+If you are using Meteor v2, you need to make sure you install Vite v4 and `jorgenvatle:vite-bundler` instead.
 
 ```sh
 meteor npm i -D vite@4
+meteor add jorgenvatle:vite-bundler
 ```
 
 #### Application structure
@@ -467,10 +466,9 @@ The Vite integration comes with two dependencies that work together to enable co
     - [x] Migrate bundler from Fibers to Async/Await
     - [x] Update Meteor bundle parser to support new format introduced in v3.
 - [x] Code-splitting/Dynamic imports
-- [x] ~~Migrate intermediary production-build transpile step from Babel to esbuild.~~
-  - [x] Builds are now be handled entirely by Vite
 - [x] Automatically detect and inject React preamble into app markup.
+- [x] Add support for Vite v5
 - [x] Serve Vite bundle directly from Meteor, bypassing Meteor's build process.
-  - [ ] Inject Vite module preload polyfill into the Vite client entrypoint.
+  - [x] Inject Vite module preload polyfill into the Vite client entrypoint.
   - [ ] Server-side multi-page/multi-entrypoint support.
   - [ ] Handle parsing bundle manifest when using the `--production` flag.
