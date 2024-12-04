@@ -27,4 +27,5 @@ Package.onUse((api) => {
     global._meteorVite = { name, version };
 
     api.mainModule('dist/package-runtime.mjs', ['server'], { bare: false });
+    api.addAssets('package.json', ['server']);
 });
