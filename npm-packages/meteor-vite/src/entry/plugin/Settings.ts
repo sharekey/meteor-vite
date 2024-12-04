@@ -7,6 +7,13 @@ export interface PluginSettings<
     TChunkFileNames extends OutputOptions['chunkFileNames'] = undefined
 > {
     /**
+     * Whether the plugin was configured using the Meteor Vite plugin.
+     * Used to emit a warning message when the old configuration format is in use.
+     * @private
+     */
+    _configSource?: 'plugin';
+    
+    /**
      * Vite client entry into Meteor.
      * Not to be confused with your Meteor mainModule.
      *
