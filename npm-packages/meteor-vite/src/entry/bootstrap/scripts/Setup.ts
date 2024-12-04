@@ -160,6 +160,10 @@ export function clientMainModule({ viteMainModule, modulePreload }: {
         )
     }
     
+    if (!CurrentConfig.clientEntryModule) {
+        throw new Error(`Missing client entry module! Maybe jorgenvatle:vite is out of date? Try updating it: $  ${pc.yellow('meteor update jorgenvatle:vite')}`)
+    }
+    
     writeToPathSync(CurrentConfig.clientEntryModule, importLines.join('\n'));
     return CurrentConfig.clientEntryModule;
 }
