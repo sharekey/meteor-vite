@@ -136,7 +136,7 @@ export function serverMainModule({ meteorMainModule, viteMainModule }: {
 }
 
 export function clientMainModule({ viteMainModule, modulePreload }: {
-    viteMainModule?: string | undefined;
+    viteMainModule: string;
     modulePreload?: boolean | ModulePreloadOptions | undefined;
 }) {
     const importLines = [];
