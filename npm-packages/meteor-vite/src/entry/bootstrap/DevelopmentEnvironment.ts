@@ -2,7 +2,7 @@ import { Meteor } from 'meteor/meteor';
 import { WebApp, WebAppInternals } from 'meteor/webapp';
 import Path from 'path';
 import { createServer, createServerModuleRunner } from 'vite';
-import { resolveMeteorViteConfig } from './lib/Config';
+import { CurrentConfig, resolveMeteorViteConfig } from './lib/Config';
 import Instance from './lib/Instance';
 
 Meteor.startup(async () => {
@@ -14,7 +14,7 @@ Meteor.startup(async () => {
     const server = await createServer(config);
     
     const modules = {
-        clientEntry: Path.relative(projectRoot, config.meteor?.clientEntry || ''),
+        clientEntry: Path.relative(projectRoot, CurrentConfig.clientEntryModule),
         serverEntry: config.meteor?.serverEntry && Path.resolve(config.meteor.serverEntry),
     }
     
