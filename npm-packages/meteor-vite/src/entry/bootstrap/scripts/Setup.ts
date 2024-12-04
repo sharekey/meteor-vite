@@ -1,5 +1,6 @@
 import FS from 'node:fs';
 import Path from 'node:path';
+import type { ModulePreloadOptions } from 'vite';
 import { MeteorViteError } from '../../../error/MeteorViteError';
 import { homepage } from '../../../utilities/Constants';
 import Logger, { createSimpleLogger } from '../../../utilities/Logger';
@@ -99,13 +100,13 @@ export function serverMainModule({ meteorMainModule, viteMainModule }: {
     return CurrentConfig.serverProductionProxyModule;
 }
 
-export function clientMainModule({ viteMainModule, polyfillModulePreload }: {
+export function clientMainModule({ viteMainModule, modulePreload }: {
     viteMainModule?: string | undefined;
-    polyfillModulePreload?: boolean | undefined;
+    modulePreload?: boolean | ModulePreloadOptions | undefined;
 }) {
     const importLines = [];
     
-    if (polyfillModulePreload !== false) {
+    if (typeof modulePreload === 'object' && modulePreload.polyfill !== false) {
         importLines.push(`import "vite/modulepreload-polyfill"`);
     }
     
