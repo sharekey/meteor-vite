@@ -32,7 +32,7 @@ Meteor.startup(async () => {
         await runner.import(modules.serverEntry);
     }
     
-    // ⚡[Client/React] Add React HMR preamble
+    // ⚡ [Client/React] Add React HMR preamble
     if (needsReactPreamble) {
         WebAppInternals.registerBoilerplateDataCallback('react-preamble', (req, data) => {
             data.dynamicHead = data.dynamicHead || '';
@@ -60,12 +60,13 @@ Meteor.startup(async () => {
             return `<script src="${url}" type="module" crossorigin></script>`
         });
         
-        WebApp.handlers.use(server.middlewares);
         WebAppInternals.registerBoilerplateDataCallback('vite', (req, data) => {
             data.dynamicHead = data.dynamicHead || '';
             data.dynamicHead += scriptTags.join('\n');
         })
     }
     
+    // ⚡ [Vite] Bind Vite to Meteor's Express app to serve modules and assets to clients.
+    WebApp.handlers.use(server.middlewares);
     Instance.printUrls(config);
 })
