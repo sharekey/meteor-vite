@@ -105,8 +105,17 @@ export function clientMainModule({ viteMainModule, modulePreload }: {
     modulePreload?: boolean | ModulePreloadOptions | undefined;
 }) {
     const importLines = [];
+    let polyfill = true;
     
-    if (typeof modulePreload === 'object' && modulePreload.polyfill !== false) {
+    if (modulePreload === false) {
+        polyfill = false;
+    }
+    
+    if (typeof modulePreload === 'object' && modulePreload.polyfill === false) {
+        polyfill = false;
+    }
+    
+    if (polyfill) {
         importLines.push(`import "vite/modulepreload-polyfill"`);
     }
     
