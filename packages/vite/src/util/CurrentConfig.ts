@@ -32,6 +32,7 @@ export const CurrentConfig = {
     // in development mode.
     outDir: Path.join(tempDir, 'dist'),
     
+    clientEntryModule: Path.join(tempDir, 'client', '_entry.mjs'),
     serverEntryModule: Path.join(tempDir, 'server', '_entry.mjs'),
     serverProductionProxyModule: Path.join(tempDir, 'server', '_env.mjs'),
     meteorPackagesFile: Path.join(projectRoot, '.meteor', 'packages'),

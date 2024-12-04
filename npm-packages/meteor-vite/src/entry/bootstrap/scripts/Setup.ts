@@ -98,3 +98,23 @@ export function serverMainModule({ meteorMainModule, viteMainModule }: {
     FS.writeFileSync(CurrentConfig.serverProductionProxyModule, importLines.join('\n'));
     return CurrentConfig.serverProductionProxyModule;
 }
+
+export function clientMainModule({ viteMainModule, polyfillModulePreload }: {
+    viteMainModule?: string | undefined;
+    polyfillModulePreload?: boolean | undefined;
+}) {
+    const importLines = [];
+    
+    if (polyfillModulePreload !== false) {
+        importLines.push(`import "vite/modulepreload-polyfill"`);
+    }
+    
+    if (viteMainModule) {
+        importLines.push(
+            `import ${JSON.stringify(Path.resolve(CurrentConfig.projectRoot, viteMainModule))}`,
+        )
+    }
+    
+    FS.writeFileSync(CurrentConfig.clientEntryModule, importLines.join('\n'));
+    return CurrentConfig.clientEntryModule;
+}
