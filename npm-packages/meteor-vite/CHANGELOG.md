@@ -1,5 +1,12 @@
 # meteor-vite
 
+## 3.1.1
+
+### Patch Changes
+
+- 7f19e6c9: Emit an informational exception if Meteor build plugin is missing a client entry module runtime setting. Addresses an issue where updating meteor-vite without updating the build plugin to a version where version validation was added.
+  - Added missing `semver` package to dependencies.
+
 ## 3.1.0
 
 ### Minor Changes
