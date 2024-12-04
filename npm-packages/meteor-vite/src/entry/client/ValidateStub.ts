@@ -42,9 +42,11 @@ export function validateStub(stubbedPackage: any, { exportKeys, packageName, req
     
     errors.forEach((error, i) => {
         if (warnOnly) {
+            showErrorOverlay(error);
             return console.warn(error);
         }
         if (errors.length - 1 >= i) {
+            showErrorOverlay(error);
             throw error;
         }
         console.error(error);
@@ -53,8 +55,11 @@ export function validateStub(stubbedPackage: any, { exportKeys, packageName, req
 }
 
 class MeteorViteError extends Error {
+    public readonly footer: string;
+    
     constructor(message: string, { packageName, requestId, exportName }: ErrorMetadata) {
-        const footerLines = [
+        super(message);
+        this.footer = [
             `⚡ Affected package: ${packageName}`,
             `⚡ Export name: { ${exportName} }`,
             `⚡ Vite Request ID: ${requestId}`,
@@ -65,11 +70,10 @@ class MeteorViteError extends Error {
             `🔓  At your own risk, you can disable validation for the '${packageName}' package`,
             `    This may allow the app to continue running, but can lead to other things breaking.`,
             `    ${PackageJson.homepage}#stub-validation`,
-        ].join('\n')
+        ].join('\n');
         
-        super(message);
         this.name = `[meteor-vite] ⚠️ ${this.constructor.name}`
-        this.stack += `\n\n${footerLines}`
+        this.stack += `\n\n${this.footer}`;
     }
 }
 
@@ -87,4 +91,23 @@ export interface StubValidatorOptions extends Pick<StubValidationSettings, 'warn
      * export {}
      */
     exportKeys: string[];
+}
+
+function showErrorOverlay(error: Error) {
+    if (!globalThis.window) {
+        return;
+    }
+    
+    if ('footer' in error) {
+        error.message = `${error.message}\n${error.footer}`
+    }
+    
+    const ErrorOverlay = customElements.get('vite-error-overlay');
+    
+    if (!ErrorOverlay) {
+        return;
+    }
+    
+    const overlay = new ErrorOverlay(error);
+    document.body.appendChild(overlay);
 }
