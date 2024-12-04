@@ -81,6 +81,11 @@ function injectServerEntryImport(mainModule: string | undefined) {
     ].join('\n'));
 }
 
+function writeToPathSync(path: string, content: string) {
+    FS.mkdirSync(Path.dirname(path), { recursive: true });
+    FS.writeFileSync(path, content);
+}
+
 export function serverMainModule({ meteorMainModule, viteMainModule }: {
     meteorMainModule: string | undefined,
     viteMainModule?: string | undefined;
@@ -96,7 +101,7 @@ export function serverMainModule({ meteorMainModule, viteMainModule }: {
         )
     }
     
-    FS.writeFileSync(CurrentConfig.serverProductionProxyModule, importLines.join('\n'));
+    writeToPathSync(CurrentConfig.serverProductionProxyModule, importLines.join('\n'));
     return CurrentConfig.serverProductionProxyModule;
 }
 
@@ -125,6 +130,6 @@ export function clientMainModule({ viteMainModule, modulePreload }: {
         )
     }
     
-    FS.writeFileSync(CurrentConfig.clientEntryModule, importLines.join('\n'));
+    writeToPathSync(CurrentConfig.clientEntryModule, importLines.join('\n'));
     return CurrentConfig.clientEntryModule;
 }
