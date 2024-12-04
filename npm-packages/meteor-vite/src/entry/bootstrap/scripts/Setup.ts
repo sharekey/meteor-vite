@@ -10,9 +10,16 @@ import { CurrentConfig } from '../lib/Config';
 const logger = createSimpleLogger('Setup');
 
 export function setupProject() {
+    validateVersions();
     cleanupPreviousBuilds();
     prepareServerEntry();
     // Create entry modules for the server.
+}
+
+function validateVersions() {
+    logger.info(`jorgenvatle:vite v${global.meteorVite?.version}`);
+    
+    // Todo: run validation
 }
 
 /**
