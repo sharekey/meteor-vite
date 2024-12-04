@@ -19,13 +19,12 @@ export function setupProject() {
 }
 
 function validateVersions() {
-    const { version: meteorPackageVersion } = global._meteorVite || {};
-    if (!meteorPackageVersion) {
+    if (!CurrentConfig.buildPluginVersion) {
         logger.warn(`Could not retrieve version from jorgenvatle:vite. This could mean it's out of date. Try running ${pc.yellow('meteor update jorgenvatle:vite')} to update it`);
         return;
     }
     
-    logger.info(`jorgenvatle:vite v${meteorPackageVersion}`);
+    logger.info(`jorgenvatle:vite v${CurrentConfig.buildPluginVersion}`);
     logger.info(`meteor-vite v${npmPackageVersion}`);
     
     const expectedVersion = {
@@ -39,7 +38,7 @@ function validateVersions() {
         logger.warn(`meteor-vite is out of date! Try updating it: ${command}`)
     }
     
-    if (!satisfies(meteorPackageVersion, `^${expectedVersion.meteorPackage.raw}`)) {
+    if (!satisfies(CurrentConfig.buildPluginVersion, `^${expectedVersion.meteorPackage.raw}`)) {
         const command = pc.yellow(`meteor update jorgenvatle:vite`);
         logger.warn(`jorgenvatle:vite is out of date! Try updating it: ${command}`)
     }
