@@ -476,3 +476,5 @@ The Vite integration comes with two dependencies that work together to enable co
   - [x] Inject Vite module preload polyfill into the Vite client entrypoint.
   - [ ] Server-side multi-page/multi-entrypoint support.
   - [ ] Handle parsing bundle manifest when using the `--production` flag.
+- [ ] Use Vite error overlay when stub validation fails client-side.
+- [ ] Validate that `meteor-vite` and `jorgenvatle:vite` both have matching compatible versions. 
