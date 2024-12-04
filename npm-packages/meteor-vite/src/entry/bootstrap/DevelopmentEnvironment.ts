@@ -6,9 +6,6 @@ import { resolveMeteorViteConfig } from './lib/Config';
 import Instance from './lib/Instance';
 
 Meteor.startup(async () => {
-    Instance.printWelcomeMessage();
-    Instance.logger.success('Initializing Vite Dev Server...');
-    
     const { projectRoot } = globalThis.MeteorViteRuntimeConfig;
     const { config, needsReactPreamble } = await resolveMeteorViteConfig({
         mode: 'development',
