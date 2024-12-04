@@ -22,5 +22,7 @@ Package.onUse((api) => {
         'ecmascript'
     ]);
 
+    global.meteorVite = { version: Package._packageSource.version };
+
     api.mainModule('dist/package-runtime.mjs', ['server'], { bare: false });
 });

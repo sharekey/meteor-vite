@@ -8,4 +8,10 @@ declare global {
     namespace globalThis {
         var MeteorViteRuntimeConfig: (typeof CurrentConfig) & MeteorViteRuntimeConfig;
     }
+    
+    namespace global {
+        var meteorVite: undefined | {
+            version: string;
+        }
+    }
 }
