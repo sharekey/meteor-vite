@@ -14,7 +14,9 @@ Meteor.startup(async () => {
     const server = await createServer(config);
     
     const modules = {
-        clientEntry: Path.relative(projectRoot, CurrentConfig.clientEntryModule),
+        clientEntry: Path.relative(projectRoot,
+            CurrentConfig.clientEntryModule || config.meteor.clientEntry /* <- Addresses older versions of jorgenvatle:vite */
+        ),
         serverEntry: config.meteor?.serverEntry && Path.resolve(config.meteor.serverEntry),
     }
     
