@@ -18,6 +18,10 @@ export function setupProject() {
 
 function validateVersions() {
     logger.info(`jorgenvatle:vite v${global.meteorVite?.version}`);
+    const expectedVersion = {
+        meteorPackage: '1.0.2',
+        npmPackage: '3.1.0'
+    }
     
     // Todo: run validation
 }
