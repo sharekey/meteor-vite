@@ -89,7 +89,8 @@ async function setVersion(newVersion) {
 }
 
 async function publish() {
-    const { version } = await parsePackageJson();
+    const packageJson = await parsePackageJson();
+    const version = packageJson.version;
 
     logger.info(`⚡  Publishing ${meteorPackage.name}...`);
 
@@ -115,6 +116,8 @@ async function publish() {
 
     logger.info(`🚀  Published to Atmosphere: `)
     logger.info(` L ${meteorPackage.name}@${version}`)
+    packageJson.name = packageJson.name.replace('_', ':');
+    await FS.writeFile(meteorPackage.packageJsonPath, JSON.stringify(packageJson));
 }
 
 function shell(command, options) {
