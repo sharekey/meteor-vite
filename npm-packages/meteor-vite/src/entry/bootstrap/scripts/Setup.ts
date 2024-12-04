@@ -19,7 +19,7 @@ export function setupProject() {
 }
 
 function validateVersions() {
-    const { version: meteorPackageVersion } = global._meteorVite;
+    const { version: meteorPackageVersion } = global._meteorVite || {};
     if (!meteorPackageVersion) {
         logger.warn(`Could not retrieve version from jorgenvatle:vite. This could mean it's out of date. Try running ${pc.yellow('meteor update jorgenvatle:vite')} to update it`);
         return;
