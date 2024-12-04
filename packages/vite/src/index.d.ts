@@ -10,7 +10,8 @@ declare global {
     }
     
     namespace global {
-        var meteorVite: undefined | {
+        var _meteorVite: undefined | {
+            name: string;
             version: string;
         }
     }
