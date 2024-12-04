@@ -64,6 +64,7 @@ export function meteorWorker(config: PartialPluginOptions): PluginOption {
             resolveId,
             config: (userConfig) =>  {
                 const pluginSettings = mergeMeteorSettings(userConfig, {
+                    _configSource: 'plugin',
                     meteorStubs: {
                         packageJsonPath: 'package.json',
                         meteor: {
