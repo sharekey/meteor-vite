@@ -1,5 +1,18 @@
 # meteor-vite
 
+## 3.1.0
+
+### Minor Changes
+
+- e0b26ddf: Inject module preload polyfill in client entrypoints unless explicitly disabled in Vite config.
+  - Use built-in Vite error overlay when stub validation fails
+  - Validate that versions for `meteor-vite` and the `jorgenvatle:vite` build plugin are compatible.
+
+### Patch Changes
+
+- 910e16f5: Emit warning message when using deprecated Vite plugin configuration format.
+  - https://github.com/JorgenVatle/meteor-vite/issues/247#issuecomment-2513052765
+
 ## 3.0.1
 
 ### Patch Changes

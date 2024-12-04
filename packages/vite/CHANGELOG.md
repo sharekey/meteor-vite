@@ -1,5 +1,12 @@
 # jorgenvatle_vite
 
+## 1.0.2
+
+### Patch Changes
+
+- c875e845: Add client entry module to runtime config
+  - Bind package version to build plugin context
+
 ## 1.0.1
 
 ### Patch Changes
