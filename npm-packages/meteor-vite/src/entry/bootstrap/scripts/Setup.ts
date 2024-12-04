@@ -17,7 +17,14 @@ export function setupProject() {
 }
 
 function validateVersions() {
-    logger.info(`jorgenvatle:vite v${global.meteorVite?.version}`);
+    const { version } = global._meteorVite;
+    if (!version) {
+        logger.warn(`Could not retrieve version from jorgenvatle:vite. This could mean it's out of date. Try running ${pc.yellow('meteor update jorgenvatle:vite')} to update it`);
+        return;
+    }
+    
+    logger.info(`jorgenvatle:vite v${version}`);
+    
     const expectedVersion = {
         meteorPackage: '1.0.2',
         npmPackage: '3.1.0'
