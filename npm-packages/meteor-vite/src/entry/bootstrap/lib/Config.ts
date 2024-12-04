@@ -63,6 +63,11 @@ export async function resolveMeteorViteConfig(
         }
     }
     
+    if (!userConfig.meteor._configSource) {
+        Instance.logger.warn('Make sure you configure MeteorVite using the Vite plugin, not the old top-level `meteor` config property.')
+        Instance.logger.warn('See the readme for an example: https://github.com/JorgenVatle/meteor-vite?tab=readme-ov-file#vite-config')
+    }
+    
     const config = {
         ...inlineConfig,
         meteor: userConfig.meteor,
