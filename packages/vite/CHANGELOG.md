@@ -1,5 +1,11 @@
 # jorgenvatle_vite
 
+## 1.0.3
+
+### Patch Changes
+
+- 37cd1228: Use package.json instead of global variable for determining current version of jorgenvatle:vite
+
 ## 1.0.2
 
 ### Patch Changes

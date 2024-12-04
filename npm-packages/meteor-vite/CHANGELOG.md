@@ -1,5 +1,11 @@
 # meteor-vite
 
+## 3.1.2
+
+### Patch Changes
+
+- 37cd1228: Use package.json instead of global variable for determining current version of jorgenvatle:vite
+
 ## 3.1.1
 
 ### Patch Changes
