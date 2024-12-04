@@ -6,6 +6,8 @@ import { homepage } from '../../../utilities/Constants';
 import Logger, { createSimpleLogger } from '../../../utilities/Logger';
 import pc from 'picocolors';
 import { CurrentConfig } from '../lib/Config';
+import { satisfies, parse, SemVer } from 'semver';
+import { version as npmPackageVersion } from '../../../utilities/Constants';
 
 const logger = createSimpleLogger('Setup');
 
@@ -17,20 +19,29 @@ export function setupProject() {
 }
 
 function validateVersions() {
-    const { version } = global._meteorVite;
-    if (!version) {
+    const { version: meteorPackageVersion } = global._meteorVite;
+    if (!meteorPackageVersion) {
         logger.warn(`Could not retrieve version from jorgenvatle:vite. This could mean it's out of date. Try running ${pc.yellow('meteor update jorgenvatle:vite')} to update it`);
         return;
     }
     
-    logger.info(`jorgenvatle:vite v${version}`);
+    logger.info(`jorgenvatle:vite v${meteorPackageVersion}`);
     
     const expectedVersion = {
-        meteorPackage: '1.0.2',
-        npmPackage: '3.1.0'
+        meteorPackage: parse('1.0.2')!,
+        npmPackage: parse('3.1.0')!,
     }
     
-    // Todo: run validation
+    if (!satisfies(npmPackageVersion, `^${expectedVersion.npmPackage.raw}`)) {
+        const { minor, major } = expectedVersion.npmPackage;
+        const command = pc.yellow(`npm i meteor-vite@${minor}.${major}`);
+        logger.warn(`meteor-vite is out of date! Try updating it: ${command}`)
+    }
+    
+    if (!satisfies(meteorPackageVersion, `^${expectedVersion.meteorPackage.raw}`)) {
+        const command = pc.yellow(`meteor update jorgenvatle:vite`);
+        logger.warn(`jorgenvatle:vite is out of date! Try updating it: ${command}`)
+    }
 }
 
 /**
