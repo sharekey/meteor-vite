@@ -55,11 +55,12 @@ export function validateStub(stubbedPackage: any, { exportKeys, packageName, req
 }
 
 class MeteorViteError extends Error {
-    public readonly footer: string;
-    
     constructor(message: string, { packageName, requestId, exportName }: ErrorMetadata) {
         super(message);
-        this.footer = [
+
+        this.name = `[meteor-vite] ⚠️ ${this.constructor.name}`;
+        this.message = [
+            message,
             `⚡ Affected package: ${packageName}`,
             `⚡ Export name: { ${exportName} }`,
             `⚡ Vite Request ID: ${requestId}`,
@@ -70,10 +71,8 @@ class MeteorViteError extends Error {
             `🔓  At your own risk, you can disable validation for the '${packageName}' package`,
             `    This may allow the app to continue running, but can lead to other things breaking.`,
             `    ${PackageJson.homepage}#stub-validation`,
-        ].join('\n');
-        
-        this.name = `[meteor-vite] ⚠️ ${this.constructor.name}`
-        this.stack += `\n\n${this.footer}`;
+            '',
+        ].join('\n')
     }
 }
 
