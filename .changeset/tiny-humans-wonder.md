@@ -3,3 +3,4 @@
 ---
 
 Emit warning message when using deprecated Vite plugin configuration format.
+- #247
