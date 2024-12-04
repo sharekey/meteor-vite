@@ -72,6 +72,7 @@ async function applyVersion() {
 
     await setVersion(release.newVersion);
 
+    await shell(`rm ${CHANGESET_STATUS_FILE}`);
     await shell(`git add ${meteorPackage.packageJsPath}`);
     await shell(`git commit -m 'Bump ${meteorPackage.name} version to ${release.newVersion}'`);
 }
