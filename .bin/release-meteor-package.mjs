@@ -8,8 +8,7 @@ const PACKAGE_NAME_REGEX = /name:\s*'(?<packageName>(?<author>[\w\-._]+):(?<name
 const PACKAGE_VERSION_REGEX = /version:\s*'(?<version>[\d\w.+-]+)'\s*,/;
 const CHANGESET_STATUS_FILE = 'changeset-status.json';
 const meteorPackage = {
-    releaseName: 'vite',
-    username: 'jorgenvatle',
+    name: 'jorgenvatle:vite',
     packageJsPath: Path.join(repoPath, './packages/vite/package.js'),
     packageJsonPath: Path.join(repoPath, './packages/vite/package.json'),
 };
@@ -62,36 +61,36 @@ async function applyVersion() {
     const { releases } = await FS.readFile(`${CHANGESET_STATUS_FILE}`, 'utf-8')
                                  .then((content) => JSON.parse(content));
 
-    const release = releases.find(({ name }) => name === meteorPackage.releaseName);
+    const release = releases.find(({ name }) => name === meteorPackage.name.replace(':', '_'));
 
     if (!release) {
-        logger.info('⚠️  No pending releases found for %s', meteorPackage.releaseName);
+        logger.info('⚠️  No pending releases found for %s', meteorPackage.name);
         return;
     }
 
-    logger.info(`ℹ️  New version ${release.newVersion} for ${meteorPackage.releaseName} detected`);
+    logger.info(`ℹ️  New version ${release.newVersion} for ${meteorPackage.name} detected`);
 
     await setVersion(release.newVersion);
 
     await shell(`git add ${meteorPackage.packageJsPath}`);
-    await shell(`git commit -m 'Bump ${meteorPackage.releaseName} version to ${release.newVersion}'`);
+    await shell(`git commit -m 'Bump ${meteorPackage.name} version to ${release.newVersion}'`);
 }
 
 async function setVersion(newVersion) {
     const { rawContent, version, name } = await parsePackageJs(meteorPackage.packageJsPath);
     if (!version) {
-        throw new Error(`Unable to read version from ${meteorPackage.releaseName} package.js`);
+        throw new Error(`Unable to read version from ${meteorPackage.name} package.js`);
     }
     const patchedPackageJs = rawContent.replace(PACKAGE_VERSION_REGEX, `version: '${newVersion}',`);
     await FS.writeFile(meteorPackage.packageJsPath, patchedPackageJs);
 
-    logger.info(`✅  Changed ${meteorPackage.releaseName} (${name}) version from v${version} to v${newVersion}\n`);
+    logger.info(`✅  Changed ${meteorPackage.name} (${name}) version from v${version} to v${newVersion}\n`);
 }
 
 async function publish() {
     const { version } = await parsePackageJson();
 
-    logger.info(`⚡  Publishing ${meteorPackage.releaseName}...`);
+    logger.info(`⚡  Publishing ${meteorPackage.name}...`);
 
     if (await isPublished(version)) {
         logger.info(`⚠️  Version ${version} is already published to Atmosphere. Skipping...`);
@@ -114,7 +113,7 @@ async function publish() {
     });
 
     logger.info(`🚀  Published to Atmosphere: `)
-    logger.info(` L ${meteorPackage.username}:${meteorPackage.releaseName}@${version}`)
+    logger.info(` L ${meteorPackage.name}@${version}`)
 }
 
 function shell(command, options) {
@@ -165,7 +164,7 @@ function shell(command, options) {
  * }>}
  */
 async function getPublishedVersions() {
-    const json = execFileSync('meteor', ['show', `${meteorPackage.username}:${meteorPackage.releaseName}`, '--show-all', '--ejson']).toString();
+    const json = execFileSync('meteor', ['show', `${meteorPackage.name}`, '--show-all', '--ejson']).toString();
     return JSON.parse(json);
 }
 
