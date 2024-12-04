@@ -6,7 +6,7 @@ import { homepage } from '../../../utilities/Constants';
 import Logger, { createSimpleLogger } from '../../../utilities/Logger';
 import pc from 'picocolors';
 import { CurrentConfig } from '../lib/Config';
-import { satisfies, parse, SemVer } from 'semver';
+import { satisfies, parse } from 'semver';
 import { version as npmPackageVersion } from '../../../utilities/Constants';
 
 const logger = createSimpleLogger('Setup');
