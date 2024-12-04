@@ -1,5 +1,11 @@
 # jorgenvatle_vite
 
+## 1.0.4
+
+### Patch Changes
+
+- 705a3d51: [Release] Rewrite package name after release to use consistent naming for releases on GitHub
+
 ## 1.0.3
 
 ### Patch Changes
