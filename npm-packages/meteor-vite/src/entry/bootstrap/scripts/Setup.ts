@@ -26,6 +26,7 @@ function validateVersions() {
     }
     
     logger.info(`jorgenvatle:vite v${meteorPackageVersion}`);
+    logger.info(`meteor-vite v${npmPackageVersion}`);
     
     const expectedVersion = {
         meteorPackage: parse('1.0.2')!,
