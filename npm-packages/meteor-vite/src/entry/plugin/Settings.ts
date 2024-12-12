@@ -66,6 +66,16 @@ export interface PluginSettings<
     tempDir?: string;
     
     /**
+     * Normally Meteor-Vite will omit any source maps from your build output, even if source maps are explicitly
+     * enabled in your Vite config. Normally you wouldn't want to expose source maps to the public. But if you
+     * have appropriate access control configured or your app is for internal use, it can be useful to enable.
+     *
+     * You also need to enable source maps in your Vite build config.
+     * {@link https://vite.dev/config/build-options.html#build-sourcemap}
+     */
+    exposeSourceMaps?: boolean;
+    
+    /**
      * Settings for controlling how stubs created by Meteor-Vite are validated.
      * These settings only apply in a development environment. Once the app is bundled for production, runtime
      * stub validation is disabled.
