@@ -63,7 +63,9 @@ export async function buildForProduction() {
                 // Appending our own temporary file extension on output files
                 // to help Meteor identify files to be processed by our compiler plugin.
                 if (originalFilePath.endsWith('map')) {
-                    return;
+                    if (config.meteor.exposeSourceMaps !== true) {
+                        return;
+                    }
                 }
                 FS.renameSync(originalFilePath, filePath);
                 logger.debug(`Renamed file: ${filePath.replace(ext, pc.yellow(ext))}`);
