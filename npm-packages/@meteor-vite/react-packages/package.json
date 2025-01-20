@@ -1,0 +1,38 @@
+{
+  "name": "react-packages",
+  "description": "Meteor packages for a great React developer experience",
+  "scripts": {
+    "lint": "eslint . || true"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/meteor/react-packages.git"
+  },
+  "keywords": [
+    "meteor",
+    "react"
+  ],
+  "author": "Tom Colemna",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/meteor/react-packages/issues"
+  },
+  "homepage": "https://github.com/meteor/react-packages#readme",
+  "dependencies": {
+    "eslint-config-airbnb": "^18.2.1",
+    "eslint-plugin-jsx-a11y": "^6.4.1"
+  },
+  "eslintConfig": {
+    "extends": "airbnb"
+  },
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^5.54.1",
+    "eslint": "^8.35.0",
+    "eslint-config-standard-with-typescript": "^34.0.0",
+    "eslint-plugin-import": "^2.27.5",
+    "eslint-plugin-n": "^15.6.1",
+    "eslint-plugin-promise": "^6.1.1",
+    "eslint-plugin-react": "^7.32.2",
+    "typescript": "^4.9.5"
+  }
+}
