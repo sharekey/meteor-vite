@@ -10,5 +10,6 @@
     <fileColor scope="Svelte (example)" color="402929" />
     <fileColor scope="Vite-Bundler (atmosphere)" color="273e08" />
     <fileColor scope="React (example)" color="263c6b" />
+    <fileColor scope="npm-packages" color="Gray" />
   </component>
 </project>
