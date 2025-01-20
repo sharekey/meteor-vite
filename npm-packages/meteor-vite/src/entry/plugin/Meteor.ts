@@ -77,12 +77,19 @@ export function meteorWorker(config: PartialPluginOptions): PluginOption {
                             buildProgramsPath: Path.join(METEOR_LOCAL_DIR, 'build', 'programs'),
                             isopackPath: Path.join(METEOR_LOCAL_DIR, 'isopacks'),
                         },
-                        debug: !!process.env.METEOR_VITE_STUBS_DEBUG
+                        debug: !!process.env.METEOR_VITE_STUBS_DEBUG,
                     },
                     tempDir: Path.join(METEOR_LOCAL_DIR, 'vite'),
                     stubValidation: {
                         warnOnly: process.env.NODE_ENV === 'production',
                         disabled: false,
+                        ignorePackages: [
+                            // These packages have exports that are intentionally left as undefined
+                            // Causing false-positive validation warnings.
+                            // https://github.com/JorgenVatle/meteor-vite/issues/246
+                            'roles',
+                            'alanning:roles'
+                        ]
                     }
                 }, config);
                 
