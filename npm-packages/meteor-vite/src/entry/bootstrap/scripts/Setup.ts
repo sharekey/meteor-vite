@@ -64,7 +64,7 @@ function prepareServerEntry() {
     FS.mkdirSync(Path.dirname(CurrentConfig.serverEntryModule), { recursive: true });
     FS.writeFileSync(
         Path.join(
-            Path.dirname(CurrentConfig.serverEntryModule),
+            CurrentConfig.tempDir,
             '.gitignore'
         ),
         '*'
