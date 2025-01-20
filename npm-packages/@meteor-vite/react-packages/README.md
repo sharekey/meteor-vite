@@ -1,5 +1,5 @@
 # Meteor react-packages (npm)
-> This is a npm-published fork of the official Meteor [`react-packages`](https://github.com/meteor/react-packages) repository.
+> This is a npm-published fork of the [official Meteor `react-packages`](https://github.com/meteor/react-packages) repository.
 > This allows us leave bundling of React up to Vite, instead of relying on Meteor's bundling system. Giving a little 
 > bit more flexibility in terms of configuration through Vite.
 > 
