@@ -13,7 +13,7 @@ import type { StubValidationSettings } from '../plugin/Settings';
  * rather than just an undefined check.
  */
 export function validateStub(stubbedPackage: any, { exportKeys, packageName, requestId, warnOnly }: StubValidatorOptions) {
-    let debug = !!globalThis?.process?.env.ENABLE_DEBUG_LOGS || (globalThis?.Meteor?.isClient && !globalThis.Meteor.isProduction);
+    const debug = !!globalThis?.process?.env.ENABLE_DEBUG_LOGS || (globalThis?.Meteor?.isClient && !globalThis.Meteor.isProduction);
     
     if (debug) {
         console.debug('Meteor-Vite package validation:', {
