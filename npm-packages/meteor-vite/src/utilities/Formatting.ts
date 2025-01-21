@@ -17,3 +17,12 @@ export const Colorize = {
 export function formatImportPath(path: string) {
     return Path.posix.join(...path.split(Path.sep));
 }
+
+/**
+ * Create a module import string for the provided path.
+ * Normalizes import paths to handle platform-specific path formatting.
+ * @param path Module/import path
+ */
+export function moduleImport(path: string) {
+    return `import ${JSON.stringify(formatImportPath(path))}`;
+}
