@@ -6,7 +6,7 @@ import type { RollupOutput, RollupWatcher } from 'rollup';
 import { createBuilder, type InlineConfig, mergeConfig, version } from 'vite';
 import { MeteorViteError } from '../../../error/MeteorViteError';
 
-import { Colorize } from '../../../utilities/Formatting';
+import { Colorize, moduleImport } from '../../../utilities/Formatting';
 import Logger, { BuildLogger } from '../../../utilities/Logger';
 import type { MeteorStubsSettings, ProjectJson, ResolvedMeteorViteConfig } from '../../plugin/Settings';
 import { CurrentConfig, resolveMeteorViteConfig } from '../lib/Config';
@@ -124,7 +124,7 @@ function addServerEntryImport({ filePath }: {
         return;
     }
     
-    FS.writeFileSync(serverEntryModule, [`import ${JSON.stringify(importPath)}`, originalContent].join('\n'));
+    FS.writeFileSync(serverEntryModule, [moduleImport(importPath), originalContent].join('\n'));
     
     return {
         importPath,
