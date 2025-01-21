@@ -26,3 +26,12 @@ function formatImportPath(path: string) {
 export function moduleImport(path: string) {
     return `import ${JSON.stringify(formatImportPath(path))}`;
 }
+
+/**
+ * Check whether the provided module content has an import for the provided path.
+ * @param module
+ */
+export function hasModuleImport(module: { content: string, path: string }) {
+    const expectedContent = formatImportPath(module.path);
+    return module.content.includes(expectedContent);
+}
