@@ -3,7 +3,7 @@ import Path from 'node:path';
 import type { ModulePreloadOptions } from 'vite';
 import { MeteorViteError } from '../../../error/MeteorViteError';
 import { homepage } from '../../../utilities/Constants';
-import { moduleImport } from '../../../utilities/Formatting';
+import { hasModuleImport, moduleImport } from '../../../utilities/Formatting';
 import Logger, { createSimpleLogger } from '../../../utilities/Logger';
 import pc from 'picocolors';
 import { CurrentConfig } from '../lib/Config';
@@ -89,7 +89,7 @@ function injectServerEntryImport(mainModule: string | undefined) {
     const originalContent = FS.readFileSync(mainModule, 'utf-8');
     const importPath = Path.relative(Path.dirname(mainModule), CurrentConfig.serverEntryModule);
     
-    if (originalContent.includes(importPath)) {
+    if (hasModuleImport({ content: originalContent, path: importPath })) {
         return;
     }
     
