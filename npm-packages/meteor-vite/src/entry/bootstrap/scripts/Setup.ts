@@ -126,8 +126,9 @@ export function serverMainModule({ meteorMainModule, viteMainModule }: {
     ];
     
     if (viteMainModule) {
+        const path = formatImportPath(Path.resolve(CurrentConfig.projectRoot, viteMainModule));
         importLines.push(
-            `import ${JSON.stringify(Path.resolve(CurrentConfig.projectRoot, viteMainModule))}`,
+            `import ${JSON.stringify(path)}`,
         )
     }
     
