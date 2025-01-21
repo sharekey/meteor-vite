@@ -14,7 +14,7 @@ export const Colorize = {
  * format.
  * @param path File/import path
  */
-export function formatImportPath(path: string) {
+function formatImportPath(path: string) {
     return Path.posix.join(...path.split(Path.sep));
 }
 
