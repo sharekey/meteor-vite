@@ -1,5 +1,28 @@
 # meteor-vite
 
+## 3.2.0
+
+### Minor Changes
+
+- 689c8cb7: Default configuration improvements
+
+  - Disable debug logs by default in production
+
+    - https://github.com/JorgenVatle/meteor-vite/issues/275
+
+  - Disable stub validation warnings for packages with known undefined exports
+    - https://github.com/JorgenVatle/meteor-vite/issues/246
+
+- 0bdafcff: Add plugin option for exposing source maps through the Meteor WebApp in production.
+
+### Patch Changes
+
+- 493a0bd4: Normalize generated import paths to address bad import paths on Windows.
+
+  - https://github.com/JorgenVatle/meteor-vite/issues/281
+
+- 41837c35: Place .gitignore file for temporary Vite bundle modules in temp dir root instead of the parent directory of the server entry. Addresses a concern where these temporary files might get accidentally commited into version control.
+
 ## 3.1.2
 
 ### Patch Changes
