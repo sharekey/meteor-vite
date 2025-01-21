@@ -156,7 +156,7 @@ export function clientMainModule({ viteMainModule, modulePreload }: {
     
     if (viteMainModule) {
         importLines.push(
-            `import ${JSON.stringify(Path.resolve(CurrentConfig.projectRoot, viteMainModule))}`,
+            moduleImport(Path.resolve(CurrentConfig.projectRoot, viteMainModule))
         )
     }
     
