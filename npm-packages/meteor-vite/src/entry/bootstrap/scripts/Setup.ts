@@ -3,6 +3,7 @@ import Path from 'node:path';
 import type { ModulePreloadOptions } from 'vite';
 import { MeteorViteError } from '../../../error/MeteorViteError';
 import { homepage } from '../../../utilities/Constants';
+import { formatImportPath } from '../../../utilities/Formatting';
 import Logger, { createSimpleLogger } from '../../../utilities/Logger';
 import pc from 'picocolors';
 import { CurrentConfig } from '../lib/Config';
@@ -104,7 +105,7 @@ function injectServerEntryImport(mainModule: string | undefined) {
         ` *`,
         ` * More info: https://github.com/JorgenVatle/meteor-vite#lazy-loaded-meteor-packages`,
         ` **/`,
-        `import ${JSON.stringify(importPath)}`,
+        `import ${JSON.stringify(formatImportPath(importPath))}`,
         '/** End of vite auto-imports **/',
         originalContent,
     ].join('\n'));
