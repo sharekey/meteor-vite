@@ -3,7 +3,7 @@ import Path from 'node:path';
 import type { ModulePreloadOptions } from 'vite';
 import { MeteorViteError } from '../../../error/MeteorViteError';
 import { homepage } from '../../../utilities/Constants';
-import { formatImportPath } from '../../../utilities/Formatting';
+import { moduleImport } from '../../../utilities/Formatting';
 import Logger, { createSimpleLogger } from '../../../utilities/Logger';
 import pc from 'picocolors';
 import { CurrentConfig } from '../lib/Config';
@@ -105,7 +105,7 @@ function injectServerEntryImport(mainModule: string | undefined) {
         ` *`,
         ` * More info: https://github.com/JorgenVatle/meteor-vite#lazy-loaded-meteor-packages`,
         ` **/`,
-        `import ${JSON.stringify(formatImportPath(importPath))}`,
+        moduleImport(importPath),
         '/** End of vite auto-imports **/',
         originalContent,
     ].join('\n'));
@@ -126,9 +126,8 @@ export function serverMainModule({ meteorMainModule, viteMainModule }: {
     ];
     
     if (viteMainModule) {
-        const path = formatImportPath(Path.resolve(CurrentConfig.projectRoot, viteMainModule));
         importLines.push(
-            `import ${JSON.stringify(path)}`,
+            moduleImport(Path.resolve(CurrentConfig.projectRoot, viteMainModule))
         )
     }
     
