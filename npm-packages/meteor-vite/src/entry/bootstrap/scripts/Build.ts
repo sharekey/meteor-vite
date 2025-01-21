@@ -6,7 +6,7 @@ import type { RollupOutput, RollupWatcher } from 'rollup';
 import { createBuilder, type InlineConfig, mergeConfig, version } from 'vite';
 import { MeteorViteError } from '../../../error/MeteorViteError';
 
-import { Colorize, moduleImport } from '../../../utilities/Formatting';
+import { Colorize, hasModuleImport, moduleImport } from '../../../utilities/Formatting';
 import Logger, { BuildLogger } from '../../../utilities/Logger';
 import type { MeteorStubsSettings, ProjectJson, ResolvedMeteorViteConfig } from '../../plugin/Settings';
 import { CurrentConfig, resolveMeteorViteConfig } from '../lib/Config';
@@ -120,7 +120,7 @@ function addServerEntryImport({ filePath }: {
     const originalContent = FS.readFileSync(serverEntryModule, 'utf-8');
     const importPath = Path.relative(Path.dirname(serverEntryModule), filePath);
     
-    if (originalContent.includes(importPath)) {
+    if (hasModuleImport({ content: originalContent, path: importPath })) {
         return;
     }
     
