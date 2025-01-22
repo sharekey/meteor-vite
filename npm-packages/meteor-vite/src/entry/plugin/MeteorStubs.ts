@@ -59,7 +59,7 @@ export const MeteorStubs: () => Promise<Plugin> = setupPlugin(async () => {
                 'Request duration': `${Date.now() - timeStarted}ms`,
             });
             
-            if (request.context.pluginSettings.meteorStubs.debug || globalThis?.MeteorViteRuntimeConfig?.productionPreview) {
+            if (request.context.pluginSettings.meteorStubs.debug) {
                 await storeDebugSnippet({ request, stubTemplate: template, meteorPackage })
             }
             
