@@ -38,10 +38,6 @@ export const MeteorStubs: () => Promise<Plugin> = setupPlugin(async () => {
                 await request.forceImport();
             }
             
-            if (globalThis?.MeteorViteRuntimeConfig?.productionPreview) {
-                return loadCachedStubTemplate(request);
-            }
-            
             const meteorPackage = await MeteorPackage.parse({
                 filePath: request.context.file.sourcePath,
                 fileContent: request.context.file.content,
@@ -94,10 +90,6 @@ async function storeDebugSnippet({ request, stubTemplate, meteorPackage }: {
     request.log.info('Stored debug snippets', {
         File: Colorize.filepath(baseDir),
     })
-}
-
-async function loadCachedStubTemplate(request: ViteLoadRequest) {
-    return FS.readFile(request.cache.templatePath, 'utf-8');
 }
 
 /**
