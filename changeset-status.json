@@ -4,55 +4,22 @@
       "releases": [
         {
           "name": "meteor-vite",
-          "type": "minor"
-        }
-      ],
-      "summary": "Default configuration improvements\n\n- Disable debug logs by default in production\n  -  https://github.com/JorgenVatle/meteor-vite/issues/275\n  \n- Disable stub validation warnings for packages with known undefined exports\n  -  https://github.com/JorgenVatle/meteor-vite/issues/246",
-      "id": "good-cougars-march"
-    },
-    {
-      "releases": [
-        {
-          "name": "meteor-vite",
           "type": "patch"
         }
       ],
-      "summary": "Normalize generated import paths to address bad import paths on Windows.\n\n- https://github.com/JorgenVatle/meteor-vite/issues/281",
-      "id": "happy-feet-tan"
-    },
-    {
-      "releases": [
-        {
-          "name": "meteor-vite",
-          "type": "minor"
-        }
-      ],
-      "summary": "Add plugin option for exposing source maps through the Meteor WebApp in production.",
-      "id": "plenty-poets-eat"
-    },
-    {
-      "releases": [
-        {
-          "name": "meteor-vite",
-          "type": "patch"
-        }
-      ],
-      "summary": "Place .gitignore file for temporary Vite bundle modules in temp dir root instead of the parent directory of the server entry. Addresses a concern where these temporary files might get accidentally commited into version control.",
-      "id": "six-moles-cry"
+      "summary": "Disable old stub template caching when running in simulated production mode (`meteor run --production`)\n\nFixes:\n- https://github.com/JorgenVatle/meteor-vite/issues/283",
+      "id": "big-planes-explain"
     }
   ],
   "releases": [
     {
       "name": "meteor-vite",
-      "type": "minor",
-      "oldVersion": "3.1.2",
+      "type": "patch",
+      "oldVersion": "3.2.0",
       "changesets": [
-        "good-cougars-march",
-        "happy-feet-tan",
-        "plenty-poets-eat",
-        "six-moles-cry"
+        "big-planes-explain"
       ],
-      "newVersion": "3.2.0"
+      "newVersion": "3.2.1"
     }
   ]
 }
