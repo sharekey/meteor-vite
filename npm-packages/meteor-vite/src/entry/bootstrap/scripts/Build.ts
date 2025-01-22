@@ -39,38 +39,42 @@ export async function buildForProduction() {
         logger.info(`Preparing ${Colorize.arch(context)} bundle...`);
         const list = fileNames[context] || [];
         
-        
-        const result = normalizeBuildOutput(
-            await builder.build(environment)
-        );
-        
-        fileNames[context] = list;
-        
-        result.forEach(({ output }) => {
-            output.forEach((chunk) => {
-                const originalFilePath = Path.resolve(environment.config.build.outDir, chunk.fileName);
-                const ext = `.${CurrentConfig.bundleFileExtension}`;
-                let filePath = originalFilePath + ext;
-                
-                if (environment.name === 'server') {
-                    filePath = originalFilePath;
-                }
-                
-                if ('isEntry' in chunk) {
-                    list.push({ filePath, originalFilePath, isEntry: chunk.isEntry });
-                }
-                
-                // Appending our own temporary file extension on output files
-                // to help Meteor identify files to be processed by our compiler plugin.
-                if (originalFilePath.endsWith('map')) {
-                    if (config.meteor.exposeSourceMaps !== true) {
-                        return;
+        try {
+            const result = normalizeBuildOutput(
+                await builder.build(environment)
+            );
+            
+            fileNames[context] = list;
+            
+            result.forEach(({ output }) => {
+                output.forEach((chunk) => {
+                    const originalFilePath = Path.resolve(environment.config.build.outDir, chunk.fileName);
+                    const ext = `.${CurrentConfig.bundleFileExtension}`;
+                    let filePath = originalFilePath + ext;
+                    
+                    if (environment.name === 'server') {
+                        filePath = originalFilePath;
                     }
-                }
-                FS.renameSync(originalFilePath, filePath);
-                logger.debug(`Renamed file: ${filePath.replace(ext, pc.yellow(ext))}`);
+                    
+                    if ('isEntry' in chunk) {
+                        list.push({ filePath, originalFilePath, isEntry: chunk.isEntry });
+                    }
+                    
+                    // Appending our own temporary file extension on output files
+                    // to help Meteor identify files to be processed by our compiler plugin.
+                    if (originalFilePath.endsWith('map')) {
+                        if (config.meteor.exposeSourceMaps !== true) {
+                            return;
+                        }
+                    }
+                    FS.renameSync(originalFilePath, filePath);
+                    logger.debug(`Renamed file: ${filePath.replace(ext, pc.yellow(ext))}`);
+                });
             });
-        });
+        } catch (error) {
+            logger.error(error);
+            throw error;
+        }
     }
     
     fileNames['server']?.forEach((file) => {
