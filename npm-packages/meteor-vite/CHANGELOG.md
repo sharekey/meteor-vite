@@ -1,5 +1,15 @@
 # meteor-vite
 
+## 3.2.1
+
+### Patch Changes
+
+- 56b7b000: Disable old stub template caching when running in simulated production mode (`meteor run --production`)
+
+  Fixes:
+
+  - https://github.com/JorgenVatle/meteor-vite/issues/283
+
 ## 3.2.0
 
 ### Minor Changes
