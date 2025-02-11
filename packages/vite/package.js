@@ -21,6 +21,7 @@ Package.onUse((api) => {
         'isobuild:compiler-plugin@1.0.0',
         'ecmascript',
         'server-render',
+        'webapp'
     ]);
 
     api.mainModule('dist/package-runtime.mjs', ['server'], { bare: false });
