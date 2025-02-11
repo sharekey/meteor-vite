@@ -1,5 +1,5 @@
 import { Meteor } from 'meteor/meteor';
-import { WebApp, WebAppInternals } from 'meteor/webapp';
+import { WebApp } from 'meteor/webapp';
 import { onPageLoad } from 'meteor/server-render';
 import Path from 'path';
 import { createServer, createServerModuleRunner } from 'vite';
