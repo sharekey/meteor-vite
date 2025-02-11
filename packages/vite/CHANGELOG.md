@@ -1,5 +1,11 @@
 # jorgenvatle_vite
 
+## 1.1.2
+
+### Patch Changes
+
+- e9bca4cb: Prevent call stack recursion for internal Meteor boilerplate method
+
 ## 1.1.1
 
 ### Patch Changes
