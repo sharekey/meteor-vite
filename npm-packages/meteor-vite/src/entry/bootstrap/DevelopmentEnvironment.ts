@@ -51,20 +51,16 @@ Meteor.startup(async () => {
     }
     
     // ⚡ [Client] Inject module import scripts into the Meteor WebApp boilerplate.
-    {
-        Instance.logger.info('Registering boilerplate data callback...');
-        const scriptTags = [
+    onPageLoad((sink) => {
+        const scripts = [
             Path.join(config.base, '@vite/client'),
             Path.join(config.base, modules.clientEntry)
-        ].map((url) => {
-            return `<script src="${url}" type="module" crossorigin></script>`
-        });
+        ];
         
-        WebAppInternals.registerBoilerplateDataCallback('vite', (req, data) => {
-            data.dynamicHead = data.dynamicHead || '';
-            data.dynamicHead += scriptTags.join('\n');
-        })
-    }
+        scripts.forEach((url) => {
+            sink.appendToHead(`<script src="${url}" type="module" crossorigin></script>`);
+        });
+    })
     
     // ⚡ [Vite] Bind Vite to Meteor's Express app to serve modules and assets to clients.
     WebApp.handlers.use(server.middlewares);
