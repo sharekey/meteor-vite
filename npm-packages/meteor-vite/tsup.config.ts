@@ -13,7 +13,6 @@ export default defineConfig([
             './src/entry/bootstrap/RuntimeHMR.ts',
             './src/entry/bootstrap/scripts/index.ts',
             './src/entry/bootstrap/ProductionEnvironment.ts',
-            './src/entry/bootstrap/CommonEnvironment.ts',
         ],
         outDir: 'dist',
         format: 'esm',
