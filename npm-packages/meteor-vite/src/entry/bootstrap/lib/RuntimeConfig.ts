@@ -12,7 +12,7 @@ export const RuntimeConfigCollection = new Mongo.Collection<RuntimeConfigDocumen
 });
 
 export async function setBoilerplate(config: Omit<RuntimeConfigDocument, '_id'>) {
-    await RuntimeConfigCollection.updateAsync({
+    await RuntimeConfigCollection.upsertAsync({
         _id: 'boilerplate'
     }, {
         $set: config
