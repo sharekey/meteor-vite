@@ -17,7 +17,11 @@ Meteor.startup(async () => {
         if (body?.length) {
             // Todo: meteor/server-render'si mplementation for this appears to be affected by a hoisting issue in Cordova.
             //  - report to meteor?
-            sink.appendToBody(body.join('\n'));
+            try {
+                sink.appendToBody(body.join('\n'));
+            } catch (error) {
+                console.error('Failed to append content to page! Are you using Cordova?', error)
+            }
         }
     })
 });
