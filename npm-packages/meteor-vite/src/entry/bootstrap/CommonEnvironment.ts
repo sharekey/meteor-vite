@@ -8,6 +8,16 @@ export const RuntimeConfigCollection = new Mongo.Collection<{
     connection: null,
 });
 
+export async function setScripts(scripts: string[]) {
+    await RuntimeConfigCollection.updateAsync({
+        _id: 'scripts'
+    }, {
+        $set: {
+            scripts,
+        }
+    })
+}
+
 Meteor.startup(async () => {
     // We can rely on the Meteor WebApp for server rendering in browser contexts.
     if (!Meteor.isCordova && !Meteor.isServer) {
@@ -21,6 +31,6 @@ Meteor.startup(async () => {
         if (!document) {
             throw new Meteor.Error(404, 'Failed to load Meteor-Vite client scripts!');
         }
-        sink.appendToHead(document.scripts);
+        sink.appendToHead(document.scripts.join('\n'));
     })
 })
