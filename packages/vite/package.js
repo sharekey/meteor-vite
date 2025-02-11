@@ -25,4 +25,5 @@ Package.onUse((api) => {
     ]);
 
     api.mainModule('dist/package-runtime.mjs', ['server'], { bare: false });
+    api.addFiles('src/entry/bootstrap-boilerplate.js');
 });
