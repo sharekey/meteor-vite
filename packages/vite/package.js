@@ -24,6 +24,7 @@ Package.onUse((api) => {
         'webapp',
     ]);
 
-    api.mainModule('dist/package-runtime.mjs', ['server'], { bare: false });
+    api.mainModule('dist/server-runtime.mjs', ['server'], { bare: false });
+    api.mainModule('dist/client-runtime.mjs', ['client'], { bare: false });
     api.addFiles('src/dependencies.js'); // un-lazy-load dependencies.
 });
