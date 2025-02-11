@@ -41,7 +41,7 @@ Meteor.startup(async () => {
         Path.join(config.base, '@vite/client'),
         Path.join(config.base, modules.clientEntry)
     ].map((url) => {
-        let absoluteUrl = url;
+        let absoluteUrl = url.replaceAll(Path.win32.sep, Path.posix.sep);
         
         if (!absoluteUrl.match(/https?:/)) {
             absoluteUrl = Meteor.absoluteUrl(url)
