@@ -1,5 +1,6 @@
 import { Meteor } from 'meteor/meteor';
-import { WebAppInternals, WebApp } from 'meteor/webapp';
+import { WebApp } from 'meteor/webapp';
+import { onPageLoad } from 'meteor/server-render';
 import { ViteProductionBoilerplate } from './boilerplate/Production';
 import Logger from '../../utilities/Logger';
 import type { ViteManifestFile } from './scripts/Build';
@@ -32,21 +33,21 @@ Meteor.startup(async () => {
     //  add a custom asset route where we have better control over caching and CORS rules.
     boilerplate.makeViteAssetsCacheable();
     
-    WebAppInternals.registerBoilerplateDataCallback('vite', async (req, data) => {
+    onPageLoad((sink) => {
         try {
             const { dynamicBody, dynamicHead } = boilerplate.getBoilerplate();
             
             if (dynamicHead) {
-                data.dynamicHead = `${data.dynamicHead || ''}\n${dynamicHead}`;
+                sink.appendToHead(dynamicHead);
             }
             
             if (dynamicBody) {
-                data.dynamicBody = `${data.dynamicBody || ''}\n${dynamicBody}`;
+                sink.appendToBody(dynamicBody);
             }
         } catch (error) {
             console.warn(error);
             throw error;
         }
-    });
+    })
 })
 
