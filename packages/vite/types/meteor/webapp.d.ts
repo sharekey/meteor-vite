@@ -1,6 +1,5 @@
 import type HTTP from 'http';
 import type * as Connect from 'connect';
-import { StaticFiles } from 'meteor/webapp';
 
 declare module 'meteor/webapp' {
     namespace WebAppInternals {
