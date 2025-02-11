@@ -58,6 +58,7 @@ Meteor.startup(async () => {
     }
     
     await setBoilerplate({ head: scripts });
+    await import('./CommonEnvironment');
     
     // ⚡ [Vite] Bind Vite to Meteor's Express app to serve modules and assets to clients.
     WebApp.handlers.use(server.middlewares);

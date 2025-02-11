@@ -37,6 +37,7 @@ Meteor.startup(async () => {
     await setBoilerplate({
         head: dynamicHead ? [dynamicHead] : [],
         body: dynamicBody ? [dynamicBody] : [],
-    })
+    });
+    await import('./CommonEnvironment');
 })
 
