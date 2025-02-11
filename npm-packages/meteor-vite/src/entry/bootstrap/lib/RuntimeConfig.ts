@@ -1,30 +1,27 @@
 import { Meteor } from 'meteor/meteor';
-import { Mongo } from 'meteor/mongo';
 
-interface RuntimeConfigDocument {
-    _id: 'boilerplate',
+interface BoilerplateData {
     head?: string[];
     body?: string[];
 }
 
-export const RuntimeConfigCollection = new Mongo.Collection<RuntimeConfigDocument>('_meteor-vite', {
-    connection: null,
-});
+const BOILERPLATE: BoilerplateData = {
+    head: [] as string[],
+    body: [] as string[],
+}
 
-export async function setBoilerplate(config: Omit<RuntimeConfigDocument, '_id'>) {
-    await RuntimeConfigCollection.upsertAsync({
-        _id: 'boilerplate'
-    }, {
-        $set: config
-    })
+export async function setBoilerplate(config: BoilerplateData) {
+    Object.assign(BOILERPLATE, config);
 }
 
 export async function getBoilerplate() {
-    const document = await RuntimeConfigCollection.findOneAsync({
-        _id: 'boilerplate',
-    });
-    if (!document) {
-        throw new Meteor.Error(404, 'Failed to load Meteor-Vite boilerplate!');
-    }
-    return document;
+    return BOILERPLATE;
 }
+
+Meteor.startup(async () => {
+    Meteor.methods({
+        '_meteor-vite.getBoilerplate'() {
+            return getBoilerplate();
+        }
+    })
+})
