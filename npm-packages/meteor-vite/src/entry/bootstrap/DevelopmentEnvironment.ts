@@ -35,10 +35,18 @@ Meteor.startup(async () => {
         await runner.import(modules.serverEntry);
     }
     
+    
+    // ⚡ [Client] Prepare module import scripts for the Meteor app HTML.
+    const scripts = [
+        Path.join(config.base, '@vite/client'),
+        Path.join(config.base, modules.clientEntry)
+    ].map((url) => {
+        return `<script src="${url}" type="module" crossorigin></script>`;
+    });
+    
     // ⚡ [Client/React] Add React HMR preamble
     if (needsReactPreamble) {
-        onPageLoad((sink) => {
-            sink.appendToHead(`
+        scripts.unshift(`
                 <script type="module">
                     import RefreshRuntime from "${Meteor.absoluteUrl(Path.join(config.base, '@react-refresh'))}"
                     RefreshRuntime.injectIntoGlobalHook(window)
@@ -47,19 +55,10 @@ Meteor.startup(async () => {
                     window.__vite_plugin_react_preamble_installed__ = true
                 </script>
             `)
-        })
     }
     
-    // ⚡ [Client] Inject module import scripts into the Meteor WebApp boilerplate.
     onPageLoad((sink) => {
-        const scripts = [
-            Path.join(config.base, '@vite/client'),
-            Path.join(config.base, modules.clientEntry)
-        ];
-        
-        scripts.forEach((url) => {
-            sink.appendToHead(`<script src="${url}" type="module" crossorigin></script>`);
-        });
+        sink.appendToHead(scripts.join('\n'));
     })
     
     // ⚡ [Vite] Bind Vite to Meteor's Express app to serve modules and assets to clients.
