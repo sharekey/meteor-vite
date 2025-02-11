@@ -19,10 +19,6 @@ export default defineConfig(() => ({
     minify: false,
     sourcemap: true,
     format: 'esm',
-    noExternal: ['meteor'],
-    esbuildPlugins: [
-        EsbuildPluginMeteorStubs
-    ]
 }))
 
 export const EsbuildPluginMeteorStubs = meteorImportStubs({
