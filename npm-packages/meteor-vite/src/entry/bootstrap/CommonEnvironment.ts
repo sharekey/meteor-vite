@@ -1,23 +1,7 @@
 import { Meteor } from 'meteor/meteor';
 import { onPageLoad } from 'meteor/server-render';
+import { getBoilerplate } from './lib/RuntimeConfig';
 
-interface RuntimeConfigDocument {
-    _id: 'boilerplate',
-    head?: string[];
-    body?: string[];
-}
-
-export const RuntimeConfigCollection = new Mongo.Collection<RuntimeConfigDocument>('_meteor-vite', {
-    connection: null,
-});
-
-export async function setBoilerplate(config: Omit<RuntimeConfigDocument, '_id'>) {
-    await RuntimeConfigCollection.updateAsync({
-        _id: 'boilerplate'
-    }, {
-        $set: config
-    })
-}
 
 Meteor.startup(async () => {
     // We can rely on the Meteor WebApp for server rendering in browser contexts.
@@ -26,17 +10,13 @@ Meteor.startup(async () => {
     }
     
     onPageLoad(async (sink) => {
-        const document = await RuntimeConfigCollection.findOneAsync({
-            _id: 'boilerplate',
-        });
-        if (!document) {
-            throw new Meteor.Error(404, 'Failed to load Meteor-Vite client scripts!');
+        const { head, body } = await getBoilerplate();
+        
+        if (head) {
+            sink.appendToHead(head.join('\n'));
         }
-        if (document.head) {
-            sink.appendToHead(document.head.join('\n'));
-        }
-        if (document.body) {
-            sink.appendToBody(document.body.join('\n'));
+        if (body) {
+            sink.appendToBody(body.join('\n'));
         }
     })
 })

@@ -2,7 +2,7 @@ import { Meteor } from 'meteor/meteor';
 import { WebApp } from 'meteor/webapp';
 import Path from 'path';
 import { createServer, createServerModuleRunner } from 'vite';
-import { setBoilerplate } from './CommonEnvironment';
+import { setBoilerplate } from './lib/RuntimeConfig';
 import { CurrentConfig, resolveMeteorViteConfig } from './lib/Config';
 import Instance from './lib/Instance';
 

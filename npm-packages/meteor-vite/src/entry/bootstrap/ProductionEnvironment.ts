@@ -2,7 +2,7 @@ import { Meteor } from 'meteor/meteor';
 import { WebApp } from 'meteor/webapp';
 import { ViteProductionBoilerplate } from './boilerplate/Production';
 import Logger from '../../utilities/Logger';
-import { setBoilerplate } from './CommonEnvironment';
+import { setBoilerplate } from './lib/RuntimeConfig';
 import type { ViteManifestFile } from './scripts/Build';
 
 Meteor.startup(async () => {
