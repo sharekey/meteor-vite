@@ -1,4 +1,5 @@
 import { Meteor } from 'meteor/meteor';
+import { Mongo } from 'meteor/mongo';
 
 interface RuntimeConfigDocument {
     _id: 'boilerplate',
