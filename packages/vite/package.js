@@ -22,7 +22,6 @@ Package.onUse((api) => {
         'ecmascript',
         'server-render',
         'webapp',
-        'mongo',
     ]);
 
     api.mainModule('dist/package-runtime.mjs', ['server'], { bare: false });
