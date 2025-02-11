@@ -26,6 +26,7 @@ export default defineConfig(() => ({
 
 export const EsbuildPluginMeteorStubs = meteorImportStubs({
     'meteor': () => 'export const Meteor = PackageStub.Meteor || globalThis.Meteor',
+    'mongo': () => `export { Mongo } = PackageStub`,
     'isobuild': () => `const PluginGlobal = Plugin; export { PluginGlobal as Plugin }`,
     'server-render': () => `export const { onPageLoad } = PackageStub`,
     'webapp': () => [
