@@ -1,5 +1,11 @@
 # meteor-vite
 
+## 3.3.1
+
+### Patch Changes
+
+- 2dffe083: Catch and log exceptions during server render appendToBody calls in the client. Workaround for hoisting issue in Cordova environments.
+
 ## 3.3.0
 
 ### Minor Changes
