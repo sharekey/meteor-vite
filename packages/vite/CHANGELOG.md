@@ -1,5 +1,11 @@
 # jorgenvatle_vite
 
+## 1.1.1
+
+### Patch Changes
+
+- f1f8b590: Fix bad meteor/server-render client module stub
+
 ## 1.1.0
 
 ### Minor Changes
