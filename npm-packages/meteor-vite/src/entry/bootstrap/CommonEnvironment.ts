@@ -20,6 +20,9 @@ Meteor.startup(async () => {
             try {
                 sink.appendToBody(body.join('\n'));
             } catch (error) {
+                if (Meteor.isServer) {
+                    throw error;
+                }
                 console.error('Failed to append content to page! Are you using Cordova?', error)
             }
         }
