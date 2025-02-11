@@ -1,5 +1,14 @@
 # jorgenvatle_vite
 
+## 1.1.0
+
+### Minor Changes
+
+- 5082a594: Use `meteor/server-render` instead of WebAppInternals for rendering Vite module markup
+
+  - Load Vite HTML snippets client-side when running in Cordova.
+    - Addresses https://github.com/JorgenVatle/meteor-vite/issues/280
+
 ## 1.0.4
 
 ### Patch Changes
