@@ -1,5 +1,6 @@
 import { Meteor } from 'meteor/meteor';
 import { WebApp, WebAppInternals } from 'meteor/webapp';
+import { onPageLoad } from 'meteor/server-render';
 import Path from 'path';
 import { createServer, createServerModuleRunner } from 'vite';
 import { CurrentConfig, resolveMeteorViteConfig } from './lib/Config';
@@ -36,11 +37,8 @@ Meteor.startup(async () => {
     
     // ⚡ [Client/React] Add React HMR preamble
     if (needsReactPreamble) {
-        WebAppInternals.registerBoilerplateDataCallback('react-preamble', (req, data) => {
-            data.dynamicHead = data.dynamicHead || '';
-            
-            // language=html
-            data.dynamicHead += `
+        onPageLoad((sink) => {
+            sink.appendToHead(`
                 <script type="module">
                     import RefreshRuntime from "${Meteor.absoluteUrl(Path.join(config.base, '@react-refresh'))}"
                     RefreshRuntime.injectIntoGlobalHook(window)
@@ -48,7 +46,7 @@ Meteor.startup(async () => {
                     window.$RefreshSig$ = () => (type) => type
                     window.__vite_plugin_react_preamble_installed__ = true
                 </script>
-            `;
+            `)
         })
     }
     
