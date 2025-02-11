@@ -60,7 +60,7 @@ function meteorImportStubs(packages: {
                 const stubSymbol = `PackageStub_${stubId++}`;
                 return {
                     contents: `
-                        const PackageStub = Package?.[${JSON.stringify(packageName)}];
+                        const ${stubSymbol} = Package?.[${JSON.stringify(packageName)}];
                         ${stubFunction(stubSymbol)}
                     `
                 }
