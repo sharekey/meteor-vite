@@ -2,7 +2,7 @@ import { Meteor } from 'meteor/meteor';
 import { WebApp } from 'meteor/webapp';
 import Path from 'path';
 import { createServer, createServerModuleRunner } from 'vite';
-import { setScripts } from './CommonEnvironment';
+import { setBoilerplate } from './CommonEnvironment';
 import { CurrentConfig, resolveMeteorViteConfig } from './lib/Config';
 import Instance from './lib/Instance';
 
@@ -57,7 +57,7 @@ Meteor.startup(async () => {
             `)
     }
     
-    await setScripts(scripts);
+    await setBoilerplate({ head: scripts });
     
     // ⚡ [Vite] Bind Vite to Meteor's Express app to serve modules and assets to clients.
     WebApp.handlers.use(server.middlewares);
