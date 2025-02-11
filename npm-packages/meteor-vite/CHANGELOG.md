@@ -1,5 +1,11 @@
 # meteor-vite
 
+## 3.3.2
+
+### Patch Changes
+
+- 64865d95: Use absolute URLs for dev server Vite entry snippets
+
 ## 3.3.1
 
 ### Patch Changes
