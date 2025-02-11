@@ -41,7 +41,13 @@ Meteor.startup(async () => {
         Path.join(config.base, '@vite/client'),
         Path.join(config.base, modules.clientEntry)
     ].map((url) => {
-        return `<script src="${url}" type="module" crossorigin></script>`;
+        let absoluteUrl = url;
+        
+        if (!absoluteUrl.match(/https?:/)) {
+            absoluteUrl = Meteor.absoluteUrl(url)
+        }
+        
+        return `<script src="${absoluteUrl}" type="module" crossorigin></script>`;
     });
     
     // ⚡ [Client/React] Add React HMR preamble
