@@ -25,6 +25,9 @@ export async function getBoilerplate(): Promise<BoilerplateData> {
 Meteor.startup(async () => {
     Meteor.methods({
         '_meteor-vite.getBoilerplate'() {
+            if (!Meteor.isServer) {
+                return BOILERPLATE;
+            }
             return getBoilerplate();
         }
     })
