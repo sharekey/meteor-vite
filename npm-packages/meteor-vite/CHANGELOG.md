@@ -1,5 +1,18 @@
 # meteor-vite
 
+## 3.3.0
+
+### Minor Changes
+
+- 5082a594: Use `meteor/server-render` instead of WebAppInternals for rendering Vite module markup
+
+  - Load Vite HTML snippets client-side when running in Cordova.
+    - Addresses https://github.com/JorgenVatle/meteor-vite/issues/280
+
+### Patch Changes
+
+- 233ccb1d: Fix issue where projects without a devDependencies field in `package.json` would cause a runtime TypeError.
+
 ## 3.2.1
 
 ### Patch Changes
