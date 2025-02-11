@@ -20,8 +20,4 @@ if (Meteor.isServer) {
     })
 }
 
-Meteor.startup(async () => {
-    await runBootstrapScript('setupBoilerplate'); // Initialize Vite HTML boilerplate
-})
-
 export {}
