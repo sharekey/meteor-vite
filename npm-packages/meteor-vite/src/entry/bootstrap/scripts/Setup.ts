@@ -11,7 +11,7 @@ import pc from 'picocolors';
 import { CurrentConfig } from '../lib/Config';
 import { satisfies, parse } from 'semver';
 import { version as npmPackageVersion } from '../../../utilities/Constants';
-import { getBoilerplate } from '../lib/RuntimeConfig';
+
 
 const logger = createSimpleLogger('Setup');
 
@@ -30,6 +30,7 @@ export function setupBoilerplate() {
         }
         
         onPageLoad(async (sink) => {
+            const { getBoilerplate } = await import('../lib/RuntimeConfig');
             const { head, body } = await getBoilerplate();
             
             if (head) {
