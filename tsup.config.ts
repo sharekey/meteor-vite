@@ -19,12 +19,17 @@ export default defineConfig(() => ({
     minify: false,
     sourcemap: true,
     format: 'esm',
+    esbuildPlugins: [
+        meteorImportStubs({
+            'isobuild': () => `const PluginGlobal = Plugin; export { PluginGlobal as Plugin }`,
+        })
+    ],
+    noExternal: ['meteor/isobuild']
 }))
 
 export const EsbuildPluginMeteorStubs = meteorImportStubs({
     'meteor': (symbol) => `export const Meteor = ${symbol}?.Meteor || globalThis.Meteor`,
     'mongo': (symbol) => `export const { Mongo } = ${symbol} || {}`,
-    'isobuild': () => `const PluginGlobal = Plugin; export { PluginGlobal as Plugin }`,
     'server-render': (symbol) => `export const { onPageLoad } = ${symbol} || {}`,
     'webapp': (symbol) => [
         `export const WebApp = ${symbol}?.WebApp || globalThis.WebApp`,
