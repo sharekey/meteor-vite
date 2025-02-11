@@ -8,7 +8,7 @@ Package.describe({
 Package.registerBuildPlugin({
     name: 'vite',
     use: [
-        'ecmascript@0.16.9'
+        'ecmascript@0.16.9',
     ],
     sources: [
         'dist/build-plugin.mjs',
@@ -19,7 +19,8 @@ Package.onUse((api) => {
     api.versionsFrom(['3.0', '3.1']);
     api.use([
         'isobuild:compiler-plugin@1.0.0',
-        'ecmascript'
+        'ecmascript',
+        'server-render',
     ]);
 
     api.mainModule('dist/package-runtime.mjs', ['server'], { bare: false });
