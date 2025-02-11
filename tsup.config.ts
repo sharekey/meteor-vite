@@ -25,20 +25,21 @@ export default defineConfig(() => ({
 }))
 
 export const EsbuildPluginMeteorStubs = meteorImportStubs({
-    'meteor': () => 'export const Meteor = PackageStub.Meteor || globalThis.Meteor',
-    'mongo': () => `export const { Mongo } = PackageStub`,
+    'meteor': (symbol) => `export const Meteor = ${symbol}.Meteor || globalThis.Meteor`,
+    'mongo': (symbol) => `export const { Mongo } = ${symbol}`,
     'isobuild': () => `const PluginGlobal = Plugin; export { PluginGlobal as Plugin }`,
-    'server-render': () => `export const { onPageLoad } = PackageStub`,
-    'webapp': () => [
-        'export const WebApp = PackageStub.WebApp || globalThis.WebApp',
-        'export const WebAppInternals = PackageStub.WebAppInternals || globalThis.WebAppInternals',
+    'server-render': (symbol) => `export const { onPageLoad } = ${symbol}`,
+    'webapp': (symbol) => [
+        `export const WebApp = ${symbol}.WebApp || globalThis.WebApp`,
+        `export const WebAppInternals = ${symbol}.WebAppInternals || globalThis.WebAppInternals`,
     ].join('\n'),
 })
 
 function meteorImportStubs(packages: {
-    [key in string]: () => string;
+    [key in string]: (symbol: string) => string;
 }): Plugin {
     const filter = /^meteor\//;
+    let stubId = 0;
     return {
         name: 'meteor-import-stubs',
         setup(build) {
@@ -56,10 +57,11 @@ function meteorImportStubs(packages: {
                     throw new Error('Meteor package is missing stubs: ' + pc.yellow(args.path));
                 }
                 
+                const stubSymbol = `PackageStub_${stubId++}`;
                 return {
                     contents: `
-                        const PackageStub = Package?.[${JSON.stringify(packageName)}] || {};
-                        ${stubFunction()}
+                        const PackageStub = Package?.[${JSON.stringify(packageName)}];
+                        ${stubFunction(stubSymbol)}
                     `
                 }
             })
