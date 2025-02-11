@@ -1,3 +1,3 @@
 export { buildForProduction } from './Build';
-export { setupProject } from './Setup';
+export { setupProject, setupBoilerplate } from './Setup';
 export * from './InitDevServer';
