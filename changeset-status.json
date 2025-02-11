@@ -1,0 +1,25 @@
+{
+  "changesets": [
+    {
+      "releases": [
+        {
+          "name": "meteor-vite",
+          "type": "patch"
+        }
+      ],
+      "summary": "Catch and log exceptions during server render appendToBody calls in the client. Workaround for hoisting issue in Cordova environments.",
+      "id": "cool-beans-learn"
+    }
+  ],
+  "releases": [
+    {
+      "name": "meteor-vite",
+      "type": "patch",
+      "oldVersion": "3.3.0",
+      "changesets": [
+        "cool-beans-learn"
+      ],
+      "newVersion": "3.3.1"
+    }
+  ]
+}
