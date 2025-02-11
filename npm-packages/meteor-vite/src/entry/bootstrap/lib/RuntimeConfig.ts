@@ -14,8 +14,12 @@ export async function setBoilerplate(config: BoilerplateData) {
     Object.assign(BOILERPLATE, config);
 }
 
-export async function getBoilerplate() {
-    return BOILERPLATE;
+export async function getBoilerplate(): Promise<BoilerplateData> {
+    if (Meteor.isServer) {
+        return BOILERPLATE;
+    }
+    
+    return Meteor.callAsync('_meteor-vite.getBoilerplate');
 }
 
 Meteor.startup(async () => {
