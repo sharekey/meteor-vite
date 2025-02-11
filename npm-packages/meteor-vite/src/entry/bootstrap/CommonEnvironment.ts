@@ -11,10 +11,12 @@ Meteor.startup(async () => {
         const { getBoilerplate } = await import('./lib/RuntimeConfig');
         const { head, body } = await getBoilerplate();
         
-        if (head) {
+        if (head?.length) {
             sink.appendToHead(head.join('\n'));
         }
-        if (body) {
+        if (body?.length) {
+            // Todo: meteor/server-render'si mplementation for this appears to be affected by a hoisting issue in Cordova.
+            //  - report to meteor?
             sink.appendToBody(body.join('\n'));
         }
     })
