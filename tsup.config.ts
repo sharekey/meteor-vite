@@ -25,13 +25,13 @@ export default defineConfig(() => ({
 }))
 
 export const EsbuildPluginMeteorStubs = meteorImportStubs({
-    'meteor': (symbol) => `export const Meteor = ${symbol}.Meteor || globalThis.Meteor`,
-    'mongo': (symbol) => `export const { Mongo } = ${symbol}`,
+    'meteor': (symbol) => `export const Meteor = ${symbol}?.Meteor || globalThis.Meteor`,
+    'mongo': (symbol) => `export const { Mongo } = ${symbol} || {}`,
     'isobuild': () => `const PluginGlobal = Plugin; export { PluginGlobal as Plugin }`,
-    'server-render': (symbol) => `export const { onPageLoad } = ${symbol}`,
+    'server-render': (symbol) => `export const { onPageLoad } = ${symbol} || {}`,
     'webapp': (symbol) => [
-        `export const WebApp = ${symbol}.WebApp || globalThis.WebApp`,
-        `export const WebAppInternals = ${symbol}.WebAppInternals || globalThis.WebAppInternals`,
+        `export const WebApp = ${symbol}?.WebApp || globalThis.WebApp`,
+        `export const WebAppInternals = ${symbol}?.WebAppInternals || globalThis?.WebAppInternals`,
     ].join('\n'),
 })
 
@@ -60,7 +60,7 @@ function meteorImportStubs(packages: {
                 const stubSymbol = `PackageStub_${stubId++}`;
                 return {
                     contents: `
-                        const ${stubSymbol} = Package?.[${JSON.stringify(packageName)}];
+                        const ${stubSymbol} = globalThis.Package?.[${JSON.stringify(packageName)}];
                         ${stubFunction(stubSymbol)}
                     `
                 }
