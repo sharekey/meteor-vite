@@ -15,7 +15,7 @@ Meteor.startup(async () => {
     
     // Todo: retrieve base and assets dir from build config/manifest file
     const boilerplate = new ViteProductionBoilerplate({
-        base: '/vite',
+        base: import.meta.env.BASE_URL,
         assetsDir: 'vite',
         files,
     });
