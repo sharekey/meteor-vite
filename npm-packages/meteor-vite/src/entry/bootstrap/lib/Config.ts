@@ -95,7 +95,7 @@ export async function resolveMeteorViteConfig(
             }
         },
         define: {
-            __VITE_ASSETS_DIR__: 'vite',
+            __VITE_ASSETS_DIR__: JSON.stringify('vite'),
         },
         environments: {
             server: {
