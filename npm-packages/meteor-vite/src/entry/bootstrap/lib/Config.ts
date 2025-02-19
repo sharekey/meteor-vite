@@ -68,9 +68,14 @@ export async function resolveMeteorViteConfig(
         Instance.logger.warn('See the readme for an example: https://github.com/JorgenVatle/meteor-vite?tab=readme-ov-file#vite-config')
     }
     
+    let base: string = userConfig.base ?? '/vite';
+    if (command === 'build' && userConfig.meteor?.assetsBaseUrl) {
+        base = userConfig.meteor.assetsBaseUrl;
+    }
+    
     const config = {
         ...inlineConfig,
-        base: userConfig.meteor.assetsBaseUrl ?? userConfig.base ?? '/vite',
+        base,
         meteor: userConfig.meteor,
         appType: 'custom',
         server: { middlewareMode: true, },
