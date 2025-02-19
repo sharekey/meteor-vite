@@ -104,6 +104,8 @@ export function meteorWorker(config: PartialPluginOptions): PluginOption {
                     }
                 });
                 
+                userConfig.base = mergedUserConfig.base;
+                userConfig.define = mergedUserConfig.define;
                 userConfig.optimizeDeps = mergedUserConfig.optimizeDeps;
             },
             configResolved(resolvedConfig) {
