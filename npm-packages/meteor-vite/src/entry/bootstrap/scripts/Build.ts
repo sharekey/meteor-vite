@@ -47,8 +47,17 @@ export async function buildForProduction() {
             
             fileNames[context] = list;
             if (environment.name === 'client') {
-                logger.info(`Vite assets will be fetched from ${Colorize.filepath(environment.config.base)}`);
-                logger.info(`Meteor will serve these assets from ${Colorize.filepath(`/${assetsDir}`)}`);
+                const baseAssetPath = `/${assetsDir.replace(/^\/+/g, '')}`;
+                const baseCdnPath = environment.config.base;
+                
+                logger.info(`Vite assets will be fetched from ${Colorize.filepath(baseCdnPath)}`);
+                logger.info(`Meteor will serve these assets from ${Colorize.filepath(baseAssetPath)}`);
+                
+                if (baseAssetPath !== baseCdnPath) {
+                    logger.warn('The root directory for your Vite bundle appears to be different from your Vite base path');
+                    logger.warn(`Make sure you have a CDN or proxy configured to serve Meteor assets from ${Colorize.filepath(baseCdnPath)} -> ${Colorize.filepath(baseAssetPath)}`);
+                    logger.warn(`If you're not using a CDN or proxy, just remove the 'base' field in your ${Colorize.filepath('vite.config.ts')} file`);
+                }
             }
             
             result.forEach(({ output }) => {
