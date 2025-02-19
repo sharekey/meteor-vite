@@ -94,6 +94,9 @@ export async function resolveMeteorViteConfig(
                 output: fileNameTemplates('client'),
             }
         },
+        define: {
+            __VITE_ASSETS_DIR__: 'vite',
+        },
         environments: {
             server: {
                 dev: {
