@@ -13,7 +13,7 @@ import { CurrentConfig, resolveMeteorViteConfig } from '../lib/Config';
 import Instance from '../lib/Instance';
 
 export async function buildForProduction() {
-    const { config, outDir, packageJson } = await resolveMeteorViteConfig({ mode: 'production' }, 'build');
+    const { config, outDir, packageJson, assetsDir } = await resolveMeteorViteConfig({ mode: 'production' }, 'build');
     const { logger } = Instance;
     logger.info(`Building with Vite v${version}...`);
     
@@ -30,7 +30,6 @@ export async function buildForProduction() {
     
     const builder = await createBuilder(config);
     const fileNames: Partial<Record<string, { filePath: string, originalFilePath: string, isEntry?: boolean }[]>> = {};
-    const assetsDir = JSON.parse(config.define.__VITE_ASSETS_DIR__);
     
     for (const [context, environment] of Object.entries(builder.environments)) {
         if (context.toLowerCase() === 'ssr') {

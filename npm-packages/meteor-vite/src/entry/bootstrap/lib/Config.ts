@@ -73,6 +73,7 @@ export async function resolveMeteorViteConfig(
         base = userConfig.meteor.assetsBaseUrl;
     }
     
+    const assetsDir = userConfig.meteor.assetsDir ?? 'vite';
     const config = {
         ...inlineConfig,
         base,
@@ -95,7 +96,7 @@ export async function resolveMeteorViteConfig(
             }
         },
         define: {
-            __VITE_ASSETS_DIR__: JSON.stringify('vite'),
+            __VITE_ASSETS_DIR__: JSON.stringify(assetsDir),
         },
         environments: {
             server: {
@@ -150,6 +151,7 @@ export async function resolveMeteorViteConfig(
         config,
         packageJson,
         outDir,
+        assetsDir,
         needsReactPreamble,
         viteServerMainModule
     }
