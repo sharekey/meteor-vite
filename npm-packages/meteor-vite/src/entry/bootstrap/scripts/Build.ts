@@ -45,6 +45,7 @@ export async function buildForProduction() {
             );
             
             fileNames[context] = list;
+            logger.info(`Vite assets will be served from ${environment.config.base}`);
             
             result.forEach(({ output }) => {
                 output.forEach((chunk) => {
