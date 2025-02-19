@@ -95,6 +95,7 @@ export function meteorWorker(config: PartialPluginOptions): PluginOption {
                 }, config);
                 
                 const mergedUserConfig = mergeViteSettings(userConfig, {
+                    base: pluginSettings.assetsBaseUrl ?? userConfig.base ?? '/vite',
                     define: {
                         __VITE_ASSETS_DIR__: JSON.stringify(pluginSettings.assetsDir),
                     },
