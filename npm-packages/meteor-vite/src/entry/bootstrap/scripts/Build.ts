@@ -30,7 +30,7 @@ export async function buildForProduction() {
     
     const builder = await createBuilder(config);
     const fileNames: Partial<Record<string, { filePath: string, originalFilePath: string, isEntry?: boolean }[]>> = {};
-    const assetsDir = config.define.__VITE_ASSETS_DIR__;
+    const assetsDir = JSON.parse(config.define.__VITE_ASSETS_DIR__);
     
     for (const [context, environment] of Object.entries(builder.environments)) {
         if (context.toLowerCase() === 'ssr') {
