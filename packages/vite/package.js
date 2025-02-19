@@ -15,10 +15,6 @@ Package.registerBuildPlugin({
     ],
 });
 
-Npm.depends({
-    'meteor-vite': '3.3.2'
-})
-
 Package.onUse((api) => {
     api.versionsFrom(['3.0', '3.1']);
     api.use([
