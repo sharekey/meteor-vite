@@ -30,6 +30,7 @@ export async function buildForProduction() {
     
     const builder = await createBuilder(config);
     const fileNames: Partial<Record<string, { filePath: string, originalFilePath: string, isEntry?: boolean }[]>> = {};
+    const assetsDir = config.define.__VITE_ASSETS_DIR__;
     
     for (const [context, environment] of Object.entries(builder.environments)) {
         if (context.toLowerCase() === 'ssr') {
@@ -45,7 +46,10 @@ export async function buildForProduction() {
             );
             
             fileNames[context] = list;
-            logger.info(`Vite assets will be served from ${environment.config.base}`);
+            if (environment.name === 'client') {
+                logger.info(`Vite assets will be fetched from ${Colorize.filepath(environment.config.base)}`);
+                logger.info(`Meteor will serve these assets from ${Colorize.filepath(`/${assetsDir}`)}`);
+            }
             
             result.forEach(({ output }) => {
                 output.forEach((chunk) => {
@@ -100,6 +104,7 @@ export async function buildForProduction() {
             server: config.meteor.serverEntry,
         },
         outDir,
+        assetsDir,
     }
 }
 
