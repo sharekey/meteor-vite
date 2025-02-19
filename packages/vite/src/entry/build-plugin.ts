@@ -9,7 +9,7 @@ import { CurrentConfig } from '../util/CurrentConfig';
 import Logger from '../util/Logger';
 
 class CompilerPlugin {
-    constructor(public readonly config: { outDir: string }) {
+    constructor(public readonly config: { outDir: string, assetsDir: string }) {
         Logger.info('Initializing Meteor Compiler Plugin...');
     }
     processFilesForTarget(files: InputFile[]) {
@@ -20,7 +20,7 @@ class CompilerPlugin {
                     path: file.getPathInPackage(),
                 },
                 basename: this._formatFilename(file.getBasename()),
-                path: Path.join('vite', Path.relative(this.config.outDir, this._formatFilename(file.getPathInPackage()))),
+                path: Path.join(this.config.assetsDir, Path.relative(this.config.outDir, this._formatFilename(file.getPathInPackage()))),
                 arch: file.getArch(),
             }
             
@@ -77,14 +77,14 @@ else {
         }, async () => {
             try {
                 await cleanup;
-                const { outDir } = await runBootstrapScript('buildForProduction').catch((error) => {
+                const { outDir, assetsDir } = await runBootstrapScript('buildForProduction').catch((error) => {
                     if (CurrentConfig.productionPreview) {
                         return { outDir: CurrentConfig.outDir };
                     }
                     throw error;
                 });
                 
-                return new CompilerPlugin({ outDir });
+                return new CompilerPlugin({ outDir, assetsDir });
             } catch (error) {
                 Logger.error('build failed');
                 console.error(error);
