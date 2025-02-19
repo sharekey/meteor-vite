@@ -7,19 +7,19 @@
           "type": "patch"
         }
       ],
-      "summary": "Catch and log exceptions during server render appendToBody calls in the client. Workaround for hoisting issue in Cordova environments.",
-      "id": "cool-beans-learn"
+      "summary": "Use absolute URLs for dev server Vite entry snippets",
+      "id": "dirty-numbers-work"
     }
   ],
   "releases": [
     {
       "name": "meteor-vite",
       "type": "patch",
-      "oldVersion": "3.3.0",
+      "oldVersion": "3.3.1",
       "changesets": [
-        "cool-beans-learn"
+        "dirty-numbers-work"
       ],
-      "newVersion": "3.3.1"
+      "newVersion": "3.3.2"
     }
   ]
 }
