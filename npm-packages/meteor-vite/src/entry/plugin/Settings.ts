@@ -49,7 +49,7 @@ export interface PluginSettings<
     
     /**
      * Root directory to serve Vite assets from in production.
-     * Defaults to /vite-assets.
+     * Defaults to /vite.
      */
     assetsDir?: string;
     
