@@ -13,6 +13,7 @@ export class ViteProductionBoilerplate extends ViteBoilerplate {
         Meteor.settings.vite = { manifest: viteManifest };
         super();
         this.logger = createSimpleLogger('HTML Boilerplate');
+        this.logger.info(`Serving Vite assets from ${this.baseUrl}`);
     }
     
     public get assetDir() {
