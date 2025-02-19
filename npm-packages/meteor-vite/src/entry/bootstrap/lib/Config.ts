@@ -70,7 +70,7 @@ export async function resolveMeteorViteConfig(
     
     const config = {
         ...inlineConfig,
-        base: userConfig.base ?? '/vite',
+        base: userConfig.meteor.assetsBaseUrl ?? userConfig.base ?? '/vite',
         meteor: userConfig.meteor,
         appType: 'custom',
         server: { middlewareMode: true, },
