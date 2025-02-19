@@ -9,10 +9,22 @@ Meteor.startup(async () => {
     
     onPageLoad(async (sink) => {
         const { getBoilerplate } = await import('./lib/RuntimeConfig');
-        const { head, body } = await getBoilerplate();
+        const { head, body, scripts } = await getBoilerplate();
         
         if (head?.length) {
             sink.appendToHead(head.join('\n'));
+        }
+        if (scripts?.length) {
+            const urls = scripts.map((url) => {
+                if (url.match(/^https?:/)) {
+                    return url;
+                }
+                if (Meteor.isCordova) {
+                    return Meteor.absoluteUrl(url);
+                }
+                return url;
+            });
+            sink.appendToHead(urls.map((url) => `<script src="${url}" type="module" crossorigin></script>`).join('\n'))
         }
         if (body?.length) {
             // Todo: meteor/server-render'si mplementation for this appears to be affected by a hoisting issue in Cordova.

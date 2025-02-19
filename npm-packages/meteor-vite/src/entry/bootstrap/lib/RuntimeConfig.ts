@@ -3,11 +3,13 @@ import { Meteor } from 'meteor/meteor';
 interface BoilerplateData {
     head?: string[];
     body?: string[];
+    scripts?: string[];
 }
 
 const BOILERPLATE: BoilerplateData = {
-    head: [] as string[],
-    body: [] as string[],
+    head: [],
+    body: [],
+    scripts: []
 }
 
 export async function setBoilerplate(config: BoilerplateData) {
