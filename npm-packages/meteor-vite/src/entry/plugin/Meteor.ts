@@ -80,6 +80,7 @@ export function meteorWorker(config: PartialPluginOptions): PluginOption {
                         debug: !!process.env.METEOR_VITE_STUBS_DEBUG,
                     },
                     tempDir: Path.join(METEOR_LOCAL_DIR, 'vite'),
+                    assetsDir: 'vite',
                     stubValidation: {
                         warnOnly: process.env.NODE_ENV === 'production',
                         disabled: false,
@@ -94,6 +95,9 @@ export function meteorWorker(config: PartialPluginOptions): PluginOption {
                 }, config);
                 
                 const mergedUserConfig = mergeViteSettings(userConfig, {
+                    define: {
+                        __VITE_ASSETS_DIR__: JSON.stringify(pluginSettings.assetsDir),
+                    },
                     optimizeDeps: {
                         entries: [pluginSettings.clientEntry]
                     }
