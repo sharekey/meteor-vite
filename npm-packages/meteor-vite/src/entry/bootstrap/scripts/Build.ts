@@ -1,14 +1,15 @@
-import FS from 'fs';
 import { execaSync } from 'execa';
+import FS from 'fs';
 import Path from 'node:path';
 import pc from 'picocolors';
 import type { RollupOutput, RollupWatcher } from 'rollup';
-import { createBuilder, type InlineConfig, mergeConfig, version } from 'vite';
+import { createBuilder, type InlineConfig, version } from 'vite';
 import { MeteorViteError } from '../../../error/MeteorViteError';
 
 import { Colorize, hasModuleImport, moduleImport } from '../../../utilities/Formatting';
 import Logger, { BuildLogger } from '../../../utilities/Logger';
 import type { MeteorStubsSettings, ProjectJson, ResolvedMeteorViteConfig } from '../../plugin/Settings';
+import { ViteProductionBoilerplate } from '../boilerplate/Production';
 import { CurrentConfig, resolveMeteorViteConfig } from '../lib/Config';
 import Instance from '../lib/Instance';
 
@@ -113,6 +114,11 @@ export async function buildForProduction() {
         },
         outDir,
         assetsDir,
+        boilerplate: new ViteProductionBoilerplate({
+            base: process.env.METEOR_VITE_BASE_URL || import.meta.env.BASE_URL,
+            assetsDir: assetsDir,
+            files: JSON.parse(FS.readFileSync(Path.join(assetsDir, 'client.manifest.json'), 'utf8')),
+        }),
     }
 }
 

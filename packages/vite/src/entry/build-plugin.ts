@@ -106,14 +106,9 @@ else {
         }, async () => {
             try {
                 await cleanup;
-                const { outDir, assetsDir } = await runBootstrapScript('buildForProduction').catch((error) => {
-                    if (CurrentConfig.productionPreview) {
-                        return { outDir: CurrentConfig.outDir };
-                    }
-                    throw error;
-                });
+                const { outDir, assetsDir, boilerplate } = await runBootstrapScript('buildForProduction');
                 
-                return new CompilerPlugin({ outDir, assetsDir, mode: CurrentConfig.mode });
+                return new CompilerPlugin({ outDir, assetsDir, mode: CurrentConfig.mode, boilerplate });
             } catch (error) {
                 Logger.error('build failed');
                 console.error(error);
