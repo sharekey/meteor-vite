@@ -71,6 +71,7 @@ export async function resolveMeteorViteConfig(
     const config = {
         ...inlineConfig,
         meteor: userConfig.meteor,
+        base: userConfig.base,
         appType: 'custom',
         server: { middlewareMode: true, },
         configFile: userConfig.configFile,
