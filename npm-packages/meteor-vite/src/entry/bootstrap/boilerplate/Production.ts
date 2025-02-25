@@ -1,17 +1,17 @@
-import { Meteor } from 'meteor/meteor';
 import { WebAppInternals } from 'meteor/webapp';
 import { inspect } from 'node:util';
-import type { TransformedViteManifest } from '../scripts/Build';
 import Logger, { createSimpleLogger, type SimpleLogger } from '../../../utilities/Logger';
+import type { TransformedViteManifest } from '../scripts/Build';
 import { type Boilerplate, ViteBoilerplate } from './Boilerplate';
 
 export class ViteProductionBoilerplate extends ViteBoilerplate {
     
-    protected readonly logger: SimpleLogger
+    protected readonly logger: SimpleLogger;
+    protected readonly settings: Partial<{ manifest: TransformedViteManifest, imports: ManifestImports }>;
     
     constructor(public readonly viteManifest: TransformedViteManifest) {
-        Meteor.settings.vite = { manifest: viteManifest };
         super();
+        this.settings = { manifest: viteManifest };
         this.logger = createSimpleLogger('HTML Boilerplate');
         this.logger.info(`Serving Vite assets from ${this.baseUrl}`);
     }
@@ -167,8 +167,8 @@ export class ViteProductionBoilerplate extends ViteBoilerplate {
     }
     
     protected get imports(): ManifestImports {
-        if (Meteor.settings.vite?.imports) {
-            return Meteor.settings.vite.imports;
+        if (this.settings?.imports) {
+            return this.settings.imports;
         }
         
         const manifest = this.viteManifest;
@@ -239,7 +239,7 @@ export class ViteProductionBoilerplate extends ViteBoilerplate {
             modules,
         }, { depth: 4, colors: true }));
         
-        Object.assign(Meteor.settings.vite, { imports });
+        Object.assign(this.settings, { imports });
         
         return imports;
     }
