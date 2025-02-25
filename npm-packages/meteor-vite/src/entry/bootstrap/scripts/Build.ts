@@ -31,6 +31,7 @@ export async function buildForProduction() {
     
     const builder = await createBuilder(config);
     const fileNames: Partial<Record<string, { filePath: string, originalFilePath: string, isEntry?: boolean }[]>> = {};
+    let clientManifest = {};
     
     for (const [context, environment] of Object.entries(builder.environments)) {
         if (context.toLowerCase() === 'ssr') {
@@ -70,6 +71,10 @@ export async function buildForProduction() {
                         filePath = originalFilePath;
                     }
                     
+                    if (filePath.includes('client.manifest.json') && 'source' in chunk) {
+                        clientManifest = JSON.parse(chunk.source.toString());
+                    }
+                    
                     if ('isEntry' in chunk) {
                         list.push({ filePath, originalFilePath, isEntry: chunk.isEntry });
                     }
@@ -106,14 +111,6 @@ export async function buildForProduction() {
         logger.debug('Added import to server entry', summary);
     });
     
-    let files = {}
-    
-    fileNames['client']?.forEach((file) => {
-        if (!file.filePath.includes('client.manifest.json')) {
-            return;
-        }
-        files = JSON.parse(FS.readFileSync(file.filePath, 'utf8'));
-    })
     
     return {
         fileNames,
@@ -126,7 +123,7 @@ export async function buildForProduction() {
         boilerplate: new ViteProductionBoilerplate({
             base: config.base,
             assetsDir,
-            files,
+            files: clientManifest,
         }),
     }
 }
