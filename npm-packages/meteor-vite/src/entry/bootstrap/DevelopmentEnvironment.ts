@@ -6,7 +6,7 @@ import { resolveMeteorViteConfig } from './lib/Config';
 import Instance from './lib/Instance';
 
 Meteor.startup(async () => {
-    const { config, needsReactPreamble, modules } = await resolveMeteorViteConfig({
+    const { config, modules } = await resolveMeteorViteConfig({
         mode: 'development',
     }, 'serve');
     
@@ -25,38 +25,6 @@ Meteor.startup(async () => {
         
         await runner.import(modules.serverEntry);
     }
-    
-    
-    // ⚡ [Client] Prepare module import scripts for the Meteor app HTML.
-    if (!config.base) {
-        throw new Error('Unable to resolve base URL for Vite assets! Make sure you are importing meteor-vite as a plugin your Vite config');
-    }
-    const scripts = [
-        Path.join(config.base, '@vite/client'),
-        Path.join(config.base, modules.clientEntry)
-    ].map((url) => {
-        let absoluteUrl = url.replaceAll(Path.win32.sep, Path.posix.sep);
-        
-        if (!absoluteUrl.match(/https?:/)) {
-            absoluteUrl = Meteor.absoluteUrl(url)
-        }
-        
-        return `<script src="${absoluteUrl}" type="module" crossorigin></script>`;
-    });
-    
-    // ⚡ [Client/React] Add React HMR preamble
-    if (needsReactPreamble) {
-        scripts.unshift(`
-                <script type="module">
-                    import RefreshRuntime from "${Meteor.absoluteUrl(Path.join(config.base, '@react-refresh'))}"
-                    RefreshRuntime.injectIntoGlobalHook(window)
-                    window.$RefreshReg$ = () => {}
-                    window.$RefreshSig$ = () => (type) => type
-                    window.__vite_plugin_react_preamble_installed__ = true
-                </script>
-            `)
-    }
-    
     
     // ⚡ [Vite] Bind Vite to Meteor's Express app to serve modules and assets to clients.
     WebApp.handlers.use(server.middlewares);
