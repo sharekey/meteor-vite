@@ -9,8 +9,8 @@ import { CurrentConfig } from '../util/CurrentConfig';
 import Logger from '../util/Logger';
 
 class CompilerPlugin {
-    constructor(public readonly config: { outDir: string, assetsDir: string }) {
-        Logger.info('Initializing Meteor Compiler Plugin...');
+    constructor(public readonly config: { outDir: string, assetsDir: string, mode: 'production' | 'development' | string }) {
+        Logger.info(`[${config.mode}] Initializing Vite Compiler Plugin...`);
     }
     processFilesForTarget(files: InputFile[]) {
         files.forEach(file => {
@@ -25,6 +25,10 @@ class CompilerPlugin {
             }
             
             Logger.debug(`[${pc.yellow(file.getArch())}] Processing: ${fileMeta.basename}`, pc.dim(inspect({ fileMeta }, { colors: true })));
+            
+            if (this.config.mode !== 'production') {
+                return;
+            }
             
             if (fileMeta.arch.startsWith('os') && fileMeta.basename.endsWith('.entry.js')) {
                 file.addJavaScript({
@@ -84,13 +88,20 @@ else {
                     throw error;
                 });
                 
-                return new CompilerPlugin({ outDir, assetsDir });
+                return new CompilerPlugin({ outDir, assetsDir, mode: CurrentConfig.mode });
             } catch (error) {
                 Logger.error('build failed');
                 console.error(error);
                 throw error;
             }
         });
+    } else {
+        Plugin.registerCompiler({
+            filenames: [CurrentConfig.clientEntryModule, 'vite.config.ts', 'vite.config.js'],
+            extensions: [],
+        }, async () => {
+            return new CompilerPlugin({ outDir: '', assetsDir: '', mode: CurrentConfig.mode });
+        })
     }
     
    await cleanup;
