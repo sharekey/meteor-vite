@@ -124,10 +124,12 @@ else {
             filenames: [CurrentConfig.clientEntryModule, 'vite.config.ts', 'vite.config.js'],
             extensions: [],
         }, async () => {
+            const boilerplate = await runBootstrapScript('prepareDevServerBoilerplate');
             return new CompilerPlugin({
                 outDir: '',
                 assetsDir: '',
                 mode: CurrentConfig.mode,
+                boilerplate,
             });
         })
     }
