@@ -34,23 +34,31 @@ export const Info = () => {
         }
 
         return (
-            <div>
-                <h2>Learn Meteor!</h2>
-                <ul>{links.map(
-                    link => <li key={link._id}>
-                        <a href={link.url} target="_blank">{link.title}</a>
-                    </li>,
-                )}</ul>
-                <h3>Add resources</h3>
-                <form onSubmit={e => form.submit(e)}>
-                    <label>
-                        Title
-                        <input name="title" value={form.data.title} onChange={form.setData('title')} placeholder="My awesome resource.." />
+            <div class="grid gap-4">
+                <div class="py-6">
+                    <h2 class="text-2xl font-semibold pb-4">Learn Meteor!</h2>
+                    <ul class="grid gap-2">{links.map(
+                        link => <li class="flex gap-4" key={link._id}>
+                            <span class="opacity-50">-</span> <a href={link.url} target="_blank">{link.title}</a>
+                        </li>,
+                    )}</ul>
+                </div>
+
+                <div>
+                    <h3 class="text-xl font-semibold pb-2">Add resources</h3>
+                    <p class="text-slate-400 text-sm">Enter some URLs to test functionality</p>
+                </div>
+
+                <form class="grid gap-4" onSubmit={e => form.submit(e)}>
+                    <label class="flex items-center gap-6">
+                        <span class="font-semibold">Title</span>
+                        <input class="flex-grow" name="title" value={form.data.title} onChange={form.setData('title')} placeholder="My awesome resource.." />
                     </label>
-                    <label>
-                        URL
-                        <input name="url" value={form.data.url} onChange={form.setData('url')} placeholder="http://examp.." />
+                    <label class="flex items-center gap-6">
+                        <span class="font-semibold">URL</span>
+                        <input class="flex-grow"  name="url" value={form.data.url} onChange={form.setData('url')} placeholder="http://examp.." />
                     </label>
+
                     <button type="submit">Add</button>
                 </form>
             </div>

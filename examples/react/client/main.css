@@ -1,4 +1,18 @@
+@import "tailwindcss";
 body {
   padding: 10px;
   font-family: sans-serif;
+}
+
+
+button {
+  @apply bg-indigo-500 px-3 py-2 text-white  rounded-md hover:opacity-90 cursor-pointer transition;
+}
+
+input {
+  @apply bg-gray-900 py-2 px-3 rounded-md ring-gray-700/50 ring ring-inset;
+}
+
+a {
+  @apply text-blue-500 underline font-medium hover:text-blue-400 transition
 }
