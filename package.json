@@ -23,6 +23,7 @@
     "launch": "npm run example launch",
     "build": "npm run example build",
     "build:packages": "npm run build:vite && npm run build:package",
+    "watch:packages": "concurrently -k -n atmosphere,npm 'npm:build:vite -- --watch' 'cd npm-packages/meteor-vite && npm run build -- --watch'",
     "prepare": "npm run build:packages || exit 0",
     "build:vite": "tsup",
     "link": "npm run example link",
