@@ -20,10 +20,7 @@ Package.onUse((api) => {
     api.use([
         'isobuild:compiler-plugin@1.0.0',
         'ecmascript',
-        'server-render',
-        'webapp',
     ]);
 
     api.mainModule('dist/server-runtime.mjs', ['server'], { bare: false });
-    api.addFiles('dist/cordova-runtime.mjs', ['web.cordova']);
 });
