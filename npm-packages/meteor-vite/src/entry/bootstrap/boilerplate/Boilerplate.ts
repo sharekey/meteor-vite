@@ -3,5 +3,5 @@ export type Boilerplate = {
     dynamicBody?: string;
 }
 export abstract class ViteBoilerplate {
-    public abstract getBoilerplate(): Promise<Boilerplate> | Boilerplate;
+    public abstract getBoilerplate():  Boilerplate;
 }

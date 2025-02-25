@@ -1,3 +1,4 @@
+import type { ViteBoilerplate } from 'meteor-vite/bootstrap/boilerplate/Boilerplate';
 import type { InputFile } from 'meteor/isobuild';
 import { Plugin } from 'meteor/isobuild';
 import FS from 'node:fs';
@@ -9,7 +10,13 @@ import { CurrentConfig } from '../util/CurrentConfig';
 import Logger from '../util/Logger';
 
 class CompilerPlugin {
-    constructor(public readonly config: { outDir: string, assetsDir: string, mode: 'production' | 'development' | string }) {
+    protected boilerplateReady = false;
+    constructor(public readonly config: {
+        outDir: string,
+        assetsDir: string,
+        mode: 'production' | 'development' | string,
+        boilerplate: ViteBoilerplate;
+    }) {
         Logger.info(`[${config.mode}] Initializing Vite Compiler Plugin...`);
     }
     processFilesForTarget(files: InputFile[]) {
@@ -25,6 +32,23 @@ class CompilerPlugin {
             }
             
             Logger.debug(`[${pc.yellow(file.getArch())}] Processing: ${fileMeta.basename}`, pc.dim(inspect({ fileMeta }, { colors: true })));
+            
+            if (!this.boilerplateReady) {
+                const { dynamicHead, dynamicBody } = this.config.boilerplate.getBoilerplate();
+                if (dynamicHead) {
+                    file.addHtml({
+                        data: dynamicHead,
+                        section: 'head',
+                    })
+                }
+                if (dynamicBody) {
+                    file.addHtml({
+                        data: dynamicBody,
+                        section: 'body',
+                    })
+                }
+                this.boilerplateReady = true;
+            }
             
             if (this.config.mode !== 'production') {
                 return;
@@ -100,7 +124,11 @@ else {
             filenames: [CurrentConfig.clientEntryModule, 'vite.config.ts', 'vite.config.js'],
             extensions: [],
         }, async () => {
-            return new CompilerPlugin({ outDir: '', assetsDir: '', mode: CurrentConfig.mode });
+            return new CompilerPlugin({
+                outDir: '',
+                assetsDir: '',
+                mode: CurrentConfig.mode,
+            });
         })
     }
     
