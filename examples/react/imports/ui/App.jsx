@@ -16,7 +16,7 @@ export const App = () => (
                           </p>
                       </div>
 
-                      <Hello/>
+                      <Hello />
                       <Info/>
                   </div>
               </div>
