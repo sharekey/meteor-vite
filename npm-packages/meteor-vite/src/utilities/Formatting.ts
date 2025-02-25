@@ -1,5 +1,6 @@
 import Path from 'path';
 import pc from 'picocolors';
+import Logger from './Logger';
 
 export const Colorize = {
     filepath: pc.cyan,
@@ -41,25 +42,30 @@ export function viteAssetUrl({ arch, path, base }: {
     path: string;
     base?: string;
 }): string {
-    if (path.match(/^https?:/)) {
-        return path;
+    try {
+        if (path.match(/^https?:/)) {
+            return path;
+        }
+        
+        if (base?.match(/^https?:/)) {
+            return new URL(path, base).href;
+        }
+        
+        if (arch.includes('cordova')) {
+            const base = process.env.CDN_URL || process.env.MOBILE_ROOT_URL || process.env.ROOT_URL;
+            return new URL(path, base).href;
+        }
+        
+        if (!base) {
+            const base = process.env.CDN_URL || process.env.ROOT_URL;
+            return new URL(path, base).href;
+        }
+        
+        return Path.posix.join(base, path.replaceAll(Path.win32.sep, '/'));
+    } catch (error) {
+        Logger.warn(`Failed to prepare URL for Vite asset! If you're using Cordova, make sure you set an external Mobile server URL (e.g. --mobile-server http://192.168.0.1:3000/)`)
+        throw error;
     }
-    
-    if (base?.match(/^https?:/)) {
-        return new URL(path, base).href;
-    }
-    
-    if (arch.includes('cordova')) {
-        const base = process.env.CDN_URL || process.env.MOBILE_ROOT_URL || process.env.ROOT_URL;
-        return new URL(path, base).href;
-    }
-    
-    if (!base) {
-        const base = process.env.CDN_URL || process.env.ROOT_URL;
-        return new URL(path, base).href;
-    }
-    
-    return Path.posix.join(base, path.replaceAll(Path.win32.sep, '/'));
 }
 
 export type Arch = 'web.browser' | 'os.linux' | 'web.cordova' | string;
