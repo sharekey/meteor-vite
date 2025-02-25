@@ -106,6 +106,15 @@ export async function buildForProduction() {
         logger.debug('Added import to server entry', summary);
     });
     
+    let files = {}
+    
+    fileNames['client']?.forEach((file) => {
+        if (!file.filePath.includes('client.manifest.json')) {
+            return;
+        }
+        files = JSON.parse(FS.readFileSync(file.filePath, 'utf8'));
+    })
+    
     return {
         fileNames,
         entry: {
@@ -116,8 +125,8 @@ export async function buildForProduction() {
         assetsDir,
         boilerplate: new ViteProductionBoilerplate({
             base: config.base,
-            assetsDir: assetsDir,
-            files: JSON.parse(FS.readFileSync(Path.join(assetsDir, 'client.manifest.json'), 'utf8')),
+            assetsDir,
+            files,
         }),
     }
 }
