@@ -1,6 +1,5 @@
-import Path from 'path';
 import type { OutputOptions } from 'rollup';
-import { type InlineConfig, resolveConfig, type ResolvedConfig } from 'vite';
+import { type ResolvedConfig } from 'vite';
 import type { DeepPartial, MakeOptional, MakeRequired } from '../../utilities/GenericTypes';
 
 export interface PluginSettings<
@@ -44,12 +43,15 @@ export interface PluginSettings<
      * If you have a CDN or use different subdomains for your app, it can be a good idea to set a base URL for
      * your assets so that your assets are fetched from one consistent URL. This helps with caching and should
      * reduce load on both your clients and server.
+     * @default /vite
      */
     assetsBaseUrl?: string;
     
     /**
      * Root directory to serve Vite assets from in production.
-     * Defaults to /vite.
+     * This is the path at which Meteor will serve Vite assets. It should match the path specified by `assetsBaseUrl`
+     * unless you have a reverse proxy that can handle the rewrite to point requests to the correct path
+     * @default /vite
      */
     assetsDir?: string;
     
