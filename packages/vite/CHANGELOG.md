@@ -1,5 +1,11 @@
 # jorgenvatle_vite
 
+## 1.3.0
+
+### Minor Changes
+
+- 9202100f: Prepare client HTML boilerplate during build time instead of generating it with each incoming request. This should also address Vite not being initially included in Cordova builds.
+
 ## 1.2.0
 
 ### Minor Changes
