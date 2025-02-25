@@ -117,7 +117,11 @@ else {
         });
     } else {
         Plugin.registerCompiler({
-            filenames: [CurrentConfig.clientEntryModule, 'vite.config.ts', 'vite.config.js'],
+            filenames: [
+                CurrentConfig.clientEntryModule, 'vite.config.ts', 'vite.config.js',
+                'vite.config.mts',
+                'vite.config.mjs',
+            ],
             extensions: [],
         }, async () => {
             const boilerplate = await runBootstrapScript('prepareDevServerBoilerplate');
