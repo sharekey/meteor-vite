@@ -35,3 +35,20 @@ export function hasModuleImport(module: { content: string, path: string }) {
     const expectedContent = formatImportPath(module.path);
     return module.content.includes(expectedContent);
 }
+
+export function viteAssetUrl({ arch, path, base }: {
+    arch: 'web.browser' | 'os.linux' | 'web.cordova' | string;
+    path: string;
+    base: string;
+}): string {
+    if (base.match(/^https?:/)) {
+        return new URL(path, base).href;
+    }
+    
+    if (arch.includes('cordova')) {
+        const base = process.env.CDN_URL || process.env.MOBILE_ROOT_URL || process.env.ROOT_URL;
+        return new URL(path, base).href;
+    }
+    
+    return Path.posix.join(base, path.replaceAll(Path.win32.sep, '/'));
+}
