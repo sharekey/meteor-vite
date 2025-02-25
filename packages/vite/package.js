@@ -25,5 +25,5 @@ Package.onUse((api) => {
     ]);
 
     api.mainModule('dist/server-runtime.mjs', ['server'], { bare: false });
-    api.mainModule('dist/client-runtime.mjs', ['web.cordova']);
+    api.addFiles('dist/client-runtime.mjs', ['web.cordova']);
 });
