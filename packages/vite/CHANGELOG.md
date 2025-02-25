@@ -1,5 +1,11 @@
 # jorgenvatle_vite
 
+## 1.3.2
+
+### Patch Changes
+
+- 4bfbb9a5: Fix typo in arch conditional causing boilerplate to target servers instead of clients.
+
 ## 1.3.1
 
 ### Patch Changes
