@@ -37,6 +37,9 @@ Meteor.startup(async () => {
     
     
     // ⚡ [Client] Prepare module import scripts for the Meteor app HTML.
+    if (!config.base) {
+        throw new Error('Unable to resolve base URL for Vite assets! Make sure you are importing meteor-vite as a plugin your Vite config');
+    }
     const scripts = [
         Path.join(config.base, '@vite/client'),
         Path.join(config.base, modules.clientEntry)
