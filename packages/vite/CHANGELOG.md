@@ -1,5 +1,11 @@
 # jorgenvatle_vite
 
+## 1.3.3
+
+### Patch Changes
+
+- 56b21de1: Handle Vite configs with .mts and .mjs file extensions
+
 ## 1.3.2
 
 ### Patch Changes
