@@ -13,6 +13,7 @@ declare module 'meteor/isobuild' {
         addAsset(data: FileData): void;
         addStylesheet(data: FileData): void;
         addJavaScript(data: FileData): void;
+        addHtml(html: HtmlData, lazyInitializer?: () => Promise<HtmlData>);
         getArch(): string;
         cacheable?: boolean;
     }
@@ -22,6 +23,11 @@ declare module 'meteor/isobuild' {
         data: string | PluginFileBuffer;
         sourcePath?: string;
         sourceMap?: null | string;
+    }
+    
+    interface HtmlData {
+        section: 'head' | 'body';
+        data: string;
     }
     
     namespace Plugin {
