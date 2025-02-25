@@ -266,7 +266,7 @@ export type PartialPluginOptions = DeepPartial<PluginSettings>;
 export type MeteorStubsSettings = Required<MakeRequired<PluginSettings['meteorStubs'], 'meteor'>>;
 export type ResolvedPluginSettings = MakeRequired<
     Omit<PluginSettings, 'meteorStubs'> & { meteorStubs: MeteorStubsSettings },
-    'tempDir'
+    'tempDir' | 'assetsDir'
 >;
 
 /**
