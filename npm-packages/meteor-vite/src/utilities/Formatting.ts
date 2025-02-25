@@ -37,11 +37,15 @@ export function hasModuleImport(module: { content: string, path: string }) {
 }
 
 export function viteAssetUrl({ arch, path, base }: {
-    arch: 'web.browser' | 'os.linux' | 'web.cordova' | string;
+    arch: Arch;
     path: string;
-    base: string;
+    base?: string;
 }): string {
-    if (base.match(/^https?:/)) {
+    if (path.match(/^https?:/)) {
+        return path;
+    }
+    
+    if (base?.match(/^https?:/)) {
         return new URL(path, base).href;
     }
     
@@ -50,5 +54,12 @@ export function viteAssetUrl({ arch, path, base }: {
         return new URL(path, base).href;
     }
     
+    if (!base) {
+        const base = process.env.CDN_URL || process.env.ROOT_URL;
+        return new URL(path, base).href;
+    }
+    
     return Path.posix.join(base, path.replaceAll(Path.win32.sep, '/'));
 }
+
+export type Arch = 'web.browser' | 'os.linux' | 'web.cordova' | string;
