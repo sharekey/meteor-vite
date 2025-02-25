@@ -18,7 +18,7 @@ export class ViteDevelopmentBoilerplate extends ViteBoilerplate {
         }
     }
     
-    public getBoilerplate(): Promise<Boilerplate> | Boilerplate {
+    public getBoilerplate(): Boilerplate {
         const scripts = [
             Path.join(this.baseUrl, '@vite/client'),
             Path.join(this.baseUrl, this.clientEntry)
