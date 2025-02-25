@@ -1,5 +1,11 @@
 # jorgenvatle_vite
 
+## 1.3.1
+
+### Patch Changes
+
+- 7c62f38f: Fix issue where client HTML boilerplate would only be added to the web.browser arch.
+
 ## 1.3.0
 
 ### Minor Changes
