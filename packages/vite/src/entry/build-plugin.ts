@@ -10,7 +10,7 @@ import { CurrentConfig } from '../util/CurrentConfig';
 import Logger from '../util/Logger';
 
 class CompilerPlugin {
-    protected boilerplateReady = false;
+    protected boilerplateArc = new Set<string>();
     constructor(public readonly config: {
         outDir: string,
         assetsDir: string,
@@ -20,7 +20,6 @@ class CompilerPlugin {
         Logger.info(`[${config.mode}] Initializing Vite Compiler Plugin...`);
     }
     processFilesForTarget(files: InputFile[]) {
-        this.boilerplateReady = false;
         files.forEach(file => {
             const fileMeta = {
                 _original: {
@@ -34,7 +33,7 @@ class CompilerPlugin {
             
             Logger.debug(`[${pc.yellow(file.getArch())}] Processing: ${fileMeta.basename}`, pc.dim(inspect({ fileMeta }, { colors: true })));
             
-            if (!this.boilerplateReady && file.getArch().includes('web')) {
+            if (!file.getArch().includes('web') && !this.boilerplateArc.has(file.getArch())) {
                 const { dynamicHead, dynamicBody } = this.config.boilerplate.getBoilerplate(file.getArch());
                 if (dynamicHead) {
                     file.addHtml({
@@ -48,7 +47,7 @@ class CompilerPlugin {
                         section: 'body',
                     })
                 }
-                this.boilerplateReady = true;
+                this.boilerplateArc.add(file.getArch());
                 Logger.debug(`[${pc.yellow(file.getArch())}] Added boilerplate to application HTML`, pc.dim(inspect({ dynamicBody, dynamicHead }, { colors: true })));
             }
             
