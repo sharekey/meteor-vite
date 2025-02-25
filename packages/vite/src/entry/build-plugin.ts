@@ -20,6 +20,7 @@ class CompilerPlugin {
         Logger.info(`[${config.mode}] Initializing Vite Compiler Plugin...`);
     }
     processFilesForTarget(files: InputFile[]) {
+        this.boilerplateArc.clear();
         files.forEach(file => {
             const fileMeta = {
                 _original: {
