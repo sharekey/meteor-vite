@@ -1,8 +1,7 @@
 import { Meteor } from 'meteor/meteor';
 import { WebApp } from 'meteor/webapp';
-import { ViteProductionBoilerplate } from './boilerplate/Production';
 import Logger from '../../utilities/Logger';
-import { setBoilerplate } from './lib/RuntimeConfig';
+import { ViteProductionBoilerplate } from './boilerplate/Production';
 import type { ViteManifestFile } from './scripts/Build';
 
 Meteor.startup(async () => {
@@ -32,12 +31,5 @@ Meteor.startup(async () => {
     // Todo: Instead of serving assets with Meteor's built-in static file handler,
     //  add a custom asset route where we have better control over caching and CORS rules.
     boilerplate.makeViteAssetsCacheable();
-    
-    const { dynamicBody, dynamicHead } = boilerplate.getBoilerplate();
-    await setBoilerplate({
-        head: dynamicHead ? [dynamicHead] : [],
-        body: dynamicBody ? [dynamicBody] : [],
-    });
-    await import('./CommonEnvironment');
 })
 
