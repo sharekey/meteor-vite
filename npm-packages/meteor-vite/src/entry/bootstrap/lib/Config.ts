@@ -1,16 +1,11 @@
 import FS from 'fs';
 import Path from 'path';
-import {
-    type BuildEnvironmentOptions,
-    createRunnableDevEnvironment,
-    type InlineConfig,
-    resolveConfig,
-} from 'vite';
+import { createRunnableDevEnvironment, type InlineConfig, resolveConfig } from 'vite';
 import { MeteorViteError } from '../../../error/MeteorViteError';
 import { meteorWorker } from '../../plugin/Meteor';
 import { type ProjectJson, type ResolvedMeteorViteConfig } from '../../plugin/Settings';
-import Instance from './Instance';
 import { clientMainModule, serverMainModule } from '../scripts/Setup';
+import Instance from './Instance';
 
 export const CurrentConfig = globalThis.MeteorViteRuntimeConfig;
 
@@ -153,6 +148,11 @@ export async function resolveMeteorViteConfig(
         needsReactPreamble,
         viteServerMainModule,
         modules,
+        /**
+         * Only available within the context of the compiler plugin.
+         * At runtime, Meteor-Tool's initial arguments aren't made available
+         */
+        isSimulatedProduction: process.argv.includes('--production'),
     }
 }
 
