@@ -1,5 +1,4 @@
-import { Meteor } from 'meteor/meteor';
-import Path from 'path';
+import { viteAssetUrl } from '../../../utilities/Formatting';
 import { type Boilerplate, ViteBoilerplate } from './Boilerplate';
 
 export class ViteDevelopmentBoilerplate extends ViteBoilerplate {
@@ -18,26 +17,20 @@ export class ViteDevelopmentBoilerplate extends ViteBoilerplate {
         }
     }
     
-    public getBoilerplate(): Boilerplate {
+    public getBoilerplate(arch: string): Boilerplate {
         // ⚡ [Client] Prepare module import scripts for the Meteor app HTML.
         const scripts = [
-            Path.join(this.baseUrl, '@vite/client'),
-            Path.join(this.baseUrl, this.clientEntry)
-        ].map((url) => {
-            let absoluteUrl = url.replaceAll(Path.win32.sep, Path.posix.sep);
-            
-            if (!absoluteUrl.match(/https?:/)) {
-                absoluteUrl = Meteor.absoluteUrl(url)
-            }
-            
-            return `<script src="${absoluteUrl}" type="module" crossorigin></script>`;
+            '@vite/client',
+            this.clientEntry
+        ].map((path) => {
+            return `<script src="${viteAssetUrl({ arch, path, base: this.baseUrl })}" type="module" crossorigin></script>`;
         });
         
         // ⚡ [Client/React] Add React HMR preamble
         if (this.needsReactPreamble) {
             scripts.unshift(`
                 <script type="module">
-                    import RefreshRuntime from "${Meteor.absoluteUrl(Path.join(this.baseUrl, '@react-refresh'))}"
+                    import RefreshRuntime from "${viteAssetUrl({ arch, base: this.baseUrl, path: '@react-refresh' })}"
                     RefreshRuntime.injectIntoGlobalHook(window)
                     window.$RefreshReg$ = () => {}
                     window.$RefreshSig$ = () => (type) => type
