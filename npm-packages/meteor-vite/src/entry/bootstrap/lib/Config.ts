@@ -20,6 +20,11 @@ export async function resolveMeteorViteConfig(
     const packageJson = parsePackageJson();
     process.chdir(projectRoot);
     
+    /**
+     * Only available within the context of the compiler plugin.
+     * At runtime, Meteor-Tool's initial arguments aren't made available
+     */
+    const isSimulatedProduction = process.argv.includes('--production');
     const needsReactPreamble = Object.keys(packageJson?.devDependencies || {}).includes('@vitejs/plugin-react') || Object.keys(packageJson.dependencies || {}).includes('@vitejs/plugin-react');
     let viteServerMainModule: undefined | string = undefined;
     
@@ -148,11 +153,7 @@ export async function resolveMeteorViteConfig(
         needsReactPreamble,
         viteServerMainModule,
         modules,
-        /**
-         * Only available within the context of the compiler plugin.
-         * At runtime, Meteor-Tool's initial arguments aren't made available
-         */
-        isSimulatedProduction: process.argv.includes('--production'),
+        isSimulatedProduction,
     }
 }
 
