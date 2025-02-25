@@ -48,6 +48,7 @@ class CompilerPlugin {
                     })
                 }
                 this.boilerplateReady = true;
+                Logger.debug(`[${pc.yellow(file.getArch())}] Added boilerplate to application HTML`, pc.dim(inspect({ dynamicBody, dynamicHead }, { colors: true })));
             }
             
             if (this.config.mode !== 'production') {
