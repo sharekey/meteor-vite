@@ -138,13 +138,21 @@ export async function resolveMeteorViteConfig(
         },
     } satisfies InlineConfig & Pick<ResolvedMeteorViteConfig, 'meteor'>;
     
+    const modules = {
+        clientEntry: Path.relative(projectRoot,
+            CurrentConfig.clientEntryModule || config.meteor.clientEntry /* <- Addresses older versions of jorgenvatle:vite */
+        ),
+        serverEntry: config.meteor?.serverEntry && Path.resolve(config.meteor.serverEntry),
+    }
+    
     return {
         config,
         packageJson,
         outDir,
         assetsDir: userConfig.meteor.assetsDir,
         needsReactPreamble,
-        viteServerMainModule
+        viteServerMainModule,
+        modules,
     }
 }
 

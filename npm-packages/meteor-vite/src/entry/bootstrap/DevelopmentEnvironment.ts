@@ -8,18 +8,11 @@ import Instance from './lib/Instance';
 
 Meteor.startup(async () => {
     const { projectRoot } = globalThis.MeteorViteRuntimeConfig;
-    const { config, needsReactPreamble } = await resolveMeteorViteConfig({
+    const { config, needsReactPreamble, modules } = await resolveMeteorViteConfig({
         mode: 'development',
     }, 'serve');
     
     const server = await createServer(config);
-    
-    const modules = {
-        clientEntry: Path.relative(projectRoot,
-            CurrentConfig.clientEntryModule || config.meteor.clientEntry /* <- Addresses older versions of jorgenvatle:vite */
-        ),
-        serverEntry: config.meteor?.serverEntry && Path.resolve(config.meteor.serverEntry),
-    }
     
     await server.warmupRequest(modules.clientEntry);
     
