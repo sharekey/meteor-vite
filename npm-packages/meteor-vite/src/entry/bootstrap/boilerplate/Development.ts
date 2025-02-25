@@ -19,6 +19,7 @@ export class ViteDevelopmentBoilerplate extends ViteBoilerplate {
     }
     
     public getBoilerplate(): Boilerplate {
+        // ⚡ [Client] Prepare module import scripts for the Meteor app HTML.
         const scripts = [
             Path.join(this.baseUrl, '@vite/client'),
             Path.join(this.baseUrl, this.clientEntry)
