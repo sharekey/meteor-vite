@@ -25,7 +25,7 @@ export async function resolveMeteorViteConfig(
     const packageJson = parsePackageJson();
     process.chdir(projectRoot);
     
-    const needsReactPreamble = Object.keys(packageJson?.devDependencies).includes('@vitejs/plugin-react') || Object.keys(packageJson.dependencies).includes('@vitejs/plugin-react');
+    const needsReactPreamble = Object.keys(packageJson?.devDependencies || {}).includes('@vitejs/plugin-react') || Object.keys(packageJson.dependencies || {}).includes('@vitejs/plugin-react');
     let viteServerMainModule: undefined | string = undefined;
     
     const userConfig: ResolvedMeteorViteConfig = await resolveConfig(Object.assign({
