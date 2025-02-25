@@ -34,7 +34,7 @@ class CompilerPlugin {
             Logger.debug(`[${pc.yellow(file.getArch())}] Processing: ${fileMeta.basename}`, pc.dim(inspect({ fileMeta }, { colors: true })));
             
             if (!this.boilerplateReady && file.getArch().includes('web')) {
-                const { dynamicHead, dynamicBody } = this.config.boilerplate.getBoilerplate();
+                const { dynamicHead, dynamicBody } = this.config.boilerplate.getBoilerplate(file.getArch());
                 if (dynamicHead) {
                     file.addHtml({
                         data: dynamicHead,
