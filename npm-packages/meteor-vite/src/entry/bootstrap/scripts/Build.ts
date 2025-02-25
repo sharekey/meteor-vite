@@ -115,7 +115,7 @@ export async function buildForProduction() {
         outDir,
         assetsDir,
         boilerplate: new ViteProductionBoilerplate({
-            base: process.env.METEOR_VITE_BASE_URL || import.meta.env.BASE_URL,
+            base: config.base,
             assetsDir: assetsDir,
             files: JSON.parse(FS.readFileSync(Path.join(assetsDir, 'client.manifest.json'), 'utf8')),
         }),
