@@ -35,9 +35,9 @@ export const Info = () => {
 
         return (
             <div class="grid gap-4">
-                <div class="py-6">
+                <div class="py-6 ">
                     <h2 class="text-2xl font-semibold pb-4">Learn Meteor!</h2>
-                    <ul class="grid gap-2">{links.map(
+                    <ul class="grid gap-2 max-h-[35vh] overflow-y-auto">{links.map(
                         link => <li class="flex gap-4" key={link._id}>
                             <span class="opacity-50">-</span> <a href={link.url} target="_blank">{link.title}</a>
                         </li>,
