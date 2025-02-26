@@ -9,12 +9,8 @@
   "exports": {
     "./plugin": {
       "types": "./dist/plugin/index.d.ts",
-      "import": [
-        "./dist/plugin/index.mjs"
-      ],
-      "require": [
-        "./dist/plugin/index.js"
-      ]
+      "import": "./dist/plugin/index.mjs",
+      "require": "./dist/plugin/index.js"
     },
     "./bootstrap/scripts": {
       "types": "./dist/bootstrap/scripts/index.d.ts",
