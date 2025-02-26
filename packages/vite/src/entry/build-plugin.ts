@@ -88,7 +88,7 @@ class CompilerPlugin {
         }
         
         this.boilerplateArc.add(arch);
-        Logger.debug(`[${Colorize(arch)}] Added boilerplate to application HTML`, pc.dim(inspect({ dynamicBody, dynamicHead }, { colors: true })));
+        Logger.debug(`[${Colorize.arch(arch)}] Added boilerplate to application HTML`, pc.dim(inspect({ dynamicBody, dynamicHead }, { colors: true })));
     }
     
     protected _formatFilename(nameOrPath: string) {
