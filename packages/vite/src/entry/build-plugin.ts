@@ -1,5 +1,5 @@
 import type { ViteBoilerplate } from 'meteor-vite/bootstrap/boilerplate/Boilerplate';
-import { Colorize } from 'meteor-vite/src/utilities/Formatting';
+import { Colorize } from 'meteor-vite/utilities';
 import type { InputFile } from 'meteor/isobuild';
 import { Plugin } from 'meteor/isobuild';
 import FS from 'node:fs';
