@@ -38,7 +38,7 @@ export default defineConfig([
     
     // Plugin entry
     {
-        name: 'meteor-vite/internals',
+        name: 'meteor-vite/plugin',
         entry: [
             './src/entry/plugin/index.ts',
         ],
@@ -52,9 +52,9 @@ export default defineConfig([
         dts: true,
     },
     
-    // Plugin entry
+    // Utilities
     {
-        name: 'meteor-vite/internals',
+        name: 'meteor-vite/utilities',
         entry: [
             './src/entry/plugin/index.ts',
         ],
