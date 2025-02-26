@@ -65,7 +65,6 @@ class CompilerPlugin {
             return;
         }
         if (this.boilerplateArc.has(arch)) {
-            Logger.warn(`Tried to add HTML boilerplate twice for arch '${Colorize.arch(arch)}'`)
             return;
         }
         if (file.getPathInPackage().includes('node_modules')) {
