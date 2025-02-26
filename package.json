@@ -46,7 +46,7 @@
     "start:react": "npm start react",
     "start:<example app>": "npm start <example app>",
 
-    "install:package": "cd npm-packages/meteor-vite && meteor npm install",
+    "install:meteor-vite": "cd npm-packages/meteor-vite && meteor npm install",
     "link:package": "meteor npm run link:vue && meteor npm run link:svelte"
   }
 }
