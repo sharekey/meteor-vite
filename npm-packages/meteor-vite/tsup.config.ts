@@ -51,20 +51,4 @@ export default defineConfig([
         keepNames: false,
         dts: true,
     },
-    
-    // Utilities
-    {
-        name: 'meteor-vite/utilities',
-        entry: [
-            './src/entry/plugin/index.ts',
-        ],
-        outDir: 'dist/utilities',
-        format: [
-            'cjs',
-            'esm',
-        ],
-        sourcemap: true,
-        keepNames: false,
-        dts: true,
-    },
 ]);
