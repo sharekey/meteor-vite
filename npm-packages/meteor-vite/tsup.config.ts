@@ -14,7 +14,6 @@ export default defineConfig([
             './src/entry/bootstrap/scripts/index.ts',
             './src/entry/bootstrap/ProductionEnvironment.ts',
             './src/entry/bootstrap/CommonEnvironment.ts',
-            './src/utilities/index.ts',
         ],
         outDir: 'dist',
         format: 'esm',
@@ -44,6 +43,22 @@ export default defineConfig([
             './src/entry/plugin/index.ts',
         ],
         outDir: 'dist/plugin',
+        format: [
+            'cjs',
+            'esm',
+        ],
+        sourcemap: true,
+        keepNames: false,
+        dts: true,
+    },
+    
+    // Plugin entry
+    {
+        name: 'meteor-vite/internals',
+        entry: [
+            './src/entry/plugin/index.ts',
+        ],
+        outDir: 'dist/utilities',
         format: [
             'cjs',
             'esm',
