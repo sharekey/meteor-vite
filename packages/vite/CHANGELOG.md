@@ -1,5 +1,11 @@
 # jorgenvatle_vite
 
+## 1.3.4
+
+### Patch Changes
+
+- 8aa1ff9c: Fix issue where Vite config files in node_modules would trigger Vite boilerplate injection into client app leading to the boilerplate being omitted/tree-shaken out of the app unless imported explicitly.
+
 ## 1.3.3
 
 ### Patch Changes
