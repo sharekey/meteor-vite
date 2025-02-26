@@ -27,7 +27,6 @@
     "build:jorgenvatle:vite": "tsup",
     "watch:packages": "concurrently -k -n atmosphere,npm 'npm:build:jorgenvatle:vite -- --watch' 'npm:build:meteor-vite -- --watch'",
     "prepare": "npm run build:packages || exit 0",
-    "build:vite": "tsup",
     "link": "npm run example link",
     "release": "npm run publish:vite && changeset publish",
     "version": "(npm run version:vite || exit 1) && changeset version",
@@ -40,7 +39,6 @@
     "start:vue": "npm start vue",
     "start:react": "npm start react",
     "start:<example app>": "npm start <example app>",
-    "build:package": "cd npm-packages/meteor-vite && meteor npm run build",
     "install:package": "cd npm-packages/meteor-vite && meteor npm install",
     "link:package": "meteor npm run link:vue && meteor npm run link:svelte"
   }
