@@ -1,6 +1,6 @@
 import Path from 'path';
 import pc from 'picocolors';
-import Logger from './Logger';
+import { MeteorViteError } from '../error/MeteorViteError';
 
 export const Colorize = {
     filepath: pc.cyan,
@@ -63,8 +63,10 @@ export function viteAssetUrl({ arch, path, base }: {
         
         return Path.posix.join(base, path.replaceAll(Path.win32.sep, '/'));
     } catch (error) {
-        Logger.warn(`Failed to prepare URL for Vite asset! If you're using Cordova, make sure you set an external Mobile server URL (e.g. --mobile-server http://192.168.0.1:3000/)`)
-        throw error;
+        throw new MeteorViteError(`Failed to prepare URL for Vite asset!`, {
+            cause: error,
+            subtitle: `Try setting a ROOT_URL for your app. If you're using Cordova, make sure you set an external Mobile server URL (e.g. --mobile-server http://192.168.0.1:3000/)`,
+        });
     }
 }
 
