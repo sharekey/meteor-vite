@@ -60,9 +60,6 @@ class CompilerPlugin {
     
     protected addHtmlBoilerplate(file: InputFile) {
         const arch = file.getArch();
-        if (!file.getBasename().includes('vite.config')) {
-            return;
-        }
         if (!arch.includes('web')) {
             Logger.debug(`Skipping boilerplate injection for arch '${Colorize.arch(arch)}'`)
             return;
