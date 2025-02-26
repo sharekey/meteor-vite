@@ -22,7 +22,7 @@
     "start": "npm run example start",
     "launch": "npm run example launch",
     "build": "npm run example build",
-    "build:packages": "npm run build:vite && npm run build:package",
+    "build:packages": "npm run build:jorgenvatle:vite && npm run build:meteor-vite",
     "build:meteor-vite": "cd npm-packages/meteor-vite && npm run build --",
     "build:jorgenvatle:vite": "tsup",
     "watch:packages": "concurrently -k -n atmosphere,npm 'npm:build:jorgenvatle:vite -- --watch' 'npm:build:meteor-vite -- --watch'",
