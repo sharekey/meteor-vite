@@ -1,4 +1,5 @@
 import type { ViteBoilerplate } from 'meteor-vite/bootstrap/boilerplate/Boilerplate';
+import { Colorize } from 'meteor-vite/src/utilities/Formatting';
 import type { InputFile } from 'meteor/isobuild';
 import { Plugin } from 'meteor/isobuild';
 import FS from 'node:fs';
@@ -34,23 +35,7 @@ class CompilerPlugin {
             
             Logger.debug(`[${pc.yellow(file.getArch())}] Processing: ${fileMeta.basename}`, pc.dim(inspect({ fileMeta }, { colors: true })));
             
-            if (file.getArch().includes('web') && !this.boilerplateArc.has(file.getArch())) {
-                const { dynamicHead, dynamicBody } = this.config.boilerplate.getBoilerplate(file.getArch());
-                if (dynamicHead) {
-                    file.addHtml({
-                        data: dynamicHead,
-                        section: 'head',
-                    })
-                }
-                if (dynamicBody) {
-                    file.addHtml({
-                        data: dynamicBody,
-                        section: 'body',
-                    })
-                }
-                this.boilerplateArc.add(file.getArch());
-                Logger.debug(`[${pc.yellow(file.getArch())}] Added boilerplate to application HTML`, pc.dim(inspect({ dynamicBody, dynamicHead }, { colors: true })));
-            }
+            this.addHtmlBoilerplate(file);
             
             if (this.config.mode !== 'production') {
                 return;
@@ -72,6 +57,40 @@ class CompilerPlugin {
             });
         })
     }
+    
+    protected addHtmlBoilerplate(file: InputFile) {
+        const arch = file.getArch();
+        if (!file.getBasename().includes('vite.config')) {
+            return;
+        }
+        if (!arch.includes('web')) {
+            Logger.debug(`Skipping boilerplate injection for arch '${Colorize.arch(arch)}'`)
+            return;
+        }
+        if (this.boilerplateArc.has(arch)) {
+            Logger.warn(`Tried to add HTML boilerplate twice for arch '${Colorize.arch(arch)}'`)
+            return;
+        }
+        
+        const { dynamicHead, dynamicBody } = this.config.boilerplate.getBoilerplate(file.getArch());
+        
+        if (dynamicHead) {
+            file.addHtml({
+                data: dynamicHead,
+                section: 'head',
+            })
+        }
+        if (dynamicBody) {
+            file.addHtml({
+                data: dynamicBody,
+                section: 'body',
+            })
+        }
+        
+        this.boilerplateArc.add(arch);
+        Logger.debug(`[${Colorize(arch)}] Added boilerplate to application HTML`, pc.dim(inspect({ dynamicBody, dynamicHead }, { colors: true })));
+    }
+    
     protected _formatFilename(nameOrPath: string) {
         return nameOrPath.replace(`.${CurrentConfig.bundleFileExtension}`, '');
     }
