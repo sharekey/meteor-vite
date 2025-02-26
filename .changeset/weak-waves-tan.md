@@ -2,4 +2,4 @@
 "jorgenvatle_vite": patch
 ---
 
-Remove filename requirement for Vite HTML boilerplate compile
+Remove filename requirement for Vite HTML boilerplate compiler
