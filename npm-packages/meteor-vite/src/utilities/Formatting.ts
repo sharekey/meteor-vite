@@ -55,12 +55,17 @@ export function viteAssetUrl({ arch, path, base }: {
             return new URL(path, base).href;
         }
         
+        const relativePath = path.replaceAll(Path.win32.sep, Path.posix.sep);
+        
         if (!base) {
-            const base = process.env.CDN_URL || process.env.ROOT_URL;
-            return new URL(path, base).href;
+            const absoluteBase = process.env.CDN_URL || process.env.ROOT_URL
+            if (absoluteBase) {
+                return new URL(path, base).href;
+            }
+            return relativePath;
         }
         
-        return Path.posix.join(base, path.replaceAll(Path.win32.sep, '/'));
+        return Path.posix.join(base, relativePath);
     } catch (error) {
         throw new Error(`⚡  Failed to prepare URL for Vite asset! Try setting a ROOT_URL for your app. If you're using Cordova, make sure you set an external Mobile server URL (e.g. --mobile-server http://192.168.0.1:3000/)`, {
             cause: error,
