@@ -50,8 +50,8 @@ jobs:
 
       - name: 'Build packages'
         run: |
-          npm run build:vite
-          meteor npm run build:package
+          npm run build:jorgenvatle:vite
+          meteor npm run build:meteor-vite
 
       - name: 'Create Release'
         id: changesets
