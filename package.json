@@ -24,6 +24,7 @@
     "build": "npm run example build",
     "build:packages": "npm run build:vite && npm run build:package",
     "build:meteor-vite": "cd npm-packages/meteor-vite && npm run build --",
+    "build:jorgenvatle:vite": "tsup",
     "watch:packages": "concurrently -k -n atmosphere,npm 'npm:build:vite -- --watch' 'cd npm-packages/meteor-vite && npm run build -- --watch'",
     "prepare": "npm run build:packages || exit 0",
     "build:vite": "tsup",
