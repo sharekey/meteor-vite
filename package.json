@@ -21,24 +21,31 @@
   "scripts": {
     "start": "npm run example start",
     "launch": "npm run example launch",
+
     "build": "npm run example build",
     "build:packages": "npm run build:jorgenvatle:vite && npm run build:meteor-vite",
     "build:meteor-vite": "cd npm-packages/meteor-vite && npm run build --",
     "build:jorgenvatle:vite": "tsup",
+
     "watch:packages": "concurrently -k -n atmosphere,npm 'npm:build:jorgenvatle:vite -- --watch' 'npm:build:meteor-vite -- --watch'",
+
     "prepare": "npm run build:packages || exit 0",
     "link": "npm run example link",
     "release": "npm run publish:vite && changeset publish",
     "version": "(npm run version:vite || exit 1) && changeset version",
     "example": ".bin/example-app.sh",
+
     "subtree": "npm run subtree:pull && npm run subtree:push",
     "subtree:pull": "git subtree pull --prefix npm-packages/@meteor-vite/react-packages https://github.com/JorgenVatle/react-packages vite --squash",
     "subtree:push": "git subtree push --prefix npm-packages/@meteor-vite/react-packages https://github.com/JorgenVatle/react-packages vite",
+
     "version:vite": "meteor node .bin/release-meteor-package.mjs version",
     "publish:vite": "meteor node .bin/release-meteor-package.mjs publish",
+
     "start:vue": "npm start vue",
     "start:react": "npm start react",
     "start:<example app>": "npm start <example app>",
+
     "install:package": "cd npm-packages/meteor-vite && meteor npm install",
     "link:package": "meteor npm run link:vue && meteor npm run link:svelte"
   }
