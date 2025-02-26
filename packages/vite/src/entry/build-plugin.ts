@@ -71,6 +71,10 @@ class CompilerPlugin {
             Logger.warn(`Tried to add HTML boilerplate twice for arch '${Colorize.arch(arch)}'`)
             return;
         }
+        if (file.getPathInPackage().includes('node_modules')) {
+            Logger.debug(`Skipping boilerplate injection for ${Colorize.filepath(file.getPathInPackage())} as it is not part of the project`);
+            return;
+        }
         
         const { dynamicHead, dynamicBody } = this.config.boilerplate.getBoilerplate(file.getArch());
         
