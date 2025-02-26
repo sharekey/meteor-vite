@@ -1,5 +1,11 @@
 # jorgenvatle_vite
 
+## 1.3.5
+
+### Patch Changes
+
+- 48439db7: Remove filename requirement for Vite HTML boilerplate compiler
+
 ## 1.3.4
 
 ### Patch Changes
