@@ -14,6 +14,7 @@ export default defineConfig([
             './src/entry/bootstrap/scripts/index.ts',
             './src/entry/bootstrap/ProductionEnvironment.ts',
             './src/entry/bootstrap/CommonEnvironment.ts',
+            './src/utilities/index.ts',
         ],
         outDir: 'dist',
         format: 'esm',
