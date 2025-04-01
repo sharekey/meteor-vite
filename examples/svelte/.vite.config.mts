@@ -8,7 +8,7 @@ export default defineConfig({
       configFile: 'svelte.config.mjs'
     }),
     meteor({
-        clientEntry: 'imports/ui/entry-meteor.js',
+        clientEntry: 'imports/ui/entry-vite.ts',
         stubValidation: {
           warnOnly: true,
         }
