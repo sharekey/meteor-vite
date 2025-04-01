@@ -120,6 +120,7 @@ export async function buildForProduction() {
         },
         outDir,
         assetsDir,
+        staticAssetBoilerplate: config.meteor.staticAssetBoilerplate,
         boilerplate: new ViteProductionBoilerplate({
             base: config.base,
             assetsDir,

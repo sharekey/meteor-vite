@@ -17,6 +17,7 @@ class CompilerPlugin {
         assetsDir: string,
         mode: 'production' | 'development' | string,
         boilerplate: ViteBoilerplate;
+        staticAssetBoilerplate: boolean;
     }) {
         Logger.info(`[${config.mode}] Initializing Vite Compiler Plugin...`);
     }
@@ -63,6 +64,12 @@ class CompilerPlugin {
         if (!arch.includes('web')) {
             Logger.debug(`Skipping boilerplate injection for arch '${Colorize.arch(arch)}'`)
             return;
+        }
+        if (!this.config.staticAssetBoilerplate) {
+            if (arch.includes('browser')) {
+                Logger.debug(`Skipping boilerplate injection. Static asset boilerplate is disabled. ${Colorize.filepath(file.getPathInPackage())}`)
+                return;
+            }
         }
         if (this.boilerplateArc.has(arch)) {
             return;
@@ -126,9 +133,15 @@ else {
         }, async () => {
             try {
                 await cleanup;
-                const { outDir, assetsDir, boilerplate } = await runBootstrapScript('buildForProduction');
+                const { outDir, assetsDir, boilerplate, staticAssetBoilerplate } = await runBootstrapScript('buildForProduction');
                 
-                return new CompilerPlugin({ outDir, assetsDir, mode: CurrentConfig.mode, boilerplate });
+                return new CompilerPlugin({
+                    outDir,
+                    assetsDir,
+                    mode: CurrentConfig.mode,
+                    boilerplate,
+                    staticAssetBoilerplate
+                });
             } catch (error) {
                 Logger.error('build failed');
                 console.error(error);
@@ -152,6 +165,7 @@ else {
                 assetsDir: '',
                 mode: CurrentConfig.mode,
                 boilerplate,
+                staticAssetBoilerplate: true,
             });
         })
     }
