@@ -1,6 +1,7 @@
 import { WebAppInternals } from 'meteor/webapp';
 import { inspect } from 'node:util';
 import Path from 'path';
+import { trimLeadingSlash } from '../../../utilities';
 import Logger, { createSimpleLogger, type SimpleLogger } from '../../../utilities/Logger';
 import type { TransformedViteManifest } from '../scripts/Build';
 import { type Boilerplate, ViteBoilerplate } from './Boilerplate';
@@ -18,7 +19,7 @@ export class ViteProductionBoilerplate extends ViteBoilerplate {
     }
     
     public get assetDir() {
-        return '/' + this.viteManifest.assetsDir.replace(/^\/+/, '');
+        return '/' + trimLeadingSlash(this.viteManifest.assetsDir);
     }
     
     public get baseUrl() {
