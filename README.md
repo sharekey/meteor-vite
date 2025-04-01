@@ -448,6 +448,9 @@ to put that.
 But do be careful with this - any code that's imported by both your Vite config's [`clientEntry`](#example-with-vue)
 and your Meteor `mainModule.client` may lead to the code being included twice in your final production bundle.
 
+To avoid any confusion between the two, we recommend that you name your entry modules in a way that makes it clear
+which part is imported where. See [Application Structure](#application-structure) for a recommended naming scheme.
+
 ## Meteor build plugins
 Meteor-Vite is more or less a replacement for Meteor's entire build system. Standard minifier packages and other 
 Meteor-ecosystem build plugins are no longer necessary, you can now lean on the much larger and widely adopted Vite
