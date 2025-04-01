@@ -80,7 +80,7 @@ COPY --from=meteor-bundler $SCRIPTS_FOLDER $SCRIPTS_FOLDER/
 COPY --from=meteor-bundler $APP_BUNDLE_FOLDER $APP_BUNDLE_FOLDER/
 
 # Install production npm dependencies
-RUN bash $SCRIPTS_FOLDER/build-meteor-npm-dependencies.sh
+RUN bash $SCRIPTS_FOLDER/app/npm-install.sh
 
 COPY .docker/scripts $SCRIPTS_FOLDER/custom
 
