@@ -23,7 +23,7 @@ export class ViteProductionBoilerplate extends ViteBoilerplate {
     }
     
     public get baseUrl() {
-        return this.viteManifest.base;
+        return process.env.METEOR_VITE_BASE_URL || this.viteManifest.base;
     }
     
     protected filePath(file: string) {
