@@ -29,6 +29,10 @@ Meteor.startup(async () => {
         Logger.warn(`Served 404 for unknown Vite asset: ${req.originalUrl}`);
     });
     
+    // Todo: Instead of serving assets with Meteor's built-in static file handler,
+    //  add a custom asset route where we have better control over caching and CORS rules.
+    boilerplate.makeViteAssetsCacheable();
+    
     if (__VITE_DYNAMIC_ASSET_BOILERPLATE__) {
         WebAppInternals.registerBoilerplateDataCallback('meteor-vite', (req, data) => {
             const { dynamicHead, dynamicBody } = boilerplate.getBoilerplate();
@@ -38,8 +42,4 @@ Meteor.startup(async () => {
             data.dynamicBody += dynamicBody;
         })
     }
-    
-    // Todo: Instead of serving assets with Meteor's built-in static file handler,
-    //  add a custom asset route where we have better control over caching and CORS rules.
-    boilerplate.makeViteAssetsCacheable();
 })
