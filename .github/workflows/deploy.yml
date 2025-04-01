@@ -14,7 +14,6 @@ jobs:
     secrets: inherit
     with:
       appBasename: 'vue'
-      nodeVersion: '20-alpine'
 
   svelte:
     name: 'Svelte'
@@ -22,7 +21,6 @@ jobs:
     secrets: inherit
     with:
       appBasename: 'svelte'
-      nodeVersion: '20-alpine'
 
   react:
     name: 'React'
@@ -30,7 +28,6 @@ jobs:
     secrets: inherit
     with:
       appBasename: 'react'
-      nodeVersion: '20-alpine'
 
   solid:
     name: 'Solid'
@@ -38,7 +35,6 @@ jobs:
     secrets: inherit
     with:
       appBasename: 'solid'
-      nodeVersion: '20-alpine'
 
   vue-meteor-v3:
     name: 'Meteor v3'
@@ -46,7 +42,6 @@ jobs:
     secrets: inherit
     with:
       appBasename: 'vue-zodern-relay'
-      nodeVersion: '20-alpine'
 
   vue-ssr:
     name: 'Vue + SSR'
@@ -54,4 +49,3 @@ jobs:
     secrets: inherit
     with:
       appBasename: 'vue-ssr'
-      nodeVersion: '20-alpine'
