@@ -1,7 +1,7 @@
-import { defineConfig } from 'vite'
-import vue from '@vitejs/plugin-vue'
-import { meteor } from 'meteor-vite/plugin';
 import zodernRelay from '@meteor-vite/plugin-zodern-relay';
+import vue from '@vitejs/plugin-vue';
+import { meteor } from 'meteor-vite/plugin';
+import { defineConfig } from 'vite';
 
 export default defineConfig({
     plugins: [
