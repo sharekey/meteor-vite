@@ -34,7 +34,7 @@ export function isSamePath(pathA: string, pathB: string) {
     return Path.normalize(trimTrailingSlash(pathA)) === Path.normalize(trimTrailingSlash(pathB));
 }
 
-function trimTrailingSlash(path: string) {
+export function trimTrailingSlash(path: string) {
     return path.replace(/\/+$/, '');
 }
 
