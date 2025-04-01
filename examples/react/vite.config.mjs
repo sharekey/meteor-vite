@@ -1,7 +1,7 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import { meteor } from 'meteor-vite/plugin';
-import tailwind from '@tailwindcss/vite'
+import tailwind from '@tailwindcss/vite';
 
 export default defineConfig({
   plugins: [
@@ -9,7 +9,7 @@ export default defineConfig({
           jsxRuntime: 'classic'
       }),
       meteor({
-        clientEntry: "imports/vite-entrypoint.jsx",
+        clientEntry: "client/entry-vite.js",
         stubValidation: {
           warnOnly: true,
         },
