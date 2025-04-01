@@ -1,5 +1,6 @@
 import { WebAppInternals } from 'meteor/webapp';
 import { inspect } from 'node:util';
+import Path from 'path';
 import Logger, { createSimpleLogger, type SimpleLogger } from '../../../utilities/Logger';
 import type { TransformedViteManifest } from '../scripts/Build';
 import { type Boilerplate, ViteBoilerplate } from './Boilerplate';
@@ -25,7 +26,7 @@ export class ViteProductionBoilerplate extends ViteBoilerplate {
     }
     
     protected filePath(file: string) {
-        return `${this.baseUrl.replace(/\/?$/, '')}/${file}`;
+        return Path.join(this.baseUrl, file);
     }
     
     public getBoilerplate(): Boilerplate {
