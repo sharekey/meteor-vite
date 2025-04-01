@@ -410,14 +410,29 @@ broken Meteor packages.
 
 The validation is done simply through verifying that package exports do not have a `typeof` value of `undefined`.
 If you do have a package that intentionally has `undefined` exports, you can disable the warning message for this
-package by excluding it in your Meteor settings.json file;
+package by excluding it in your Meteor settings.json file.
+
+Packages that register global exports only for testing may result in false-positives. `ObserveMultiplexer` in 
+`meteor/mongo` on the server is a good example of this.
+
 ```ts
 // vite.config.ts
 export default defineConfig({
   plugins: [
       meteor({
         stubValidation: {
-            ignorePackages: ["ostrio:cookies"]
+            ignorePackages: ['ostrio:cookies', 'meteor/mongo'],
+            
+            /**
+             * This will prevent the validator from throwing errors
+             * when a missing export is detected.
+             */
+            warnOnly: true,
+            
+            /**
+             * If you want no warnings, you can simply disable the validation outright.
+             */
+            disabled: false,
         }
       })
   ]
