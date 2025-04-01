@@ -313,6 +313,10 @@ export default defineConfig({
        * Set METEOR_VITE_BASE_URL=<your cdn url here> in production to override the base URL for your Vite assets.
        * @note Only affects web.browser and web.browser.legacy architectures. Cordova can only have assets generated
        * statically.
+       * @warning If your CDN URL does not need to change after building your app, just define the URL using 
+       * {@link https://vite.dev/config/shared-options.html#base `config.base`} instead. Using this option will result
+       * in additional resource consumption in production and somewhat slower response times unless caching is set up
+       * accordingly.
        * @default true
        */
       dynamicAssetBoilerplate: false,
