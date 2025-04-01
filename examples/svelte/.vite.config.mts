@@ -1,6 +1,6 @@
 import { svelte } from '@sveltejs/vite-plugin-svelte';
-import { defineConfig } from 'vite';
 import { meteor } from 'meteor-vite/plugin';
+import { defineConfig } from 'vite';
 
 export default defineConfig({
   plugins: [
@@ -8,7 +8,7 @@ export default defineConfig({
       configFile: 'svelte.config.mjs'
     }),
     meteor({
-        clientEntry: 'imports/ui/main.ts',
+        clientEntry: 'imports/ui/entry-meteor.js',
         stubValidation: {
           warnOnly: true,
         }

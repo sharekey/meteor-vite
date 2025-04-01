@@ -26,8 +26,8 @@
   },
   "meteor": {
     "mainModule": {
-      "client": "client/main.ts",
-      "server": "server/main.ts"
+      "client": "client/entry-meteor.js",
+      "server": "server/entry-meteor.ts"
     },
     "testModule": "tests/main.js",
     "vite": {
