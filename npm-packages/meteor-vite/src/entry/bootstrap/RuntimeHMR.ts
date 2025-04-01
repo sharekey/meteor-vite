@@ -114,5 +114,14 @@ if (import.meta.hot) {
                 types.set(key, value);
             }
         }
+        if (globalThis.Accounts) {
+            Object.assign(globalThis.Accounts, {
+                _beforeExternalLoginHook: null,
+                _onCreateLoginTokenHook: null,
+                _onCreateUserHook: null,
+                _onExternalLoginHook: null,
+                _additionalFindUserOnExternalLogin: null,
+            })
+        }
     })
 }
