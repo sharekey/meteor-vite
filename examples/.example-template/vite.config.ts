@@ -5,6 +5,8 @@ export default defineConfig({
     plugins: [
         meteor({
             clientEntry: 'client/vite-entry.ts',
+            serverEntry: 'server/vite-entry.ts',
+            enableExperimentalFeatures: true,
         }),
     ],
     optimizeDeps: {},
