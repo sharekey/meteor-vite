@@ -10,7 +10,7 @@ export default defineConfig({
             defaultExport: 'component',
         }),
         meteor({
-            clientEntry: 'imports/entrypoint/vite.js',
+            clientEntry: 'client/entry-vite.js',
         })
     ],
 });
