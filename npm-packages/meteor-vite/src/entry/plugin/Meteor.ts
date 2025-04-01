@@ -78,7 +78,8 @@ export function meteorWorker(config: PartialPluginOptions): PluginOption {
                             // Causing false-positive validation warnings.
                             // https://github.com/JorgenVatle/meteor-vite/issues/246
                             'roles',
-                            'alanning:roles'
+                            'alanning:roles',
+                            'meteor/mongo'
                         ]
                     }
                 }, config);
