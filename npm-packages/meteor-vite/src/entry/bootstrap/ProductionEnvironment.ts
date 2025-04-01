@@ -1,5 +1,5 @@
 import { Meteor } from 'meteor/meteor';
-import { WebApp } from 'meteor/webapp';
+import { WebApp, WebAppInternals } from 'meteor/webapp';
 import Logger from '../../utilities/Logger';
 import { ViteProductionBoilerplate } from './boilerplate/Production';
 import type { ViteManifestFile } from './scripts/Build';
@@ -31,7 +31,17 @@ async function markViteAssetsForCaching(files: ClientManifest) {
         res.write('Vite asset not found');
         res.end();
         Logger.warn(`Served 404 for unknown Vite asset: ${req.originalUrl}`);
-    })
+    });
+    
+    if (!__VITE_STATIC_ASSET_BOILERPLATE__) {
+        WebAppInternals.registerBoilerplateDataCallback('meteor-vite', (req, data) => {
+            const { dynamicHead, dynamicBody } = boilerplate.getBoilerplate();
+            data.dynamicHead = data.dynamicHead || '';
+            data.dynamicBody = data.dynamicBody || '';
+            data.dynamicHead += dynamicHead;
+            data.dynamicBody += dynamicBody;
+        })
+    }
     
     // Todo: Instead of serving assets with Meteor's built-in static file handler,
     //  add a custom asset route where we have better control over caching and CORS rules.
