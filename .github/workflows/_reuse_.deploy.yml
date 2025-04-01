@@ -13,16 +13,7 @@ on:
       imageRegistry:
         type: string
         default: ghcr.io
-      meteorBaseImage:
-        type: string
-        required: false
-        description: |
-          Meteor base image for bundling. Useful to override if you need a Meteor release not officially
-          supported yet by the original geoffreybooth image.
-      nodeVersion:
-        type: string
-        default: 14-alpine
-        description: Node.js Docker image version to use for the final production build.
+
 jobs:
   build:
     name: Build 🐋
@@ -30,8 +21,6 @@ jobs:
     secrets: inherit
     with:
       appBasename: ${{ inputs.appBasename }}
-      nodeVersion: ${{ inputs.nodeVersion }}
-      meteorBaseImage: ${{ inputs.meteorBaseImage }}
       push: true
 
 
