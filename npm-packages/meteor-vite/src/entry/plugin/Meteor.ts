@@ -90,6 +90,7 @@ export function meteorWorker(config: PartialPluginOptions): PluginOption {
                     base,
                     define: {
                         __VITE_ASSETS_DIR__: JSON.stringify(pluginSettings.assetsDir),
+                        __VITE_STATIC_ASSET_BOILERPLATE__: JSON.stringify(pluginSettings.staticAssetBoilerplate),
                     },
                     optimizeDeps: {
                         entries: [pluginSettings.clientEntry]
