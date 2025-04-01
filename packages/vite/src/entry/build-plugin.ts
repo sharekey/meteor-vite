@@ -138,7 +138,9 @@ else {
     } else {
         Plugin.registerCompiler({
             filenames: [
-                CurrentConfig.clientEntryModule, 'vite.config.ts', 'vite.config.js',
+                CurrentConfig.clientEntryModule,
+                'vite.config.ts',
+                'vite.config.js',
                 'vite.config.mts',
                 'vite.config.mjs',
             ],
