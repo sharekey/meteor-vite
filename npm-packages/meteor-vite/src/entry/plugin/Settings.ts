@@ -51,6 +51,7 @@ export interface PluginSettings<
      * Whether imports for your Vite production assets in your app's index.html file should be generated statically
      * (once during build) or dynamically with every incoming request. Enable if you need to change the base URL of
      * your Vite assets after building your application.
+     * Set METEOR_VITE_BASE_URL=<your cdn url here> in production to override the base URL for your Vite assets.
      * @note Only affects web.browser and web.browser.legacy architectures. Cordova can only have assets generated
      * statically.
      * @default true
