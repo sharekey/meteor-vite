@@ -49,13 +49,13 @@ export interface PluginSettings<
     
     /**
      * Whether imports for your Vite production assets in your app's index.html file should be generated statically
-     * (once during build) or dynamically with every incoming request. Disable if you need to change the base URL of
+     * (once during build) or dynamically with every incoming request. Enable if you need to change the base URL of
      * your Vite assets after building your application.
      * @note Only affects web.browser and web.browser.legacy architectures. Cordova can only have assets generated
      * statically.
      * @default true
      */
-    staticAssetBoilerplate: boolean;
+    dynamicAssetBoilerplate: boolean;
     
     /**
      * Root directory to serve Vite assets from in production.

@@ -70,7 +70,7 @@ export function meteorWorker(config: PartialPluginOptions): PluginOption {
                     },
                     tempDir: Path.join(METEOR_LOCAL_DIR, 'vite'),
                     assetsDir: 'vite',
-                    staticAssetBoilerplate: true,
+                    dynamicAssetBoilerplate: false,
                     stubValidation: {
                         warnOnly: process.env.NODE_ENV === 'production',
                         disabled: false,
@@ -90,7 +90,7 @@ export function meteorWorker(config: PartialPluginOptions): PluginOption {
                     base,
                     define: {
                         __VITE_ASSETS_DIR__: JSON.stringify(pluginSettings.assetsDir),
-                        __VITE_STATIC_ASSET_BOILERPLATE__: JSON.stringify(pluginSettings.staticAssetBoilerplate),
+                        __VITE_STATIC_ASSET_BOILERPLATE__: JSON.stringify(pluginSettings.dynamicAssetBoilerplate),
                     },
                     optimizeDeps: {
                         entries: [pluginSettings.clientEntry]

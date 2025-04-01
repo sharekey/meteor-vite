@@ -29,7 +29,7 @@ Meteor.startup(async () => {
         Logger.warn(`Served 404 for unknown Vite asset: ${req.originalUrl}`);
     });
     
-    if (!__VITE_STATIC_ASSET_BOILERPLATE__) {
+    if (__VITE_DYNAMIC_ASSET_BOILERPLATE__) {
         WebAppInternals.registerBoilerplateDataCallback('meteor-vite', (req, data) => {
             const { dynamicHead, dynamicBody } = boilerplate.getBoilerplate();
             data.dynamicHead = data.dynamicHead || '';

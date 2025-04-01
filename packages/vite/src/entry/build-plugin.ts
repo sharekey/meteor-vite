@@ -17,7 +17,7 @@ class CompilerPlugin {
         assetsDir: string,
         mode: 'production' | 'development' | string,
         boilerplate: ViteBoilerplate;
-        staticAssetBoilerplate: boolean;
+        dynamicAssetBoilerplate: boolean;
     }) {
         Logger.info(`[${config.mode}] Initializing Vite Compiler Plugin...`);
     }
@@ -65,11 +65,9 @@ class CompilerPlugin {
             Logger.debug(`Skipping boilerplate injection for arch '${Colorize.arch(arch)}'`)
             return;
         }
-        if (!this.config.staticAssetBoilerplate) {
-            if (arch.includes('browser')) {
-                Logger.debug(`Skipping boilerplate injection. Static asset boilerplate is disabled. ${Colorize.filepath(file.getPathInPackage())}`)
-                return;
-            }
+        if (this.config.dynamicAssetBoilerplate && !arch.includes('cordova')) {
+            Logger.debug(`Skipping boilerplate injection. Static asset boilerplate is disabled. ${Colorize.filepath(file.getPathInPackage())}`)
+            return;
         }
         if (this.boilerplateArc.has(arch)) {
             return;
@@ -133,14 +131,14 @@ else {
         }, async () => {
             try {
                 await cleanup;
-                const { outDir, assetsDir, boilerplate, staticAssetBoilerplate } = await runBootstrapScript('buildForProduction');
+                const { outDir, assetsDir, boilerplate, dynamicAssetBoilerplate } = await runBootstrapScript('buildForProduction');
                 
                 return new CompilerPlugin({
                     outDir,
                     assetsDir,
                     mode: CurrentConfig.mode,
                     boilerplate,
-                    staticAssetBoilerplate
+                    dynamicAssetBoilerplate,
                 });
             } catch (error) {
                 Logger.error('build failed');
@@ -165,7 +163,7 @@ else {
                 assetsDir: '',
                 mode: CurrentConfig.mode,
                 boilerplate,
-                staticAssetBoilerplate: true,
+                dynamicAssetBoilerplate: true,
             });
         })
     }
