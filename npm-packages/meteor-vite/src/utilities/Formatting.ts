@@ -38,6 +38,10 @@ export function trimTrailingSlash(path: string) {
     return path.replace(/\/+$/, '');
 }
 
+export function trimLeadingSlash(path: string) {
+    return path.replace(/^\/+/g, '');
+}
+
 /**
  * Check whether the provided module content has an import for the provided path.
  * @param module
