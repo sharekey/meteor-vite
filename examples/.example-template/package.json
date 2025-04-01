@@ -14,8 +14,8 @@
   },
   "meteor": {
     "mainModule": {
-      "client": "imports/entrypoints/meteor-client.ts",
-      "server": "imports/entrypoints/meteor-server.ts"
+      "client": "client/entry-meteor.ts",
+      "server": "server/entry-meteor.ts"
     },
     "testModule": "tests/main.js"
   },
