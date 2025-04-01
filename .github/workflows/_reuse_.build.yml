@@ -10,7 +10,7 @@ on:
         default: '3.2'
       nodeVersion:
         type: string
-        default: '20-alpine'
+        default: '22-alpine'
       push:
         type: boolean
         default: false
