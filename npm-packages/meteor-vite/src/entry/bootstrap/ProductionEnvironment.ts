@@ -8,10 +8,15 @@ Meteor.startup(async () => {
     if (!Meteor.isProduction) {
         return;
     }
+    
     console.log('[Vite] Fetching manifest...');
     const manifest = await Assets.getTextAsync(`${__VITE_ASSETS_DIR__}/client.manifest.json`);
-    const files: Record<string, ViteManifestFile> = JSON.parse(manifest);
+    const files: ClientManifest = JSON.parse(manifest);
     
+    await markViteAssetsForCaching(files);
+})
+
+async function markViteAssetsForCaching(files: ClientManifest) {
     // Todo: retrieve base and assets dir from build config/manifest file
     const boilerplate = new ViteProductionBoilerplate({
         base: process.env.METEOR_VITE_BASE_URL || import.meta.env.BASE_URL,
@@ -31,5 +36,6 @@ Meteor.startup(async () => {
     // Todo: Instead of serving assets with Meteor's built-in static file handler,
     //  add a custom asset route where we have better control over caching and CORS rules.
     boilerplate.makeViteAssetsCacheable();
-})
+}
 
+type ClientManifest = Record<string, ViteManifestFile>;
