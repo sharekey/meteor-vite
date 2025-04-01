@@ -28,6 +28,13 @@ export function moduleImport(path: string) {
 }
 
 /**
+ * Normalize and compare two file paths.
+ */
+export function isSamePath(pathA: string, pathB: string) {
+    return Path.normalize(pathA) === Path.normalize(pathB);
+}
+
+/**
  * Check whether the provided module content has an import for the provided path.
  * @param module
  */
