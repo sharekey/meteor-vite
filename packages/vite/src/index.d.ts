@@ -8,6 +8,6 @@ declare global {
     namespace globalThis {
         var MeteorViteRuntimeConfig: (typeof CurrentConfig) & MeteorViteRuntimeConfig;
         var __VITE_ASSETS_DIR__: string;
-        var __VITE_STATIC_ASSET_BOILERPLATE__: string;
+        var __VITE_STATIC_ASSET_BOILERPLATE__: boolean;
     }
 }
