@@ -1,5 +1,5 @@
-import { Meteor } from 'meteor/meteor'
-import { LinksCollection } from '/imports/api/links'
+import { LinksCollection } from '/imports/api/links';
+import { Meteor } from 'meteor/meteor';
 
 // Initializes SSR for the Vue app.
 import '/imports/ui/server';
