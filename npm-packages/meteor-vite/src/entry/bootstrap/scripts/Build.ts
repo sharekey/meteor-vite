@@ -6,7 +6,7 @@ import type { RollupOutput, RollupWatcher } from 'rollup';
 import { createBuilder, type InlineConfig, version } from 'vite';
 import { MeteorViteError } from '../../../error/MeteorViteError';
 
-import { Colorize, hasModuleImport, moduleImport } from '../../../utilities/Formatting';
+import { Colorize, hasModuleImport, isSamePath, moduleImport } from '../../../utilities/Formatting';
 import Logger, { BuildLogger } from '../../../utilities/Logger';
 import type { MeteorStubsSettings, ProjectJson, ResolvedMeteorViteConfig } from '../../plugin/Settings';
 import { ViteProductionBoilerplate } from '../boilerplate/Production';
@@ -54,7 +54,7 @@ export async function buildForProduction() {
                 logger.info(`Vite assets will be fetched from ${Colorize.filepath(baseCdnPath)}`);
                 logger.info(`Meteor will serve these assets from ${Colorize.filepath(baseAssetPath)}`);
                 
-                if (baseAssetPath !== baseCdnPath) {
+                if (!isSamePath(baseAssetPath, baseCdnPath)) {
                     logger.warn('The root directory for your Vite bundle appears to be different from your Vite base path');
                     logger.warn(`Make sure you have a CDN or proxy configured to serve Meteor assets from ${Colorize.filepath(baseCdnPath)} -> ${Colorize.filepath(baseAssetPath)}`);
                     logger.warn(`If you're not using a CDN or proxy, just remove the 'base' field in your ${Colorize.filepath('vite.config.ts')} file`);
