@@ -9,7 +9,7 @@ export default defineConfig({
           jsxRuntime: 'classic'
       }),
       meteor({
-        clientEntry: "client/entry-vite.js",
+        clientEntry: "client/entry-vite.jsx",
         stubValidation: {
           warnOnly: true,
         },
