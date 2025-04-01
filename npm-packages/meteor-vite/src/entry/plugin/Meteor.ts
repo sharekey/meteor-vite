@@ -3,29 +3,18 @@ import pc from 'picocolors';
 import type { Plugin, PluginOption, ResolvedConfig, UserConfig } from 'vite';
 import PackageJSON from '../../../package.json';
 import { FatalMeteorViteError } from '../../error/MeteorViteError';
-import type { PartialPluginOptions, PluginOptions, PluginSettings } from './Settings';
 import { MeteorStubs } from './MeteorStubs';
 import { mergeWithTypes, parseConfig } from './ParseConfig';
+import type { PartialPluginOptions, PluginOptions, PluginSettings } from './Settings';
 
 /**
  * Configure the Meteor-Vite compiler.
- * Will be added automatically by Meteor if omitted.
  *
- * Just make sure you set your {@link https://github.com/JorgenVatle/meteor-vite#installation clientEntry} either using
- * this plugin, or in your vite config.
- *
- * @example plugin (recommended)
+ * @example vite.config.ts
  * export default defineConfig({
  *     plugins: [
  *         meteor({ clientEntry: './imports/entrypoint/vite.js' })
  *     ]
- * })
- *
- * @example vite config
- * export default defineConfig({
- *     meteor: {
- *         clientEntry: './imports/entrypoint/vite.js',
- *     }
  * })
  */
 export default function meteor(config: PluginOptions): PluginOption {
