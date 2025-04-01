@@ -18,8 +18,8 @@ export function stubTemplate({ requestId, meteorPackage, importPath, stubValidat
     meteorPackage: MeteorPackage;
     importPath?: string;
 }) {
-    const stubId = getStubId();
     const { packageId } = meteorPackage;
+    const stubId = packageId.replaceAll('/', '_');
     // Todo: combine package-level exports with exports from mainModule when imported without a subpath
     const submodule = meteorPackage.getModule({ importPath });
     const serializedPackage = meteorPackage.serialize({ importPath });
@@ -130,13 +130,4 @@ function stubValidationTemplate({ settings, requestId, exportKeys, packageId }: 
         importString,
         validateStub,
     }
-}
-
-/**
- * Unique ID for the next stub.
- * @type {number}
- */
-let nextStubId = 0;
-function getStubId() {
-    return nextStubId++;
 }
