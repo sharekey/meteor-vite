@@ -70,6 +70,7 @@ export function meteorWorker(config: PartialPluginOptions): PluginOption {
                     },
                     tempDir: Path.join(METEOR_LOCAL_DIR, 'vite'),
                     assetsDir: 'vite',
+                    staticAssetBoilerplate: true,
                     stubValidation: {
                         warnOnly: process.env.NODE_ENV === 'production',
                         disabled: false,

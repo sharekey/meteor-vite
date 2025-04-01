@@ -48,6 +48,16 @@ export interface PluginSettings<
     assetsBaseUrl?: string;
     
     /**
+     * Whether imports for your Vite production assets in your app's index.html file should be generated statically
+     * (once during build) or dynamically with every incoming request. Disable if you need to change the base URL of
+     * your Vite assets after building your application.
+     * @note Only affects web.browser and web.browser.legacy architectures. Cordova can only have assets generated
+     * statically.
+     * @default true
+     */
+    staticAssetBoilerplate: boolean;
+    
+    /**
      * Root directory to serve Vite assets from in production.
      * This is the path at which Meteor will serve Vite assets. It should match the path specified by `assetsBaseUrl`
      * unless you have a reverse proxy that can handle the rewrite to point requests to the correct path
