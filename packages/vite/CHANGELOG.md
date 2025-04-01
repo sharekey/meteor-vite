@@ -1,5 +1,11 @@
 # jorgenvatle_vite
 
+## 1.4.0
+
+### Minor Changes
+
+- e3950b4f: Add option to dynamically generate Vite asset boilerplate. Fixes #316
+
 ## 1.3.6
 
 ### Patch Changes

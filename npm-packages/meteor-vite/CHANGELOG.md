@@ -1,5 +1,21 @@
 # meteor-vite
 
+## 3.6.0
+
+### Minor Changes
+
+- e3950b4f: Add option to dynamically generate Vite asset boilerplate. Fixes #316
+- 6b1c9bb0: Reset any user-defined hooks in accounts-base during server-side HMR.
+
+  - https://github.com/JorgenVatle/meteor-vite/issues/313#issuecomment-2744594347
+
+### Patch Changes
+
+- 439b07c7: Ensure consistent use of METEOR_VITE_BASE_URL override for Vite boilerplate assets. Related to #316
+- 4a5affc8: Fix Vite asset base URL comparison causing false-positive warning messages for mismatched paths.
+- 2c32274f: Update default stub validation config to exclude meteor/mongo
+- 9fa6a399: Use package ID instead of random number for Meteor package stub IDs. #320
+
 ## 3.5.0
 
 ### Minor Changes
