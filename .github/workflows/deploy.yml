@@ -36,8 +36,8 @@ jobs:
     with:
       appBasename: 'solid'
 
-  vue-meteor-v3:
-    name: 'Meteor v3'
+  vue-zodern-relay:
+    name: 'Vue + zodern:relay'
     uses: ./.github/workflows/_reuse_.deploy.yml
     secrets: inherit
     with:
