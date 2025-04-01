@@ -21,7 +21,6 @@ jobs:
     uses: ./.github/workflows/_reuse_.build.yml
     with:
       appBasename: 'vue'
-      meteorBaseImage: jorgenvatle/meteor-base
 
   svelte:
     name: 'Svelte'
