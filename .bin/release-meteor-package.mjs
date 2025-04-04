@@ -156,12 +156,14 @@ async function fixPackageJsonName() {
         logger.info('🔎 No meteor package name format detected in package.json. No changes necessary!');
         return;
     }
+    const meteorName = packageJson.name;
     logger.info(`⚠️ Detected package.json using Meteor package name format: ${packageJson.name.name}`);
 
     packageJson.name = packageJson.name.replace(':', '_');
     await FS.writeFile(meteorPackage.packageJsonPath, JSON.stringify(packageJson, null, 2));
+
     await shell(`git add ${meteorPackage.packageJsonPath}`);
-    await shell(`git commit --amend --no-edit`);
+    await shell(`git commit -m 'Revert ${meteorName} package.json name to use npm-compatible format'`);
 
     logger.info(`✅  Fixed package.json name to use npm-compatible format: ${packageJson.name}`);
 }
