@@ -240,6 +240,7 @@ async function isPublished(version) {
 
     if (action === 'fix-package-name') {
         await fixPackageJsonName();
+        return;
     }
 
     throw new Error(`The provided argument is not recognized: "${action}"`);
