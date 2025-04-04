@@ -131,7 +131,7 @@ async function publish() {
     logger.info(`✨  Publishing to Atmosphere with Meteor ${release} release...`);
     await setVersion(version);
 
-    await shell(`meteor publish`, {
+    await shell(`VITE_METEOR_DISABLED=true meteor publish`, {
         async: true,
         cwd: Path.dirname(meteorPackage.packageJsPath),
         env: {
