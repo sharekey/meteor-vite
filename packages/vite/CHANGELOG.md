@@ -1,5 +1,11 @@
 # jorgenvatle:vite
 
+## 1.4.2
+
+### Patch Changes
+
+- 575857ca: Test releases using Meteor package name format
+
 ## 1.4.1
 
 ### Patch Changes

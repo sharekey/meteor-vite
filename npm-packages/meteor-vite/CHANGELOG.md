@@ -1,5 +1,12 @@
 # meteor-vite
 
+## 3.6.1
+
+### Patch Changes
+
+- 85c8136d: Fix issue where lazy-loaded server packages would have their import references added only to the client mainModule.
+  - Fixes #285
+
 ## 3.6.0
 
 ### Minor Changes
