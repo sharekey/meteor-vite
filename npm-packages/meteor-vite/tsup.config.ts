@@ -8,7 +8,6 @@ export default defineConfig([
     {
         name: 'meteor-vite/internals',
         entry: [
-            './src/entry/client/index.ts',
             './src/entry/bootstrap/index.ts',
             './src/entry/bootstrap/RuntimeHMR.ts',
             './src/entry/bootstrap/scripts/index.ts',
@@ -33,6 +32,18 @@ export default defineConfig([
         esbuildPlugins: [
             EsbuildPluginMeteorStubs,
         ]
+    },
+    
+    // Plugin entry
+    {
+        name: 'meteor-vite/client',
+        entry: {
+            plugin: './src/client/index.ts',
+        },
+        format: 'esm',
+        sourcemap: true,
+        dts: true,
+        skipNodeModulesBundle: true,
     },
     
     // Plugin entry
