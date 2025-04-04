@@ -12,14 +12,6 @@
       "import": "./dist/plugin.mjs",
       "require": "./dist/plugin.js"
     },
-    "./bootstrap/scripts": {
-      "types": "./dist/bootstrap/scripts/index.d.ts",
-      "import": "./dist/bootstrap/scripts/index.mjs"
-    },
-    "./bootstrap/*": {
-      "types": "./dist/bootstrap/*.d.ts",
-      "import": "./dist/bootstrap/*.mjs"
-    },
     "./utilities": {
       "types": "./dist/utilities.d.ts",
       "import": "./dist/utilities.mjs",
@@ -28,7 +20,15 @@
     "./client": {
       "types": "./dist/client/index.d.ts",
       "import": "./dist/client/index.mjs"
-    }
+    },
+    "./bootstrap/scripts": {
+      "types": "./dist/bootstrap/scripts/index.d.ts",
+      "import": "./dist/bootstrap/scripts/index.mjs"
+    },
+    "./bootstrap/*": {
+      "types": "./dist/bootstrap/*.d.ts",
+      "import": "./dist/bootstrap/*.mjs"
+    },
   },
   "scripts": {
     "start": "ts-node-dev src/bin/debug/watch-mocks.ts",
