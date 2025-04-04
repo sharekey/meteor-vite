@@ -4,8 +4,5 @@
   "version": "1.5.1",
   "scripts": {
     "publish": "VITE_METEOR_DISABLED=true meteor publish"
-  },
-  "dependencies": {
-    "meteor-vite": "file:../../npm-packages/meteor-vite"
   }
 }
