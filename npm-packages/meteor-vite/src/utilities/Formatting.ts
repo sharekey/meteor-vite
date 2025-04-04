@@ -1,11 +1,15 @@
 import Path from 'path';
 import pc from 'picocolors';
+import { inspect } from 'util';
 
 export const Colorize = {
     filepath: pc.cyan,
     arch: pc.yellow,
     versionNumber: pc.blue,
     textSnippet: pc.white,
+    object: (data: unknown) => {
+        return pc.dim(inspect(data, { colors: true }));
+    }
 };
 
 /**
