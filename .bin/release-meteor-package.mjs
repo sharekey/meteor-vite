@@ -80,6 +80,12 @@ async function updateChangesetToUseMeteorPackageNameFormat() {
     }, null, 2));
 }
 
+async function revertToNpmCompatiblePackageNameFormat() {
+    const packageJson = await parsePackageJson();
+    packageJson.name = packageJson.name.replace(':', '_');
+    await FS.writeFile(meteorPackage.packageJsonPath, JSON.stringify(packageJson, null, 2));
+}
+
 async function applyVersion() {
     await shell(`changeset status --output ${CHANGESET_STATUS_FILE}`);
 
@@ -102,6 +108,10 @@ async function applyVersion() {
     await shell(`git commit -m 'Bump ${meteorPackage.name} version to ${release.newVersion}'`);
 
     await updateChangesetToUseMeteorPackageNameFormat();
+    await shell('npx changeset version');
+    await revertToNpmCompatiblePackageNameFormat();
+    await shell(`git add ${meteorPackage.packageJsonPath}`);
+    await shell(`git commit --amend`);
 }
 
 async function setVersion(newVersion) {
