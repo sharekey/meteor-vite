@@ -56,7 +56,7 @@ export default defineConfig([
     {
         name: 'meteor-vite/utilities',
         entry: [
-            './src/entry/plugin/index.ts',
+            './src/utilities/index.ts',
         ],
         outDir: 'dist/utilities',
         format: [
