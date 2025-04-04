@@ -1,13 +1,16 @@
 import FS from 'fs/promises';
+import PLimit from 'p-limit';
 import pc from 'picocolors';
 import Logger from '../../../../utilities/Logger';
 import { RefreshNeeded } from '../../ViteLoadRequest';
 import MeteorEvents, { EventTimeout } from '../MeteorEvents';
 import { viteAutoImportBlock } from './StubTemplate';
-import PLimit from 'p-limit';
 
 export const wait = (waitMs: number) => new Promise<void>((resolve) => setTimeout(() => resolve(), waitMs));
 
+// Todo: Now that meteor-vite is running within the Meteor runtime, we should probably refactor this
+//  to listen on events within the current process
+//  We also likely don't need to throw any errors.
 class AutoImportQueue {
     protected restartTimeout?: ReturnType<typeof setTimeout>;
     protected addedPackages: string[] = [];
