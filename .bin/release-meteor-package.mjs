@@ -1,4 +1,4 @@
-import { execSync, spawn, execFileSync } from 'child_process';
+import { execFileSync, execSync, spawn } from 'child_process';
 import Path from 'path';
 import FS from 'fs/promises';
 
@@ -55,6 +55,31 @@ async function parsePackageJson() {
     return JSON.parse(await FS.readFile(meteorPackage.packageJsonPath, 'utf-8'));
 }
 
+async function updateChangesetToUseMeteorPackageNameFormat() {
+    const packageJson = await parsePackageJson();
+    const CHANGESET_DIR = '.changeset';
+
+    const formattedName = packageJson.name.replace('_', ':');
+
+    // Rewrite changeset jorgenvatle_vite to jorgenvatle:vite
+    const changesets = await FS.readdir('.changeset');
+    for (const changeset of changesets) {
+        if (!changeset.endsWith('.md')) {
+            continue;
+        }
+        const path = Path.join(CHANGESET_DIR, changeset);
+        const content = await FS.readFile(path, 'utf-8');
+        const newContent = content.replace(packageJson.name, formattedName);
+        await FS.writeFile(path, newContent);
+    }
+
+    // Rewrite package.json from jorgenvatle_vite to jorgenvatle:vite
+    await FS.writeFile(meteorPackage.packageJsonPath, JSON.stringify({
+        ...packageJson,
+        name: formattedName,
+    }, null, 2));
+}
+
 async function applyVersion() {
     await shell(`changeset status --output ${CHANGESET_STATUS_FILE}`);
 
@@ -75,6 +100,8 @@ async function applyVersion() {
     await shell(`rm ${CHANGESET_STATUS_FILE}`);
     await shell(`git add ${meteorPackage.packageJsPath}`);
     await shell(`git commit -m 'Bump ${meteorPackage.name} version to ${release.newVersion}'`);
+
+    await updateChangesetToUseMeteorPackageNameFormat();
 }
 
 async function setVersion(newVersion) {
