@@ -80,12 +80,6 @@ async function updateChangesetToUseMeteorPackageNameFormat() {
     }, null, 2));
 }
 
-async function revertToNpmCompatiblePackageNameFormat() {
-    const packageJson = await parsePackageJson();
-    packageJson.name = packageJson.name.replace(':', '_');
-    await FS.writeFile(meteorPackage.packageJsonPath, JSON.stringify(packageJson, null, 2));
-}
-
 async function applyVersion() {
     await shell(`changeset status --output ${CHANGESET_STATUS_FILE}`);
 
@@ -110,11 +104,6 @@ async function applyVersion() {
     // Rewrite package.json and changelogs to use jorgenvatle:vite instead of jorgenvatle_vite
     await updateChangesetToUseMeteorPackageNameFormat();
     await shell('npx changeset version');
-
-    // Revert package.json name back to jorgenvatle_vite to avoid breaking npm workspaces
-    await revertToNpmCompatiblePackageNameFormat();
-    await shell(`git add ${meteorPackage.packageJsonPath}`);
-    await shell(`git commit --amend --no-edit`);
 }
 
 async function setVersion(newVersion) {
@@ -138,7 +127,6 @@ async function publish() {
         return;
     }
 
-
     const release = execSync('meteor --version').toString().trim();
     logger.info(`✨  Publishing to Atmosphere with Meteor ${release} release...`);
     await setVersion(version);
@@ -155,6 +143,27 @@ async function publish() {
 
     logger.info(`🚀  Published to Atmosphere: `)
     logger.info(` L ${meteorPackage.name}@${version}`)
+}
+
+/**
+ * Revert package.json files using Meteor package name format (author:name) to npm-compatible placeholder format
+ * (author_name)
+ * @returns {Promise<void>}
+ */
+async function fixPackageJsonName() {
+    const packageJson = await parsePackageJson();
+    if (!packageJson.name.includes(':')) {
+        logger.info('🔎 No meteor package name format detected in package.json. No changes necessary!');
+        return;
+    }
+    logger.info(`⚠️ Detected package.json using Meteor package name format: ${packageJson.name.name}`);
+
+    packageJson.name = packageJson.name.replace(':', '_');
+    await FS.writeFile(meteorPackage.packageJsonPath, JSON.stringify(packageJson, null, 2));
+    await shell(`git add ${meteorPackage.packageJsonPath}`);
+    await shell(`git commit --amend --no-edit`);
+
+    logger.info(`✅  Fixed package.json name to use npm-compatible format: ${packageJson.name}`);
 }
 
 function shell(command, options) {
@@ -225,6 +234,10 @@ async function isPublished(version) {
     if (action === 'version') {
         await applyVersion();
         return;
+    }
+
+    if (action === 'fix-package-name') {
+        await fixPackageJsonName();
     }
 
     throw new Error(`The provided argument is not recognized: "${action}"`);
