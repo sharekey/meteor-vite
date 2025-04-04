@@ -1,3 +1,4 @@
+import Path from 'node:path';
 import pc from 'picocolors';
 import { defineConfig, type Options } from 'tsup';
 
@@ -20,11 +21,12 @@ export default defineConfig(() => ({
     sourcemap: true,
     format: 'esm',
     esbuildPlugins: [
+        fixBuildPluginCjsImports(),
         meteorImportStubs({
             'isobuild': () => `const PluginGlobal = Plugin; export { PluginGlobal as Plugin }`,
-        })
+        }),
     ],
-    noExternal: ['meteor/isobuild']
+    noExternal: ['meteor/isobuild', 'meteor-vite']
 }))
 
 export const EsbuildPluginMeteorStubs = meteorImportStubs({
@@ -35,7 +37,36 @@ export const EsbuildPluginMeteorStubs = meteorImportStubs({
         `export const WebApp = ${symbol}?.WebApp || globalThis.WebApp`,
         `export const WebAppInternals = ${symbol}?.WebAppInternals || globalThis?.WebAppInternals`,
     ].join('\n'),
-})
+});
+
+const log = (...messages: unknown[]) => {
+    console.log(...messages.map((message) => {
+        if (typeof message === 'string') {
+            return pc.cyan(message);
+        }
+        return message;
+    }));
+}
+
+function fixBuildPluginCjsImports(): Plugin {
+    return {
+        name: 'fix-build-plugin-cjs-imports',
+        setup(build) {
+            build.onResolve({ filter: /^meteor-vite/ }, (args) => {
+                const parsed = Path.parse(args.path);
+                const packageRoot = parsed.dir;
+                const newPath = Path.join(packageRoot, 'dist', `${parsed.name}.js`);
+                
+                log(`Rewriting external ${pc.yellow(packageRoot)} import for Meteor build plugin: ${pc.blue(args.path)} -> ${pc.green(newPath)}`);
+                
+                return {
+                    path: newPath,
+                    external: true,
+                }
+            })
+        }
+    } satisfies Plugin;
+}
 
 function meteorImportStubs(packages: {
     [key in string]: (symbol: string) => string;
@@ -50,7 +81,7 @@ function meteorImportStubs(packages: {
             })
             
             build.onLoad({ filter: /.*/, namespace: 'meteor' }, (args) => {
-                console.log(pc.cyan(`Stubbing Meteor package import: '${pc.green(args.path)}'`));
+                log(`Stubbing Meteor package import: '${pc.green(args.path)}'`);
                 
                 const [packageName] = args.path.split('/');
                 const stubFunction = packages[packageName];
