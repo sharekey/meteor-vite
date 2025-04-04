@@ -31,7 +31,7 @@
     "prepare": "npm run build:packages || exit 0",
     "link": "npm run example link",
     "release": "npm run publish:vite && changeset publish",
-    "version": "npm run version:vite",
+    "version": "npm run version:vite && changeset version",
     "example": ".bin/example-app.sh",
 
     "subtree": "npm run subtree:pull && npm run subtree:push",
