@@ -161,7 +161,7 @@ else {
                 assetsDir: '',
                 mode: CurrentConfig.mode,
                 boilerplate,
-                dynamicAssetBoilerplate: true,
+                dynamicAssetBoilerplate: false,
             });
         })
     }
