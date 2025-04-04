@@ -63,3 +63,10 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
           METEOR_SESSION_FILE: ${{ env.METEOR_SESSION_FILE_PATH }}
+
+      - name: 'Patch package.json names'
+        if: steps.changesets.outputs.pullRequestNumber
+        run: |
+          git fetch origin
+          git switch changesets/${{ github.ref_name }}
+          npm run fix-package-name
