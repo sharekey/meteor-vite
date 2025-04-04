@@ -1,7 +1,7 @@
 name: Release
-run-name: '📦 Release: ${{ github.event.head_commit.message }}'
+run-name: '📦 Fix release package.json names'
 on:
-  push:
+  pull_request:
     branches:
       - changesets/**
 
