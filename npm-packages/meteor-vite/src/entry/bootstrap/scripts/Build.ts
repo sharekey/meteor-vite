@@ -23,7 +23,8 @@ export async function buildForProduction() {
     }
     
     preparePackagesForExportAnalyzer({ 
-        mainModule: packageJson.meteor.mainModule
+        mainModule: packageJson.meteor.mainModule,
+        replacePackages: packageJson.meteor.vite?.replacePackages || [],
     });
     // todo: refactor into environment config
     config.meteor.meteorStubs.meteor.buildProgramsPath = CurrentConfig.packageAnalyzer.buildProgramsDir;
@@ -169,7 +170,10 @@ function addServerEntryImport({ filePath }: {
  * Build a temporary Meteor project to generate package source files that
  * can be analyzed for package export stubbing.
  */
-function preparePackagesForExportAnalyzer({ mainModule }: { mainModule: { client: string } }) {
+function preparePackagesForExportAnalyzer({ mainModule, replacePackages = [] }: {
+    mainModule: { client: string },
+    replacePackages?: PackageReplacement[];
+}) {
     const inDir = CurrentConfig.packageAnalyzer.inDir;
     const outDir = CurrentConfig.packageAnalyzer.outDir;
     
@@ -192,10 +196,10 @@ function preparePackagesForExportAnalyzer({ mainModule }: { mainModule: { client
         'node_modules',
         'packages',
     ];
-    const replaceMeteorPackages = [
+    const replaceMeteorPackages: PackageReplacement[] = [
         { startsWith: 'standard-minifier', replaceWith: '' },
         { startsWith: 'refapp:meteor-typescript', replaceWith: 'typescript' },
-        // todo: implement replacePackages config option from package.json
+        ...replacePackages,
     ]
     
     // Copy files from `.meteor`
@@ -307,6 +311,10 @@ export type TransformedViteManifest = {
     base: string;
     assetsDir: string;
     files: Record<string, ViteManifestFile>;
+}
+type PackageReplacement = {
+    startsWith: string;
+    replaceWith: string;
 }
 export type ViteManifestFile = {
     file: string;
