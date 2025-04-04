@@ -18,8 +18,8 @@
       "require": "./dist/utilities.js"
     },
     "./client": {
-      "types": "./dist/client/index.d.ts",
-      "import": "./dist/client/index.mjs"
+      "types": "./dist/client.d.ts",
+      "import": "./dist/client.mjs"
     },
     "./bootstrap/scripts": {
       "types": "./dist/bootstrap/scripts/index.d.ts",
