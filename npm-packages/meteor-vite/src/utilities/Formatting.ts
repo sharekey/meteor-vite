@@ -7,9 +7,10 @@ export const Colorize = {
     arch: pc.yellow,
     versionNumber: pc.blue,
     textSnippet: pc.white,
+    fileType: (type: string) => pc.bold(pc.yellow(type)),
     object: (data: unknown) => {
         return pc.dim(inspect(data, { colors: true }));
-    }
+    },
 };
 
 /**
