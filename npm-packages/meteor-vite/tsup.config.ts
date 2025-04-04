@@ -18,6 +18,7 @@ export default defineConfig([
         format: 'esm',
         sourcemap: true,
         target: 'node20',
+        skipNodeModulesBundle: true,
         dts: false,
         onSuccess: async () => {
             try {
@@ -40,12 +41,10 @@ export default defineConfig([
         entry: {
             plugin: './src/entry/plugin/index.ts',
         },
-        format: [
-            'cjs',
-            'esm',
-        ],
+        format: ['cjs', 'esm'],
         sourcemap: true,
         dts: true,
+        skipNodeModulesBundle: true,
     },
     
     // Utilities
@@ -54,12 +53,10 @@ export default defineConfig([
         entry: {
             utilities: './src/utilities/index.ts',
         },
-        format: [
-            'cjs',
-            'esm',
-        ],
+        format: ['cjs', 'esm'],
         sourcemap: true,
         keepNames: false,
         dts: true,
+        skipNodeModulesBundle: true,
     },
 ]);
