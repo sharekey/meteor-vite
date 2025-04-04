@@ -1,5 +1,11 @@
 # jorgenvatle:vite
 
+## 1.5.1
+
+### Patch Changes
+
+- f1ff3b41: Patch potentially broken release bundle
+
 ## 1.5.0
 
 ### Minor Changes
