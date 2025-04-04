@@ -2,4 +2,4 @@
 "jorgenvatle_vite": patch
 ---
 
-Fix release build
+Patch potentially broken release bundle
