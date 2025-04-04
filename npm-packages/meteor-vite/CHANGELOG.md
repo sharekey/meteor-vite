@@ -1,5 +1,19 @@
 # meteor-vite
 
+## 3.7.0
+
+### Minor Changes
+
+- 1e2701f9: Expose internal utilities under `meteor-vite/utilities`. This is now utilized directly from the `jorgenvatle:vite` Meteor build plugin.
+- 0a4eab9e: Use Vite's SSR stack trace fix method to improve runtime stack trace information for server modules.
+- aaae4d76: Externalize dependencies listed in package's dependencies. Earlier versions would bundle Babel parser and colorizer libraries into the package source leading to redundant code inclusion.
+
+### Patch Changes
+
+- 84745ae2: Fix missing implementation for replacePackages option package.json vite settings.
+  - https://github.com/JorgenVatle/meteor-vite/discussions/311
+- 6e9d347f: Use consistent colorization for build plugin logs.
+
 ## 3.6.1
 
 ### Patch Changes
