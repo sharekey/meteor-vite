@@ -34,7 +34,7 @@ export default defineConfig([
         ]
     },
     
-    // Plugin entry
+    // Stub validation
     {
         name: 'meteor-vite/client',
         entry: {
