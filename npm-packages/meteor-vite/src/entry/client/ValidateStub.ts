@@ -1,4 +1,4 @@
-import PackageJson from '../../../package.json';
+import { bugs, homepage } from '../../utilities/Constants';
 import type { StubValidationSettings } from '../plugin/Settings';
 
 
@@ -68,11 +68,11 @@ class MeteorViteError extends Error {
             `⚡ Vite Request ID: ${requestId}`,
             '',
             `⚠️ Open an issue - it's likely an issue with meteor-vite rather than '${packageName}'`,
-            `    ${PackageJson.bugs.url}`,
+            `    ${bugs.url}`,
             '',
             `🔓  At your own risk, you can disable validation for the '${packageName}' package`,
             `    This may allow the app to continue running, but can lead to other things breaking.`,
-            `    ${PackageJson.homepage}#stub-validation`,
+            `    ${homepage}#stub-validation`,
             '',
         ].join('\n')
     }
