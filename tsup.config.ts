@@ -21,7 +21,7 @@ export default defineConfig(() => ({
     sourcemap: true,
     format: 'esm',
     esbuildPlugins: [
-        fixBuildPluginCjsImports(),
+        // fixBuildPluginCjsImports(),
         meteorImportStubs({
             'isobuild': () => `const PluginGlobal = Plugin; export { PluginGlobal as Plugin }`,
         }),
