@@ -164,6 +164,7 @@ async function fixPackageJsonName() {
 
     await shell(`git add ${meteorPackage.packageJsonPath}`);
     await shell(`git commit -m 'Revert ${meteorName} package.json name to use npm-compatible format' -m '[skip ci]'`);
+    await shell(`git push`);
 
     logger.info(`✅  Fixed package.json name to use npm-compatible format: ${packageJson.name}`);
 }
