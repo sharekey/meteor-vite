@@ -206,7 +206,7 @@ export default class ViteLoadRequest {
         const meteorEntry = Path.resolve(process.cwd(), this.meteorMainModule);
         
         if (!existsSync(meteorEntry)) {
-            throw new MeteorViteError(`meteor.mainModule.client file not found: ${meteorEntry}`);
+            throw new MeteorViteError(`Unable to resolve Meteor mainModule: ${Colorize.filepath(meteorEntry)} not found!`);
         }
         
         await AutoImportQueue.write({
