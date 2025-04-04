@@ -21,9 +21,9 @@
       "import": "./dist/bootstrap/*.mjs"
     },
     "./utilities": {
-      "types": "./dist/utilities/index.d.ts",
-      "import": "./dist/utilities/index.mjs",
-      "require": "./dist/utilities/index.js"
+      "types": "./dist/utilities.d.ts",
+      "import": "./dist/utilities.mjs",
+      "require": "./dist/utilities.js"
     },
     "./client": {
       "types": "./dist/client/index.d.ts",
