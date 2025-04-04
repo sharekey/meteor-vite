@@ -20,9 +20,16 @@ Meteor.startup(async () => {
         
         // HMR listener to clean up side-effects from things like
         // Meteor.publish(), new Mongo.Collection(), etc. on server-side hot reload.
-        await runner.import('meteor-vite/bootstrap/RuntimeHMR');
-        
-        await runner.import(modules.serverEntry);
+        try {
+            await runner.import('meteor-vite/bootstrap/RuntimeHMR');
+            
+            await runner.import(modules.serverEntry);
+        } catch (error) {
+            if (error instanceof Error) {
+                server.ssrFixStacktrace(error);
+            }
+            throw error;
+        }
     }
     
     // ⚡ [Vite] Bind Vite to Meteor's Express app to serve modules and assets to clients.
