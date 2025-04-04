@@ -1,5 +1,11 @@
 # jorgenvatle_vite
 
+## 1.4.1
+
+### Patch Changes
+
+- a00ccb27: Hotfix dynamic asset boilerplate check being inverted where the option would be disabled when enabled. Causing development builds to result in a white screen of death.
+
 ## 1.4.0
 
 ### Minor Changes
