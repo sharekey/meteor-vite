@@ -15,11 +15,9 @@ export default defineConfig([
             './src/entry/bootstrap/ProductionEnvironment.ts',
             './src/entry/bootstrap/CommonEnvironment.ts',
         ],
-        outDir: 'dist',
         format: 'esm',
         sourcemap: true,
         target: 'node20',
-        keepNames: false,
         dts: false,
         onSuccess: async () => {
             try {
@@ -42,13 +40,11 @@ export default defineConfig([
         entry: {
             plugin: './src/entry/plugin/index.ts',
         },
-        outDir: 'dist',
         format: [
             'cjs',
             'esm',
         ],
         sourcemap: true,
-        keepNames: false,
         dts: true,
     },
     
@@ -58,7 +54,6 @@ export default defineConfig([
         entry: {
             utilities: './src/utilities/index.ts',
         },
-        outDir: 'dist',
         format: [
             'cjs',
             'esm',
