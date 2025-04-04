@@ -169,10 +169,13 @@ cleanOutput() {
 
 link() {
   for package in "${npmPackages[@]}"; do
-    cd "$APP_DIR" || exit 1
-    meteor npm i "../../npm-packages/$package"
+    (npmPackage "$package" link --ws false) || exit 1
     log:success "Added npm link for $package"
   done
+
+  (cd "$APP_DIR" && npm link "${npmPackages[@]}") || exit 1
+
+  log:success "Linked ${npmPackages[*]} to $app"
 }
 
 production:install() {
