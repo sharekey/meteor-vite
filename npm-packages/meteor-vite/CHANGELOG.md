@@ -1,5 +1,12 @@
 # meteor-vite
 
+## 3.7.1
+
+### Patch Changes
+
+- 4ad7da0: Correct type definition: Fix issue where dynamicAssetBoilerplate was marked as required in plugin settings.
+- 4dd968a: Prevent naming Meteor stub ID collissions by using package import path rather than package ID for stub IDs
+
 ## 3.7.0
 
 ### Minor Changes
