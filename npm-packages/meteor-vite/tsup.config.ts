@@ -38,7 +38,7 @@ export default defineConfig([
     {
         name: 'meteor-vite/client',
         entry: {
-            client: './src/client/index.ts',
+            client: './src/entry/client/index.ts',
         },
         format: 'esm',
         sourcemap: true,
