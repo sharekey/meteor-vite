@@ -141,8 +141,12 @@ async function publish() {
         },
     });
 
-    logger.info(`🚀  Published to Atmosphere: `)
-    logger.info(` L ${meteorPackage.name}@${version}`)
+    logger.info(`🚀  Published to Atmosphere: `);
+    logger.info(` L ${meteorPackage.name}@${version}`);
+
+    // Ensures GitHub releases will use the correct Meteor package name format
+    // jorgenvatle:vite instead of jorgenvatle_vite
+    await updateChangesetToUseMeteorPackageNameFormat();
 }
 
 /**
