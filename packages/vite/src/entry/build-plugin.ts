@@ -15,7 +15,7 @@ class CompilerPlugin {
         assetsDir: string,
         mode: 'production' | 'development' | string,
         boilerplate: ViteBoilerplate;
-        dynamicAssetBoilerplate: boolean;
+        dynamicAssetBoilerplate: boolean | undefined;
     }) {
         Logger.info(`[${config.mode}] Initializing Vite Compiler Plugin...`);
     }
