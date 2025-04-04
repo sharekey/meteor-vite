@@ -55,10 +55,10 @@ export default defineConfig([
     // Utilities
     {
         name: 'meteor-vite/utilities',
-        entry: [
-            './src/utilities/index.ts',
-        ],
-        outDir: 'dist/utilities',
+        entry: {
+            utilities: './src/utilities/index.ts',
+        },
+        outDir: 'dist',
         format: [
             'cjs',
             'esm',
