@@ -1,5 +1,5 @@
 name: Release Patcher
-run-name: '📦 Fix release package.json names'
+run-name: '✒️ Fix release package.json names'
 on:
   pull_request:
     branches:
