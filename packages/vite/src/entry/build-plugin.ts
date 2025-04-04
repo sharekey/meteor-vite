@@ -4,8 +4,6 @@ import type { InputFile } from 'meteor/isobuild';
 import { Plugin } from 'meteor/isobuild';
 import FS from 'node:fs';
 import Path from 'path';
-import pc from 'picocolors';
-import { inspect } from 'util';
 import { runBootstrapScript } from '../util/Bootstrap';
 import { CurrentConfig } from '../util/CurrentConfig';
 import Logger from '../util/Logger';
@@ -34,7 +32,7 @@ class CompilerPlugin {
                 arch: file.getArch(),
             }
             
-            Logger.debug(`[${pc.yellow(file.getArch())}] Processing: ${fileMeta.basename}`, pc.dim(inspect({ fileMeta }, { colors: true })));
+            Logger.debug(`[${Colorize.arch(file.getArch())}] Processing: ${fileMeta.basename}`, Colorize.object({ fileMeta }));
             
             this.addHtmlBoilerplate(file);
             
@@ -48,7 +46,7 @@ class CompilerPlugin {
                     data: file.getContentsAsString(),
                     sourceMap: this._sourcemap(file),
                 });
-                Logger.debug(`Added ${pc.yellow('JavaScript')} to ${pc.cyan(fileMeta.arch)}: ${fileMeta.basename}`);
+                Logger.debug(`Added ${Colorize.fileType('JavaScript')} to ${Colorize.arch(fileMeta.arch)}: ${fileMeta.basename}`);
                 return;
             }
             
@@ -93,7 +91,7 @@ class CompilerPlugin {
         }
         
         this.boilerplateArc.add(arch);
-        Logger.debug(`[${Colorize.arch(arch)}] Added boilerplate to application HTML`, pc.dim(inspect({ dynamicBody, dynamicHead }, { colors: true })));
+        Logger.debug(`[${Colorize.arch(arch)}] Added boilerplate to application HTML`, Colorize.object({ dynamicBody, dynamicHead }));
     }
     
     protected _formatFilename(nameOrPath: string) {
@@ -104,7 +102,7 @@ class CompilerPlugin {
         const filename = this._formatFilename(file.getPathInPackage()) + `.map`;
         const path = Path.resolve(CurrentConfig.projectRoot, filename);
         if (!FS.existsSync(path)) {
-            Logger.warn(`Could not resolve source map for ${pc.green(filename)}`);
+            Logger.warn(`Could not resolve source map for ${Colorize.filepath(filename)}`);
             return;
         }
         return FS.readFileSync(path, 'utf8')
