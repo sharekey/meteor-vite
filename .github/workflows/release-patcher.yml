@@ -4,6 +4,10 @@ on:
   pull_request:
     branches:
       - changesets/**
+  push:
+    branches:
+      - release
+      - changesets/**
 
 concurrency: ${{ github.workflow }}-${{ github.ref }}
 
