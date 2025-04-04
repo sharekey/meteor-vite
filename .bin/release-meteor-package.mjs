@@ -107,8 +107,11 @@ async function applyVersion() {
     await shell(`git add ${meteorPackage.packageJsPath}`);
     await shell(`git commit -m 'Bump ${meteorPackage.name} version to ${release.newVersion}'`);
 
+    // Rewrite package.json and changelogs to use jorgenvatle:vite instead of jorgenvatle_vite
     await updateChangesetToUseMeteorPackageNameFormat();
     await shell('npx changeset version');
+
+    // Revert package.json name back to jorgenvatle_vite to avoid breaking npm workspaces
     await revertToNpmCompatiblePackageNameFormat();
     await shell(`git add ${meteorPackage.packageJsonPath}`);
     await shell(`git commit --amend`);
