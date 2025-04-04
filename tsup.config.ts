@@ -16,6 +16,7 @@ export default defineConfig(() => ({
     platform: 'node',
     keepNames: false,
     minify: false,
+    tsconfig: "tsconfig.build.json",
     sourcemap: true,
     format: 'esm',
     esbuildPlugins: [
