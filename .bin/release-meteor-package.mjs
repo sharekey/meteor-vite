@@ -114,7 +114,7 @@ async function applyVersion() {
     // Revert package.json name back to jorgenvatle_vite to avoid breaking npm workspaces
     await revertToNpmCompatiblePackageNameFormat();
     await shell(`git add ${meteorPackage.packageJsonPath}`);
-    await shell(`git commit --amend`);
+    await shell(`git commit --amend --no-edit`);
 }
 
 async function setVersion(newVersion) {
