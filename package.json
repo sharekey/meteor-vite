@@ -34,6 +34,8 @@
     "version": "npm run version:vite && changeset version",
     "example": ".bin/example-app.sh",
 
+    "fix-package-name": "meteor node .bin/release-meteor-package.mjs fix-package-name",
+
     "subtree": "npm run subtree:pull && npm run subtree:push",
     "subtree:pull": "git subtree pull --prefix npm-packages/@meteor-vite/react-packages https://github.com/JorgenVatle/react-packages vite --squash",
     "subtree:push": "git subtree push --prefix npm-packages/@meteor-vite/react-packages https://github.com/JorgenVatle/react-packages vite",
