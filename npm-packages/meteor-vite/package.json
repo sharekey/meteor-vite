@@ -34,6 +34,7 @@
     "start": "ts-node-dev src/bin/debug/watch-mocks.ts",
     "watch": "tsup --watch --dts --sourcemap",
     "build": "tsup",
+    "clean": "rm -rf ./dist",
     "prepack": "npm run build",
     "test": "vitest",
     "lint": "tsc --noEmit"
