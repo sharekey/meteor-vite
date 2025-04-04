@@ -17,6 +17,7 @@ export default defineConfig([
         format: 'esm',
         sourcemap: true,
         target: 'node20',
+        outDir: './dist/bootstrap',
         skipNodeModulesBundle: true,
         dts: false,
         onSuccess: async () => {
