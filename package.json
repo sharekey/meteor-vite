@@ -41,7 +41,7 @@
     "subtree:push": "git subtree push --prefix npm-packages/@meteor-vite/react-packages https://github.com/JorgenVatle/react-packages vite",
 
     "version:vite": "meteor node .bin/release-meteor-package.mjs version",
-    "publish:vite": "meteor node .bin/release-meteor-package.mjs publish",
+    "publish:vite": "node .bin/release-meteor-package.mjs publish",
 
     "start:vue": "npm start vue",
     "start:react": "npm start react",
