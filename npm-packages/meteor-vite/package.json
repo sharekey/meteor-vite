@@ -28,7 +28,7 @@
     "./bootstrap/*": {
       "types": "./dist/bootstrap/*.d.ts",
       "import": "./dist/bootstrap/*.mjs"
-    },
+    }
   },
   "scripts": {
     "start": "ts-node-dev src/bin/debug/watch-mocks.ts",
