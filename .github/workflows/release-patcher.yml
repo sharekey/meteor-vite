@@ -9,7 +9,7 @@ on:
       - release
       - changesets/**
 
-concurrency: ${{ github.workflow }}-${{ github.ref }}
+concurrency: ${{ github.workflow }}-${{ github.ref }}-release-patch
 
 jobs:
   release:
