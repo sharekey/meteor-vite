@@ -1,5 +1,16 @@
 # jorgenvatle:vite
 
+## 1.5.0
+
+### Minor Changes
+
+- 26d77f17: Fix internal build process where parts of the meteor-vite package would be bundled into the package instead of loaded from the peer project's node_modules.
+  - Fixes #286
+
+### Patch Changes
+
+- 6e9d347f: Use consistent colorization for build plugin logs.
+
 ## 1.4.2
 
 ### Patch Changes
