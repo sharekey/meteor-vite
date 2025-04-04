@@ -60,7 +60,7 @@ export interface PluginSettings<
      * accordingly.
      * @default true
      */
-    dynamicAssetBoilerplate: boolean;
+    dynamicAssetBoilerplate?: boolean;
     
     /**
      * Root directory to serve Vite assets from in production.
