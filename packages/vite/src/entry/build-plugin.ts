@@ -65,7 +65,7 @@ class CompilerPlugin {
             Logger.debug(`Skipping boilerplate injection for arch '${Colorize.arch(arch)}'`)
             return;
         }
-        if (this.config.dynamicAssetBoilerplate && !arch.includes('cordova')) {
+        if (!this.config.dynamicAssetBoilerplate && !arch.includes('cordova')) {
             Logger.debug(`Skipping boilerplate injection. Static asset boilerplate is disabled. ${Colorize.filepath(file.getPathInPackage())}`)
             return;
         }
