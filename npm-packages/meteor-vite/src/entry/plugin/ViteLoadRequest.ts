@@ -4,11 +4,12 @@ import Path from 'path';
 import pc from 'picocolors';
 import { type Environment, ViteDevServer } from 'vite';
 import { MeteorViteError } from '../../error/MeteorViteError';
+import { Colorize } from '../../utilities';
+
+import { createLabelledLogger, LabelLogger } from '../../utilities/Logger';
 import AutoImportQueue from './meteor/package/AutoImportQueue';
 import { isSameModulePath } from './meteor/package/components/MeteorPackage';
 import type { ResolvedPluginSettings } from './Settings';
-
-import { createLabelledLogger, LabelLogger } from '../../utilities/Logger';
 
 export default class ViteLoadRequest {
     
@@ -202,15 +203,14 @@ export default class ViteLoadRequest {
      * @return {Promise<void>}
      */
     public async forceImport() {
-        const mainModule = this.context.pluginSettings.meteorStubs.packageJson!.meteor.mainModule;
-        const meteorClientEntryFile = Path.resolve(process.cwd(), mainModule.client);
+        const meteorEntry = Path.resolve(process.cwd(), this.meteorMainModule);
         
-        if (!existsSync(meteorClientEntryFile)) {
-            throw new MeteorViteError(`meteor.mainModule.client file not found: ${meteorClientEntryFile}`);
+        if (!existsSync(meteorEntry)) {
+            throw new MeteorViteError(`meteor.mainModule.client file not found: ${meteorEntry}`);
         }
         
         await AutoImportQueue.write({
-            meteorEntrypoint: meteorClientEntryFile,
+            meteorEntrypoint: meteorEntry,
             importString: this.context.id,
         }).catch((error) => {
             if (!(error instanceof RefreshNeeded)) {
@@ -222,6 +222,21 @@ export default class ViteLoadRequest {
             
             this.context.server.restart(true);
         });
+    }
+    
+    protected get _meteorMainModule() {
+        const mainModule = this.context.pluginSettings.meteorStubs.packageJson!.meteor.mainModule;
+        if (this.context.environment.name === 'server') {
+            return mainModule.server;
+        }
+        return mainModule.client;
+    }
+    
+    protected get meteorMainModule() {
+        if (!this._meteorMainModule) {
+            throw new MeteorViteError(`Missing Meteor mainModule for current environment! Make sure you specify mainModule paths in your ${Colorize.filepath('package.json')}`);
+        }
+        return this._meteorMainModule;
     }
     
     public get cache() {
