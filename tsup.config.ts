@@ -26,7 +26,7 @@ export default defineConfig(() => ({
             'isobuild': () => `const PluginGlobal = Plugin; export { PluginGlobal as Plugin }`,
         }),
     ],
-    noExternal: ['meteor/isobuild']
+    noExternal: ['meteor/isobuild', 'meteor-vite']
 }))
 
 export const EsbuildPluginMeteorStubs = meteorImportStubs({
