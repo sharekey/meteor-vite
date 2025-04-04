@@ -39,10 +39,10 @@ export default defineConfig([
     // Plugin entry
     {
         name: 'meteor-vite/plugin',
-        entry: [
-            './src/entry/plugin/index.ts',
-        ],
-        outDir: 'dist/plugin',
+        entry: {
+            plugin: './src/entry/plugin/index.ts',
+        },
+        outDir: 'dist',
         format: [
             'cjs',
             'esm',
