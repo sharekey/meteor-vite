@@ -68,5 +68,5 @@ jobs:
         if: steps.changesets.outputs.pullRequestNumber
         run: |
           git fetch origin
-          git switch --track changeset-release/${{ github.ref_name }}
+          git switch --track origin/changeset-release/${{ github.ref_name }}
           npm run fix-package-name
