@@ -4,7 +4,7 @@ import {
 
 // index.js
 import React2 from "react";
-import Meteor3 from "meteor/meteor";
+import { Meteor as Meteor3 } from "meteor/meteor";
 
 // useTracker.ts
 import { Meteor } from "meteor/meteor";

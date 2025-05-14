@@ -4,7 +4,7 @@ import {
 
 // suspense/index.js
 import React from "react";
-import Meteor4 from "meteor/meteor";
+import { Meteor as Meteor4 } from "meteor/meteor";
 
 // suspense/useFind.ts
 import { Meteor } from "meteor/meteor";

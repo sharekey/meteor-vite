@@ -37,7 +37,7 @@ __export(index_exports, {
 });
 module.exports = __toCommonJS(index_exports);
 var import_react4 = __toESM(require("react"));
-var import_meteor4 = __toESM(require("meteor/meteor"));
+var import_meteor4 = require("meteor/meteor");
 
 // useTracker.ts
 var import_meteor = require("meteor/meteor");
@@ -372,7 +372,7 @@ var useSubscribeServer = (name, ...args) => () => false;
 var useSubscribe = import_meteor3.Meteor.isServer ? useSubscribeServer : useSubscribeClient;
 
 // index.js
-if (import_meteor4.default.isDevelopment) {
+if (import_meteor4.Meteor.isDevelopment) {
   const v = import_react4.default.version.split(".");
   if (v[0] < 16 || v[0] == 16 && v[1] < 8) {
     console.warn("react-meteor-data 2.x requires React version >= 16.8.");

@@ -36,7 +36,7 @@ __export(suspense_exports, {
 });
 module.exports = __toCommonJS(suspense_exports);
 var import_react5 = __toESM(require("react"));
-var import_meteor5 = __toESM(require("meteor/meteor"));
+var import_meteor5 = require("meteor/meteor");
 
 // suspense/useFind.ts
 var import_meteor2 = require("meteor/meteor");
@@ -491,7 +491,7 @@ function useTrackerDev(key, reactiveFn, deps = null, skipUpdate = null) {
 var useTracker = import_meteor4.Meteor.isDevelopment ? useTrackerDev : _useTracker;
 
 // suspense/index.js
-if (import_meteor5.default.isDevelopment) {
+if (import_meteor5.Meteor.isDevelopment) {
   const v = import_react5.default.version.split(".");
   if (v[0] < 16 || v[0] == 16 && v[1] < 8) {
     console.warn("react-meteor-data 2.x requires React version >= 16.8.");

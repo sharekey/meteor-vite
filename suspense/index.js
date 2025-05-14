@@ -1,5 +1,5 @@
 import React from 'react';
-import Meteor from 'meteor/meteor';
+import { Meteor } from 'meteor/meteor';
 
 if (Meteor.isDevelopment) {
   const v = React.version.split('.')
