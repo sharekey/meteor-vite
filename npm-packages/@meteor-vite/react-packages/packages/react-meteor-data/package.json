@@ -14,6 +14,7 @@
     "clean": "rm -rf ./dist",
     "postversion": "git add package.json && git commit -m 'Bump versions'",
     "postpublish": "git push --tags && git push",
+    "postinstall": "tsup",
     "prepack": "npm run clean && npm run build"
   },
   "main": "dist/index.js",
