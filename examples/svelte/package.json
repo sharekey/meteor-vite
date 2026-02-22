@@ -13,9 +13,9 @@
   },
   "dependencies": {
     "@babel/runtime": "^7.27.0",
-    "meteor-node-stubs": "^1.2.5",
+    "meteor-node-stubs": "^1.2.8",
     "meteor-vite": "^3.6.1",
-    "svelte": "^5.2.9",
+    "svelte": "^5.51.5",
     "vite": "^6.2.5"
   },
   "devDependencies": {
